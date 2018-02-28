@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}Express Finance{% endblock %}</title>
+	<link rel="stylesheet" href="{% static 'dist/css/styles.css' %}">
+	{% block extrastyles %}{% endblock %}
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+	<header class="s-header">
+		<div class="wrapper">
+			<a href="{% url 'main' %}" class="b-logo">
+				<svg><use href="#svg-logo">
+				</svg>
+			</a>
+			
+			<div class="s-header__phone">
+				<span>Телефон горячей линии</span>
+				<a href="tel:+0800211112">0 800 211 112</a>
+			</div>
+
+			<div class="b-nav">
+				<a href="about.html" class="b-nav__link">О нас</a>
+				<a href="#" class="b-nav__link">Кредиты</a>
+				<a href="spoiler-page.html" class="b-nav__link">Акции</a>
+				<a href="faq.html" class="b-nav__link">Справка</a>
+				<a href="blog.html" class="b-nav__link">Блог</a>
+				<a href="#" class="b-nav__link">Студентам</a>
+			</div>
+
+			<div class="s-header__lang">
+				<button class="b-btn b-btn--lang">Рус</button>
+				<button class="b-btn b-btn--lang">Укр</button>
+			</div>
+
+			<button class="b-btn-login">Мой кабинет <span class="icon icon--login"></span></button>
+
+		</div>
+	</header>
+{% block content %}{% endblock %}
+
+	<footer class="s-footer">
+		<div class="wrapper wrapper--flex">
+			<div class="s-footer-contacts">
+				<a class="b-tel b-tel--primary" href="tel:0800211119">0 800 211 112 <span>Бесплатные звонки по Украине</span></a>
+				<a class="b-tel b-tel--secondary" href="tel:0673694111"><span class="icon icon--kyivstar"></span>067 369 41 11</a>
+				<a class="b-tel b-tel--secondary" href="tel:0503694111"><span class="icon icon--vodafone"></span>050 369 41 11</a>
+			</div>
+
+			<div class="s-footer-about">
+				<nav class="s-footer-nav">
+					<h4 class="s-footer-nav__title">О нас</h4>
+					<a href="#" class="s-footer-nav__link">Правовая информация</a>
+					<a href="#" class="s-footer-nav__link">Договор займа</a>
+					<a href="#" class="s-footer-nav__link">Финансовая отчетность</a>
+					<a href="#" class="s-footer-nav__link">Политика конфиденциальности</a>
+					<a href="#" class="s-footer-nav__link">Партнерам</a>
+					<a href="#" class="s-footer-nav__link">Отзывы</a>
+					<a href="#" class="s-footer-nav__link">Контакты</a>
+				</nav>
+			</div>
+
+			<div class="s-footer-faq">
+				<nav class="s-footer-nav">
+					<h4 class="s-footer-nav__title">Часто задаваемые вопросы</h4>
+					<a href="#" class="s-footer-nav__link">Как подать запрос?</a>
+					<a href="#" class="s-footer-nav__link">Как погасить / продлить кредит</a>
+					<a href="#" class="s-footer-nav__link">Почему мне отказали в выдаче кредита</a>
+				</nav>
+
+				<nav class="s-footer-nav">
+					<h4 class="s-footer-nav__title">Как вернуть кредит</h4>
+					<a href="#" class="s-footer-nav__link">В интернете</a>
+					<a href="#" class="s-footer-nav__link">Оплата кредита через терминал</a>
+					<a href="#" class="s-footer-nav__link">В кассе банка</a>
+				</nav>
+			</div>
+
+			<div class="s-footer-referal-wrap">
+				<div class="s-footer-referal">
+					<h4 class="s-footer-referal__title">Заработай с партнеской программой "Приведи друга"</h4>
+					<p class="s-footer-referal__text">
+						Приводи друзей и получай <strong>до 200 грн</strong>
+						за каждого нового пользователя! 
+					</p>
+
+					<button class="b-btn-primary b-btn-primary--main">Пригласить друга</button>
+
+				</div>
+			</div>
+			
+			<div class="s-footer-base">
+				<a href="#" class="b-logo">
+					<svg><use href="#svg-logo">
+					</svg>
+				</a>
+
+				<p class="s-footer-base__info">
+					Первый в Украине сервис кредитования через интернет. <br>
+					Мы предоставляем быстрые и удобные кредиты для всех граждан Украины. <br>
+					&copy 2015 - 2017 MyCredit - Кредит онлайн на банковскую карту за 20 минут
+				</p>
+
+				<div class="s-footer-base__social">
+					<a href="#"><span class="icon icon--telegram"></span></a>
+					<a href="#"><span class="icon icon--facebook"></span></a>	
+				</div>
+			</div>
+		</div>
+
+	</footer>
+{% block extra %}{% endblock %}
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script
+	src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+	integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+	crossorigin="anonymous"></script>
+	<script src="{% static 'dist/libs/slick.js"' %}'></script>
+	<script src="{% static 'dist/libs/common.js' %}"></script>
+{% block extrascrypts %}{% endblock %}
