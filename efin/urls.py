@@ -23,10 +23,11 @@ from communication.views import contacts
 from content.views import content
 
 urlpatterns = [
-	path('main/', TemplateView.as_view(template_name='main.html'), name='main'),
+	path('main/', content.main , name='main'),
 	path('main/about/agreement/', TemplateView.as_view(template_name='default.html'), name='agreement'),
 	path('main/about/contacts/', contacts.contacts, name='contacts'),
 	path('main/category/pages/<str:page_url>/', content.pages, name='static_pages'),
+	path('ajax/departments_generate/<str:city>/', content.departments_generate, name='departments_generate'),
     path('admin/', admin.site.urls),
 ]
 if settings.DEBUG:

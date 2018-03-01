@@ -74,7 +74,7 @@ window.onload = function() {
 	$('.b-region-list__wrapper').on('click', '.b-region-list__btn', function(e) {
 		var dataCity = $(this).data('city');
 
-		fieldFiller(dataCity, "data-city.json");
+		fieldFiller(dataCity, "/ajax/departments_generate/" + dataCity);  //"/static/data-city.json");
 		$('.b-region-list__btn').removeClass('btn-active');
 		$(this).addClass('btn-active');
 
@@ -307,12 +307,12 @@ function fieldFiller (datacity, url) {
 			for(key in data) {
 				if (key === datacity) {	
 					$('#data-map').attr('src', data[key].link);			
-					$('#data-adress').html(data[key].adress);
-					$('#data-city').html(data[key].name);
-					$('#data-localAdress').html(data[key].localAdress);
+					$('#data-adress').html(data[key].address);
+					$('#data-city').html(data[key].city);
+					$('#data-localAdress').html(data[key].address);
 					$('#data-schedule').html(data[key].schedule);
-					$('#data-mail').html(data[key].mail).attr('href',
-						'mailto:'+ data[key].mail);
+					$('#data-mail').html(data[key].email).attr('href',
+						'mailto:'+ data[key].email);
 					$('#data-phone').html(data[key].phone).attr('href',
 						'tel:' + data[key].phone);
 				}
