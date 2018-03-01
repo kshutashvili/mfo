@@ -74,7 +74,12 @@ class Agreement(SingletonModel):
 class Email(models.Model):
     email = models.EmailField(_('Электронная почта'),
                               max_length=64)
-
+    active = models.BooleanField(_('Активная Почта, используемая при '
+                                   'отправке писем "напишите нам"'),
+                                 default=False,
+                                 help_text=_('Будет использоваться только '
+                                             'первая из активных почт'))
+    
     class Meta:
         verbose_name = _('Электронная почта')
         verbose_name_plural = _('Электронные почты')

@@ -109,11 +109,18 @@
 							{{ contact.footer_text|safe }}
 						</p>
 					</div>
-					<form action="#" class="f-contact">
+					<form action="{% url 'contacts' %}" method="post" class="f-contact">
 						<h3 class="f-contact__title">Напишите нам</h3>
-						<input type="text" class="f-contact-input" placeholder="ФИО">
-						<input type="text" class="f-contact-input" placeholder="E-mail">
-						<textarea cols="30" rows="10" class="f-contact-textarea" placeholder="Ваше сообщение..."></textarea>
+						{% if status_message %}
+							<h2 class="f-contact__title">{{ status_message }}</h2>
+						{% endif %}
+						{% csrf_token %}
+						{{ form.name }}
+                        <span class='help-block'>{{ form.errors.name }}</span>
+                        {{ form.email }}
+                        <span class='help-block'>{{ form.errors.email }}</span>
+                        {{ form.message }}
+                        <span class='help-block'>{{ form.errors.message }}</span>
 						<button type="submit" class="b-btn-primary b-btn-primary--main">Оформить кредит</button>
 					</form>
 				</div>

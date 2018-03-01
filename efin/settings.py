@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-w8(up#n)ea%v0@5olsz37y(kt8!^@p(750bqp4#=hs-%n7n7y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -123,6 +123,15 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+# Email
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_SSL = False
 
 
 # Static files (CSS, JavaScript, Images)
