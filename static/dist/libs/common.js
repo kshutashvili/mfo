@@ -72,9 +72,9 @@ window.onload = function() {
 	/*#Cities list func*/
 	
 	$('.b-region-list__wrapper').on('click', '.b-region-list__btn', function(e) {
-		var dataCity = $(this).data('city');
+		var dep_id = $(this).data('dep_id');
 
-		fieldFiller(dataCity, "/ajax/departments_generate/" + dataCity);  //"/static/data-city.json");
+		fieldFiller(dep_id, "/ajax/departments_generate/" + dep_id);  //"/static/data-city.json");
 		$('.b-region-list__btn').removeClass('btn-active');
 		$(this).addClass('btn-active');
 
@@ -299,13 +299,13 @@ function Slider(initialId, min, max) {
 	});
 }
 
-function fieldFiller (datacity, url) {
+function fieldFiller (dep_id, url) {
 
 	$.ajax({
 		url: url,
 		success: function(data) {
 			for(key in data) {
-				if (key === datacity) {	
+				if (parseInt(key) === parseInt(dep_id)) {	
 					$('#data-map').attr('src', data[key].link);			
 					$('#data-adress').html(data[key].address);
 					$('#data-city').html(data[key].city);

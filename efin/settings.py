@@ -21,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '-w8(up#n)ea%v0@5olsz37y(kt8!^@p(750bqp4#=hs-%n7n7y'
+GOOGLE_MAPS_API_KEY = 'AIzaSyAntT27HQnaY0z2nOKEk7eyEimuzZOerMM'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     #3-rd
     'ckeditor',
     'solo',
+    'django_google_maps'
 ]
 
 MIDDLEWARE = [

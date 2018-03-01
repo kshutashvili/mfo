@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load custom_filters %}
+
 {% block title %}Express Finance{% endblock %}
 
 {% block content %}	
@@ -658,12 +660,12 @@
 
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
-				{% for obj in department_cities %}
+				{% for obj in departments %}
 				{% if forloop.counter|divisibleby:8 %}
 					</ul>
 					<ul class="b-region-list">
 				{% endif %}
-					<li><span class="arrow"></span><button class="b-region-list__btn"  data-city="{{ obj }}">{{ obj }}</button></li>
+					<li><span class="arrow"></span><button class="b-region-list__btn"  data-dep_id="{{ obj.id }}">{{ obj|get_city }}</button></li>
 				{% if forloop.last %}
 					</ul>
 				{% endif %}
@@ -680,7 +682,7 @@
 					<div class="popup-info">
 						<h3 class="popup-info__adress">
 							<span class="icon icon--arrow"></span>
-							<span id="data-adress">{{ obj.address }}</span>
+							<span id="data-adress"></span>
 						</h3>
 						<h4 class="popup-info__title">Информация</h4>
 						<div class="popup-info__item">
@@ -689,21 +691,21 @@
 						</div>
 						<div class="popup-info__item">
 							<span class="popup-info__item-title">Адресс:</span>
-							<span class="popup-info__item-main" id="data-localAdress">{{ obj.address }}</span>
+							<span class="popup-info__item-main" id="data-localAdress"></span>
 						</div>
 						<div class="popup-info__item">
 							<span class="popup-info__item-title">Режим работы:</span>
-							<span class="popup-info__item-main" id="data-schedule">{{ obj.schedule }}</span>
+							<span class="popup-info__item-main" id="data-schedule"></span>
 						</div>
 						<div class="popup-info__item">
 							<span class="popup-info__item-title">Контакты:</span>
 							<a class="popup-info__link popup-info__link--mail" href="mailto:{{ obj.email }}">
 								<img src="{% static 'dist/img/svgstore/mail.svg' %}" alt="mail">
-								<span id="data-mail">{{ obj.email }}</span>
+								<span id="data-mail"></span>
 							</a>
 							<a class="popup-info__link" href="tel:{{ obj.phone }}">
 								<img src="{% static 'dist/img/svgstore/phone1.svg' %}" alt="phone">
-								<span id="data-phone">{{ obj.phone }}</span>
+								<span id="data-phone"></span>
 							</a>
 						</div>
 					</div>
