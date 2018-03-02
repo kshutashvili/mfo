@@ -19,14 +19,15 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
-from communication.views import contacts
+from communication.views import contacts, about
 from content.views import content
 
 urlpatterns = [
-	path('main/', content.main , name='main'),
+	path('main/', content.main, name='main'),
+	path('main/about/', about.about, name='about'),
 	path('main/about/agreement/', TemplateView.as_view(template_name='default.html'), name='agreement'),
 	path('main/about/contacts/', contacts.contacts, name='contacts'),
-	path('main/category/pages/<str:page_url>/', content.pages, name='static_pages'),
+	path('<str:page_url>/', content.pages, name='static_pages'),
 	path('ajax/departments_generate/<int:dep_id>/', content.departments_generate, name='departments_generate'),
     path('admin/', admin.site.urls),
 ]

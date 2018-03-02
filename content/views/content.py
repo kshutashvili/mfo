@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import urlencode, force_escape
 from django.utils.safestring import mark_safe
 
-from content.models import Spoiler, StaticPage
+from content.models import Spoiler, StaticPage, MenuFooterBlock
 from communication.models import Response
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY
@@ -18,8 +18,10 @@ def pages(request, page_url):
 def main(request):
     responces = Response.objects.all()
     departments = Department.objects.all()
+    menu_footer = MenuFooterBlock.objects.order_by('order')
     return render(request, 'main.html', {'responces':responces,
-                                         'departments':departments})
+                                         'departments':departments,
+                                         'menu_footer':menu_footer})
 
 
 def departments_generate(request, dep_id):

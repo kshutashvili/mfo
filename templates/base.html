@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="b-nav">
-				<a href="about.html" class="b-nav__link">О нас</a>
+				<a href="{% url 'about' %}" class="b-nav__link">О нас</a>
 				<a href="#" class="b-nav__link">Кредиты</a>
 				<a href="spoiler-page.html" class="b-nav__link">Акции</a>
 				<a href="faq.html" class="b-nav__link">Справка</a>
@@ -52,31 +52,28 @@
 
 			<div class="s-footer-about">
 				<nav class="s-footer-nav">
-					<h4 class="s-footer-nav__title">О нас</h4>
-					<a href="#" class="s-footer-nav__link">Правовая информация</a>
-					<a href="#" class="s-footer-nav__link">Договор займа</a>
-					<a href="#" class="s-footer-nav__link">Финансовая отчетность</a>
-					<a href="#" class="s-footer-nav__link">Политика конфиденциальности</a>
-					<a href="#" class="s-footer-nav__link">Партнерам</a>
-					<a href="#" class="s-footer-nav__link">Отзывы</a>
-					<a href="#" class="s-footer-nav__link">Контакты</a>
+				{% for obj in menu_footer %}
+					{% if forloop.first %}
+						<h4 class="s-footer-nav__title">{{ obj.name }}</h4>
+						{% for item in obj.items.get_queryset %}
+							<a href="{{ item.link }}" class="s-footer-nav__link">{{ item.name }}</a>
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
 				</nav>
 			</div>
 
 			<div class="s-footer-faq">
+			{% for obj in menu_footer %}
+				{% if not forloop.first %}
 				<nav class="s-footer-nav">
-					<h4 class="s-footer-nav__title">Часто задаваемые вопросы</h4>
-					<a href="#" class="s-footer-nav__link">Как подать запрос?</a>
-					<a href="#" class="s-footer-nav__link">Как погасить / продлить кредит</a>
-					<a href="#" class="s-footer-nav__link">Почему мне отказали в выдаче кредита</a>
+					<h4 class="s-footer-nav__title">{{ obj.name }}</h4>
+					{% for item in obj.items.get_queryset %}
+						<a href="{{ item.link }}" class="s-footer-nav__link">{{ item.name }}</a>
+					{% endfor %}
 				</nav>
-
-				<nav class="s-footer-nav">
-					<h4 class="s-footer-nav__title">Как вернуть кредит</h4>
-					<a href="#" class="s-footer-nav__link">В интернете</a>
-					<a href="#" class="s-footer-nav__link">Оплата кредита через терминал</a>
-					<a href="#" class="s-footer-nav__link">В кассе банка</a>
-				</nav>
+				{% endif %}
+			{% endfor %}
 			</div>
 
 			<div class="s-footer-referal-wrap">
