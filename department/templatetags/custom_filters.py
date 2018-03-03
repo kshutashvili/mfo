@@ -10,3 +10,11 @@ def get_city(department):
     except:
         return None
 
+
+@register.filter
+def replace_comma_with_space(string):
+    try:
+        return str(string).replace(',',' ')
+    except:
+        return None
+

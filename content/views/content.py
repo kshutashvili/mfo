@@ -4,7 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import urlencode, force_escape
 from django.utils.safestring import mark_safe
 
-from content.models import Spoiler, StaticPage, MenuFooterBlock
+from content.models import Spoiler, StaticPage, MenuFooterBlock, GetCredit
+from credit.models import CreditRate
 from communication.models import Response
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY
@@ -19,9 +20,13 @@ def main(request):
     responces = Response.objects.all()
     departments = Department.objects.all()
     menu_footer = MenuFooterBlock.objects.order_by('order')
+    get_credits = GetCredit.objects.all()
+    credit_rates = CreditRate.objects.all()
     return render(request, 'main.html', {'responces':responces,
                                          'departments':departments,
-                                         'menu_footer':menu_footer})
+                                         'menu_footer':menu_footer,
+                                         'get_credits':get_credits,
+                                         'credit_rates':credit_rates})
 
 
 def departments_generate(request, dep_id):

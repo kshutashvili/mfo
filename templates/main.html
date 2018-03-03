@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% load humanize %}
+
+{% load solo_tags %}
+
 {% load custom_filters %}
 
 {% block title %}Express Finance{% endblock %}
@@ -194,67 +198,21 @@
 
 	<section class="s-advanteges">
 		<div class="s-advanteges-header">
-			<h2 class="b-section-title">Преимущества</h2>
-			<p class="b-section-subtitle">Незначительный текст о преимуществах сервиса и почему его стоит использовать, очень кратко о особенностях даной платформы</p>
+		{% get_solo 'content.AdvantageStatic' as advantage %}
+			<h2 class="b-section-title">{{ advantage.title }}</h2>
+			<p class="b-section-subtitle">{{ advantage.text }}</p>
 		</div>
 		
 		<div class="wrapper wrapper--flex">
 			<div class="s-advanteges-content">
+			{% for obj in advantage.advantages.get_queryset %}
 				<div class="s-advanteges-content__item">
-					<svg><use href="#svg-money-bag">
-					</svg>
+					<img src="{{ obj.image.url }}">
 					<p class="s-advanteges-content__item-caption">
-						<b>беспроцентный кредит</b></br>по ставке 0,04%
+						{{ obj.text|safe }}
 					</p>
 				</div>
-
-				<div class="s-advanteges-content__item">
-					<svg><use href="#svg-approved">
-					</svg>
-					<p class="s-advanteges-content__item-caption">
-						<b>одобряем 4-ре из 5-ти</b></br>поданных заявок
-					</p>
-				</div>
-
-				<div class="s-advanteges-content__item">
-					<svg><use href="#svg-stopwatch">
-					</svg>
-					<p class="s-advanteges-content__item-caption">
-					Отсрочка платежа:</br><b>3 дня без штрафов</b></p>
-				</div>
-
-				<div class="s-advanteges-content__item">
-					<svg><use href="#svg-passport">
-					</svg>
-					<p class="s-advanteges-content__item-caption"><b>без скан-копий, только</b></br>номер паспорта и и ИНН</p>
-				</div>
-
-				<div class="s-advanteges-content__item">
-					<svg><use href="#svg-money-bag">
-					</svg>
-					<p class="s-advanteges-content__item-caption"><b>беспроцентный кредит</b></br>по ставке 0,04%</p>
-				</div>
-
-				<div class="s-advanteges-content__item">
-					<svg><use href="#svg-approved">
-					</svg>
-					<p class="s-advanteges-content__item-caption"><b>одобряем 4-ре из 5-ти</b></br>поданных заявок</p>
-				</div>
-
-				<div class="s-advanteges-content__item">
-					<svg><use href="#svg-stopwatch">
-					</svg>
-					<p class="s-advanteges-content__item-caption">Отсрочка платежа:</br><b>3 дня без штрафов</b></p>
-				</div>
-
-				<div class="s-advanteges-content__item">
-					<svg><use href="#svg-passport">
-					</svg>
-					<p class="s-advanteges-content__item-caption">
-						<b>без скан-копий, только</b></br>номер паспорта и и ИНН
-					</p>
-				</div>
-
+			{% endfor %}
 			</div>
 
 			<div class="s-advanteges-message">
@@ -292,214 +250,43 @@
 	<section class="s-packages">
 		<div class="wrapper">
 			<div class="b-section-header">
-				<h2 class="b-section-title">Кредитные тарифы</h2>
-				<h3 class="b-section-subtitle">Незначительный текст о богатстве выбора всеразличных тарифных планов для клиентов Экспресс Финанс</h3>
+				{% get_solo 'content.CreditRateStatic' as cred_rate %}
+				<h2 class="b-section-title">{{ cred_rate.title }}</h2>
+				<h3 class="b-section-subtitle">{{ cred_rate.text }}</h3>
 			</div>
 
 			<div class="s-packages-content">
+			{% for obj in credit_rates %}
 				<div>
 					<div class="s-packages-content__item">
-						<div class="s-packages-content__item-img" style="background-image: url({% static 'dist/img/slide-img1.jpg' %})"></div>
+						<div class="s-packages-content__item-img" style="background-image: url({{ obj.image.url }})"></div>
 						<div class="s-packages-content__item-wrap">
 							<h3 class="s-packages-content__item-subcaption">кредитный тариф</h3>
-							<h4 class="s-packages-content__item-caption">Стандартный 
+							<h4 class="s-packages-content__item-caption">{{ obj.name }} 
 							</h4>
 							<p class="s-packages-content__item-info">
 								<span>Размер кредита:</span>
-								<b>от 750 до 15 000 грн</b>	
+								<b>от {{ obj.sum_min|intcomma|replace_comma_with_space }} до {{ obj.sum_max|intcomma|replace_comma_with_space}} грн</b>	
 							</p>
 							<p class="s-packages-content__item-info">
 								Параметр кредита:
-								<b>от 8 до 16 недель</b>	
+								<b>от {{ obj.term_min }} до {{ obj.term_max }} недель</b>	
 							</p>
 							<p class="s-packages-content__item-info">
 								% ставка:
-								<b>от 200 до 650%</b>
+								<b>от {{ obj.rate_min }} до {{ obj.rate_max }}%</b>
 							</p>
 							<p class="s-packages-content__item-info">
 								Платеж:
-								<b>раз в неделю</b>
-								<b>раз в 14дней</b>
-								<b>раз в месяц</b>
+								{% for pl in obj.payment_terms.get_queryset %}
+									<b>{{ pl.term }}</b>
+								{% endfor %}
 							</p>
 							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Подать заявку</a>
 						</div>
-						
 					</div>
 				</div>
-
-				<div>
-					<div class="s-packages-content__item">
-						<div class="s-packages-content__item-img" style="background-image: url({% static 'dist/img/slide-img2.jpg' %})"></div>
-						<div class="s-packages-content__item-wrap">
-							<h3 class="s-packages-content__item-subcaption">кредитный тариф</h3>
-							<h4 class="s-packages-content__item-caption">Пенсионный
-							</h4>
-							<p class="s-packages-content__item-info">
-								<span>Размер кредита:</span>
-								<b>от 400 до 10000 грн</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								Параметр кредита:
-								<b>от 8 до 36 недель</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								% ставка:
-								<b>от 250 до 300%</b>
-							</p>
-							<p class="s-packages-content__item-info">
-								Платеж:
-								<b>раз в месяц</b>
-							</p>
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Подать заявку</a>
-						</div>
-						
-					</div>
-				</div>
-
-				<div>
-					<div class="s-packages-content__item">
-						<div class="s-packages-content__item-img" style="background-image: url({% static 'dist/img/slider-img3.jpg' %})"></div>
-						<div class="s-packages-content__item-wrap">
-							<h3 class="s-packages-content__item-subcaption">кредитный тариф</h3>
-							<h4 class="s-packages-content__item-caption">Лояльный 
-							</h4>
-							<p class="s-packages-content__item-info">
-								<span>Размер кредита:</span>
-								<b>от 750 до 15 000 грн</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								Параметр кредита:
-								<b>от 8 до 36 недель</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								% ставка:
-								<b>от 180 до 730%</b>
-							</p>
-							<p class="s-packages-content__item-info">
-								Платеж:
-								<b>раз в неделю</b>
-							</p>
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Подать заявку</a>
-						</div>
-						
-					</div>
-				</div>
-
-				<div>
-					<div class="s-packages-content__item">
-						<div class="s-packages-content__item-img" style="background-image: url({% static 'dist/img/slider-img3.jpg' %})"></div>
-						<div class="s-packages-content__item-wrap">
-							<h3 class="s-packages-content__item-subcaption">кредитный тариф</h3>
-							<h4 class="s-packages-content__item-caption">Лояльный 
-							</h4>
-							<p class="s-packages-content__item-info">
-								<span>Размер кредита:</span>
-								<b>от 750 до 15 000 грн</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								Параметр кредита:
-								<b>от 8 до 36 недель</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								% ставка:
-								<b>от 180 до 730%</b>
-							</p>
-							<p class="s-packages-content__item-info">
-								Платеж:
-								<b>раз в неделю</b>
-							</p>
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Подать заявку</a>
-						</div>
-						
-					</div>
-				</div>
-
-				<div>
-					<div class="s-packages-content__item">
-						<div class="s-packages-content__item-img" style="background-image: url({% static 'dist/img/slider-img3.jpg' %})"></div>
-						<div class="s-packages-content__item-wrap">
-							<h3 class="s-packages-content__item-subcaption">кредитный тариф</h3>
-							<h4 class="s-packages-content__item-caption">Лояльный 
-							</h4>
-							<p class="s-packages-content__item-info">
-								<span>Размер кредита:</span>
-								<b>от 750 до 15 000 грн</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								Параметр кредита:
-								<b>от 8 до 36 недель</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								% ставка:
-								<b>от 180 до 730%</b>
-							</p>
-							<p class="s-packages-content__item-info">
-								Платеж:
-								<b>раз в неделю</b>
-							</p>
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Подать заявку</a>
-						</div>
-						
-					</div>
-				</div>
-
-				<div>
-					<div class="s-packages-content__item">
-						<div class="s-packages-content__item-img" style="background-image: url({% static 'dist/img/slider-img3.jpg' %})"></div>
-						<div class="s-packages-content__item-wrap">
-							<h3 class="s-packages-content__item-subcaption">кредитный тариф</h3>
-							<h4 class="s-packages-content__item-caption">Лояльный 
-							</h4>
-							<p class="s-packages-content__item-info">
-								<span>Размер кредита:</span>
-								<b>от 750 до 15 000 грн</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								Параметр кредита:
-								<b>от 8 до 36 недель</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								% ставка:
-								<b>от 180 до 730%</b>
-							</p>
-							<p class="s-packages-content__item-info">
-								Платеж:
-								<b>раз в неделю</b>
-							</p>
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Подать заявку</a>
-						</div>
-						
-					</div>
-				</div>
-
-				<div>
-					<div class="s-packages-content__item">
-						<div class="s-packages-content__item-img" style="background-image: url({% static 'dist/img/slider-img3.jpg' %})"></div>
-						<div class="s-packages-content__item-wrap">
-							<h3 class="s-packages-content__item-subcaption">кредитный тариф</h3>
-							<h4 class="s-packages-content__item-caption">Лояльный 
-							</h4>
-							<p class="s-packages-content__item-info">
-								<span>Размер кредита:</span>
-								<b>от 750 до 15 000 грн</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								Параметр кредита:
-								<b>от 8 до 36 недель</b>	
-							</p>
-							<p class="s-packages-content__item-info">
-								% ставка:
-								<b>от 180 до 730%</b>
-							</p>
-							<p class="s-packages-content__item-info">
-								Платеж:
-								<b>раз в неделю</b>
-							</p>
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Подать заявку</a>
-						</div>				
-					</div>
-				</div>
+			{% endfor %}
 			</div>
 		</div>
 	</section>
@@ -572,25 +359,16 @@
 			</div>
 
 			<div class="b-section-message">
-				<div class="b-section-message__item active">
+			{% for obj in get_credits %}
+				<div class="b-section-message__item {% if forloop.first %}active{% endif %}">
 					<h3 class="b-section-message__item-title">
-						Оформление в отделении
+						{{ obj.title }}
 					</h3>
 					<p class="b-section-message__item-content">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur voluptate, consectetur recusandae natus? Aperiam eos vel quae esse velit reprehenderit ea quibusdam, doloribus quam quo accusantium amet, fugit placeat tenetur.
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus obcaecati nulla ea vel. Voluptate, tempora! Tenetur, nihil deserunt odit autem rem, sunt ab facilis cupiditate, atque et dignissimos sint cumque.
+						{{ obj.text }}
 					</p>
 				</div>
-
-				<div class="b-section-message__item">
-					<h3 class="b-section-message__item-title">
-						Оформление онлайн
-					</h3>
-					<p class="b-section-message__item-content">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur voluptate, consectetur recusandae natus? Aperiam eos vel quae esse velit reprehenderit ea quibusdam, doloribus quam quo accusantium amet, fugit placeat tenetur.
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus obcaecati nulla ea vel. Voluptate, tempora! Tenetur, nihil deserunt odit autem rem, sunt ab facilis cupiditate, atque et dignissimos sint cumque.
-					</p>
-				</div>
+			{% endfor %}
 			</div>
 
 			<div class="b-section-cards">
@@ -715,42 +493,24 @@
 		</div>
 	</section>
 
-	<section class="s-media">
+	<section class="s-media" action="#!">
 		<div class="wrapper">
-			<h2 class="b-section-title">Как закрыть кредит?</h2>
+		{% get_solo 'content.CloseCreditStatic' as close_credit %}
+			<h2 class="b-section-title">{{ close_credit.title }}</h2>
 			<div class="b-media">
+			{% for obj in close_credit.close_credits.get_queryset %}
 				<div class="b-media-item">
 					<div class="b-media-item__img">
-						<svg class="svg-phone" >
-							<use href="#svg-phone"></use>
-						</svg>
+						<img src="{{ obj.image.url }}">
 					</div>
 					
-					<h4 class="b-media-item__title">Через платежные терминалы</h4>
-					<p class="b-media-item__info">Оплата кредита в терминале Ibox, EasyPay, City24 и TYME- это быстро и удобно. Терминал Вы сможете найти в ближайшем к Вам супермаркете.</p>
-					<button class="b-btn-primary b-btn-primary--main">Подробнее</button>
+					<h4 class="b-media-item__title">{{ obj.title }}</h4>
+					<p class="b-media-item__info">{{ obj.text }}</p>
+					<a href="{{ obj.link }}">
+						<button class="b-btn-primary b-btn-primary--main">Подробнее</button>
+					</a>
 				</div>
-				<div class="b-media-item">
-					<div class="b-media-item__img">
-						<svg class="svg-tablet">
-							<use href="#svg-tablet"></use>
-						</svg>
-					</div>
-					
-					<h4 class="b-media-item__title">В личном кабинете</h4>
-					<p class="b-media-item__info">Вы можете погасить кредит Ваш кредит онлайн не выходя из дома. Просто перейдите в личный кабинет и оплатите займ банковской картой</p>
-					<button class="b-btn-primary b-btn-primary--main">Подробнее</button>
-				</div>
-				<div class="b-media-item">
-					<div class="b-media-item__img">
-						<svg class="svg-house">
-							<use href="#svg-house"></use>
-						</svg>
-					</div>
-					<h4 class="b-media-item__title">В кассе банков-партнеров</h4>
-					<p class="b-media-item__info">Вы можете погасить кредит Ваш кредит онлайн не выходя из дома. Просто перейдите в личный кабинет и оплатите займ банковской картой</p>
-					<button class="b-btn-primary b-btn-primary--main">Подробнее</button>
-				</div>
+			{% endfor %}
 			</div>
 		</div>
 	</section>

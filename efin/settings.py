@@ -38,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     #own
     'communication',
     'department',
     'content',
+    'vacancy',
+    'credit',
     #3-rd
     'ckeditor',
     'solo',

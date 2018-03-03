@@ -21,13 +21,15 @@ from django.conf.urls.static import static
 
 from communication.views import contacts, about
 from content.views import content
+from vacancy.views import job
 
 urlpatterns = [
 	path('main/', content.main, name='main'),
+	path('main/job/', job.job, name='job'),
 	path('main/about/', about.about, name='about'),
 	path('main/about/agreement/', TemplateView.as_view(template_name='default.html'), name='agreement'),
 	path('main/about/contacts/', contacts.contacts, name='contacts'),
-	path('<str:page_url>/', content.pages, name='static_pages'),
+	path('static/<str:page_url>/', content.pages, name='static_pages'),
 	path('ajax/departments_generate/<int:dep_id>/', content.departments_generate, name='departments_generate'),
     path('admin/', admin.site.urls),
 ]
