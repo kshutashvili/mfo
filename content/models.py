@@ -6,7 +6,7 @@ from django.utils.html import format_html
 from solo.models import SingletonModel
 from ckeditor.fields import RichTextField
 
-from communication.models import Email, PhoneNumber
+from communication.models import Email, PhoneNumber, Response
 
 
 class Spoiler(models.Model):
@@ -249,4 +249,54 @@ class DiscountStatic(SingletonModel):
 
     def __str__(self):
         return mark_safe(self.title)
+
+
+class AboutUsStatic(SingletonModel):
+    title = models.CharField(_('Заголовок'),
+                             max_length=64)
+    subtitle = models.CharField(_('Подзаголовок'),
+                                max_length=64)
+    text = models.TextField(_('Текст'))
+    advantages = models.ManyToManyField('Advantage',
+                                        verbose_name=_('Преимущества'))
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255,
+                            help_text=_("Используйте ссылку вида /#html_id "
+                                        "для блока лэндинга. Остальные ссылки "
+                                        "указывать полностью (https://...)"))
+    image = models.ImageField(_('Картинка'),
+                              upload_to='about_us')
+    middle_title = models.CharField(_('Заголовок на середине страницы'),
+                                    max_length=128)
+    middle_text = models.TextField(_('Текст на середине страницы'))
+    responses = models.ManyToManyField(Response,
+                                       verbose_name=_('Отзывы'))
+    important_title = models.CharField(_('Заголовок важных аспектов'),
+                                       max_length=128)
+    important_aspects = models.ManyToManyField('ImportantAspect',
+                                               verbose_name=_('Важные аспекты'))
+
+    class Meta:
+        verbose_name = _('Страница о нас')
+        verbose_name_plural = _('Страница о нас')
+
+    def __str__(self):
+        return self.title
+
+
+class ImportantAspect(models.Model):
+    title = models.CharField(_('Заголовок'),
+                             max_length=64)
+    text = models.TextField(_('Текст'))
+    image = models.FileField(_('Картинка'),
+                             upload_to='important_aspect',
+                             null=True,
+                             blank=True)
+
+    class Meta:
+        verbose_name = _('Аспект')
+        verbose_name_plural = _('Важные аспекты')
+
+    def __str__(self):
+        return self.title
 

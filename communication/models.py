@@ -106,3 +106,19 @@ class SocialNet(models.Model):
     def __str__(self):
         return self.link
 
+
+class BlogItem(models.Model):
+    title = models.CharField(_('Заголовок'),
+                             max_length=128)
+    text = RichTextField(_('Текст статьи'))
+    image = models.ImageField(_('Картинка'),
+                              upload_to='blog_items')
+    date = models.DateField(_('Дата анонса'))
+
+    class Meta:
+        verbose_name = _('Статья')
+        verbose_name_plural = _('Статьи в блоге')
+
+    def __str__(self):
+        return self.title
+

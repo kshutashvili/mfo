@@ -32,3 +32,8 @@ class ResponseAdmin(admin.ModelAdmin):
 class SocialNetAdmin(admin.ModelAdmin):
     list_display = ('link',)
 
+
+@admin.register(models.BlogItem)
+class BlogItemAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date',)
+

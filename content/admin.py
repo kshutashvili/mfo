@@ -77,3 +77,12 @@ class SecurityStaticAdmin(admin.ModelAdmin):
 class DiscountStaticAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
 
+
+@admin.register(models.ImportantAspect)
+class ImportantAspectAdmin(admin.ModelAdmin):
+    list_display = ('title', 'text',)
+
+
+@admin.register(models.AboutUsStatic)
+class AboutUsStaticAdmin(admin.ModelAdmin):
+    list_display = ('title', 'subtitle', 'link', )

@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load solo_tags %}
+
 {% block title %}About us{% endblock %}
 
 {% block content %}
@@ -20,194 +22,80 @@
 		<div class="wrapper">
 			<div class="s-about__wrap">
 				<div class="b-top-nav">
-					<a class="b-top-nav__item active">Главная</a>
+					<a href="{% url 'main' %}" class="b-top-nav__item active">Главная</a>
 					<a href="{% url 'about' %}" class="b-top-nav__item">О Нас</a>
 				</div>
-
-				<h2 class="b-top-title">О нас</h2>
+				{% get_solo 'content.AboutUsStatic' as about %}
+				<h2 class="b-top-title">{{ about.title }}</h2>
 
 				<div class="s-about-info">
 					<h3 class="s-about-info__title">
-						Заголовок о Экспресс Финанс <br>
-						в две строки
+						{{ about.subtitle }}
 					</h3>
 					<p class="s-about-info__text">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum fugit, numquam nobis vero perferendis, doloribus quo illo vitae temporibus eligendi nam doloremque in, nemo sit expedita unde dolore, excepturi illum!
+						{{ about.text }}
 					</p>
 				</div>
 
 				<div class="s-about-content">
+				{% for obj in about.advantages.get_queryset %}
 					<div class="s-about-content__item">
-						<svg><use href="#svg-approved">
-						</svg>
+						<img src="{{ obj.image.url }}">
 						<p class="s-about-content__item-caption">
-							<b>одобряем 4-ре из 5-ти</b></br>поданных заявок
+							{{ obj.text|safe }}
 						</p>
 					</div>
-
-					<div class="s-about-content__item">
-						<svg><use href="#svg-stopwatch">
-						</svg>
-						<p class="s-about-content__item-caption">
-						Отсрочка платежа:</br><b>3 дня без штрафов</b></p>
-					</div>
-
-					<div class="s-about-content__item">
-						<svg><use href="#svg-passport">
-						</svg>
-						<p class="s-about-content__item-caption"><b>без скан-копий, только</b></br>номер паспорта и и ИНН</p>
-					</div>
-
-					<div class="s-about-content__item">
-						<svg><use href="#svg-money-bag">
-						</svg>
-						<p class="s-advanteges-content__item-caption"><b>беспроцентный кредит</b></br>по ставке 0,04%</p>
-					</div>
+				{% endfor %}
 				</div>
 
-				<a href="form-callback.html" class="b-btn-primary b-btn-primary--main b-btn-primary--sm s-about__btn">Оформить кредит</a>
+				<a href="{{ about.link }}" class="b-btn-primary b-btn-primary--main b-btn-primary--sm s-about__btn">Оформить кредит</a>
 			</div>
 		</div>
 	</section>
 
 	<section class="s-response">
 		<div class="wrapper">
-			<h2 class="b-section-title">Экспресс финанс в лицах</h2>
-			<p class="s-response__info">Это не просто сайт, который с помощью  специальной программы выдает кредиты, это лучшие специалисты, <br> ежедневно работающие над тем, чтобы Экспресс Финанс стал вашим незаменимым помощником в повседневной жизни</p>
-
+			<h2 class="b-section-title">{{ about.title_middle }}</h2>
+			<p class="s-response__info">{{ about.text_middle }}</p>
 			<div id="response" class="b-response-wrap">
+			{% for obj in about.responses.get_queryset %}
 				<div>
 					<div class="b-response">
 						<div class="b-response__icon"></div>
 
 						<p class="b-response__info">
-							Отличная компания! Моментальное рассмотрение заявки, быстрый перевод денег и удобное погашение займа. Искренне благодарю Экспресс Финанс за помощь!
+							{{ obj.text }}
 						</p>
 
 						<div class="b-response__person">
-							<img class="b-response__person-img" src="{% static 'dist/img/person-img.jpg' %}" alt="person-img" width="130" height="125">
+							<img class="b-response__person-img" src="{{ obj.image.url }}" alt="person-img" width="130" height="125">
 
 							<div class="b-response__person-info">
-								<p><b>Инна</b></p>
-								<p>Студентка</p>
+								<p><b>{{ obj.name }}</b></p>
+								<p>{{ obj.status }}</p>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div>
-					<div class="b-response">
-						<div class="b-response__icon"></div>
-
-						<p class="b-response__info">
-							Отличная компания! Моментальное рассмотрение заявки, быстрый перевод денег и удобное погашение займа. Искренне благодарю Экспресс Финанс за помощь!
-						</p>
-
-						<div class="b-response__person">
-							<img class="b-response__person-img" src="{% static 'dist/img/person-img.jpg' %}" alt="person-img" width="130" height="125">
-
-							<div class="b-response__person-info">
-								<p><b>Инна</b></p>
-								<p>Студентка</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div>
-					<div class="b-response">
-						<div class="b-response__icon"></div>
-
-						<p class="b-response__info">
-							Отличная компания! Моментальное рассмотрение заявки, быстрый перевод денег и удобное погашение займа. Искренне благодарю Экспресс Финанс за помощь!
-						</p>
-
-						<div class="b-response__person">
-							<img class="b-response__person-img" src="{% static 'dist/img/person-img.jpg' %}" alt="person-img" width="130" height="125" >
-
-							<div class="b-response__person-info">
-								<p><b>Инна</b></p>
-								<p>Студентка</p>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div>
-					<div class="b-response">
-						<div class="b-response__icon"></div>
-
-						<p class="b-response__info">
-							Отличная компания! Моментальное рассмотрение заявки, быстрый перевод денег и удобное погашение займа. Искренне благодарю Экспресс Финанс за помощь!
-						</p>
-
-						<div class="b-response__person">
-							<img class="b-response__person-img" src="{% static 'dist/img/person-img.jpg' %}" alt="person-img" width="130" height="125" >
-
-							<div class="b-response__person-info">
-								<p><b>Инна</b></p>
-								<p>Студентка</p>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div>
-					<div class="b-response">
-						<div class="b-response__icon"></div>
-
-						<p class="b-response__info">
-							Отличная компания! Моментальное рассмотрение заявки, быстрый перевод денег и удобное погашение займа. Искренне благодарю Экспресс Финанс за помощь!
-						</p>
-
-						<div class="b-response__person">
-							<img class="b-response__person-img" src="{% static 'dist/img/person-img.jpg' %}" alt="person-img" width="130" height="125" >
-
-							<div class="b-response__person-info">
-								<p><b>Инна</b></p>
-								<p>Студентка</p>
-							</div>
-						</div>
-					</div>
-				</div>
+			{% endfor %}
 			</div>
 		</div>
 	</section>
 
 	<section class="s-values">
 		<div class="wrapper">
-			<h2 class="b-section-title">Что для нас важно</h2>
+			<h2 class="b-section-title">{{ about.important_title }}</h2>
 
 			<div class="b-value-wrap">
+			{% for obj in about.important_aspects.get_queryset %}
 				<div class="b-value">
 					<span class="icon icon--interview"></span>
 					<div class="b-value__info">
-						<h3 class="b-value__info-title">Ваше мнение о нас</h3>
-						<p class="b-value__info-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, perferendis consequatur assumenda laboriosam dignissimos maxime, labore iure doloremque, debitis placeat nobis molestias sed nemo quisquam impedit quidem sequi molestiae aliquid!</p>
+						<h3 class="b-value__info-title">{{ obj.title }}</h3>
+						<p class="b-value__info-text">{{ obj.text }}</p>
 					</div>
 				</div>
-
-				<div class="b-value">
-					<span class="icon icon--interview"></span>
-					<div class="b-value__info">
-						<h3 class="b-value__info-title">Ваше мнение о нас</h3>
-						<p class="b-value__info-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, perferendis consequatur assumenda laboriosam dignissimos maxime, labore iure doloremque, debitis placeat nobis molestias sed nemo quisquam impedit quidem sequi molestiae aliquid!</p>
-					</div>
-				</div>
-
-				<div class="b-value">
-					<span class="icon icon--interview"></span>
-					<div class="b-value__info">
-						<h3 class="b-value__info-title">Ваше мнение о нас</h3>
-						<p class="b-value__info-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, perferendis consequatur assumenda laboriosam dignissimos maxime, labore iure doloremque, debitis placeat nobis molestias sed nemo quisquam impedit quidem sequi molestiae aliquid!</p>
-					</div>
-				</div>
-
-				<div class="b-value">
-					<span class="icon icon--interview"></span>
-					<div class="b-value__info">
-						<h3 class="b-value__info-title">Ваше мнение о нас</h3>
-						<p class="b-value__info-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, perferendis consequatur assumenda laboriosam dignissimos maxime, labore iure doloremque, debitis placeat nobis molestias sed nemo quisquam impedit quidem sequi molestiae aliquid!</p>
-					</div>
-				</div>
+			{% endfor %}
 			</div>
 		</div>
 	</section>
