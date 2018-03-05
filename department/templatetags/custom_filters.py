@@ -17,4 +17,3 @@ def replace_comma_with_space(string):
         return str(string).replace(',',' ')
     except:
         return None
-
