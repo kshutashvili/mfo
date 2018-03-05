@@ -19,7 +19,7 @@
 			
 			<div class="s-header__phone">
 				<span>Телефон горячей линии</span>
-				<a href="tel:+0800211112">0 800 211 112</a>
+				<a href="tel:+{{ phones.first.number|cut:' ' }}">{{ phones.first.number }}</a>
 			</div>
 
 			<div class="b-nav">
@@ -45,9 +45,13 @@
 	<footer class="s-footer">
 		<div class="wrapper wrapper--flex">
 			<div class="s-footer-contacts">
-				<a class="b-tel b-tel--primary" href="tel:0800211119">0 800 211 112 <span>Бесплатные звонки по Украине</span></a>
-				<a class="b-tel b-tel--secondary" href="tel:0673694111"><span class="icon icon--kyivstar"></span>067 369 41 11</a>
-				<a class="b-tel b-tel--secondary" href="tel:0503694111"><span class="icon icon--vodafone"></span>050 369 41 11</a>
+			{% for obj in phones %}
+				{% if forloop.first %}
+					<a class="b-tel b-tel--primary" href="tel:{{ obj.number|cut:' ' }}">{{ obj.number }} <span>Бесплатные звонки по Украине</span></a>
+				{% else %}
+					<a class="b-tel b-tel--secondary" href="tel:{{ obj.number|cut:' ' }}"><!--<span class="icon icon--kyivstar"></span>-->{{ obj.number }}</a>
+				{% endif %}
+			{% endfor %}
 			</div>
 
 			<div class="s-footer-about">
@@ -90,7 +94,7 @@
 			</div>
 			
 			<div class="s-footer-base">
-				<a href="#" class="b-logo">
+				<a href="{% url 'main' %}" class="b-logo">
 					<svg><use href="#svg-logo">
 					</svg>
 				</a>
@@ -102,8 +106,13 @@
 				</p>
 
 				<div class="s-footer-base__social">
-					<a href="#"><span class="icon icon--telegram"></span></a>
-					<a href="#"><span class="icon icon--facebook"></span></a>	
+				{% for obj in social_nets %}
+					{% if forloop.first %}
+						<a href="{{ obj.link }}"><span class="icon icon--facebook"></span></a>	
+					{% else %}
+						<a href="{{ obj.link }}"><span class="icon icon--telegram"></span></a>
+					{% endif %}
+				{% endfor %}
 				</div>
 			</div>
 		</div>

@@ -27,3 +27,8 @@ class EmailAdmin(admin.ModelAdmin):
 class ResponseAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'text')
 
+
+@admin.register(models.SocialNet)
+class SocialNetAdmin(admin.ModelAdmin):
+    list_display = ('link',)
+

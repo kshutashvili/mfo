@@ -79,11 +79,30 @@ class Email(models.Model):
                                  default=False,
                                  help_text=_('Будет использоваться только '
                                              'первая из активных почт'))
-    
+
     class Meta:
         verbose_name = _('Электронная почта')
         verbose_name_plural = _('Электронные почты')
 
     def __str__(self):
         return self.email
+
+
+class SocialNet(models.Model):
+    image = models.FileField(_('Иконка'),
+                             upload_to='social_nets',
+                             null=True,
+                             blank=True)
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255,
+                            help_text=_("Используйте ссылку вида /#html_id "
+                                        "для блока лэндинга. Остальные ссылки "
+                                        "указывать полностью (https://...)"))
+
+    class Meta:
+        verbose_name = _('Социальная сеть')
+        verbose_name_plural = _('Социальные сети')
+
+    def __str__(self):
+        return self.link
 
