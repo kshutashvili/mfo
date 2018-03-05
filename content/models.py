@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.utils.html import format_html 
 
 from solo.models import SingletonModel
 from ckeditor.fields import RichTextField
@@ -200,4 +201,52 @@ class CloseCreditStatic(SingletonModel):
 
     def __str__(self):
         return self.title
+
+
+class SecurityStatic(SingletonModel):
+    image1 = models.FileField(_('Картинка первого партнера'),
+                              upload_to='secutiry_block')
+    image2 = models.FileField(_('Картинка второго партнера'),
+                              upload_to='secutiry_block')
+    image3 = models.FileField(_('Картинка третьего партнера'),
+                              upload_to='secutiry_block')
+    security_items = models.ManyToManyField('SecurityItem',
+                                            verbose_name=_('Элементы безопасности'))
+
+    class Meta:
+        verbose_name = _('Блок')
+        verbose_name_plural = _('Блок о безопасности на главной')
+
+    def __str__(self):
+        return 'Блок о безопасности'
+
+
+class SecurityItem(models.Model):
+    text = RichTextField(_('Текст'))
+
+    class Meta:
+        verbose_name = _('Элемент безопасности')
+        verbose_name_plural = _('Элементы безопасности на главной')
+
+    def __str__(self):
+        return mark_safe(self.text)
+
+
+class DiscountStatic(SingletonModel):
+    title = RichTextField(_('Заголовок'))
+    image = models.FileField(_('Картинка'),
+                             upload_to='discount')
+    text = RichTextField(_('Текст'))
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255,
+                            help_text=_("Используйте ссылку вида /#html_id "
+                                        "для блока лэндинга. Остальные ссылки "
+                                        "указывать полностью (https://...)"))
+
+    class Meta:
+        verbose_name = _('Блок')
+        verbose_name_plural = _('Блок скидка на главной')
+
+    def __str__(self):
+        return mark_safe(self.title)
 

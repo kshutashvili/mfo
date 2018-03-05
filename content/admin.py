@@ -62,3 +62,18 @@ class CloseCreditAdmin(admin.ModelAdmin):
 class CloseCreditStaticAdmin(admin.ModelAdmin):
     list_display = ('title',)
 
+
+@admin.register(models.SecurityItem)
+class SecutiryItemAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+
+
+@admin.register(models.SecurityStatic)
+class SecurityStaticAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+
+
+@admin.register(models.DiscountStatic)
+class DiscountStaticAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+

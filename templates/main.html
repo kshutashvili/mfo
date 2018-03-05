@@ -215,31 +215,23 @@
 			{% endfor %}
 			</div>
 
+			{% get_solo 'content.DiscountStatic' as discount %}
 			<div class="s-advanteges-message">
 				<div class="s-advanteges-message__image-box">
-					<svg class="s-advanteges-message__svg-1"><use href="#svg-money-bag">
+					<svg class="s-advanteges-message__svg-1"><img src="{{ discount.image.url }}">
 					</svg>
-					<svg class="s-advanteges-message__svg-2"><use href="#svg-money-bag">
+					<svg class="s-advanteges-message__svg-2"><img src="{{ discount.image.url }}">
 					</svg>
-					<svg class="s-advanteges-message__svg-3"><use href="#svg-money-bag">
+					<svg class="s-advanteges-message__svg-3"><img src="{{ discount.image.url }}">
 					</svg>
 				</div>
 
 				<div class="s-advanteges-message__content">
 					<h4 class="s-advanteges-message__content-title">
-						беспроцентный кредит <br>
-						<span>по ставке 0,04%</span>
+						{{ discount.title|safe }}
 					</h4>
-					<p class="s-advanteges-message__content-main">Готовы к новому сюрпризу от Экспресс Финанс? Сегодня мы объявляем о запуске бонусной программы лояльности “Любимый клиент” для постоянных клиентов .</p>
-					<p class="s-advanteges-message__content-main">Какие возможности дает вам программа лояльности? Все участники программы лояльности получают сразу несколько преимуществ: </p>
-
-					<ul class="s-advanteges-message__content-list">
-						<li>Скидки до 20%* на оформление кредитов</li>
-						<li>Увеличение доступной суммы кредита до 10 000 грн.</li>
-						<li>Автоматическое подтверждение заявок с возможностью сразу получить деньги на карту</li>
-					</ul>
-
-					<a href="blog-item.html" class="b-btn-stretch">Как стать участником программы?</a>
+					<p class="s-advanteges-message__content-main">{{ discount.text|safe }}</p>
+					<a href="{{ discount.link.url }}" class="b-btn-stretch">Как стать участником программы?</a>
 				</div>
 
 			</div>
@@ -371,10 +363,11 @@
 			{% endfor %}
 			</div>
 
+			{% get_solo 'content.SecurityStatic' as security %}
 			<div class="b-section-cards">
 				<div class="b-section-cards__item">
-					<img class="visa-img" src="{% static 'dist/img/visa-logo.png' %}" alt="visa-card">
-					<img class="master-card" src="{% static 'dist/img/master-card.png' %}" alt="master-card">
+					<img class="visa-img" src="{{ security.image1.url }}" alt="visa-card">
+					<img class="master-card" src="{{ security.image2.url }}" alt="master-card">
 
 					<div class="b-section-cards__item-square">
 					</div>
@@ -382,13 +375,13 @@
 					</div>
 
 					<div class="b-section-cards__icons">
-						<span class="icon icon--sticker"><b>О параметрах защиты</b><br>Экспресс Финанс</span>
-						<span class="icon icon--sticker"><b>О параметрах защиты</b><br>Экспресс Финанс</span>
-						<span class="icon icon--sticker"><b>О параметрах защиты</b><br>Экспресс Финанс</span>
+					{% for obj in security.security_items.get_queryset %}
+						<span class="icon icon--sticker">{{ obj.text|safe }}</span>
+					{% endfor %}
 					</div>
 				</div>
 				<div class="b-section-cards__item">
-					<img class="bank-card" src="{% static 'dist/img/svgstore/credit-card.svg' %}" alt="credit-card">
+					<img class="bank-card" src="{{ security.image3.url }}" alt="credit-card">
 				</div>
 			</div>
 		</div>
