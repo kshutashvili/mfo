@@ -4,6 +4,8 @@
 
 {% load custom_filters %}
 
+{% load solo_tags %}
+
 {% block title %}Contacts{% endblock %}
 
 {% block content %}
@@ -106,22 +108,16 @@
 					<img class="b-sidebar-banner__img b-sidebar-banner__img--left" src="{% static 'dist/img/car.png' %}" alt="car">
 					<img class="b-sidebar-banner__img b-sidebar-banner__img--right" src="{% static 'dist/img/grn.png' %}" alt="money">
 				</div>
-
+			{% get_solo 'communication.LastArticles' as last_articles %}
+			{% for obj in last_articles.articles.get_queryset %}
 				<article class="b-blog-item">
-					<img src="{% static 'dist/img/money.jpg' %}" alt="money" class="b-blog-item__img">
-					<h3 class="b-blog-item__title">Заголовок новостной статьи  блога в тему раздела</h3>
-					<p class="b-blog-item__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe aliquid in atque dolorum hic neque unde ex, quisquam soluta voluptas officia magnam doloremque, quasi ducimus impedit voluptatibus sed, autem facere?</p>
-					<a class="b-blog-item__link" href="#">Подробнее</a>
-					<time class="b-blog-item__date" >20 декабря 2017</time>
+					<img src="{{ obj.image.url }}" alt="money" class="b-blog-item__img">
+					<h3 class="b-blog-item__title">{{ obj.title }}</h3>
+					<p class="b-blog-item__text">{{ obj.text|safe|get_few_words:'40'|safe }}</p>
+					<a class="b-blog-item__link" href="{% url 'blog_item' obj.id %}">Подробнее</a>
+					<time class="b-blog-item__date" >{{ obj.date }}</time>
 				</article>
-
-				<article class="b-blog-item">
-					<img src="{% static 'dist/img/money.jpg' %}" alt="money" class="b-blog-item__img">
-					<h3 class="b-blog-item__title">Заголовок новостной статьи  блога в тему раздела</h3>
-					<p class="b-blog-item__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe aliquid in atque dolorum hic neque unde ex, quisquam soluta voluptas officia magnam doloremque, quasi ducimus impedit voluptatibus sed, autem facere?</p>
-					<a class="b-blog-item__link" href="#">Подробнее</a>
-					<time class="b-blog-item__date" >20 декабря 2017</time>
-				</article>
+			{% endfor %}
 			</aside>
 		</div>
 	</section>

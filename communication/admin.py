@@ -37,3 +37,8 @@ class SocialNetAdmin(admin.ModelAdmin):
 class BlogItemAdmin(admin.ModelAdmin):
     list_display = ('title', 'date',)
 
+
+@admin.register(models.LastArticles)
+class LastArticlesAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+

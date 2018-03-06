@@ -1,4 +1,7 @@
 {% load static %}
+
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +52,7 @@
 				{% if forloop.first %}
 					<a class="b-tel b-tel--primary" href="tel:{{ obj.number|cut:' ' }}">{{ obj.number }} <span>Бесплатные звонки по Украине</span></a>
 				{% else %}
-					<a class="b-tel b-tel--secondary" href="tel:{{ obj.number|cut:' ' }}"><!--<span class="icon icon--kyivstar"></span>-->{{ obj.number }}</a>
+					<a class="b-tel b-tel--secondary" href="tel:{{ obj.number|cut:' ' }}"><span class="icon icon--{{ obj|get_icon_class_phone_number }}"></span>{{ obj.number }}</a>
 				{% endif %}
 			{% endfor %}
 			</div>
@@ -107,11 +110,7 @@
 
 				<div class="s-footer-base__social">
 				{% for obj in social_nets %}
-					{% if forloop.first %}
-						<a href="{{ obj.link }}"><span class="icon icon--facebook"></span></a>	
-					{% else %}
-						<a href="{{ obj.link }}"><span class="icon icon--telegram"></span></a>
-					{% endif %}
+					<a href="{{ obj.link }}"><span class="icon icon--{{ obj|get_icon_class_social_net }}"></span></a>	
 				{% endfor %}
 				</div>
 			</div>

@@ -8,3 +8,4 @@ def menu_processor(requset):
     return {'menu_footer': menu_footer,
             'social_nets':social_nets,
             'phones':phones}
+

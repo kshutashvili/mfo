@@ -89,10 +89,6 @@ class Email(models.Model):
 
 
 class SocialNet(models.Model):
-    image = models.FileField(_('Иконка'),
-                             upload_to='social_nets',
-                             null=True,
-                             blank=True)
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
                             help_text=_("Используйте ссылку вида /#html_id "
@@ -120,5 +116,17 @@ class BlogItem(models.Model):
         verbose_name_plural = _('Статьи в блоге')
 
     def __str__(self):
-        return self.title
+        return ' '.join([self.title, str(self.date)])
+
+
+class LastArticles(SingletonModel):
+    articles = models.ManyToManyField('BlogItem',
+                                      verbose_name=_('Статьи'))
+
+    class Meta:
+        verbose_name = _('Последние статьи')
+        verbose_name_plural = _('Блок последние статьи')
+
+    def __str__(self):
+        return 'Последние статьи'
 

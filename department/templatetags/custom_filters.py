@@ -46,3 +46,35 @@ def generate_paginate_iter(q_list, divider):
     except:
         return None
 
+
+@register.filter
+def get_icon_class_social_net(social_net):
+    try:
+        if 'facebook' in social_net.link:
+            return 'facebook'
+        elif 'telegram' in social_net.link:
+            return 'telegram'
+        else:
+            return ''
+    except:
+        return ''
+
+
+@register.filter
+def get_icon_class_phone_number(phone):
+    kyivstar = ['67', '68', '96', '97', '98']
+    vodafone = ['5', '66', '95', '99']
+    lifecell = ['63', '93', '73']
+    try:
+        tmp = phone.number.split('0')
+        if tmp[1][:2] in lifecell:
+            return 'lifecell'
+        elif tmp[1][:2] in vodafone:
+            return 'vodafone'
+        elif tmp[1][:2] in kyivstar:
+            return 'kyivstar'
+        else:
+            return ''
+    except:
+        return ''
+
