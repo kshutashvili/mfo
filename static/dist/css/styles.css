@@ -722,9 +722,8 @@ fieldset {
 
 .s-advanteges-content__item, .s-about-content__item {
   text-align: center; }
-  .s-advanteges-content__item svg, .s-about-content__item svg {
-    width: 50%;
-    height: 50%; }
+  .s-advanteges-content__item svg, img, .s-about-content__item svg, img {
+    width: 50%; }
 
 .b-review, .b-response-wrap {
   position: relative;

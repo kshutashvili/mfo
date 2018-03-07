@@ -28,7 +28,7 @@ urlpatterns = [
 	path('main/', content.main, name='main'),
 	path('main/job/', job.job, name='job'),
 	path('main/about/', about.about, name='about'),
-	path('main/about/agreement/', TemplateView.as_view(template_name='default.html'), name='agreement'),
+	path('main/about/agreement/', content.agreement, name='agreement'),
 	path('main/about/contacts/', contacts.contacts, name='contacts'),
 	path('main/blog', blog.blog, name='blog'),
 	path('main/blog/item<int:item_id>/', blog.blog_item, name='blog_item'),

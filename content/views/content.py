@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import urlencode, force_escape
 from django.utils.safestring import mark_safe
 
-from content.models import Spoiler, StaticPage, GetCredit
+from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem
 from credit.models import CreditRate, CreditRateUp
 from communication.models import Response
 from department.models import Department
@@ -21,14 +21,7 @@ def main(request):
 
 
 def index(request):
-    responces = Response.objects.all()
-    departments = Department.objects.all()
-    get_credits = GetCredit.objects.all()
-    credit_rates = CreditRate.objects.all()
-    return render(request, 'index.html', {'responces':responces,
-                                          'departments':departments,
-                                          'get_credits':get_credits,
-                                          'credit_rates':credit_rates})
+    return render(request, 'index.html', {})
 
 
 def departments_generate(request, dep_id):
@@ -58,3 +51,8 @@ def slider_filler(request):
                                'sum_min':obj.credit_rate.sum_min,
                                'sum_max':obj.credit_rate.sum_max}
     return JsonResponse(result)
+
+
+def agreement(request):
+    menu_about = MenuAboutItem.objects.all()
+    return render(request, 'default.html', {'menu_about':menu_about})

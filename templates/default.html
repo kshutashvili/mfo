@@ -13,12 +13,9 @@
 <section class="s-head">
 		<div class="wrapper">
 			<nav class="s-head__nav">
-				<a href="#">Правовая информация</a>
-				<a href="{% url 'agreement' %}">Договор займа</a>
-				<a href="#">Финансовая отчетность</a>
-				<a href="#">Политика конфиденциальности</a>
-				<a href="#response">Отзывы</a>
-				<a href="{% url 'contacts' %}">Контакты</a>
+				{% for obj in menu_about %}
+					<a href="{{ obj.link }}">{{ obj.name }}</a>
+				{% endfor %}
 			</nav>
 		</div>
 	</section>

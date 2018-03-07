@@ -6,14 +6,17 @@ from django.core.mail import EmailMessage
 
 from communication.models import Contact, Email
 from communication.forms import SendEmailForm
+from content.models import MenuAboutItem
 
 
 def contacts(request):
     contact = Contact.objects.first()
+    menu_about = MenuAboutItem.objects.all()
     if request.method == 'GET':
         form = SendEmailForm()
         return render(request, 'contacts.html', {'contact':contact,
-                                                 'form':form})
+                                                 'form':form,
+                                                 'menu_about':menu_about})
     elif request.method == 'POST':
         form = SendEmailForm(request.POST)
         if form.is_valid():
@@ -35,5 +38,6 @@ def contacts(request):
             status_message = _('Исправьте ошибки в данных')
         return render(request, 'contacts.html', {'contact':contact,
                                                  'form':form,
-                                                 'status_message':status_message})
+                                                 'status_message':status_message,
+                                                 'menu_about':menu_about})
 
