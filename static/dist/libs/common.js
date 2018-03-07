@@ -1,16 +1,19 @@
 window.onload = function() {
 
-	new Slider('#credit-slider-1', 750, 10000);
+	//new Slider('#credit-slider-1', 750, 10000);
 
-	new Slider('#termin-slider-1', 56, 99);
+	//new Slider('#termin-slider-1', 56, 99);
 
-	new Slider('#credit-slider-2', 750, 10000);
+	//new Slider('#credit-slider-2', 750, 10000);
 
-	new Slider('#termin-slider-2', 1, 12);
+	//new Slider('#termin-slider-2', 1, 12);
 
-	new Slider('#credit-slider-3', 750, 10000);
+	//new Slider('#credit-slider-3', 750, 10000);
 
-	new Slider('#termin-slider-3', 1, 12);
+	//new Slider('#termin-slider-3', 1, 12);
+
+	sliderFiller();
+
 
 	/*#Slick slider*/
 
@@ -320,6 +323,19 @@ function fieldFiller (dep_id, url) {
 		}
 	});
 
+}
+
+
+function sliderFiller(){
+	$.ajax({
+		url:'/ajax/slider_filler/',
+		success: function(data){
+			for(key in data){
+				new Slider('#credit-slider-' + key, data[key].sum_min, data[key].sum_max);
+				new Slider('#termin-slider-' + key, data[key].term_min, data[key].term_max);
+			}
+		}
+	})
 }
 
 function tabs() {

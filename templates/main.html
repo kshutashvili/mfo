@@ -11,38 +11,37 @@
 {% block title %}Express Finance{% endblock %}
 
 {% block content %}	
-	<section class="s-main">
+
+{% get_solo 'content.MainPageStatic' as main %}
+	<section class="s-main" style="background-image: url({{ main.top_block.image.url }});" >
 		<div class="wrapper wrapper--flex">
 			<ul class="s-main__list">
 				<li class="s-main__list-title">Выберите Ваш<br>кредний тариф</li>
+			{% for obj in main.credits_up.get_queryset %}
 				<li>
-					<button data-btn="form-1" class="b-btn b-btn--secondary active"><span class="icon icon--cash"></span>Кредит на карту</button> 
+					<button data-btn="form-{{ obj.id }}" class="b-btn b-btn--secondary {% if forloop.first %}active{% endif %}"><span class="icon icon--{{ obj.icon_class }}"></span>{{ obj.credit_rate.name }}</button> 
 				</li>
-				<li>
-					<button data-btn="form-2" class="b-btn b-btn--secondary"><span class="icon icon--stick-man"></span>Пенсионный</button>
-				</li>
-				<li>
-					<button data-btn="form-3" class="b-btn b-btn--secondary"><span class="icon icon--sticker"></span>Все кредиты</button>
-				</li>
+			{% endfor %}
 			</ul>
 			
 			<div class="b-main-form-container">
-				<div data-content="form-1" class="tab-content is-showed">
-					<form action="#" class="b-main-form b-main-form--prime">
+			{% for obj in main.credits_up.get_queryset %}
+				<div data-content="form-{{ obj.id }}" class="tab-content {% if forloop.first %}is-showed{% endif %}">
+					<form action="#" class="b-main-form b-main-form--prime {% if forloop.counter == 2 %}arrow-mid{% elif forloop.last %}arrow-bot{% endif %}">
 						<fieldset class="b-main-form__content">
 							<div class="b-form-item">
-								<label class="b-form-item__label" for="credit-value-1">Сумма кредита:
+								<label class="b-form-item__label" for="credit-value-{{ obj.id }}">Сумма кредита:
 								</label>
 
-								<input class="b-form-item__input b-form-item__input--first" type="text" id="credit-value-1">
+								<input class="b-form-item__input b-form-item__input--first" type="text" id="credit-value-{{ obj.id }}">
 
 								<span>грн</span>
 
-								<div class="b-form-item__slider" id="credit-slider-1">
+								<div class="b-form-item__slider" id="credit-slider-{{ obj.id }}">
 									<div class="ui-slider-helper">
 										<a class='ui-slider-handle'>
 											<span class="icon icon--arrow icon--left"></span>
-											<span class="ui-slider-val">750 грн</span>
+											<span class="ui-slider-val">{{ obj.credit_rate.sum_min }} грн</span>
 											<span class="icon icon--arrow icon--right"></span>
 										</a>
 									</div>
@@ -50,16 +49,16 @@
 							</div>
 
 							<div class="b-form-item">
-								<label class="b-form-item__label" for="termin-value-1">Срок займа:</label>
+								<label class="b-form-item__label" for="termin-value-{{ obj.id }}">Срок займа:</label>
 
-								<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-1">
+								<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-{{ obj.id }}">
 								<span>дней</span>
 
-								<div class="b-form-item__slider" id="termin-slider-1">
+								<div class="b-form-item__slider" id="termin-slider-{{ obj.id }}">
 									<div class="ui-slider-helper ui-slider-helper--sm">
 										<a class='ui-slider-handle ui-slider-handle--sm'>
 											<span class="icon icon--arrow icon--left"></span>
-											<span class="ui-slider-val">56 дней</span>
+											<span class="ui-slider-val">{{ obj.credit_rate.get_term.min_days }} дней</span>
 											<span class="icon icon--arrow icon--right"></span>
 										</a>
 									</div>
@@ -69,8 +68,8 @@
 
 						<fieldset class="b-main-form__total">
 							<div class="b-main-form__total-content">
-								<p><span>Вы берете:</span><span id="credit-total-1">10000 грн</span></p>
-								<p><span>На срок:</span> <span id="termin-total-1">14 дней</span></p>
+								<p><span>Вы берете:</span><span id="credit-total-{{ obj.id }}">{{ obj.credit_rate.sum_min }} грн</span></p>
+								<p><span>На срок:</span> <span id="termin-total-{{ obj.id }}">{{ obj.credit_rate.get_term_min_days }} дней</span></p>
 								<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span>550 грн/нед.</span></p>
 							</div>
 
@@ -78,134 +77,28 @@
 						</fieldset>
 					</form>
 				</div>
-				
-				<div data-content="form-2" class="tab-content">
-					<form action="#" class="b-main-form b-main-form--prime arrow-mid">
+			{% endfor %}<!-- arrow-mid  arrow-bot -->
 
-						<fieldset class="b-main-form__content">
-
-							<div class="b-form-item">
-								<label class="b-form-item__label" for="credit-value-2">Сумма кредита:
-								</label>
-
-								<input class="b-form-item__input b-form-item__input--first" type="text" id="credit-value-2">
-
-								<span>грн</span>
-
-								<div class="b-form-item__slider" id="credit-slider-2">
-									<div class="ui-slider-helper">
-										<a class='ui-slider-handle'>
-											<span class="icon icon--arrow icon--left"></span>
-											<span class="ui-slider-val">750 грн</span>
-											<span class="icon icon--arrow icon--right"></span>
-										</a>
-									</div>
-								</div>
-							</div>
-
-							<div class="b-form-item">
-								<label class="b-form-item__label" for="termin-value-2">Срок займа:</label>
-
-								<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-2">
-								<span>месяц(ев)</span>
-
-								<div class="b-form-item__slider" id="termin-slider-2">
-									<div class="ui-slider-helper ui-slider-helper--sm">
-										<a class='ui-slider-handle ui-slider-handle--sm'>
-											<span class="icon icon--arrow icon--left"></span>
-											<span class="ui-slider-val">1 месяц</span>
-											<span class="icon icon--arrow icon--right"></span>
-										</a>
-									</div>
-								</div>
-							</div>
-						</fieldset>
-
-						<fieldset class="b-main-form__total">
-							<div class="b-main-form__total-content">
-								<p><span>Вы берете:</span><span id="credit-total-2">750 грн</span></p>
-								<p><span>На срок:</span> <span id="termin-total-2">1 месяц</span></p>
-								<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span>550 грн/мес.</span></p>
-							</div>
-
-							<button class="b-btn-primary b-btn-primary--main">Оформить кредит</button>
-						</fieldset>
-					</form>
-				</div>
-
-				<div data-content="form-3" class="tab-content">
-					<form action="#" class="b-main-form b-main-form--prime arrow-bot">
-
-						<fieldset class="b-main-form__content">
-
-							<div class="b-form-item">
-								<label class="b-form-item__label" for="credit-value-3">Сумма кредита:
-								</label>
-
-								<input class="b-form-item__input b-form-item__input--first" type="text" id="credit-value-3">
-
-								<span>грн</span>
-
-								<div class="b-form-item__slider" id="credit-slider-3">
-									<div class="ui-slider-helper">
-										<a class='ui-slider-handle'>
-											<span class="icon icon--arrow icon--left"></span>
-											<span class="ui-slider-val">750 грн</span>
-											<span class="icon icon--arrow icon--right"></span>
-										</a>
-									</div>
-								</div>
-							</div>
-
-							<div class="b-form-item">
-								<label class="b-form-item__label" for="termin-value-3">Срок займа:</label>
-
-								<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-3">
-								<span>месяц(ев)</span>
-
-								<div class="b-form-item__slider" id="termin-slider-3">
-									<div class="ui-slider-helper ui-slider-helper--sm">
-										<a class='ui-slider-handle ui-slider-handle--sm'>
-											<span class="icon icon--arrow icon--left"></span>
-											<span class="ui-slider-val">1 месяц</span>
-											<span class="icon icon--arrow icon--right"></span>
-										</a>
-									</div>
-								</div>
-							</div>
-						</fieldset>
-
-						<fieldset class="b-main-form__total">
-							<div class="b-main-form__total-content">
-								<p><span>Вы берете:</span><span id="credit-total-3">750 грн</span></p>
-								<p><span>На срок:</span> <span id="termin-total-3">1 месяц</span></p>
-								<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span>550 грн/мес.</span></p>
-							</div>
-
-							<button class="b-btn-primary b-btn-primary--main">Оформить кредит</button>
-						</fieldset>
-					</form>
-				</div>
 			</div>
 			
 			<h1 class="s-main-title">
-				<span class="s-main-title__top">Деньги на</span>
-				<span class="s-main-title__middle">То, что вам нужно</span>
-				<span class="s-main-title__bottom">Мгновенные онлайн-кредиты</span>
+				<span class="s-main-title__top">{{ main.top_block.title }}</span>
+				<span class="s-main-title__middle">{{ main.top_block.subtitle }}</span>
+				<span class="s-main-title__bottom">{{ main.top_block.footer }}</span>
 			</h1>
 		</div>
 	</section>
 
-	<section class="s-advanteges">
+
+	<section class="s-advanteges" style="background-image: url({{ main.discount.image.url }});" >
 		<div class="s-advanteges-header">
-		{% get_solo 'content.AdvantageStatic' as advantage %}
-			<h2 class="b-section-title">{{ advantage.title }}</h2>
-			<p class="b-section-subtitle">{{ advantage.text }}</p>
+			<h2 class="b-section-title">{{ main.advantage.title }}</h2>
+			<p class="b-section-subtitle">{{ main.advantage.text }}</p>
 		</div>
 		
 		<div class="wrapper wrapper--flex">
 			<div class="s-advanteges-content">
-			{% for obj in advantage.advantages.get_queryset %}
+			{% for obj in main.advantage.advantages.get_queryset %}
 				<div class="s-advanteges-content__item">
 					<img src="{{ obj.image.url }}">
 					<p class="s-advanteges-content__item-caption">
@@ -215,23 +108,22 @@
 			{% endfor %}
 			</div>
 
-			{% get_solo 'content.DiscountStatic' as discount %}
 			<div class="s-advanteges-message">
 				<div class="s-advanteges-message__image-box">
-					<svg class="s-advanteges-message__svg-1"><img src="{{ discount.image.url }}">
+					<svg class="s-advanteges-message__svg-1"><use href="#svg-money-bag">
 					</svg>
-					<svg class="s-advanteges-message__svg-2"><img src="{{ discount.image.url }}">
+					<svg class="s-advanteges-message__svg-2"><use href="#svg-money-bag">
 					</svg>
-					<svg class="s-advanteges-message__svg-3"><img src="{{ discount.image.url }}">
+					<svg class="s-advanteges-message__svg-3"><use href="#svg-money-bag">
 					</svg>
 				</div>
 
 				<div class="s-advanteges-message__content">
 					<h4 class="s-advanteges-message__content-title">
-						{{ discount.title|safe }}
+						{{ main.discount.title|safe }}
 					</h4>
-					<p class="s-advanteges-message__content-main">{{ discount.text|safe }}</p>
-					<a href="{{ discount.link.url }}" class="b-btn-stretch">Как стать участником программы?</a>
+					<p class="s-advanteges-message__content-main">{{ main.discount.text|safe }}</p>
+					<a href="{{ main.discount.link }}" class="b-btn-stretch">Как стать участником программы?</a>
 				</div>
 
 			</div>
@@ -242,13 +134,12 @@
 	<section class="s-packages">
 		<div class="wrapper">
 			<div class="b-section-header">
-				{% get_solo 'content.CreditRateStatic' as cred_rate %}
-				<h2 class="b-section-title">{{ cred_rate.title }}</h2>
-				<h3 class="b-section-subtitle">{{ cred_rate.text }}</h3>
+				<h2 class="b-section-title">{{ main.credit_block.title }}</h2>
+				<h3 class="b-section-subtitle">{{ main.credit_block.text }}</h3>
 			</div>
 
 			<div class="s-packages-content">
-			{% for obj in credit_rates %}
+			{% for obj in main.credit_block.credit_rates.get_queryset %}
 				<div>
 					<div class="s-packages-content__item">
 						<div class="s-packages-content__item-img" style="background-image: url({{ obj.image.url }})"></div>
@@ -351,7 +242,7 @@
 			</div>
 
 			<div class="b-section-message">
-			{% for obj in get_credits %}
+			{% for obj in main.credit_take.get_queryset %}
 				<div class="b-section-message__item {% if forloop.first %}active{% endif %}">
 					<h3 class="b-section-message__item-title">
 						{{ obj.title }}
@@ -363,11 +254,10 @@
 			{% endfor %}
 			</div>
 
-			{% get_solo 'content.SecurityStatic' as security %}
 			<div class="b-section-cards">
 				<div class="b-section-cards__item">
-					<img class="visa-img" src="{{ security.image1.url }}" alt="visa-card">
-					<img class="master-card" src="{{ security.image2.url }}" alt="master-card">
+					<img class="visa-img" src="{{ main.security.image1.url }}" alt="visa-card">
+					<img class="master-card" src="{{ main.security.image2.url }}" alt="master-card">
 
 					<div class="b-section-cards__item-square">
 					</div>
@@ -375,13 +265,13 @@
 					</div>
 
 					<div class="b-section-cards__icons">
-					{% for obj in security.security_items.get_queryset %}
+					{% for obj in main.security.security_items.get_queryset %}
 						<span class="icon icon--sticker">{{ obj.text|safe }}</span>
 					{% endfor %}
 					</div>
 				</div>
 				<div class="b-section-cards__item">
-					<img class="bank-card" src="{{ security.image3.url }}" alt="credit-card">
+					<img class="bank-card" src="{{ main.security.image3.url }}" alt="credit-card">
 				</div>
 			</div>
 		</div>
@@ -398,16 +288,16 @@
 				<div class="b-review__icon"></div>
 
 				<div class="b-review__info">
-				{% for obj in responces %}
-					<p id="review-{{ forloop.counter }}" {% if forloop.first %}class="active"{% endif %}>
+				{% for obj in main.responses.get_queryset %}
+					<p id="review-{{ obj.id }}" {% if forloop.first %}class="active"{% endif %}>
 						{{ obj.text }}
 					</p>
 				{% endfor %}
 				</div>
 
 				<div class="b-review__person-wrapper">
-				{% for obj in responces %}
-					<div id="person-{{ forloop.counter }}" class="b-review__person {% if forloop.first %}active{% endif %}">
+				{% for obj in main.responses.get_queryset %}
+					<div id="person-{{ obj.id }}" class="b-review__person {% if forloop.first %}active{% endif %}">
 
 						<div class="b-review__person-img">
 							<img src="{{ obj.image.url }}" alt="person-img">
@@ -431,7 +321,7 @@
 
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
-				{% for obj in departments %}
+				{% for obj in main.departments.get_queryset %}
 				{% if forloop.counter|divisibleby:8 %}
 					</ul>
 					<ul class="b-region-list">
@@ -488,13 +378,14 @@
 
 	<section class="s-media" action="#!">
 		<div class="wrapper">
-		{% get_solo 'content.CloseCreditStatic' as close_credit %}
-			<h2 class="b-section-title">{{ close_credit.title }}</h2>
+			<h2 class="b-section-title">{{ main.credit_close.title }}</h2>
 			<div class="b-media">
-			{% for obj in close_credit.close_credits.get_queryset %}
+			{% for obj in main.credit_close.close_credits.get_queryset %}
 				<div class="b-media-item">
 					<div class="b-media-item__img">
-						<img src="{{ obj.image.url }}">
+						<svg class="{{ obj.icon_class }}">
+							<use href="#{{ obj.icon_class }}"></use>
+						</svg>
 					</div>
 					
 					<h4 class="b-media-item__title">{{ obj.title }}</h4>
@@ -558,15 +449,5 @@
 	</div>
 {% endblock %}
 	
-{% block extrascrypts %}
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<script
-	src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-	integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-	crossorigin="anonymous"></script>
-	<script src="{% static 'dist/libs/slick.js' %}"></script>
-	<script src="{% static 'dist/libs/common.js' %}"></script>
-{% endblock %}
 </body>
 </html>

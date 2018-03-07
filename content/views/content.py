@@ -5,7 +5,7 @@ from django.template.defaultfilters import urlencode, force_escape
 from django.utils.safestring import mark_safe
 
 from content.models import Spoiler, StaticPage, GetCredit
-from credit.models import CreditRate
+from credit.models import CreditRate, CreditRateUp
 from communication.models import Response
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY
@@ -17,14 +17,18 @@ def pages(request, page_url):
 
 
 def main(request):
+    return render(request, 'main.html', {})
+
+
+def index(request):
     responces = Response.objects.all()
     departments = Department.objects.all()
     get_credits = GetCredit.objects.all()
     credit_rates = CreditRate.objects.all()
-    return render(request, 'main.html', {'responces':responces,
-                                         'departments':departments,
-                                         'get_credits':get_credits,
-                                         'credit_rates':credit_rates})
+    return render(request, 'index.html', {'responces':responces,
+                                          'departments':departments,
+                                          'get_credits':get_credits,
+                                          'credit_rates':credit_rates})
 
 
 def departments_generate(request, dep_id):
@@ -42,4 +46,15 @@ def departments_generate(request, dep_id):
                         'email':obj.email,
                         'phone':obj.phone,
                         'link':link}
+    return JsonResponse(result)
+
+
+def slider_filler(request):
+    data = CreditRateUp.objects.all()
+    result = dict()
+    for obj in data:
+        result[str(obj.id)] = {'term_min':obj.credit_rate.get_term_min_days(),
+                               'term_max':obj.credit_rate.get_term_max_days(),
+                               'sum_min':obj.credit_rate.sum_min,
+                               'sum_max':obj.credit_rate.sum_max}
     return JsonResponse(result)

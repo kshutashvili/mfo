@@ -86,3 +86,19 @@ class ImportantAspectAdmin(admin.ModelAdmin):
 @admin.register(models.AboutUsStatic)
 class AboutUsStaticAdmin(admin.ModelAdmin):
     list_display = ('title', 'subtitle', 'link', )
+
+
+@admin.register(models.MainPageTopBlockStatic)
+class MainPageTopBlockStaticAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'footer')
+
+
+@admin.register(models.MainPageStatic)
+class MainPageStaticAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+
+
+@admin.register(models.IndexPageStatic)
+class IndexPageStaticAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+

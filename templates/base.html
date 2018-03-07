@@ -1,5 +1,7 @@
 {% load static %}
 
+{% load solo_tags %}
+
 {% load custom_filters %}
 
 <!DOCTYPE html>
@@ -56,10 +58,10 @@
 				{% endif %}
 			{% endfor %}
 			</div>
-
+{% get_solo 'content.MainPageStatic' as main %}
 			<div class="s-footer-about">
 				<nav class="s-footer-nav">
-				{% for obj in menu_footer %}
+				{% for obj in main.menu_footer.get_queryset %}
 					{% if forloop.first %}
 						<h4 class="s-footer-nav__title">{{ obj.name }}</h4>
 						{% for item in obj.items.get_queryset %}
@@ -71,7 +73,7 @@
 			</div>
 
 			<div class="s-footer-faq">
-			{% for obj in menu_footer %}
+			{% for obj in main.menu_footer.get_queryset %}
 				{% if not forloop.first %}
 				<nav class="s-footer-nav">
 					<h4 class="s-footer-nav__title">{{ obj.name }}</h4>
@@ -109,7 +111,7 @@
 				</p>
 
 				<div class="s-footer-base__social">
-				{% for obj in social_nets %}
+				{% for obj in main.social_nets.get_queryset %}
 					<a href="{{ obj.link }}"><span class="icon icon--{{ obj|get_icon_class_social_net }}"></span></a>	
 				{% endfor %}
 				</div>

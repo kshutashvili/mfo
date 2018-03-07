@@ -6,7 +6,9 @@ from django.utils.html import format_html
 from solo.models import SingletonModel
 from ckeditor.fields import RichTextField
 
-from communication.models import Email, PhoneNumber, Response
+from communication.models import Email, PhoneNumber, Response, SocialNet
+from credit.models import CreditRateUp, CreditRate
+from department.models import Department
 
 
 class Spoiler(models.Model):
@@ -41,7 +43,7 @@ class StaticPage(models.Model):
         verbose_name_plural = _('Статические страницы')
 
     def __str__(self):
-        return self.title
+        return ' '.join([self.title, 'ID:', str(self.id)])
 
 
 class MenuAboutItem(models.Model):
@@ -91,7 +93,7 @@ class MenuFooterBlock(models.Model):
         verbose_name_plural = _('Блоки меню в футере')
 
     def __str__(self):
-        return self.name
+        return ' '.join([self.name, 'ID:', str(self.id)])
 
 
 class JobStaticPage(SingletonModel):
@@ -132,10 +134,12 @@ class CreditRateStatic(SingletonModel):
     title = models.CharField(_('Заголовок'),
                              max_length=128)
     text = models.TextField(_('Небольшой текст'))
+    credit_rates = models.ManyToManyField(CreditRate,
+                                          verbose_name=_('Кредитные тарифы'))
 
     class Meta:
         verbose_name = _('Блок')
-        verbose_name_plural = _('Статический блок кредитные тарифы на главной')
+        verbose_name_plural = _('Блок кредитные тарифы на главной')
 
     def __str__(self):
         return self.title
@@ -169,12 +173,17 @@ class AdvantageStatic(SingletonModel):
         return self.title
 
 
+CLOSE_CREDIT_ICON_CHOICES = (('svg-phone','Терминал'),
+                             ('svg-tablet','Личный кабинет'),
+                             ('svg-house','Банк'))
+
 class CloseCredit(models.Model):
     title = models.CharField(_('Заголовок'),
                              max_length=128)
-    image = models.FileField(_('Картинка'),
-                             upload_to='close_credit')
     text = models.TextField(_('Текст'))
+    icon_class = models.CharField(_('Иконка'),
+                                  max_length=128,
+                                  choices=CLOSE_CREDIT_ICON_CHOICES) 
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
                             help_text=_("Используйте ссылку вида /#html_id "
@@ -218,7 +227,7 @@ class SecurityStatic(SingletonModel):
         verbose_name_plural = _('Блок о безопасности на главной')
 
     def __str__(self):
-        return 'Блок о безопасности'
+        return ' '.join(['Блок о безопасности', 'ID:', str(self.id)])
 
 
 class SecurityItem(models.Model):
@@ -234,8 +243,8 @@ class SecurityItem(models.Model):
 
 class DiscountStatic(SingletonModel):
     title = RichTextField(_('Заголовок'))
-    image = models.FileField(_('Картинка'),
-                             upload_to='discount')
+    image = models.ImageField(_('Картинка заднего фона'),
+                              upload_to='discount')
     text = RichTextField(_('Текст'))
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
@@ -299,4 +308,105 @@ class ImportantAspect(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class MainPageTopBlockStatic(SingletonModel):
+    title = models.CharField(_('Первая строка заголовка'),
+                             max_length=128)
+    subtitle = models.CharField(_('Вторая строка заголовка'),
+                                max_length=128)
+    footer = models.CharField(_('Подзаголовок'),
+                              max_length=128)
+    image = models.ImageField(_('Картинка на заднем фоне'),
+                              upload_to='main_top_block')
+
+    class Meta:
+        verbose_name = _('Блок')
+        verbose_name_plural = _('Блок вверху главной страницы')
+
+    def __str__(self):
+        return ' '.join([self.title, self.subtitle]) 
+
+
+class MainPageStatic(SingletonModel):
+    top_block = models.ForeignKey('MainPageTopBlockStatic',
+                                  verbose_name=_('Верхний блок страницы'),
+                                  on_delete=models.CASCADE)
+    credits_up = models.ManyToManyField(CreditRateUp,
+                                        verbose_name=_('Кредитные тарифы вверху страницы'))
+    advantage = models.ForeignKey('AdvantageStatic',
+                                  verbose_name=_('Блок преимущества'),
+                                  on_delete=models.CASCADE)
+    discount = models.ForeignKey('DiscountStatic',
+                                 verbose_name=_('Блок акция'),
+                                 on_delete=models.CASCADE,
+                                 null=True)
+    credit_block = models.ForeignKey('CreditRateStatic',
+                                     verbose_name=_('Блок кредитные тарифы'),
+                                     on_delete=models.CASCADE,
+                                     null=True)
+    credit_take = models.ManyToManyField('GetCredit',
+                                         verbose_name=_('Блок как получить кредит'))
+    security = models.ForeignKey('SecurityStatic',
+                                 verbose_name=_('Блок о параметрах защиты'),
+                                 on_delete=models.CASCADE,
+                                 null=True)
+    responses = models.ManyToManyField(Response,
+                                       verbose_name=_('Блок отзывы'))
+    departments = models.ManyToManyField(Department,
+                                         verbose_name=_('Отделения'))
+    credit_close = models.ForeignKey('CloseCreditStatic',
+                                     verbose_name=_('Блок как закрыть кредит'),
+                                     on_delete=models.CASCADE,
+                                     null=True)
+    menu_footer = models.ManyToManyField('MenuFooterBlock',
+                                         verbose_name=_('Меню в футере'))
+    social_nets = models.ManyToManyField(SocialNet,
+                                         verbose_name=_('Социальные сети в футере'))
+
+    class Meta:
+        verbose_name = _('Главная страница')
+        verbose_name_plural = _('Главная страница')
+
+    def __str__(self):
+        return 'Главная страница'
+
+
+class IndexPageStatic(SingletonModel):
+    advantage = models.ForeignKey('AdvantageStatic',
+                                  verbose_name=_('Блок преимущества'),
+                                  on_delete=models.CASCADE)
+    discount = models.ForeignKey('DiscountStatic',
+                                 verbose_name=_('Блок акция'),
+                                 on_delete=models.CASCADE,
+                                 null=True)
+    credit_block = models.ForeignKey('CreditRateStatic',
+                                     verbose_name=_('Блок кредитные тарифы'),
+                                     on_delete=models.CASCADE,
+                                     null=True)
+    credit_take = models.ManyToManyField('GetCredit',
+                                         verbose_name=_('Блок как получить кредит'))
+    security = models.ForeignKey('SecurityStatic',
+                                 verbose_name=_('Блок о параметрах защиты'),
+                                 on_delete=models.CASCADE,
+                                 null=True)
+    responses = models.ManyToManyField(Response,
+                                       verbose_name=_('Блок отзывы'))
+    departments = models.ManyToManyField(Department,
+                                         verbose_name=_('Отделения'))
+    credit_close = models.ForeignKey('CloseCreditStatic',
+                                     verbose_name=_('Блок как закрыть кредит'),
+                                     on_delete=models.CASCADE,
+                                     null=True)
+    menu_footer = models.ManyToManyField('MenuFooterBlock',
+                                         verbose_name=_('Меню в футере'))
+    social_nets = models.ManyToManyField(SocialNet,
+                                         verbose_name=_('Социальные сети в футере'))
+
+    class Meta:
+        verbose_name = _('Страница Партнерский лэндинг')
+        verbose_name_plural = _('Страница Партнерский лэндинг')
+
+    def __str__(self):
+        return 'Страница Партнерский лэндинг'
 

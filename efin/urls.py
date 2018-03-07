@@ -24,6 +24,7 @@ from content.views import content
 from vacancy.views import job
 
 urlpatterns = [
+	path('', content.index, name='index'),
 	path('main/', content.main, name='main'),
 	path('main/job/', job.job, name='job'),
 	path('main/about/', about.about, name='about'),
@@ -33,6 +34,7 @@ urlpatterns = [
 	path('main/blog/item<int:item_id>/', blog.blog_item, name='blog_item'),
 	path('static/<str:page_url>/', content.pages, name='static_pages'),
 	path('ajax/departments_generate/<int:dep_id>/', content.departments_generate, name='departments_generate'),
+	path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
     path('admin/', admin.site.urls),
 ]
 if settings.DEBUG:

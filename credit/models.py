@@ -34,6 +34,12 @@ class CreditRate(models.Model):
     def __str__(self):
         return self.name
 
+    def get_term_min_days(self):
+        return self.term_min * 7
+
+    def get_term_max_days(self):
+        return self.term_max * 7
+
 
 class PaymentTerm(models.Model):
     term = models.CharField(_('Платеж'),
@@ -46,4 +52,24 @@ class PaymentTerm(models.Model):
 
     def __str__(self):
         return self.term
+
+
+CREDIT_RATE_UP_CHOICES = (('cash','Наличка'),
+                          ('stick-man','Пенсионер'),
+                          ('sticker','Стикер'))
+
+class CreditRateUp(models.Model):
+    credit_rate = models.ForeignKey('CreditRate',
+                                    verbose_name=_('Кредитный тариф'),
+                                    on_delete=models.CASCADE)
+    icon_class = models.CharField(_('Иконка'),
+                                  max_length=128,
+                                  choices=CREDIT_RATE_UP_CHOICES)
+
+    class Meta:
+        verbose_name = _('Популярный кредитный тариф')
+        verbose_name_plural = _('Популярные кредитные тарифы, вверху на главной')
+
+    def __str__(self):
+        return self.credit_rate.name
 

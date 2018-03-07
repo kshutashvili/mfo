@@ -13,3 +13,8 @@ class CreditRateAdmin(admin.ModelAdmin):
 class PaymentTermAdmin(admin.ModelAdmin):
     list_display = ('term',)
 
+
+@admin.register(models.CreditRateUp)
+class CreditRateUpAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+
