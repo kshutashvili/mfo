@@ -263,12 +263,12 @@
 					</div>
 					<div class="b-section-cards__item-square">
 					</div>
-
 					<div class="b-section-cards__icons">
 					{% for obj in main.security.security_items.get_queryset %}
 						<span class="icon icon--sticker">{{ obj.text|safe }}</span>
 					{% endfor %}
 					</div>
+
 				</div>
 				<div class="b-section-cards__item">
 					<img class="svg-bank" src="{{ main.security.image3.url }}" alt="credit-card">
