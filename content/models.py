@@ -398,10 +398,6 @@ class IndexPageStatic(SingletonModel):
                                      verbose_name=_('Блок как закрыть кредит'),
                                      on_delete=models.CASCADE,
                                      null=True)
-    menu_footer = models.ManyToManyField('MenuFooterBlock',
-                                         verbose_name=_('Меню в футере'))
-    social_nets = models.ManyToManyField(SocialNet,
-                                         verbose_name=_('Социальные сети в футере'))
 
     class Meta:
         verbose_name = _('Страница Партнерский лэндинг')
