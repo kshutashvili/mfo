@@ -1,70 +1,90 @@
 window.onload = function() {
 
-	//new Slider('#credit-slider-1', 750, 10000);
-
-	//new Slider('#termin-slider-1', 56, 99);
-
-	//new Slider('#credit-slider-2', 750, 10000);
-
-	//new Slider('#termin-slider-2', 1, 12);
-
-	//new Slider('#credit-slider-3', 750, 10000);
-
-	//new Slider('#termin-slider-3', 1, 12);
-
 	sliderFiller();
 
 
 	/*#Slick slider*/
 
-	$('.s-packages-content').slick({
-		dots: true,
-		infinite: false,
-		speed: 300,
-		slidesToShow: 4,
-		responsive: [
-		{
-			breakpoint: 1041,
-			settings: {
-				slidesToShow: 2,
-				slidesToScroll: 2
+	(function($) {
+		$('.s-packages-content').slick({
+			dots: true,
+			infinite: false,
+			speed: 300,
+			slidesToShow: 4,
+			responsive: [
+			{
+				breakpoint: 1041,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 2}
+				},
+				{
+					breakpoint: 768,
+					settings: {
+						slidesToShow: 1,
+						slidesToScroll: 1}
+					}
+					]
+				});
+
+		$('.b-response-wrap').slick({
+			dots: true,
+			speed: 300,
+			slidesToScroll: 1,
+			slidesToShow: 3,
+			responsive: [
+			{
+				breakpoint: 1041,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 2
+				}
+			},
+			{
+				breakpoint: 768,
+				settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1
+				}
 			}
-		}]
-	});
-
-	$('.b-response-wrap').slick({
-		dots: true,
-		speed: 300,
-		slidesToScroll: 1,
-		slidesToShow: 3,
-		responsive: [
-		{
-			breakpoint: 1041,
-			settings: {
-				slidesToShow: 2,
-				slidesToScroll: 2
-			}
-		}]
-	});
-
-	/*#Review change*/
-
-	$('.b-review__person').on('click', function(e) {
-		$('.b-review__person').not($(this)).removeClass('active');
-		$(this).addClass('active');
-
-		var personId = $(this).attr('id');
-
-		var arr = personId.split("-");
-
-		$('.b-review__info p').removeClass('active');
-
-		$('#review-' + arr[1]).addClass('active');
-
-	});
+			]
+		});
 
 
-	/*#Choose plan*/
+		$('.b-review__info').slick({
+			slidesToShow: 1,
+			slidesToScroll: 1,
+			arrows: false,
+			fade: true,
+			asNavFor: '.b-review__person-wrapper'
+		});
+
+		$('.b-review__person-wrapper').slick({
+			slidesToShow: 3,
+			slidesToScroll: 1,
+			asNavFor: '.b-review__info',
+			centerMode: true,
+			focusOnSelect: true,
+			responsive: [
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 1}
+				},
+				{
+					breakpoint: 768,
+					settings: {
+						slidesToShow: 1,
+						centerMode: false,
+						slidesToScroll: 1}
+					}
+					]
+				});
+
+	})($);
+	
+	/*#Choose plan at main page*/
 
 	$('.b-section-message__item').on('click', function(e) {
 		$('.b-section-message__item').removeClass('active')
@@ -72,12 +92,12 @@ window.onload = function() {
 	});
 
 
-	/*#Cities list func*/
+	/*#Cities list*/
 	
 	$('.b-region-list__wrapper').on('click', '.b-region-list__btn', function(e) {
 		var dep_id = $(this).data('dep_id');
 
-		fieldFiller(dep_id, "/ajax/departments_generate/" + dep_id);  //"/static/data-city.json");
+		fieldFiller(dep_id, "/ajax/departments_generate/" + dep_id);
 		$('.b-region-list__btn').removeClass('btn-active');
 		$(this).addClass('btn-active');
 
@@ -122,7 +142,7 @@ window.onload = function() {
 
 	$('.b-blog-nav__btn').on('click', function(){
 		if($(this).hasClass('active')) return;
-		$('.b-blog-nav__btn').removeClass('active');
+		$('.b-blog-nav__btn').removeClass('active is-showed');
 		$(this).addClass('active');
 		pagination();
 	});
@@ -155,7 +175,7 @@ window.onload = function() {
 		pagination();
 	});
 
-	/*#Redacting*/
+	/*#Redacting at private profile*/
 
 	var inp = $('.profile__input input');
 
@@ -167,13 +187,15 @@ window.onload = function() {
 		$(this).attr('disabled', true);
 	});
 
-	/*#Add files*/
+	/*#Add files at private profile*/
 
 	$('input[type=file]').on('change', function(e) {
 		var reader = new FileReader();
 
-		for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
-			var file = e.originalEvent.srcElement.files[i];
+		var targ = getTarget(e);
+
+		for (var i = 0; i < targ.files.length; i++) {
+			var file = targ.files[i];
 			var img = document.createElement("img");
 			var div = document.createElement('div');
 			div.classList.add('profile__doc');
@@ -200,7 +222,7 @@ window.onload = function() {
 		}
 	});
 
-	/*#Form popup*/
+	/*#Form popup at private profile*/
 
 	$('.application-add').on('click', function(e) {
 		$('.overlay').addClass('active');
@@ -236,6 +258,116 @@ window.onload = function() {
 			},400)
 		})
 	});
+
+
+	/*#select options generate at questionnaire*/
+
+	styleSelect($('.b-select--days'), 'numb' , 1, 31);
+	styleSelect($('.b-select--years'), 'year' , 1920, 2000);
+
+	$('input[name=switchCitizen]').on('click', function(e) {
+		disableSelect($(this), $('#citizen'));
+	});
+
+	$('input[name=switchRegistration]').on('click', function(e) {
+		disableSelect($(this), $('#selectRegistration'));
+	});
+
+	$('#the-same').on('click', function(e){
+		var data = $(this).data('disable');
+		var field = '[data-field=' + data + ']';
+		var inputs = $(field + ' input');
+		var nextField = $(field);
+
+		if(this.checked) {
+			inputs.attr('disabled', true);
+			nextField.fadeOut(400); 
+		} else { 
+			inputs.attr('disabled', false); 
+			nextField.fadeIn(400);
+		}
+	});
+
+	$('input[name=switchDeal]').on('click', function() {
+		var field = $('#hideDeal');
+
+		if ($(this).val() === 'on') {
+			field.fadeIn();
+		} else {
+			field.fadeOut();
+		}
+	});
+
+	$('.questionnaire .b-btn-primary').not('[type=submit]').on('click', function(e) {
+		e.preventDefault();
+		var currentStep = $(this).parent();
+		var nextStep = $(this).parent().next('.questionnaire__step');
+
+		currentStep.fadeOut(400, function() {
+			nextStep.fadeIn(400);
+		})
+	});
+
+	/*Mobile features*/
+
+	$('.mobile-menu').on('click', function(e) {
+		$(this).toggleClass('active');
+		$('.wrapper').toggleClass('active');
+	});
+
+	(function($) {
+		if (document.querySelector('.s-head__nav') == null) return;
+		var defaultDist = $('.s-head__nav').offset().top;
+		var start = 0;
+		var startTop = 0;
+
+		$('.s-head__nav').on('touchstart', function(e) {
+			start = e.changedTouches[0].clientY;
+			startTop = e.changedTouches[0].pageY;
+		});
+
+		$('.s-head__nav').on('touchmove', function(e) {
+			var touchobj = e.changedTouches[0];
+
+			if (touchobj.clientY > start && startTop > defaultDist + 20) {
+				e.preventDefault();
+				$(this).addClass('active');
+			}else if(touchobj.clientY < start && startTop > $(this).height()
+				+ defaultDist - 10) {
+				e.preventDefault();
+				$(this).removeClass('active');
+			}
+		});
+	})($);
+	
+	$('.s-head__more-btn').on('click', function(e) {
+		$('.s-head__nav').toggleClass('active');
+	});
+}
+
+function disableSelect(context, select) {
+	if(context.val() === 'on') {
+		select.attr('disabled', false);
+	} else {
+		select.attr('disabled', true);
+	}
+}
+
+function styleSelect(el, type, from, to) {
+
+	if(type === 'numb') {
+		for(var i = from; i <= to; i++) {
+			var option = $('<option>').val(i).html(i);
+			el.append(option);
+		}
+	}
+
+	if(type === 'year') {
+		for(var i = to; i >= from; i--) {
+			var option = $('<option>').val(i).html(i);
+			el.append(option);
+		}
+	}
 }
 
 function formFadeOut(e, form, overlay, blur) {
@@ -248,10 +380,12 @@ function formFadeOut(e, form, overlay, blur) {
 }
 
 function pagination() {
-	var dataCount= $('.b-blog-nav__btn.active').data('blogbtn');;
+	var dataCount= $('.b-blog-nav__btn.active').data('blogbtn');
 	var currentContent = $('.b-blog-container');
 	var dataContent = $('[data-container=' + dataCount + ']');
-
+	$('.b-blog-nav__btn').removeClass('is-showed');
+	$('.b-blog-nav__btn.active').prev().addClass('is-showed');
+	$('.b-blog-nav__btn.active').next().addClass('is-showed');
 	currentContent.stop(true, true).animate({
 		opacity: 0
 	},300, function() {
@@ -338,6 +472,7 @@ function sliderFiller(){
 	})
 }
 
+
 function tabs() {
 	var dataBtn = $(this).data('btn');
 	var content = $('[data-content=' + dataBtn + ']');
@@ -358,4 +493,14 @@ function tabs() {
 			opacity: 1
 		}, 300);
 	});
+}
+
+function getTarget(obj) {
+	var targ;
+	var e=obj;
+	if (e.target) targ = e.target;
+	else if (e.srcElement) targ = e.srcElement;
+  if (targ.nodeType == 3) // defeat Safari bug
+  	targ = targ.parentNode;
+  return targ;
 }

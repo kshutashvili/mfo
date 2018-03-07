@@ -17,14 +17,33 @@
 
 	<header class="s-header">
 		<div class="wrapper">
+			<button class="mobile-menu">
+				<div class="mobile-menu__sandwich">
+					<span class="mobile-menu__topper"></span>
+					<span class="mobile-menu__middle"></span>
+					<span class="mobile-menu__footer"></span>
+				</div>
+				<span>Меню</span>
+			</button>
+
 			<a href="{% url 'main' %}" class="b-logo">
-				<svg><use href="#svg-logo">
+				<svg><use xlink:href="{% static 'sprite.svg' %}#svg-logo">
 				</svg>
 			</a>
-			
+
 			<div class="s-header__phone">
 				<span>Телефон горячей линии</span>
 				<a href="tel:+{{ phones.first.number|cut:' ' }}">{{ phones.first.number }}</a>
+			</div>
+			
+			<div class="mobile-icons">
+				<a href="#" class="mobile-link">
+					<i class="fas fa-phone"></i>
+				</a>
+
+				<a href="private-profile.html" class="mobile-link">
+					<i class="fas fa-sign-in-alt"></i>
+				</a>
 			</div>
 
 			<div class="b-nav">
@@ -41,13 +60,61 @@
 				<button class="b-btn b-btn--lang">Укр</button>
 			</div>
 
-			<button class="b-btn-login">Мой кабинет <span class="icon icon--login"></span></button>
-
+			<a href="private-profile.html" class="b-btn-login">Мой кабинет <span class="icon icon--login"></span></a>
 		</div>
 	</header>
+
 {% block content %}{% endblock %}
 
-	<footer class="s-footer">
+{% block info %}
+<section class="s-info">
+		<div class="wrapper wrapper--flex">
+
+			<div class="b-info-wrapper">
+				<div class="b-info">
+					<h4 class="b-info__title">Кредит онлайн на карту</h4>
+					<p class="b-info__text">У клиентов бывают случаи в жизни, когда оформить быстрый кредит онлайн в Украине попросту необходимо. Некоторым он нужен для открытия бизнеса, некоторым до зарплаты, а кому-то нужно организовать мероприятие,на пример, свадьбу. Поэтому люди ищут возможность, как можно выгоднее оформить быстрый кредит на карту в Украине и не бедствовать от бумажных разбирательств, процедур оформления и нудных обсуждений договора. Благодаря новому сервису Майкредит, стало возможным качественное оформление кредита на карту в онлайн режиме без волокиты и проблем. Хотелось бы ввести заемщика в курс дела, относительно процедуры по которой кредиты на карту онлайн оформляются в экспресс порядке, и описать каждый важный этап оформления при помощи уже зарекомендовавшего себя сервиса Майкредит.</p>
+				</div>
+				<div class="b-info">
+					<h4 class="b-info__title">Как получить кредит через интернет?</h4>
+					<p class="b-info__text">Получить кредит на карточку онлайн быстро и легко - это вполне возможно. И куда проще, чем взять деньги в кредит от банка напрямую или занимая у кого-то. Ниже приведем план оформления кредита при помощи сервиса Майкредит.</p>
+				</div>
+
+				<ul class="b-info-list">
+					<li>На сайте при помощи калькулятора вы можете рассчитать сумму и срок выплаты кредита. В первый раз кредит не должен превышать 3000 грн, в дальнейшем</li>
+					<li>На сайте при помощи калькулятора вы можете рассчитать сумму и срок выплаты кредита. В первый раз кредит не должен превышать 3000 грн, в дальнейшем</li>
+					<li>На сайте при помощи калькулятора вы можете рассчитать сумму и срок выплаты кредита. В первый раз кредит не должен превышать 3000 грн, в дальнейшем</li>
+					<li>На сайте при помощи калькулятора вы можете рассчитать сумму и срок выплаты кредита. В первый раз кредит не должен превышать 3000 грн, в дальнейшем</li>
+				</ul>
+			</div>
+			
+
+			<div class="b-info b-info--inline">
+				<h4 class="b-info__title">Сроки погашения кредита на Экспресс Финанс</h4>
+				<ul class="b-info__list">
+					<li>Минимальный срок погашения долга составляет 1 день.</li>
+					<li>Максимальный срок погашения 35 дней</li>
+					<li>Максимальная годовая процентная ставка, включающая ссудный процент, а также все остальные комиссии и расходы за год составляет 584%</li>		
+				</ul>
+			</div>
+
+			<div class="b-info b-info--inline">
+				<h4 class="b-info__title">Кредит онлайн на карту</h4>
+				<p class="b-info__text">У клиентов бывают случаи в жизни, когда оформить быстрый кредит онлайн в Украине попросту необходимо. Некоторым он нужен для открытия бизнеса, некоторым до зарплаты, а кому-то нужно организовать мероприятие,на пример, свадьбу. Поэтому люди ищут возможность, как можно выгоднее оформить быстрый кредит на карту в </p>
+			</div>
+
+		</div>
+	</section>
+
+	<section class="s-more-information">
+		<div class="wrapper">
+			<p>Больше информации на полной версии сайта</p>
+			<a href="#" class="b-btn-primary b-btn-primary--main">Перейти</a>
+		</div>
+	</section>
+{% endblock %}
+
+<footer class="s-footer">
 		<div class="wrapper wrapper--flex">
 			<div class="s-footer-contacts">
 			{% for obj in phones %}
@@ -59,6 +126,12 @@
 			{% endfor %}
 			</div>
 {% get_solo 'content.MainPageStatic' as main %}
+			<div class="s-footer__social">
+				{% for obj in main.social_nets.get_queryset %}
+					<a href="{{ obj.link }}"><span class="icon icon--{{ obj|get_icon_class_social_net }}"></span></a>	
+				{% endfor %}	
+			</div>
+
 			<div class="s-footer-about">
 				<nav class="s-footer-nav">
 				{% for obj in main.menu_footer.get_queryset %}
@@ -94,38 +167,40 @@
 					</p>
 
 					<button class="b-btn-primary b-btn-primary--main">Пригласить друга</button>
-
 				</div>
 			</div>
 			
 			<div class="s-footer-base">
-				<a href="{% url 'main' %}" class="b-logo">
-					<svg><use href="#svg-logo">
+				<a href="#" class="b-logo">
+					<svg><use href="{% static 'sprite.svg' %}#svg-logo">
 					</svg>
 				</a>
 
 				<p class="s-footer-base__info">
-					Первый в Украине сервис кредитования через интернет. <br>
-					Мы предоставляем быстрые и удобные кредиты для всех граждан Украины. <br>
-					&copy 2015 - 2017 MyCredit - Кредит онлайн на банковскую карту за 20 минут
+					<span class="mob-hidden">
+						Первый в Украине сервис кредитования через интернет. <br>
+						Мы предоставляем быстрые и удобные кредиты для всех граждан Украины. <br>
+					</span>
+					&copy 2015 - 2017 MyCredit <span class="mob-hidden">- Кредит онлайн на банковскую карту за 20 минут</span>
 				</p>
 
-				<div class="s-footer-base__social">
+				<div class="s-footer-base__social mob-hidden">
 				{% for obj in main.social_nets.get_queryset %}
 					<a href="{{ obj.link }}"><span class="icon icon--{{ obj|get_icon_class_social_net }}"></span></a>	
-				{% endfor %}
+				{% endfor %}	
 				</div>
 			</div>
 		</div>
-
 	</footer>
-{% block extra %}{% endblock %}
+	
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
 	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<script
-	src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-	integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-	crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 	<script src="{% static 'dist/libs/slick.js' %}"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 	<script src="{% static 'dist/libs/common.js' %}"></script>
 {% block extrascrypts %}{% endblock %}
+
+</body>
+</html>
