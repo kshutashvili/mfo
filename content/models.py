@@ -299,8 +299,7 @@ class ImportantAspect(models.Model):
     text = models.TextField(_('Текст'))
     image = models.FileField(_('Картинка'),
                              upload_to='important_aspect',
-                             null=True,
-                             blank=True)
+                             null=True)
 
     class Meta:
         verbose_name = _('Аспект')

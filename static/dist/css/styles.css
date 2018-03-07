@@ -722,8 +722,9 @@ fieldset {
 
 .s-advanteges-content__item, .s-about-content__item {
   text-align: center; }
-  .s-advanteges-content__item svg, img, .s-about-content__item svg, img {
-    width: 50%; }
+  .s-advanteges-content__item img, .s-about-content__item img {
+    width: 50%;
+    height: 50%; }
 
 .b-review, .b-response-wrap {
   position: relative;
@@ -987,20 +988,20 @@ fieldset {
     width: 58%; }
     .s-advanteges-message__image-box {
       padding: 2.5rem; }
-      .s-advanteges-message__image-box svg {
+      .s-advanteges-message__image-box img {
         display: inline-block;
         vertical-align: top; }
-        .s-advanteges-message__image-box svg:first-child {
-          width: 6rem;
-          height: 6rem; }
-        .s-advanteges-message__image-box svg:nth-child(2) {
-          margin-top: -5rem;
-          width: 9.5rem;
-          height: 9.5rem;
-          float: right; }
-        .s-advanteges-message__image-box svg:nth-child(3) {
-          width: 20rem;
-          height: 20rem; }
+    .s-advanteges-message__svg-1 {
+      width: 6rem;
+      height: 6rem; }
+    .s-advanteges-message__svg-2 {
+      margin-top: -5rem;
+      width: 9.5rem;
+      height: 9.5rem;
+      float: right; }
+    .s-advanteges-message__svg-3 {
+      width: 20rem;
+      height: 20rem; }
     .s-advanteges-message__content {
       padding: 4rem 0 1rem 0; }
       .s-advanteges-message__content-title {
@@ -1289,8 +1290,7 @@ fieldset {
     .b-section-cards__item .master-card {
       max-width: 10rem; }
     .b-section-cards__item .svg-bank {
-      width: 100%;
-      height: 48rem; }
+      width: 100%; }
   .b-section-cards__icons {
     position: absolute;
     bottom: 0;
@@ -2044,24 +2044,22 @@ fieldset {
       margin: 0;
       font-size: 14px;
       line-height: 1.571; }
-  .b-value .icon {
+  .b-value__img {
     position: relative;
     top: -5rem;
-    display: block;
     width: 12rem;
     height: 12rem;
     background: -o-linear-gradient(175deg, #f6a40f 0%, #fcc400 100%);
     background: linear-gradient(-85deg, #f6a40f 0%, #fcc400 100%);
-    border-radius: 1rem;
-    font-size: 8rem;
-    color: #fff; }
-    .b-value .icon:before {
+    border-radius: 1rem; }
+    .b-value__img img {
       position: absolute;
       top: 50%;
       left: 50%;
       -webkit-transform: translate(-50%, -50%);
           -ms-transform: translate(-50%, -50%);
-              transform: translate(-50%, -50%); }
+              transform: translate(-50%, -50%);
+      width: 65%; }
 
 /*#Blog page*/
 /*#Blog section*/

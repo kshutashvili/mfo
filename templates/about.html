@@ -94,7 +94,9 @@
 			<div class="b-value-wrap">
 			{% for obj in about.important_aspects.get_queryset %}
 				<div class="b-value">
-					<span class="icon icon--interview"></span>
+					<div class="b-value__img">
+						<img src="{{ obj.image.url }}" alt="interview">
+					</div>
 					<div class="b-value__info">
 						<h3 class="b-value__info-title">{{ obj.title }}</h3>
 						<p class="b-value__info-text">{{ obj.text }}</p>
