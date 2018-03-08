@@ -14,6 +14,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+{% get_solo 'content.MainPageStatic' as main %}
 
 	<header class="s-header">
 		<div class="wrapper">
@@ -32,8 +33,10 @@
 			</a>
 
 			<div class="s-header__phone">
+			{% if hot_line_phone|is_phone_active %}
 				<span>Телефон горячей линии</span>
-				<a href="tel:+{{ phones.first.number|cut:' ' }}">{{ phones.first.number }}</a>
+				<a href="tel:+{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }}</a>
+			{% endif %}
 			</div>
 			
 			<div class="mobile-icons">
@@ -71,38 +74,15 @@
 		<div class="wrapper wrapper--flex">
 
 			<div class="b-info-wrapper">
-				<div class="b-info">
-					<h4 class="b-info__title">Кредит онлайн на карту</h4>
-					<p class="b-info__text">У клиентов бывают случаи в жизни, когда оформить быстрый кредит онлайн в Украине попросту необходимо. Некоторым он нужен для открытия бизнеса, некоторым до зарплаты, а кому-то нужно организовать мероприятие,на пример, свадьбу. Поэтому люди ищут возможность, как можно выгоднее оформить быстрый кредит на карту в Украине и не бедствовать от бумажных разбирательств, процедур оформления и нудных обсуждений договора. Благодаря новому сервису Майкредит, стало возможным качественное оформление кредита на карту в онлайн режиме без волокиты и проблем. Хотелось бы ввести заемщика в курс дела, относительно процедуры по которой кредиты на карту онлайн оформляются в экспресс порядке, и описать каждый важный этап оформления при помощи уже зарекомендовавшего себя сервиса Майкредит.</p>
-				</div>
-				<div class="b-info">
-					<h4 class="b-info__title">Как получить кредит через интернет?</h4>
-					<p class="b-info__text">Получить кредит на карточку онлайн быстро и легко - это вполне возможно. И куда проще, чем взять деньги в кредит от банка напрямую или занимая у кого-то. Ниже приведем план оформления кредита при помощи сервиса Майкредит.</p>
-				</div>
-
-				<ul class="b-info-list">
-					<li>На сайте при помощи калькулятора вы можете рассчитать сумму и срок выплаты кредита. В первый раз кредит не должен превышать 3000 грн, в дальнейшем</li>
-					<li>На сайте при помощи калькулятора вы можете рассчитать сумму и срок выплаты кредита. В первый раз кредит не должен превышать 3000 грн, в дальнейшем</li>
-					<li>На сайте при помощи калькулятора вы можете рассчитать сумму и срок выплаты кредита. В первый раз кредит не должен превышать 3000 грн, в дальнейшем</li>
-					<li>На сайте при помощи калькулятора вы можете рассчитать сумму и срок выплаты кредита. В первый раз кредит не должен превышать 3000 грн, в дальнейшем</li>
-				</ul>
+				{{ main.credit_information.text|safe }}
 			</div>
 			
-
+			{% for obj in main.credit_information.information_items.get_queryset %}
 			<div class="b-info b-info--inline">
-				<h4 class="b-info__title">Сроки погашения кредита на Экспресс Финанс</h4>
-				<ul class="b-info__list">
-					<li>Минимальный срок погашения долга составляет 1 день.</li>
-					<li>Максимальный срок погашения 35 дней</li>
-					<li>Максимальная годовая процентная ставка, включающая ссудный процент, а также все остальные комиссии и расходы за год составляет 584%</li>		
-				</ul>
+				<h4 class="b-info__title">{{ obj.title }}</h4>
+					{{ obj.text|safe }}	
 			</div>
-
-			<div class="b-info b-info--inline">
-				<h4 class="b-info__title">Кредит онлайн на карту</h4>
-				<p class="b-info__text">У клиентов бывают случаи в жизни, когда оформить быстрый кредит онлайн в Украине попросту необходимо. Некоторым он нужен для открытия бизнеса, некоторым до зарплаты, а кому-то нужно организовать мероприятие,на пример, свадьбу. Поэтому люди ищут возможность, как можно выгоднее оформить быстрый кредит на карту в </p>
-			</div>
-
+			{% endfor %}
 		</div>
 	</section>
 
@@ -117,15 +97,13 @@
 <footer class="s-footer">
 		<div class="wrapper wrapper--flex">
 			<div class="s-footer-contacts">
+			{% if hot_line_phone|is_phone_active %}
+				<a class="b-tel b-tel--primary" href="tel:{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }} <span>Бесплатные звонки по Украине</span></a>
+			{% endif %}
 			{% for obj in phones %}
-				{% if forloop.first %}
-					<a class="b-tel b-tel--primary" href="tel:{{ obj.number|cut:' ' }}">{{ obj.number }} <span>Бесплатные звонки по Украине</span></a>
-				{% else %}
-					<a class="b-tel b-tel--secondary" href="tel:{{ obj.number|cut:' ' }}"><span class="icon icon--{{ obj|get_icon_class_phone_number }}"></span>{{ obj.number }}</a>
-				{% endif %}
+				<a class="b-tel b-tel--secondary" href="tel:{{ obj.number|cut:' ' }}"><span class="icon icon--{{ obj|get_icon_class_phone_number }}"></span>{{ obj.number }}</a>
 			{% endfor %}
 			</div>
-{% get_solo 'content.MainPageStatic' as main %}
 			<div class="s-footer__social">
 				{% for obj in main.social_nets.get_queryset %}
 					<a href="{{ obj.link }}"><span class="icon icon--{{ obj|get_icon_class_social_net }}"></span></a>	

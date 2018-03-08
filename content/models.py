@@ -358,6 +358,10 @@ class MainPageStatic(SingletonModel):
                                      verbose_name=_('Блок как закрыть кредит'),
                                      on_delete=models.CASCADE,
                                      null=True)
+    credit_information = models.ForeignKey('CreditInformationBlockStatic',
+                                           verbose_name=_('Блок информации о кредитах'),
+                                           on_delete=models.CASCADE,
+                                           null=True)
     menu_footer = models.ManyToManyField('MenuFooterBlock',
                                          verbose_name=_('Меню в футере'))
     social_nets = models.ManyToManyField(SocialNet,
@@ -404,4 +408,30 @@ class IndexPageStatic(SingletonModel):
 
     def __str__(self):
         return 'Страница Партнерский лэндинг'
+
+
+class CreditInformation(models.Model):
+    title = models.CharField(_('Заголовок'),
+                             max_length=128)
+    text = RichTextField(_('Текст'))
+
+    class Meta:
+        verbose_name = _('Информация по кредитам')
+        verbose_name_plural = _('Информация по кредитам')
+
+    def __str__(self):
+        return self.title
+
+
+class CreditInformationBlockStatic(SingletonModel):
+    text = RichTextField(_('Текст'))
+    information_items = models.ManyToManyField('CreditInformation',
+                                               verbose_name=_('Блоки информации'))
+
+    class Meta:
+        verbose_name = _('Блок')
+        verbose_name_plural = _('Блок информации по кредитам на главной над футером')
+
+    def __str__(self):
+        return 'Блок'
 

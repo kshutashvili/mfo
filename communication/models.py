@@ -41,6 +41,20 @@ class PhoneNumber(models.Model):
         return self.number
 
 
+class HotLinePhone(SingletonModel):
+    number = models.CharField(_('Номер телефона'),
+                              max_length=64)
+    schedule_start = models.TimeField(_('Время активности, начиная с:'))
+    schedule_end = models.TimeField(_('Время активности, заканчивая в:'))
+
+    class Meta:
+        verbose_name = _('Горячая линия')
+        verbose_name_plural = _('Горячая линия')
+
+    def __str__(self):
+        return self.number
+
+
 class Response(models.Model):
     image = models.ImageField(_('Фото клиента'),
                               upload_to='clients_photos')
@@ -74,11 +88,6 @@ class Agreement(SingletonModel):
 class Email(models.Model):
     email = models.EmailField(_('Электронная почта'),
                               max_length=64)
-    active = models.BooleanField(_('Активная Почта, используемая при '
-                                   'отправке писем "напишите нам"'),
-                                 default=False,
-                                 help_text=_('Будет использоваться только '
-                                             'первая из активных почт'))
 
     class Meta:
         verbose_name = _('Электронная почта')
@@ -86,6 +95,19 @@ class Email(models.Model):
 
     def __str__(self):
         return self.email
+
+
+class WriteUsEmail(SingletonModel):
+    email = models.OneToOneField('Email',
+                                 verbose_name=_('Электронная почта'),
+                                 on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('Почта')
+        verbose_name_plural = _('Почта для "Напишите нам"')
+
+    def __str__(self):
+        return self.email.email
 
 
 class SocialNet(models.Model):
@@ -129,4 +151,44 @@ class LastArticles(SingletonModel):
 
     def __str__(self):
         return 'Последние статьи'
+
+
+FAQ_CATEGORY_ICON_CHOICES = (('general','Общие вопросы'),
+                             ('execution','Оформление заявки'),
+                             ('card','Банковская карта'),
+                             ('credit','Кредитный договор'),
+                             ('personal','Личный кабинет'),
+                             ('credit_manipulation','Как погасить / увеличить кредит'))
+
+class FaqCategory(models.Model):
+    name = models.CharField(_('Название'),
+                            max_length=128)
+    icon = models.CharField(_('Иконка'),
+                            max_length=64,
+                            choices=FAQ_CATEGORY_ICON_CHOICES)
+    faq_items = models.ManyToManyField('FaqItem')
+
+    class Meta:
+        verbose_name = _('Категория')
+        verbose_name_plural = _('FAQ категории')
+
+    def __str__(self):
+        return self.name
+
+
+class FaqItem(models.Model):
+    name = models.CharField(_('Название вопроса'),
+                            max_length=255)
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255,
+                            help_text=_("Используйте ссылку вида /#html_id "
+                                        "для блока лэндинга. Остальные ссылки "
+                                        "указывать полностью (https://...)"))
+
+    class Meta:
+        verbose_name = _('Вопрос')
+        verbose_name_plural = _('FAQ вопросы')
+
+    def __str__(self):
+        return self.name
 

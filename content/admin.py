@@ -102,3 +102,13 @@ class MainPageStaticAdmin(admin.ModelAdmin):
 class IndexPageStaticAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
 
+
+@admin.register(models.CreditInformation)
+class CreditInformationAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+
+
+@admin.register(models.CreditInformationBlockStatic)
+class CreditInformationBlockStaticAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+

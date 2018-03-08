@@ -19,23 +19,23 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
-from communication.views import contacts, about, blog
+from communication.views import contacts, about, blog, faq
 from content.views import content
 from vacancy.views import job
 
 urlpatterns = [
-	path('', content.index, name='index'),
-	path('main/', content.main, name='main'),
-	path('main/job/', job.job, name='job'),
-	path('main/about/', about.about, name='about'),
-	path('main/about/agreement/', content.agreement, name='agreement'),
-	path('main/about/contacts/', contacts.contacts, name='contacts'),
-	path('main/blog/', blog.blog, name='blog'),
-	path('main/blog/item<int:item_id>/', blog.blog_item, name='blog_item'),
-	path('main/faq/', TemplateView.as_view(template_name='faq.html'), name='faq'),
-	path('static_pages/<str:page_url>/', content.pages, name='static_pages'),
-	path('ajax/departments_generate/<int:dep_id>/', content.departments_generate, name='departments_generate'),
-	path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
+    path('', content.index, name='index'),
+    path('main/', content.main, name='main'),
+    path('main/job/', job.job, name='job'),
+    path('main/about/', about.about, name='about'),
+    path('main/about/agreement/', content.agreement, name='agreement'),
+    path('main/about/contacts/', contacts.contacts, name='contacts'),
+    path('main/blog/', blog.blog, name='blog'),
+    path('main/blog/item<int:item_id>/', blog.blog_item, name='blog_item'),
+    path('main/faq/', faq.faq, name='faq'),
+    path('static_pages/<str:page_url>/', content.pages, name='static_pages'),
+    path('ajax/departments_generate/<int:dep_id>/', content.departments_generate, name='departments_generate'),
+    path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
     path('admin/', admin.site.urls),
 ]
 if settings.DEBUG:

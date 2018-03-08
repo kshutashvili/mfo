@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import EmailMessage
 
-from communication.models import Contact, Email
+from communication.models import Contact, WriteUsEmail
 from communication.forms import SendEmailForm
 from content.models import MenuAboutItem
 
@@ -20,7 +20,7 @@ def contacts(request):
     elif request.method == 'POST':
         form = SendEmailForm(request.POST)
         if form.is_valid():
-            to_email = Email.objects.filter(active=True).first().email
+            to_email = WriteUsEmail.get_solo()
             from_email = form.cleaned_data.get('email')
             subject = form.cleaned_data.get('name')
             message = form.cleaned_data.get('message')

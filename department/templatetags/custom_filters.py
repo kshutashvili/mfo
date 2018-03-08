@@ -1,4 +1,5 @@
 from django import template
+from datetime import datetime
 
 register = template.Library()
 
@@ -77,4 +78,35 @@ def get_icon_class_phone_number(phone):
             return ''
     except:
         return ''
+
+
+@register.filter
+def is_new_column(length_list):
+    try:
+        if length_list[0] == 0:
+            return False
+        else:
+            length_list[0] -= 1
+            if length_list[0] == 0:
+                length_list.pop(0)
+                if length_list:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+    except:
+        return False
+
+
+@register.filter
+def is_phone_active(phone):
+    try:
+        now = datetime.now().time()
+        if now > phone.schedule_start and now < phone.schedule_end:
+            return True
+        else:
+            return False
+    except:
+        return False
 

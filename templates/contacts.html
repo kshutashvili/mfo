@@ -38,7 +38,7 @@
 					<div class="b-contact">
 						<img src="{% static 'dist/img/svgstore/icons/phone1.svg' %}" alt="phone">
 						<h4 class="b-contact__title">Телефон</h4>
-						<a class="b-contact__link" href="tel:{{ contact.main_phone|cut:' ' }}">{{ contact.main_phone }}</a>
+						<a class="b-contact__link" href="tel:{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }}</a>
 					</div>
 
 					<div class="b-contact">
@@ -66,12 +66,11 @@
 						</p>
 						<p class="b-contact-info__item">
 							Наши телефоны: <br>
+						{% if hot_line_phone|is_phone_active %}
+							<a class="b-contact__link b-contact__link--bg b-contact__link--iconed" href="tel:{{ hot_line_phone.number|cut:' ' }}"><span class="icon icon--phone-call"></span>{{ hot_line_phone.number }}</a> (бесплатный многоканальный телефон) <br>
+						{% endif %}
 						{% for phone in contact.phones.get_queryset %}
-							{% if forloop.first %}
-								<a class="b-contact__link b-contact__link--bg b-contact__link--iconed" href="tel:{{ phone.number|cut:' ' }}"><span class="icon icon--phone-call"></span>{{ phone.number }}</a> (бесплатный многоканальный телефон) <br>
-							{% else %}
-								<a class="b-contact__link b-contact__link--bg b-contact__link--iconed" href="tel:{{ phone.number|cut:' ' }}">{{ phone.number }}</a>
-							{% endif %}
+							<a class="b-contact__link b-contact__link--bg b-contact__link--iconed" href="tel:{{ phone.number|cut:' ' }}">{{ phone.number }}</a>
 						{% endfor %}
 						</p>
 						<p class="b-contact-info__item">

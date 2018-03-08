@@ -42,3 +42,23 @@ class BlogItemAdmin(admin.ModelAdmin):
 class LastArticlesAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
 
+
+@admin.register(models.FaqCategory)
+class FaqCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
+@admin.register(models.FaqItem)
+class FaqItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'link')
+
+
+@admin.register(models.WriteUsEmail)
+class WriteUsEmailAdmin(admin.ModelAdmin):
+    list_display = ('email',)
+
+
+@admin.register(models.HotLinePhone)
+class HotLinePhoneAdmin(admin.ModelAdmin):
+    list_display = ('number', 'schedule_start', 'schedule_end')
+
