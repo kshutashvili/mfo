@@ -50,12 +50,10 @@
 			</div>
 
 			<div class="b-nav">
-				<a href="{% url 'about' %}" class="b-nav__link">О нас</a>
-				<a href="#" class="b-nav__link">Кредиты</a>
-				<a href="spoiler-page.html" class="b-nav__link">Акции</a>
-				<a href="{% url 'faq' %}" class="b-nav__link">Справка</a>
-				<a href="{% url 'blog' %}" class="b-nav__link">Блог</a>
-				<a href="#" class="b-nav__link">Студентам</a>
+			{% get_solo 'content.MenuHeaderBlock' as menu_header %}
+				{% for obj in menu_header.items.get_queryset %}
+					<a href="{{ obj.link }}" class="b-nav__link">{{ obj.name }}</a>
+				{% endfor %}
 			</div>
 
 			<div class="s-header__lang">

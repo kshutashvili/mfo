@@ -28,6 +28,16 @@ class MenuFooterBlockAdmin(admin.ModelAdmin):
     list_display = ('order', 'name')
 
 
+@admin.register(models.MenuHeaderItem)
+class MenuHeaderItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'order', 'link')
+
+
+@admin.register(models.MenuHeaderBlock)
+class MenuHeaderBlockAdmin(admin.ModelAdmin):
+    list_display = ('__str__', )
+
+
 @admin.register(models.JobStaticPage)
 class JobStaticPageAdmin(admin.ModelAdmin):
     list_display = ('__str__',)

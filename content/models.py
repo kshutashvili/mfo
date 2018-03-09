@@ -63,12 +63,44 @@ class MenuAboutItem(models.Model):
         return self.name
 
 
+class MenuHeaderItem(models.Model):
+    name = models.CharField(_('Название пункта'),
+                            max_length=128)
+    order = models.PositiveIntegerField(_('Порядок'),
+                                        default=0)
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255,
+                            help_text=_("Используйте ссылку вида html_id "
+                                        "для блока лэндинга. Остальные ссылки "
+                                        "указывать полностью (https://...)"))
+
+    class Meta:
+        verbose_name = _('Пункт меню')
+        verbose_name_plural = _('Пункты меню в хедере')
+        ordering = ['order',]
+
+    def __str__(self):
+        return self.name
+
+
+class MenuHeaderBlock(SingletonModel):
+    items = models.ManyToManyField('MenuHeaderItem',
+                                   verbose_name=_('Пункты'))
+
+    class Meta:
+        verbose_name = _('Блок')
+        verbose_name_plural = _('Блок меню в хедере')
+
+    def __str__(self):
+        return 'Блок'
+
+
 class MenuFooterItem(models.Model):
     name = models.CharField(_('Название пункта'),
                             max_length=128)
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
-                            help_text=_("Используйте ссылку вида /#html_id "
+                            help_text=_("Используйте ссылку вида html_id "
                                         "для блока лэндинга. Остальные ссылки "
                                         "указывать полностью (https://...)"))
 
