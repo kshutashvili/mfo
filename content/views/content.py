@@ -64,6 +64,10 @@ def credit_calculator(request, rate_id, term, summ):
     json_data = rate.rate_file.read()
     data = json.loads(json_data.decode('utf-8'))
     key = ''
+    if not term:
+        term = rate.term_min
+    if not summ:
+        summ = rate.sum_min
     for obj in sorted(map(int, data.keys())):
         if summ >= obj:
             continue
@@ -83,7 +87,7 @@ def credit_calculator(request, rate_id, term, summ):
     else:
         rate_percent /= 52
     # rate_percent , term, summ
-    if not rate_percent or not term or not summ:
+    if not rate_percent:
         return 0
     else:
         on_loan = (1 + rate_percent) ** term

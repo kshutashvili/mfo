@@ -1,6 +1,7 @@
 window.onload = function() {
 
 	sliderFiller();
+	sliderInit();
 
 	/*#Slick slider*/
 
@@ -419,11 +420,12 @@ function Slider(initialId, min, max) {
 		range: "min",
 		animate: "slow",
 		slide: function( event, ui) {
-			sliderValue.val(ui.value);
+			sliderValue.val(ui.value + ' ');
 			sliderHandle.html(ui.value + ' ' + quantity);
 			sliderTotal.html(ui.value + ' ' + quantity);
 			var slider = $(this);
 			var rate_id = slider.data('id');
+			if (!rate_id) return 0;
 			var term = $('#termin-total' + '-' + rate_id).html().split(' ')[0];
 			var summ = $('#credit-total' + '-' + rate_id).html().split(' ')[0];
 			$.ajax({
@@ -481,6 +483,25 @@ function sliderFiller(){
 			}
 		}
 	})
+}
+
+
+function sliderInit(){
+	var containers = $('.pay_spam');
+	for(var i=0; i < containers.length; i++){
+		var id = $('#' + containers[i].id).data('id');
+		var term = $('#termin-total-' + id).html().split(' ')[0];
+		var summ = $('#credit-total-' + id).html().split(' ')[0];
+		$.ajax({
+			url:'/ajax/credit_calculate/' + id + '/' + term + '/' + summ,
+			async:false,
+			success: function(data){
+				var res = $('#pay_spam' + id);
+				var value = res.html();
+				res.html(data['result'] + ' ' + value.split(' ')[1]);
+			}
+		})
+	}
 }
 
 

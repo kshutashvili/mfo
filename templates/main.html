@@ -72,7 +72,7 @@
 							<div class="b-main-form__total-content">
 								<p><span>Вы берете:</span><span id="credit-total-{{ obj.id }}">{{ obj.credit_rate.sum_min }} грн</span></p>
 								<p><span>На срок:</span> <span id="termin-total-{{ obj.id }}">{{ obj.credit_rate.term_min }} {% if obj.credit_rate.term_type %}месяцев{% else %}недель{% endif %}</span></p>
-								<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span id="pay_spam{{ obj.id }}" >550 {% if obj.credit_rate.term_type %}грн/месяц.{% else %}грн/неделя.{% endif %}</span></p>
+								<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span class="pay_spam" data-id="{{ obj.id }}" id="pay_spam{{ obj.id }}" >550 {% if obj.credit_rate.term_type %}грн/месяц.{% else %}грн/неделя.{% endif %}</span></p>
 							</div>
 
 							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Оформить кредит</a>
