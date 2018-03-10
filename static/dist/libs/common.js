@@ -2,7 +2,6 @@ window.onload = function() {
 
 	sliderFiller();
 
-
 	/*#Slick slider*/
 
 	(function($) {
@@ -423,6 +422,18 @@ function Slider(initialId, min, max) {
 			sliderValue.val(ui.value);
 			sliderHandle.html(ui.value + ' ' + quantity);
 			sliderTotal.html(ui.value + ' ' + quantity);
+			var slider = $(this);
+			var rate_id = slider.data('id');
+			var term = $('#termin-total' + '-' + rate_id).html().split(' ')[0];
+			var summ = $('#credit-total' + '-' + rate_id).html().split(' ')[0];
+			$.ajax({
+				url:'/ajax/credit_calculate/' + rate_id + '/' + term + '/' + summ,
+				success: function(data){
+					var res = $('#pay_spam' + rate_id);
+					var value = res.html();
+					res.html(data['result'] + ' ' + value.split(' ')[1]);
+				}
+			})
 		}
 	});
 

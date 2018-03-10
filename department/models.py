@@ -7,6 +7,9 @@ from django_google_maps import fields as map_fields
 
 
 class Department(models.Model):
+    city = models.CharField(_('Город'),
+                            max_length=128,
+                            null=True)
     address = map_fields.AddressField(_('Адрес'),
                                       max_length=128)
     geolocation = map_fields.GeoLocationField(max_length=100,

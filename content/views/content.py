@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils.translation import ugettext_lazy as _
@@ -8,7 +10,7 @@ from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem
 from credit.models import CreditRate, CreditRateUp
 from communication.models import Response
 from department.models import Department
-from efin.settings import GOOGLE_MAPS_API_KEY
+from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
 
 
 def pages(request, page_url):
@@ -32,8 +34,7 @@ def departments_generate(request, dep_id):
                          (GOOGLE_MAPS_API_KEY,
                           obj.geolocation.lat,
                           obj.geolocation.lon))
-        city = obj.address.split(',')[-2].strip()
-        result[obj.id] = {'city':city,
+        result[obj.id] = {'city':obj.city,
                         'address':obj.address,
                         'schedule':obj.schedule,
                         'email':obj.email,
@@ -46,8 +47,8 @@ def slider_filler(request):
     data = CreditRateUp.objects.all()
     result = dict()
     for obj in data:
-        result[str(obj.id)] = {'term_min':obj.credit_rate.get_term_min_days(),
-                               'term_max':obj.credit_rate.get_term_max_days(),
+        result[str(obj.id)] = {'term_min':obj.credit_rate.term_min,
+                               'term_max':obj.credit_rate.term_max,
                                'sum_min':obj.credit_rate.sum_min,
                                'sum_max':obj.credit_rate.sum_max}
     return JsonResponse(result)
@@ -56,3 +57,37 @@ def slider_filler(request):
 def agreement(request):
     menu_about = MenuAboutItem.objects.all()
     return render(request, 'default.html', {'menu_about':menu_about})
+
+
+def credit_calculator(request, rate_id, term, summ):
+    rate = CreditRate.objects.filter(id=rate_id).first()
+    json_data = rate.rate_file.read()
+    data = json.loads(json_data.decode('utf-8'))
+    key = ''
+    for obj in sorted(map(int, data.keys())):
+        if summ >= obj:
+            continue
+        else:
+            key = str(obj)
+    else:
+        if not key:
+            key = str(sorted(map(int, data.keys()))[-1])
+    percents = data[key]
+    for obj in sorted(map(int, percents.keys())):
+        if term >= int(obj):
+            rate_percent = percents[str(obj)]
+        else:
+            break
+    if rate.term_type:
+        rate_percent /= 12
+    else:
+        rate_percent /= 52
+    # rate_percent , term, summ
+    if not rate_percent or not term or not summ:
+        return 0
+    else:
+        on_loan = (1 + rate_percent) ** term
+        res = round(summ * ( rate_percent * on_loan)/(on_loan - 1), 2)
+        result = {'result':res}
+        return JsonResponse(result)
+

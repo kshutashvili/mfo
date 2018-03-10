@@ -7,8 +7,6 @@ from department.models import Department
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-	formfield_overrides = {
-		map_fields.AddressField: {'widget': map_widgets.GoogleMapsAddressWidget},}
-
-
+    formfield_overrides = {
+        map_fields.AddressField: {'widget': map_widgets.GoogleMapsAddressWidget},}
 

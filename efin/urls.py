@@ -25,17 +25,19 @@ from vacancy.views import job
 
 urlpatterns = [
     path('', content.index, name='index'),
+    path('callback/', TemplateView.as_view(template_name='form-callback.html'), name='callback'),
     path('main/', content.main, name='main'),
-    path('main/job/', job.job, name='job'),
-    path('main/about/', about.about, name='about'),
-    path('main/about/agreement/', content.agreement, name='agreement'),
-    path('main/about/contacts/', contacts.contacts, name='contacts'),
-    path('main/blog/', blog.blog, name='blog'),
-    path('main/blog/item<int:item_id>/', blog.blog_item, name='blog_item'),
-    path('main/faq/', faq.faq, name='faq'),
+    path('job/', job.job, name='job'),
+    path('about/', about.about, name='about'),
+    path('about/agreement/', content.agreement, name='agreement'),
+    path('about/contacts/', contacts.contacts, name='contacts'),
+    path('blog/', blog.blog, name='blog'),
+    path('blog/item<int:item_id>/', blog.blog_item, name='blog_item'),
+    path('faq/', faq.faq, name='faq'),
     path('static_pages/<str:page_url>/', content.pages, name='static_pages'),
     path('ajax/departments_generate/<int:dep_id>/', content.departments_generate, name='departments_generate'),
     path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
+    path('ajax/credit_calculate/<int:rate_id>/<int:term>/<int:summ>/', content.credit_calculator, name='cred_calc'),
     path('admin/', admin.site.urls),
 ]
 if settings.DEBUG:

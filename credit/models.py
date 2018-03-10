@@ -14,8 +14,12 @@ class CreditRate(models.Model):
                               upload_to='credit_rate')
     sum_min = models.PositiveIntegerField(_('Минимальная сумма кредита'))
     sum_max = models.PositiveIntegerField(_('Максимальная сумма кредита'))
-    term_min = models.PositiveIntegerField(_('Минимальный срок кредита, недель'))
-    term_max = models.PositiveIntegerField(_('Максимальный срок кредита, недель'))
+    term_min = models.PositiveIntegerField(_('Минимальный срок кредита'))
+    term_max = models.PositiveIntegerField(_('Максимальный срок кредита'))
+    term_type = models.BooleanField(_('Тип срока кредита'),
+                                    default=False,
+                                    help_text=_('Если включено, то в месяцах '
+                                                'Если отключено, то в неделях'))
     rate_min = models.DecimalField(_('Минимальная ставка, %'),
                                    validators=[MinValueValidator(0.00)],
                                    decimal_places=2,
@@ -26,6 +30,8 @@ class CreditRate(models.Model):
                                    max_digits=20)
     payment_terms = models.ManyToManyField('PaymentTerm',
                                            verbose_name=_('Сроки платежей'))
+    rate_file = models.FileField(_('Файл с процентами, формат .json'),
+                                 upload_to='rates_files')
 
     class Meta:
         verbose_name = _('Кредитный тариф')

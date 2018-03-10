@@ -39,7 +39,7 @@
 
 								<span>грн</span>
 
-								<div class="b-form-item__slider" id="credit-slider-{{ obj.id }}">
+								<div data-id="{{ obj.id }}" class="b-form-item__slider" id="credit-slider-{{ obj.id }}">
 									<div class="ui-slider-helper">
 										<a class='ui-slider-handle'>
 											<span class="icon icon--arrow icon--left"></span>
@@ -54,13 +54,13 @@
 								<label class="b-form-item__label" for="termin-value-{{ obj.id }}">Срок займа:</label>
 
 								<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-{{ obj.id }}">
-								<span>дней</span>
+								<span>{% if obj.credit_rate.term_type %} месяцев {% else %} недель {% endif %}</span>
 
-								<div class="b-form-item__slider" id="termin-slider-{{ obj.id }}">
+								<div data-id="{{ obj.id }}" class="b-form-item__slider" id="termin-slider-{{ obj.id }}">
 									<div class="ui-slider-helper ui-slider-helper--sm">
 										<a class='ui-slider-handle ui-slider-handle--sm'>
 											<span class="icon icon--arrow icon--left"></span>
-											<span class="ui-slider-val">{{ obj.credit_rate.get_term_min_days }} дней</span>
+											<span class="ui-slider-val">{{ obj.credit_rate.term_min }} {% if obj.credit_rate.term_type %}месяцев{% else %}недель{% endif %}</span>
 											<span class="icon icon--arrow icon--right"></span>
 										</a>
 									</div>
@@ -71,8 +71,8 @@
 						<fieldset class="b-main-form__total">
 							<div class="b-main-form__total-content">
 								<p><span>Вы берете:</span><span id="credit-total-{{ obj.id }}">{{ obj.credit_rate.sum_min }} грн</span></p>
-								<p><span>На срок:</span> <span id="termin-total-{{ obj.id }}">{{ obj.credit_rate.get_term_min_days }} дней</span></p>
-								<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span>550 грн/нед.</span></p>
+								<p><span>На срок:</span> <span id="termin-total-{{ obj.id }}">{{ obj.credit_rate.term_min }} {% if obj.credit_rate.term_type %}месяцев{% else %}недель{% endif %}</span></p>
+								<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span id="pay_spam{{ obj.id }}" >550 {% if obj.credit_rate.term_type %}грн/месяц.{% else %}грн/неделя.{% endif %}</span></p>
 							</div>
 
 							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Оформить кредит</a>
@@ -325,7 +325,7 @@
 					</ul>
 					<ul class="b-region-list">
 				{% endif %}
-					<li><span class="arrow"></span><button class="b-region-list__btn"  data-dep_id="{{ obj.id }}">{{ obj|get_city }}</button></li>
+					<li><span class="arrow"></span><button class="b-region-list__btn"  data-dep_id="{{ obj.id }}">{{ obj.city }}</button></li>
 				{% if forloop.last %}
 					</ul>
 				{% endif %}
