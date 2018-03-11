@@ -14,7 +14,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-{% get_solo 'content.MainPageStatic' as main %}
 
 	<header class="s-header">
 		<div class="wrapper">
@@ -61,7 +60,7 @@
 				<button class="b-btn b-btn--lang">Укр</button>
 			</div>
 
-			<a href="private-profile.html" class="b-btn-login">Мой кабинет <span class="icon icon--login"></span></a>
+			<a href="#!" class="b-btn-login">Мой кабинет <span class="icon icon--login"></span></a>
 		</div>
 	</header>
 
@@ -122,6 +121,7 @@
 			</div>
 
 			<div class="s-footer-faq">
+
 			{% for obj in main.menu_footer.get_queryset %}
 				{% if not forloop.first %}
 				<nav class="s-footer-nav">

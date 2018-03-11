@@ -423,6 +423,8 @@ function Slider(initialId, min, max) {
 			sliderValue.val(ui.value + ' ');
 			sliderHandle.html(ui.value + ' ' + quantity);
 			sliderTotal.html(ui.value + ' ' + quantity);
+		},
+		stop: function( event, ui) {
 			var slider = $(this);
 			var rate_id = slider.data('id');
 			if (!rate_id) return 0;

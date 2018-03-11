@@ -12,8 +12,6 @@
 
 {% block content %}	
 
-{% get_solo 'content.MainPageStatic' as main %}
-
 	<section class="s-main" style="background-image: url({{ main.top_block.image.url }});" >
 		<div class="wrapper wrapper--flex">
 			<ul class="s-main__list">
@@ -320,7 +318,7 @@
 
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
-					{% for obj in main.departments.get_queryset %}
+				{% for obj in main.departments.get_queryset %}
 				{% if forloop.counter|divisibleby:8 %}
 					</ul>
 					<ul class="b-region-list">

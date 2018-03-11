@@ -12,7 +12,6 @@
 
 {% block content %}
 	
-{% get_solo 'content.IndexPageStatic' as index %}		
 	<section class="s-credits">
 		<div class="wrapper">
 			<form action="#" class="b-main-form">
@@ -352,7 +351,7 @@
 					</ul>
 					<ul class="b-region-list">
 				{% endif %}
-					<li><span class="arrow"></span><button class="b-region-list__btn"  data-dep_id="{{ obj.id }}">{{ obj }}</button></li>
+					<li><span class="arrow"></span><button class="b-region-list__btn"  data-dep_id="{{ obj.id }}">{{ obj.city }}</button></li>
 				{% if forloop.last %}
 					</ul>
 				{% endif %}

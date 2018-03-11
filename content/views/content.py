@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import urlencode, force_escape
 from django.utils.safestring import mark_safe
 
-from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem
+from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
+                           MainPageStatic, IndexPageStatic
 from credit.models import CreditRate, CreditRateUp
 from communication.models import Response
 from department.models import Department
@@ -19,11 +20,15 @@ def pages(request, page_url):
 
 
 def main(request):
-    return render(request, 'main.html', {})
+    main = MainPageStatic.get_solo()
+    return render(request, 'main.html', {'main':main})
 
 
 def index(request):
-    return render(request, 'index.html', {})
+    index = IndexPageStatic.get_solo()
+    main = MainPageStatic.get_solo()
+    return render(request, 'index.html', {'index':index,
+                                          'main':main})
 
 
 def departments_generate(request, dep_id):
@@ -35,11 +40,11 @@ def departments_generate(request, dep_id):
                           obj.geolocation.lat,
                           obj.geolocation.lon))
         result[obj.id] = {'city':obj.city,
-                        'address':obj.address,
-                        'schedule':obj.schedule,
-                        'email':obj.email,
-                        'phone':obj.phone,
-                        'link':link}
+                          'address':obj.address,
+                          'schedule':obj.schedule,
+                          'email':obj.email,
+                          'phone':obj.phone,
+                          'link':link}
     return JsonResponse(result)
 
 
