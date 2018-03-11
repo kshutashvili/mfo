@@ -91,7 +91,7 @@ def credit_calculator(request, rate_id, term, summ):
         return 0
     else:
         on_loan = (1 + rate_percent) ** term
-        res = round(summ * ( rate_percent * on_loan)/(on_loan - 1), 2)
+        res = round(summ * rate_percent * on_loan / (on_loan - 1) , 2)
         result = {'result':res}
         return JsonResponse(result)
 

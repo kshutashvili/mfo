@@ -44,8 +44,10 @@ class PhoneNumber(models.Model):
 class HotLinePhone(SingletonModel):
     number = models.CharField(_('Номер телефона'),
                               max_length=64)
-    schedule_start = models.TimeField(_('Время активности, начиная с:'))
-    schedule_end = models.TimeField(_('Время активности, заканчивая в:'))
+    schedule_start = models.TimeField(_('Время активности, начиная с:'),
+                                      null=True)
+    schedule_end = models.TimeField(_('Время активности, заканчивая в:'),
+                                    null=True)
 
     class Meta:
         verbose_name = _('Горячая линия')
