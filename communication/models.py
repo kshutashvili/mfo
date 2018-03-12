@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 
 from solo.models import SingletonModel
 from ckeditor.fields import RichTextField
+from PIL import Image
 
 
 class Contact(SingletonModel):
@@ -141,6 +142,22 @@ class BlogItem(models.Model):
 
     def __str__(self):
         return ' '.join([self.title, str(self.date)])
+
+    def save(self):
+        super(BlogItem, self).save()        
+        if not self.image:
+            return
+        image = Image.open(self.image)
+        (width, height) = image.size
+        factor = max(width,height)
+        if factor > 2000:
+            k_factor = 2000./factor
+            size = (int(width * k_factor), int(height * k_factor))
+            image = image.resize(size, Image.ANTIALIAS)
+            image.save(self.image.path)
+
+    def __unicode__(self):
+        return str(self.id)
 
 
 class LastArticles(SingletonModel):
