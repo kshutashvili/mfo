@@ -27,6 +27,8 @@ urlpatterns = [
     path('', content.index, name='index'),
     path('callback/', TemplateView.as_view(template_name='form-callback.html'), name='callback'),
     path('main/', content.main, name='main'),
+    path('download_pdf/<int:spoiler_id>/', content.download_pdf, name='download_pdf'),
+    path('open_pdf/<int:spoiler_id>/', content.open_pdf, name='open_pdf'),
     path('job/', job.job, name='job'),
     path('about/', about.about, name='about'),
     path('about/agreement/', content.agreement, name='agreement'),

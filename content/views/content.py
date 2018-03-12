@@ -1,4 +1,6 @@
 import json
+import os
+from wsgiref.util import FileWrapper
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -99,4 +101,20 @@ def credit_calculator(request, rate_id, term, summ):
         res = round(summ * rate_percent * on_loan / (on_loan - 1) , 2)
         result = {'result':res}
         return JsonResponse(result)
+
+
+def download_pdf(request, spoiler_id):
+    spoiler = Spoiler.objects.filter(id=spoiler_id).first()
+    filename = spoiler.file.name
+    content = FileWrapper(spoiler.file)
+    response = HttpResponse(content, content_type='application/pdf')
+    response['Content-Length'] = os.path.getsize(spoiler.file.path)
+    response['Content-Disposition'] = 'attachment; filename=%s' % 'spoiler_file.pdf'
+    return response
+
+
+def open_pdf(request, spoiler_id):
+    spoiler = Spoiler.objects.filter(id=spoiler_id).first()
+    file_data = open(spoiler.file.path, 'rb').read()
+    return HttpResponse(file_data, content_type='application/pdf')
 

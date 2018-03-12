@@ -24,7 +24,7 @@
 								{{ obj.content_left|safe }}
 							</p>
 							{% if obj.file %}
-								<a href="#" class="b-spoiler__link b-btn-linked">Просмотреть</a>
+								<a href="#" onclick="window.open('/open_pdf/{{ obj.id }}')" class="b-spoiler__link b-btn-linked">Просмотреть</a>
 							{% endif %}
 						</div>
 						<div class="b-spoiler__column">
@@ -32,7 +32,7 @@
 								{{ obj.content_right|safe }}
 							</p>
 							{% if obj.file %}
-								<a href="#" class="b-spoiler__link b-btn-linked b-btn-linked--secondary" download>Скачать</a>
+								<input type="button" value="Cкачать" onclick="window.open('/download_pdf/{{ obj.id }}')" class="b-spoiler__link b-btn-linked b-btn-linked--secondary" >
 							{% endif %}
 						</div>		
 					</div>
