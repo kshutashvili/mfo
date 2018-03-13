@@ -73,7 +73,8 @@ class Response(models.Model):
                             max_length=128)
     status = models.CharField(_('Статус клиента'),
                               max_length=64)
-    text = models.TextField(_('Текст отзыва'))
+    text = models.TextField(_('Текст отзыва'),
+                            max_length=1000)
 
     class Meta:
         verbose_name = _('Отзыв')

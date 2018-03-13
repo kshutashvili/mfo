@@ -723,8 +723,7 @@ fieldset {
 .s-advanteges-content__item, .s-about-content__item {
   text-align: center; }
   .s-advanteges-content__item img, .s-about-content__item img {
-    width: 50%;
-    height: 50%; }
+    max-width: 10rem; }
 
 .b-review, .b-response-wrap {
   position: relative;
@@ -1751,10 +1750,6 @@ fieldset {
           box-shadow: 0 1px 100px rgba(0, 0, 0, 0.5);
   z-index: 2;
   overflow: hidden; }
-  .s-main .wrapper {
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center; }
   .s-main__list {
     position: relative;
     padding-left: 0;
@@ -1769,8 +1764,8 @@ fieldset {
     .s-main__list-title {
       font-weight: bold; }
   .s-main-title {
-    padding: 5rem 0 0 7.69231%;
-    margin: 9rem 0 0 0;
+    max-width: 60rem;
+    margin: 25rem auto 0 auto;
     text-transform: uppercase;
     letter-spacing: 1px; }
     .s-main-title span {
@@ -1903,8 +1898,8 @@ fieldset {
 .s-about {
   position: relative;
   z-index: 2;
-  background: url("../img/s-about-bg.jpg") center no-repeat;
-  background-position: 100% 0;
+  background: url("../img/s-about-bg.jpg") no-repeat;
+  background-position: 60% 0;
   background-size: cover;
   border-bottom-left-radius: 50% 12rem;
   border-bottom-right-radius: 50% 12rem;
@@ -1946,9 +1941,11 @@ fieldset {
         -ms-flex-pack: justify;
             justify-content: space-between;
     margin: 0 0 4rem 0; }
-    .s-about-content__item svg {
-      width: 7.5rem;
-      height: 7.5rem; }
+    .s-about-content__item {
+      width: 25%; }
+      .s-about-content__item svg {
+        width: 7.5rem;
+        height: 7.5rem; }
 
 /*#Response section*/
 .s-response {
@@ -3467,14 +3464,15 @@ fieldset {
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   width: 100%;
+  height: 100%;
   font-size: 14px;
   font-weight: bold;
   border-radius: 0 0 3rem 3rem;
   overflow: hidden; }
   .b-main-form-container {
     position: relative;
-    min-width: 35rem;
-    min-height: 51.8rem;
+    width: 38rem;
+    min-height: 60rem;
     z-index: 2; }
     .b-main-form-container:before {
       content: "";
@@ -3512,10 +3510,7 @@ fieldset {
       font-size: 1.2rem;
       font-weight: normal; }
   .b-main-form__total {
-    -webkit-box-flex: 1;
-        -ms-flex: 1;
-            flex: 1;
-    padding: 3rem 3rem 0.9rem 5.7265%;
+    padding: 3rem 3rem .9rem 3rem;
     position: relative;
     color: #959595;
     background-image: -o-linear-gradient(175deg, #fdfbfb 0%, #ebedee 100%);
@@ -3532,7 +3527,7 @@ fieldset {
       margin: 3rem 0 4rem 0; }
       .b-main-form__total-content span:first-child {
         display: inline-block;
-        width: 59%; }
+        width: 50%; }
       .b-main-form__total-content span:last-child {
         color: #000; }
     .b-main-form__total-cost {
@@ -3548,7 +3543,8 @@ fieldset {
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
             flex-direction: column;
-    overflow: visible; }
+    overflow: visible;
+    min-height: 58rem; }
     .b-main-form--prime.arrow-mid:after {
       top: 21.9rem; }
     .b-main-form--prime.arrow-bot:after {
@@ -3580,8 +3576,11 @@ fieldset {
       position: relative;
       background: #fff;
       margin-top: -8rem;
-      padding: 8rem 10% 4rem 10%;
+      padding: 8rem 3rem 4rem 3rem;
       z-index: 1; }
+      .b-main-form--prime .b-main-form__total-content {
+        max-width: 27rem;
+        margin: 4rem auto; }
     .b-main-form--prime .b-form-item:not(:last-child) {
       margin-bottom: 3.4rem; }
     .b-main-form--prime .b-form-item__input {
@@ -4511,11 +4510,8 @@ fieldset {
   .s-profile {
     border-bottom-left-radius: 50% 8rem;
     border-bottom-right-radius: 50% 8rem; }
-  .b-main-form__content {
-    width: 100%;
-    padding: 3rem 5.98291% 6rem 5.98291%; }
-    .b-main-form__content-message {
-      margin: 0 0 3rem 0; }
+  .b-main-form__content-message {
+    margin: 0 0 3rem 0; }
   .b-main-form__total {
     padding: 6rem 31.62393% 3rem 31.62393%; }
   .b-form-group {
@@ -4942,8 +4938,6 @@ fieldset {
     width: calc(100% - 12rem); }
     .ui-slider-helper--sm {
       width: calc(100% - 9rem); }
-  .b-main-form__total {
-    padding: 6rem 3rem 3rem 3rem; }
   .b-review__info {
     font-size: 1.5rem; }
   .s-advanteges-content__item {
