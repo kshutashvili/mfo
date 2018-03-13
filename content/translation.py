@@ -95,7 +95,7 @@ class ImportantAspectTranslationOptions(TranslationOptions):
 @register(models.AboutUsStatic)
 class AboutUsStaticTranslationOptions(TranslationOptions):
     fields = ('title', 'subtitle', 'text', 'middle_title', 'middle_text',
-              'important_title')
+              'important_title', 'title_top', 'meta_title', 'meta_description')
     required_languages = ('ua', 'ru')
 
 

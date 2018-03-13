@@ -112,8 +112,9 @@ class ImportantAspectAdmin(admin.ModelAdmin):
 @admin.register(models.AboutUsStatic)
 class AboutUsStaticAdmin(admin.ModelAdmin):
     list_display = ('title', 'subtitle', 'link', )
-    exclude = ('title', 'subtitle', 'text', 'middle_title', 'middle_text',
-               'important_title')
+    exclude = ('title_top', 'meta_title', 'meta_description', 'title', 'subtitle', 
+               'text', 'middle_title', 'middle_text', 'important_title')
+
 
 @admin.register(models.MainPageTopBlockStatic)
 class MainPageTopBlockStaticAdmin(admin.ModelAdmin):

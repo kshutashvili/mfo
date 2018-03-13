@@ -303,6 +303,14 @@ class DiscountStatic(SingletonModel):
 
 
 class AboutUsStatic(SingletonModel):
+    title_top = models.CharField(_('Title страницы'),
+                             max_length=255,
+                             null=True)
+    meta_title = models.CharField(_('Meta title страницы'),
+                                  max_length=255,
+                                  null=True)
+    meta_description = RichTextField(_('Meta description страницы'),
+                                     null=True)
     title = models.CharField(_('Заголовок'),
                              max_length=64)
     subtitle = models.CharField(_('Подзаголовок'),
