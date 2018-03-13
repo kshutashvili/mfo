@@ -37,3 +37,9 @@ class FaqItemTranslationOptions(TranslationOptions):
 class FaqPageStaticTranslationOptions(TranslationOptions):
     fields = ('title', 'meta_title', 'meta_description')
     required_languages = ('ua', 'ru')
+
+
+@register(models.BlogCategory)
+class BlogCategoryOptions(TranslationOptions):
+    fields = ('name',)
+    required_languages = ('ua', 'ru')

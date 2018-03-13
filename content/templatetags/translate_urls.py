@@ -17,6 +17,7 @@ class TranslatedURL(template.Node):
         translation.activate(self.language)
         url = reverse(view.url_name, args=view.args, kwargs=view.kwargs)
         translation.activate(request_language)
+        context['request'].session[translation.LANGUAGE_SESSION_KEY] = request_language
         return url
 
 

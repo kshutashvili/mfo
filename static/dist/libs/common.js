@@ -343,6 +343,14 @@ window.onload = function() {
 	$('.s-head__more-btn').on('click', function(e) {
 		$('.s-head__nav').toggleClass('active');
 	});
+
+	initMap();
+}
+
+function initMap() {
+	if (document.getElementById('map') == null) return;
+	var map = new google.maps.Map(document.getElementById('map'), {
+	});
 }
 
 function disableSelect(context, select) {
@@ -452,22 +460,76 @@ function Slider(initialId, min, max) {
 }
 
 function fieldFiller (dep_id, url) {
-
+	function textFill(data){
+		$('#data-adress').html(data.address);
+		$('#data-city').html(data.city);
+		$('#data-localAdress').html(data.address);
+		$('#data-schedule').html(data.schedule);
+		$('#data-mail').html(data.email).attr('href',
+			'mailto:'+ data.email);
+		$('#data-phone').html(data.phone).attr('href',
+			'tel:' + data.phone);
+	}
 	$.ajax({
 		url: url,
 		success: function(data) {
 			for(key in data) {
-				if (parseInt(key) === parseInt(dep_id)) {	
-					$('#data-map').attr('src', data[key].link);			
-					$('#data-adress').html(data[key].address);
-					$('#data-city').html(data[key].city);
-					$('#data-localAdress').html(data[key].address);
-					$('#data-schedule').html(data[key].schedule);
-					$('#data-mail').html(data[key].email).attr('href',
-						'mailto:'+ data[key].email);
-					$('#data-phone').html(data[key].phone).attr('href',
-						'tel:' + data[key].phone);
-				}
+					
+					var obj = data[key];
+					var officeArr = [];
+//					for(var k in obj) officeArr.push(obj[k]);	
+
+						var myLatlng = obj.lats
+						var map = new google.maps.Map(document.getElementById('map'), {
+							zoom: 11,
+							center: myLatlng
+						});
+
+						var iconChosen = {
+		    			url: "/static/dist/img/marker-chosen.png", // url
+		    			scaledSize: new google.maps.Size(25, 25), // scaled size
+		    			origin: new google.maps.Point(0,0), // origin
+		   				anchor: new google.maps.Point(0, 0) // anchor
+		   			};
+
+		   			var icon = {
+		    			url: "/static/dist/img/marker.png", // url
+		    			scaledSize: new google.maps.Size(25, 25), // scaled size
+		    			origin: new google.maps.Point(0,0), // origin
+		   				anchor: new google.maps.Point(0, 0) // anchor
+		   			};
+
+		   			textFill(obj);
+		   			var allMarkers = [];
+	   				var list_deps = []
+	   				for (obj in data){
+	   					list_deps.push(data[obj]);
+	   				}
+		   			for(var i = 0; i < list_deps.length; i++) {
+		   				var marker = new google.maps.Marker({
+		   					id: i,
+		   					position: list_deps[i].lats,
+		   					map: map,
+		   					title: 'Нажмите, чтобы получить информацию по отделению'
+		   				}).addListener('click', function() {
+		   					textFill(list_deps[this.id]);
+
+		   					for(var j = 0; j < allMarkers.length; j++) {
+		   						allMarkers[j].f.setIcon(icon);
+		   					}
+
+		   					this.setIcon(iconChosen);
+		   				});
+
+		   				allMarkers.push(marker);
+		   			}
+
+		   			for(var j = 0; j < allMarkers.length; j++) {
+		   				allMarkers[j].f.setIcon(icon);
+
+		   				if(j == allMarkers.length - 1) allMarkers[j].f.setIcon(iconChosen);
+		   			}
+				
 			}
 		}
 	});

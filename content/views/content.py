@@ -24,36 +24,47 @@ def pages(request, page_url):
 
 def main(request):
     main = MainPageStatic.get_solo()
-    return render(request, 'main.html', {'main':main})
+    departments = []
+    for obj in main.departments.get_queryset():
+        if obj.city not in departments:
+            departments.append(obj.city)
+    return render(request, 'main.html', {'main':main,
+                                         'departments':departments})
 
 
 def index(request):
     index = IndexPageStatic.get_solo()
     main = MainPageStatic.get_solo()
+    departments = []
+    for obj in index.departments.get_queryset():
+        if obj.city not in departments:
+            departments.append(obj.city)
     return render(request, 'index.html', {'index':index,
-                                          'main':main})
+                                          'main':main,
+                                          'departments':departments})
 
 
 def departments_generate(request, dep_id):
-    if request.session[translation.LANGUAGE_SESSION_KEY] == 'ua':
+    if translation.get_language() == 'ua':
         lang = 'ua'
     else:
         lang = 'ru'
-    departments = Department.objects.filter(id=int(dep_id))
-    result = dict()
+    city_departs = dict()
+    departments = Department.objects.filter(city=dep_id)
     for obj in departments:
-        link = mark_safe('https://www.google.com/maps/embed/v1/place?key=%s&q=%s,%s' % \
-                         (GOOGLE_MAPS_API_KEY,
-                          obj.geolocation.lat,
-                          obj.geolocation.lon))
+        #link = mark_safe('https://www.google.com/maps/embed/v1/place?key=%s&q=%s,%s' % \
+        #                (GOOGLE_MAPS_API_KEY,
+        #                obj.geolocation.lat,
+        #                obj.geolocation.lon))
         address = obj.address if lang == 'ru' else obj.address_ua
-        result[obj.id] = {'city':obj.city,
-                          'address':address,
-                          'schedule':obj.schedule,
-                          'email':obj.email,
-                          'phone':obj.phone,
-                          'link':link}
-    return JsonResponse(result)
+        city_departs[obj.id] = {'city':obj.city,
+                                'lats':{'lat':obj.geolocation.lat,
+                                        'lng':obj.geolocation.lon},
+                                'address':address,
+                                'schedule':obj.schedule,
+                                'email':obj.email,
+                                'phone':obj.phone}
+    return JsonResponse(city_departs)
 
 
 def slider_filler(request):

@@ -343,15 +343,14 @@
 	<section class="s-region">
 		<div class="wrapper">
 			<h2 class="b-section-title">{% trans "Вы можете взять кредит в другом городе" %}</h2>
-
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
-				{% for obj in main.departments.get_queryset %}
+				{% for obj in departments %}
 				{% if forloop.counter|divisibleby:8 %}
 					</ul>
 					<ul class="b-region-list">
 				{% endif %}
-					<li><span class="arrow"></span><button class="b-region-list__btn"  data-dep_id="{{ obj.id }}">{{ obj.city }}</button></li>
+					<li><span class="arrow"></span><button class="b-region-list__btn" data-dep_id="{{ obj }}">{{ obj }}</button></li>
 				{% if forloop.last %}
 					</ul>
 				{% endif %}
@@ -364,9 +363,8 @@
 						<button class="b-btn-primary b-btn-primary--main btn-show">{% trans "Показать все города" %}</button>
 					</div>
 					
+					<div id="map" class="popup-map"></div>
 
-					<iframe id="data-map" src="" class="popup-map" frameborder="0" style="border:0" allowfullscreen></iframe>
-					
 					<div class="popup-info">
 						<h3 class="popup-info__adress">
 							<span class="icon icon--arrow"></span>

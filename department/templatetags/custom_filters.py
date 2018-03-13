@@ -5,9 +5,9 @@ register = template.Library()
 
 
 @register.filter
-def get_city(department):
+def get_city(address):
     try:
-        return department.address.split(',')[-2].strip()
+        return address.split(',')[-2].strip()
     except:
         return None
 

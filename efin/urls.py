@@ -39,9 +39,10 @@ urlpatterns = i18n_patterns(
     path('about/contacts/', contacts.contacts, name='contacts'),
     path('blog/', blog.blog, name='blog'),
     path('blog/item<int:item_id>/', blog.blog_item, name='blog_item'),
+    path('blog/<str:category_link>/', blog.blog_category, name='blog_category'),
     path('faq/', faq.faq, name='faq'),
     path('<str:page_url>/', content.pages, name='static_pages'),
-    path('ajax/departments_generate/<int:dep_id>/', content.departments_generate, name='departments_generate'),
+    path('ajax/departments_generate/<str:dep_id>/', content.departments_generate, name='departments_generate'),
     path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
     path('ajax/credit_calculate/<int:rate_id>/<int:term>/<int:summ>/', content.credit_calculator, name='cred_calc'),
 )

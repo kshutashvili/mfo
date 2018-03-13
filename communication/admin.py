@@ -73,3 +73,10 @@ class HotLinePhoneAdmin(admin.ModelAdmin):
 class FaqPageStaticAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
     exclude = ('title', 'meta_title', 'meta_description')
+
+
+@admin.register(models.BlogCategory)
+class BlogCategoryAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+    exclude = ('name',)
+

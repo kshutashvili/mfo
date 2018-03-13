@@ -239,3 +239,22 @@ class FaqPageStatic(SingletonModel):
     def __str__(self):
         return 'FAQ страница'
 
+
+class BlogCategory(models.Model):
+    name = models.CharField(_('Название категории'),
+                            max_length=128)
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255,
+                            help_text=_("Используйте ссылку вида /#html_id "
+                                        "для блока лэндинга. Остальные ссылки "
+                                        "указывать полностью (https://...)"))
+    blog_items = models.ManyToManyField('BlogItem',
+                                        verbose_name=_('Статьи'))
+
+    class Meta:
+        verbose_name = _('Категория')
+        verbose_name_plural = _('Категории в блоге')
+
+    def __str__(self):
+        return self.name
+

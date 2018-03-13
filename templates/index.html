@@ -348,12 +348,12 @@
 
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
-				{% for obj in index.departments.get_queryset %}
+				{% for obj in departments %}
 				{% if forloop.counter|divisibleby:8 %}
 					</ul>
 					<ul class="b-region-list">
 				{% endif %}
-					<li><span class="arrow"></span><button class="b-region-list__btn"  data-dep_id="{{ obj.id }}">{{ obj.city }}</button></li>
+					<li><span class="arrow"></span><button class="b-region-list__btn"  data-dep_id="{{ obj }}">{{ obj }}</button></li>
 				{% if forloop.last %}
 					</ul>
 				{% endif %}
@@ -366,8 +366,7 @@
 						<button class="b-btn-primary b-btn-primary--main btn-show">{% trans "Показать все города" %}</button>
 					</div>
 					
-
-					<iframe id="data-map" src="" class="popup-map" frameborder="0" style="border:0" allowfullscreen></iframe>
+					<div id="map" class="popup-map"></div>
 					
 					<div class="popup-info">
 						<h3 class="popup-info__adress">
