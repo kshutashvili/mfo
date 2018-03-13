@@ -7,6 +7,20 @@
 {% block title %}Category{% endblock %}
 
 {% block content %}
+	<section class="s-head">
+		<div class="wrapper">
+			<nav class="s-head__nav s-head__nav--mobile">
+				<div class="s-head__nav-more">{% trans "Больше информации" %}</div>
+				{% for obj in menu_about %}
+					<a href="{{ obj.link }}">{{ obj.name }}</a>
+				{% endfor %}
+
+				<button class="s-head__more-btn">
+					<span class="icon icon--arrow"></span>
+				</button>
+			</nav>
+		</div>
+	</section>
 	<section class="s-spoiler">
 		<div class="wrapper">
 			<div class="b-top-nav">

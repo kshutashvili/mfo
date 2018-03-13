@@ -19,7 +19,9 @@ from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
 
 def pages(request, page_url):
     page = StaticPage.objects.filter(link=page_url).first()
-    return render(request, 'spoiler-page.html', {'page':page})
+    menu_about = MenuAboutItem.objects.all()
+    return render(request, 'spoiler-page.html', {'page':page,
+                                                 'menu_about':menu_about})
 
 
 def main(request):

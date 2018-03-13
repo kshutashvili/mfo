@@ -18,9 +18,6 @@
 					<a href="{{ obj.link }}">{{ obj.name }}</a>
 				{% endfor %}
 
-				{% for obj in static_pages %}
-					<a href="{% url 'static_pages' obj.link %}">{{ obj.title }}</a>
-				{% endfor %}
 				<button class="s-head__more-btn">
 					<span class="icon icon--arrow"></span>
 				</button>
