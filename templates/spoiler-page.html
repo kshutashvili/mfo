@@ -2,14 +2,16 @@
 
 {% load static %}
 
+{% load i18n %}
+
 {% block title %}Category{% endblock %}
 
 {% block content %}
 	<section class="s-spoiler">
 		<div class="wrapper">
 			<div class="b-top-nav">
-				<a href="{% url 'main' %}" class="b-top-nav__item active">Главная</a>
-				<a href="{% url 'about' %}" class="b-top-nav__item">Категория</a>
+				<a href="{% url 'main' %}" class="b-top-nav__item active">{% trans "Главная" %}</a>
+				<a href="{% url 'about' %}" class="b-top-nav__item">{% trans "Категория" %}</a>
 			</div>
 
 			<h2 class="b-top-title">{{ page.title }}</h2>
@@ -24,7 +26,7 @@
 								{{ obj.content_left|safe }}
 							</p>
 							{% if obj.file %}
-								<a href="#" onclick="window.open('/open_pdf/{{ obj.id }}')" class="b-spoiler__link b-btn-linked">Просмотреть</a>
+								<a href="#" onclick="window.open('/open_pdf/{{ obj.id }}')" class="b-spoiler__link b-btn-linked">{% trans "Просмотреть" %}</a>
 							{% endif %}
 						</div>
 						<div class="b-spoiler__column">
@@ -32,7 +34,7 @@
 								{{ obj.content_right|safe }}
 							</p>
 							{% if obj.file %}
-								<input type="button" value="Cкачать" onclick="window.open('/download_pdf/{{ obj.id }}')" class="b-spoiler__link b-btn-linked b-btn-linked--secondary" >
+								<a href="#" onclick="window.open('/download_pdf/{{ obj.id }}')" class="b-spoiler__link b-btn-linked b-btn-linked--secondary" >{% trans "Скачать" %}</a>
 							{% endif %}
 						</div>		
 					</div>

@@ -4,6 +4,8 @@
 
 {% load solo_tags %}
 
+{% load i18n %}
+
 {% block title %}About us{% endblock %}
 
 {% block content %}
@@ -11,11 +13,14 @@
 	<section class="s-head">
 		<div class="wrapper">
 			<nav class="s-head__nav s-head__nav--mobile">
-				<div class="s-head__nav-more">Больше информации</div>
+				<div class="s-head__nav-more">{% trans "Больше информации" %}</div>
 				{% for obj in menu_about %}
 					<a href="{{ obj.link }}">{{ obj.name }}</a>
 				{% endfor %}
 
+				{% for obj in static_pages %}
+					<a href="{% url 'static_pages' obj.link %}">{{ obj.title }}</a>
+				{% endfor %}
 				<button class="s-head__more-btn">
 					<span class="icon icon--arrow"></span>
 				</button>
@@ -27,8 +32,8 @@
 		<div class="wrapper">
 			<div class="s-about__wrap">
 				<div class="b-top-nav">
-					<a href="{% url 'main' %}" class="b-top-nav__item active">Главная</a>
-					<a href="{% url 'about' %}" class="b-top-nav__item">О Нас</a>
+					<a href="{% url 'main' %}" class="b-top-nav__item active">{% trans "Главная" %}</a>
+					<a href="{% url 'about' %}" class="b-top-nav__item">{% trans "О Нас" %}</a>
 				</div>
 
 				{% get_solo 'content.AboutUsStatic' as about %}
@@ -54,7 +59,7 @@
 				{% endfor %}
 				</div>
 
-				<a href="{{ about.link }}" class="b-btn-primary b-btn-primary--main b-btn-primary--sm s-about__btn">Оформить кредит</a>
+				<a href="{{ about.link }}" class="b-btn-primary b-btn-primary--main b-btn-primary--sm s-about__btn">{% trans "Оформить кредит" %}</a>
 			</div>
 		</div>
 	</section>

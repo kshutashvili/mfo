@@ -2,15 +2,22 @@
 
 {% load solo_tags %}
 
+{% load i18n %}
+
 {% load custom_filters %}
+
+{% load translate_urls %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>{% block title %}Express Finance{% endblock %}</title>
+	<title>{% block title %}Редактируемое значение из админки {% endblock %}| expressfinance.com.ua</title>
 	<link rel="stylesheet" href="{% static 'dist/css/styles.css' %}">
 	{% block extrastyles %}{% endblock %}
+	<meta name="title" content="{% block meta_title %}Редактируемое значение из админки {% endblock %}| expressfinance.com.ua" />
+	<meta name="description" content="{% block description %}Всегда на связи ☎ Вывод телефонов, которые заданы в конфиге. . ✔ Весь спектр услуг ✔ Низкие цены ✔ Доставка {% endblock %}| expressfinance.com.ua (expressfinance.com.ua)" />
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -23,7 +30,7 @@
 					<span class="mobile-menu__middle"></span>
 					<span class="mobile-menu__footer"></span>
 				</div>
-				<span>Меню</span>
+				<span>{% trans "Меню" %}</span>
 			</button>
 
 			<a href="{% url 'main' %}" class="b-logo">
@@ -33,7 +40,7 @@
 
 			<div class="s-header__phone">
 			{% if hot_line_phone|is_phone_active %}
-				<span>Телефон горячей линии</span>
+				<span>{% trans "Телефон горячей линии" %}</span>
 				<a href="tel:+{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }}</a>
 			{% endif %}
 			</div>
@@ -54,13 +61,13 @@
 					<a href="{{ obj.link }}" class="b-nav__link">{{ obj.name }}</a>
 				{% endfor %}
 			</div>
-
+			{% get_current_language as LC %}
 			<div class="s-header__lang">
-				<button class="b-btn b-btn--lang">Рус</button>
-				<button class="b-btn b-btn--lang">Укр</button>
+				<a href="{% translate_url ru %}" class="b-btn b-btn--lang">{% trans "Рус" %}</a>
+				<a href="{% translate_url ua %}" class="b-btn b-btn--lang">{% trans "Укр" %}</a>
 			</div>
 
-			<a href="#!" class="b-btn-login">Мой кабинет <span class="icon icon--login"></span></a>
+			<a href="#!" class="b-btn-login">{% trans "Мой кабинет " %}<span class="icon icon--login"></span></a>
 		</div>
 	</header>
 
@@ -85,8 +92,8 @@
 
 	<section class="s-more-information">
 		<div class="wrapper">
-			<p>Больше информации на полной версии сайта</p>
-			<a href="#" class="b-btn-primary b-btn-primary--main">Перейти</a>
+			<p>{% trans "Больше информации на полной версии сайта" %}</p>
+			<a href="#" class="b-btn-primary b-btn-primary--main">{% trans "Перейти" %}</a>
 		</div>
 	</section>
 {% endblock %}
@@ -95,7 +102,7 @@
 		<div class="wrapper wrapper--flex">
 			<div class="s-footer-contacts">
 			{% if hot_line_phone|is_phone_active %}
-				<a class="b-tel b-tel--primary" href="tel:{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }} <span>Бесплатные звонки по Украине</span></a>
+				<a class="b-tel b-tel--primary" href="tel:{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }} <span>{% trans "Бесплатные звонки по Украине" %}</span></a>
 			{% endif %}
 			{% for obj in phones %}
 				<a class="b-tel b-tel--secondary" href="tel:{{ obj.number|cut:' ' }}"><span class="icon icon--{{ obj|get_icon_class_phone_number }}"></span>{{ obj.number }}</a>
@@ -136,13 +143,13 @@
 
 			<div class="s-footer-referal-wrap">
 				<div class="s-footer-referal">
-					<h4 class="s-footer-referal__title">Заработай с партнеской программой "Приведи друга"</h4>
+					<h4 class="s-footer-referal__title">{% trans 'Заработай с партнеской программой "Приведи друга"' %}</h4>
 					<p class="s-footer-referal__text">
-						Приводи друзей и получай <strong>до 200 грн</strong>
-						за каждого нового пользователя! 
+						{% trans "Приводи друзей и получай " %}<strong>до 200 грн</strong>
+						{% trans "за каждого нового пользователя" %}!
 					</p>
 
-					<button class="b-btn-primary b-btn-primary--main">Пригласить друга</button>
+					<button class="b-btn-primary b-btn-primary--main">{% trans "Пригласить друга" %}</button>
 				</div>
 			</div>
 			
@@ -154,10 +161,10 @@
 
 				<p class="s-footer-base__info">
 					<span class="mob-hidden">
-						Первый в Украине сервис кредитования через интернет. <br>
-						Мы предоставляем быстрые и удобные кредиты для всех граждан Украины. <br>
+						{% trans "Первый в Украине сервис кредитования через интернет" %}. <br>
+						{% trans "Мы предоставляем быстрые и удобные кредиты для всех граждан Украины" %}. <br>
 					</span>
-					&copy 2015 - 2017 MyCredit <span class="mob-hidden">- Кредит онлайн на банковскую карту за 20 минут</span>
+					&copy 2015 - 2017 MyCredit <span class="mob-hidden">- {% trans "Кредит онлайн на банковскую карту за 20 минут" %}</span>
 				</p>
 
 				<div class="s-footer-base__social mob-hidden">

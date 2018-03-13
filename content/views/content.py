@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import urlencode, force_escape
 from django.utils.safestring import mark_safe
+from django.utils import translation
 
 from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
                            MainPageStatic, IndexPageStatic
@@ -34,6 +35,10 @@ def index(request):
 
 
 def departments_generate(request, dep_id):
+    if request.session[translation.LANGUAGE_SESSION_KEY] == 'ua':
+        lang = 'ua'
+    else:
+        lang = 'ru'
     departments = Department.objects.filter(id=int(dep_id))
     result = dict()
     for obj in departments:
@@ -41,8 +46,9 @@ def departments_generate(request, dep_id):
                          (GOOGLE_MAPS_API_KEY,
                           obj.geolocation.lat,
                           obj.geolocation.lon))
+        address = obj.address if lang == 'ru' else obj.address_ua
         result[obj.id] = {'city':obj.city,
-                          'address':obj.address,
+                          'address':address,
                           'schedule':obj.schedule,
                           'email':obj.email,
                           'phone':obj.phone,
@@ -105,16 +111,22 @@ def credit_calculator(request, rate_id, term, summ):
 
 def download_pdf(request, spoiler_id):
     spoiler = Spoiler.objects.filter(id=spoiler_id).first()
-    filename = spoiler.file.name
-    content = FileWrapper(spoiler.file)
-    response = HttpResponse(content, content_type='application/pdf')
-    response['Content-Length'] = os.path.getsize(spoiler.file.path)
-    response['Content-Disposition'] = 'attachment; filename=%s' % 'spoiler_file.pdf'
-    return response
+    if os.path.exists(spoiler.file.path):
+        with open(spoiler.file.path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename=%s.pdf' % os.path.basename(spoiler.file.path)
+            return response
+    raise Http404
 
 
 def open_pdf(request, spoiler_id):
     spoiler = Spoiler.objects.filter(id=spoiler_id).first()
     file_data = open(spoiler.file.path, 'rb').read()
     return HttpResponse(file_data, content_type='application/pdf')
+
+
+def translate(request, lang_code):
+    translation.activate(lang_code)
+    request.session[translation.LANGUAGE_SESSION_KEY] = lang_code
+    return HttpResponseRedirect("/")
 

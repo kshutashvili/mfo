@@ -6,6 +6,8 @@
 
 {% load solo_tags %}
 
+{% load i18n %}
+
 {% block title %}Agreement{% endblock %}
 
 {% block content %}
@@ -16,6 +18,10 @@
 				{% for obj in menu_about %}
 					<a href="{{ obj.link }}">{{ obj.name }}</a>
 				{% endfor %}
+
+				{% for obj in static_pages %}
+					<a href="{% url 'static_pages' obj.link %}">{{ obj.title }}</a>
+				{% endfor %}
 			</nav>
 		</div>
 	</section>
@@ -24,12 +30,12 @@
 		<div class="wrapper wrapper--flex">
 			<main class="b-main-container">
 				<div class="b-top-nav">
-					<a class="b-top-nav__item active" href="{% url 'main' %}" >Главная</a>
-					<a href="{% url 'about' %}" class="b-top-nav__item active">О Нас</a>
-					<a href="{% url 'agreement' %}" class="b-top-nav__item">Договор займа</a>
+					<a class="b-top-nav__item active" href="{% url 'main' %}" >{% trans "Главная" %}</a>
+					<a href="{% url 'about' %}" class="b-top-nav__item active">{% trans "О Нас" %}</a>
+					<a href="{% url 'agreement' %}" class="b-top-nav__item">{% trans "Договор займа" %}</a>
 				</div>
 
-				<h2 class="b-top-title">Договор займа</h2>
+				<h2 class="b-top-title">{% trans "Договор займа" %}</h2>
 	            {% get_solo 'communication.Agreement' as agreement %}
 				<img src="{{ agreement.image.url }}" alt="women" class="s-agreement__img">
 				
@@ -41,9 +47,9 @@
 			<aside class="b-sidebar">
 				<div class="b-sidebar-banner">
 					<h3 class="b-sidebar-banner__title">
-						<span>Всего</span> в пару кликов!
+						<span>{% trans "Всего" %}</span>{% trans "в пару кликов" %}!
 					</h3>
-					<a href="form-callback.html" class="b-btn-primary b-btn-primary--main b-btn-primary--bordered">Оформить кредит</a>
+					<a href="form-callback.html" class="b-btn-primary b-btn-primary--main b-btn-primary--bordered">{% trans "Оформить кредит" %}</a>
 					<img class="b-sidebar-banner__img b-sidebar-banner__img--left" src="{% static 'dist/img/car.png' %}" alt="car">
 					<img class="b-sidebar-banner__img b-sidebar-banner__img--right" src="{% static 'dist/img/grn.png' %}" alt="money">
 				</div>
@@ -53,7 +59,7 @@
 					<img src="{{ obj.image.url }}" alt="money" class="b-blog-item__img">
 					<h3 class="b-blog-item__title">{{ obj.title }}</h3>
 					<p class="b-blog-item__text">{{ obj.text|get_few_words:'40'|safe }}</p>
-					<a class="b-blog-item__link" href="{% url 'blog_item' obj.id %}">Подробнее</a>
+					<a class="b-blog-item__link" href="{% url 'blog_item' obj.id %}">{% trans "Подробнее" %}</a>
 					<time class="b-blog-item__date" >{{ obj.date }}</time>
 				</article>
 			{% endfor %}

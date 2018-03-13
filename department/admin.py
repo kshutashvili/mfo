@@ -9,4 +9,5 @@ from department.models import Department
 class DepartmentAdmin(admin.ModelAdmin):
     formfield_overrides = {
         map_fields.AddressField: {'widget': map_widgets.GoogleMapsAddressWidget},}
+    exclude = ('city', 'schedule')
 

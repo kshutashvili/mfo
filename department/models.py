@@ -10,8 +10,11 @@ class Department(models.Model):
     city = models.CharField(_('Город'),
                             max_length=128,
                             null=True)
-    address = map_fields.AddressField(_('Адрес'),
+    address = map_fields.AddressField(_('Адрес [ru]'),
                                       max_length=128)
+    address_ua = models.CharField(_('Адрес [ua]'),
+                                  max_length=255,
+                                  null=True)
     geolocation = map_fields.GeoLocationField(max_length=100,
                                               null=True)
     schedule = models.CharField(_('Режим работы'),
@@ -26,5 +29,5 @@ class Department(models.Model):
         verbose_name_plural = _('Отделения')
 
     def __str__(self):
-        return self.address if self.address else self.id
+        return self.address if self.address else str(self.id)
 

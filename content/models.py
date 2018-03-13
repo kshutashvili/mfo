@@ -233,6 +233,12 @@ class CloseCredit(models.Model):
 class CloseCreditStatic(SingletonModel):
     title = models.CharField(_('Заголовок'),
                              max_length=128)
+    title_ru = models.CharField(_('Заголовок [ru]'),
+                             max_length=128,
+                             null=True)
+    title_ua = models.CharField(_('Заголовок [ua]'),
+                             max_length=128,
+                             null=True)
     close_credits = models.ManyToManyField('CloseCredit',
                                            verbose_name=_('Варианты закрытия'))
 
@@ -242,6 +248,10 @@ class CloseCreditStatic(SingletonModel):
 
     def __str__(self):
         return self.title
+
+    def save(self):
+        super(CloseCreditStatic, self).save()
+        self.title = self.title_ru
 
 
 class SecurityStatic(SingletonModel):
@@ -360,6 +370,30 @@ class MainPageTopBlockStatic(SingletonModel):
 
 
 class MainPageStatic(SingletonModel):
+    title = models.CharField(_('Title страницы'),
+                             max_length=255,
+                             null=True)
+    title_ru = models.CharField(_('Title страницы [ru]'),
+                                max_length=255,
+                                null=True)
+    title_ua = models.CharField(_('Title страницы [ua]'),
+                                max_length=255,
+                                null=True)
+    meta_title = models.CharField(_('Meta title страницы'),
+                                  max_length=255,
+                                  null=True)
+    meta_title_ru = models.CharField(_('Meta title страницы [ru]'),
+                                  max_length=255,
+                                  null=True)
+    meta_title_ua = models.CharField(_('Meta title страницы [ua]'),
+                                  max_length=255,
+                                  null=True)
+    meta_description = RichTextField(_('Meta description страницы'),
+                                     null=True)
+    meta_description_ru = RichTextField(_('Meta description страницы [ru]'),
+                                     null=True)
+    meta_description_ua = RichTextField(_('Meta description страницы [ua]'),
+                                     null=True)
     top_block = models.ForeignKey('MainPageTopBlockStatic',
                                   verbose_name=_('Верхний блок страницы'),
                                   on_delete=models.CASCADE)
@@ -405,6 +439,12 @@ class MainPageStatic(SingletonModel):
 
     def __str__(self):
         return 'Главная страница'
+
+    def save(self):
+        super(MainPageStatic, self).save()
+        self.title = self.title_ru
+        self.meta_title = self.meta_title_ru
+        self.meta_description = self.meta_description_ru
 
 
 class IndexPageStatic(SingletonModel):

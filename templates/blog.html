@@ -4,6 +4,8 @@
 
 {% load custom_filters %}
 
+{% load i18n %}
+
 {% block title %}Blog{% endblock %}
 
 {% block content %}
@@ -11,13 +13,14 @@
 	<section class="s-head">
 		<div class="wrapper">
 			<nav class="s-head__nav s-head__nav--mobile">
-				<div class="s-head__nav-more">Больше информации</div>
-				<a href="#">Правовая информация</a>
-				<a href="{% url 'agreement' %}">Договор займа</a>
-				<a href="#">Финансовая отчетность</a>
-				<a href="#">Политика конфиденциальности</a>
-				<a href="about.html#response">Отзывы</a>
-				<a href="{% url 'contacts' %}">Контакты</a>
+				<div class="s-head__nav-more">{% trans "Больше информации" %}</div>
+				{% for obj in menu_about %}
+					<a href="{{ obj.link }}">{{ obj.name }}</a>
+				{% endfor %}
+
+				{% for obj in static_pages %}
+					<a href="{% url 'static_pages' obj.link %}">{{ obj.title }}</a>
+				{% endfor %}
 
 				<button class="s-head__more-btn">
 					<span class="icon icon--arrow"></span>
@@ -29,10 +32,10 @@
 	<section class="s-blog">
 		<div class="wrapper">
 			<div class="b-top-nav">
-				<a href="{% url 'main' %}" class="b-top-nav__item active">Главная</a>
-				<a href="{% url 'blog' %}" class="b-top-nav__item">Блог</a>
+				<a href="{% url 'main' %}" class="b-top-nav__item active">{% trans "Главная" %}</a>
+				<a href="{% url 'blog' %}" class="b-top-nav__item">{% trans "Блог" %}</a>
 			</div>
-			<h2 class="b-top-title">Блог</h2>
+			<h2 class="b-top-title">{% trans "Блог" %}</h2>
 
 			<div class="b-blog-slider">
 
@@ -41,8 +44,8 @@
 					<article class="b-blog-item">
 						<img src="{{ obj.image.url }}" alt="money" class="b-blog-item__img">
 						<h3 class="b-blog-item__title">{{ obj.title }}</h3>
-						<p class="b-blog-item__text">{{ obj.text|safe|get_few_words:'40'|safe }}</p>
-						<a class="b-blog-item__link" href="{% url 'blog_item' obj.id %}">Подробнее</a>
+						<p class="b-blog-item__text">{{ obj.text|safe|get_few_words:'30'|safe }}</p>
+						<a class="b-blog-item__link" href="{% url 'blog_item' obj.id %}">{% trans "Подробнее" %}</a>
 						<time class="b-blog-item__date" >{{ obj.date }}</time>
 					</article>
 					{% if forloop.counter|divisibleby:6 %}

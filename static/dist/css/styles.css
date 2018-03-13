@@ -1795,23 +1795,20 @@ fieldset {
   background-color: #FFF9E5;
   position: relative; }
   .s-head__nav {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    width: 84.18803%;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
     text-transform: uppercase;
     font-size: 1.2rem;
     font-weight: bold;
-    overflow: hidden; }
+    overflow: hidden;
+    margin-left: -1.5%; }
     .s-head__nav a {
+      display: inline-block;
       padding: 3.5rem 0;
       text-transform: uppercase;
       -webkit-transition: color .2s;
       -o-transition: color .2s;
       transition: color .2s; }
+      .s-head__nav a:not(:last-child) {
+        margin-left: 1.5%; }
       .s-head__nav a:hover {
         color: #FCC504; }
     .s-head__nav-btn, .s-head__nav-link {
@@ -3847,7 +3844,7 @@ fieldset {
   display: -ms-flexbox;
   display: flex;
   width: 62.82051%;
-  padding: 10rem 5.12821% 6rem 8.54701%;
+  padding: 3rem 5.12821% 6rem 8.54701%;
   background-color: rgba(54, 54, 54, 0.8);
   color: #fff; }
   .b-personal__alert {
@@ -3867,7 +3864,10 @@ fieldset {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
-  padding: 3rem 5.7265% 3rem 3rem;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 3rem 6.83761% 6rem 6.83761%;
   background-image: -o-linear-gradient(150deg, rgba(245, 152, 9, 0.85) 0%, rgba(248, 174, 6, 0.85) 15%, rgba(251, 196, 3, 0.85) 100%);
   background-image: linear-gradient(-60deg, rgba(245, 152, 9, 0.85) 0%, rgba(248, 174, 6, 0.85) 15%, rgba(251, 196, 3, 0.85) 100%);
   -webkit-box-shadow: 0px 4px 18px 2px rgba(246, 166, 14, 0.25);
@@ -3877,6 +3877,8 @@ fieldset {
     font-size: 2rem; }
   .b-callback__info {
     margin-bottom: 1rem; }
+  .b-callback .b-btn-primary {
+    margin: 0 auto; }
 
 /*#Buttons*/
 .b-btn {
@@ -4712,7 +4714,6 @@ fieldset {
       text-align: left;
       font-size: 1rem; }
   .s-head__nav {
-    width: 100%;
     -ms-flex-pack: distribute;
         justify-content: space-around;
     font-size: 1rem; }
@@ -4986,6 +4987,9 @@ fieldset {
   .b-response-wrap:after {
     display: none; }
   .s-head__nav {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-direction: column;

@@ -4,6 +4,8 @@
 
 {% load custom_filters %}
 
+{% load i18n %}
+
 {% load solo_tags %}
 
 {% block title %}Blog-item{% endblock %}
@@ -14,8 +16,8 @@
 		<div class="wrapper wrapper--flex">
 			<main class="b-main-container">
 				<div class="b-top-nav b-top-nav--main">
-					<a href="{% url 'main' %}" class="b-top-nav__item active">Главная</a>
-					<a href="{% url 'blog' %}" class="b-top-nav__item active">Блог</a>
+					<a href="{% url 'main' %}" class="b-top-nav__item active">{% trans "Главная" %}</a>
+					<a href="{% url 'blog' %}" class="b-top-nav__item active">{% trans "Блог" %}</a>
 					<a href="{% url 'blog_item' article.id %}" class="b-top-nav__item">{{ article.title }}</a>
 				</div>
 
@@ -33,9 +35,9 @@
 			<aside class="b-sidebar">
 				<div class="b-sidebar-banner">
 					<h3 class="b-sidebar-banner__title">
-						<span>Всего</span> в пару кликов!
+						<span>{% trans "Всего" %}</span>{% trans "в пару кликов" %}!
 					</h3>
-					<a href="form-callback.html" class="b-btn-primary b-btn-primary--main b-btn-primary--bordered">Оформить кредит</a>
+					<a href="form-callback.html" class="b-btn-primary b-btn-primary--main b-btn-primary--bordered">{% trans "Оформить кредит" %}</a>
 					<img class="b-sidebar-banner__img b-sidebar-banner__img--left" src="{% static 'dist/img/car.png' %}" alt="car">
 					<img class="b-sidebar-banner__img b-sidebar-banner__img--right" src="{% static 'dist/img/grn.png' %}" alt="money">
 				</div>
@@ -45,7 +47,7 @@
 					<img src="{{ obj.image.url }}" alt="money" class="b-blog-item__img">
 					<h3 class="b-blog-item__title">{{ obj.title }}</h3>
 					<p class="b-blog-item__text">{{ obj.text|get_few_words:'40'|safe }}</p>
-					<a class="b-blog-item__link" href="{% url 'blog_item' obj.id %}">Подробнее</a>
+					<a class="b-blog-item__link" href="{% url 'blog_item' obj.id %}">{% trans "Подробнее" %}</a>
 					<time class="b-blog-item__date" >{{ obj.date }}</time>
 				</article>
 			{% endfor %}

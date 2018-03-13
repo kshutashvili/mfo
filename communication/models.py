@@ -8,6 +8,14 @@ from PIL import Image
 
 
 class Contact(SingletonModel):
+    title = models.CharField(_('Title страницы'),
+                             max_length=255,
+                             null=True)
+    meta_title = models.CharField(_('Meta title страницы'),
+                                  max_length=255,
+                                  null=True)
+    meta_description = RichTextField(_('Meta description страницы'),
+                                     null=True)
     phones = models.ManyToManyField('PhoneNumber',
                                     verbose_name=_('Телефоны'))
     email = models.OneToOneField('Email',
@@ -210,4 +218,24 @@ class FaqItem(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class FaqPageStatic(SingletonModel):
+    title = models.CharField(_('Title страницы'),
+                             max_length=255,
+                             null=True)
+    meta_title = models.CharField(_('Meta title страницы'),
+                                  max_length=255,
+                                  null=True)
+    meta_description = RichTextField(_('Meta description страницы'),
+                                     null=True)
+    faq_categories = models.ManyToManyField('FaqCategory',
+                                            verbose_name=_('Категории с вопросами'))
+
+    class Meta:
+        verbose_name = _('Страница')
+        verbose_name_plural = _('FAQ страница')
+
+    def __str__(self):
+        return 'FAQ страница'
 

@@ -6,6 +6,8 @@
 
 {% load solo_tags %}
 
+{% load i18n %}
+
 {% load custom_filters %}
 
 {% block title %}Express Finance{% endblock %}
@@ -16,11 +18,11 @@
 		<div class="wrapper">
 			<form action="#" class="b-main-form">
 				<fieldset class="b-main-form__content">
-					<h3 class="b-main-form__content-title"><span>"Экспресс-финанс"</span>Мгновенные кредиты онлайн</h3>
-					<p class="b-main-form__content-message">Выберите суму и срок необходимого Вам кредита в форме ниже</p>
+					<h3 class="b-main-form__content-title"><span>"{% trans 'Экспресс-финанс' %}"</span>{% trans 'Мгновенные кредиты онлайн' %}</h3>
+					<p class="b-main-form__content-message">{% trans "Выберите суму и срок необходимого Вам кредита в форме ниже" %}</p>
 
 					<div class="b-form-item">
-						<label class="b-form-item__label" for="credit-value-1">Сумма кредита:</label>
+						<label class="b-form-item__label" for="credit-value-1">{% trans "Сумма кредита" %}:</label>
 
 						<div class="b-form-item__slider" id="credit-slider-1">
 							<div class="ui-slider-helper">
@@ -38,21 +40,21 @@
 					</div>
 
 					<div class="b-form-item">
-						<label class="b-form-item__label" for="termin-value-1">Срок займа:
+						<label class="b-form-item__label" for="termin-value-1">{% trans "Срок займа" %}:
 						</label>
 						
 						<div class="b-form-item__slider" id="termin-slider-1">
 							<div class="ui-slider-helper ui-slider-helper--sm">
 								<a class='ui-slider-handle ui-slider-handle--sm'>
 									<span class="icon icon--arrow icon--left"></span>
-									<span class="ui-slider-val">56 дней</span>
+									<span class="ui-slider-val">56 {% trans "дней" %}</span>
 									<span class="icon icon--arrow icon--right"></span>
 								</a>
 							</div>
 						</div>
 
 						<input class="b-form-item__input b-form-item__input--second" value="56" type="tel" id="termin-value-1">
-						<span>дней</span>	
+						<span>{% trans "дней" %}</span>	
 					</div>
 				</fieldset>
 
@@ -60,18 +62,18 @@
 					<div class="b-total-number">
 						<span class="b-total-number__bg">3495</span>
 						<span class="b-total-number__count">3495</span>
-						<span class="b-total-number__caption">Заявок</span>
+						<span class="b-total-number__caption">{% trans "Заявок" %}</span>
 					</div>
 
 					<div class="b-main-form__total-info">
-						<p class="b-main-form__info-item">Более <span>3495 заявок</span></p>
-						<p class="b-main-form__info-item">были <span>одобрены сегодня!</span></p>
+						<p class="b-main-form__info-item">{% trans "Более" %} <span>3495 {% trans "заявок" %}</span></p>
+						<p class="b-main-form__info-item">{% trans "были" %} <span>{% trans "одобрены сегодня" %}!</span></p>
 					</div>
 
 					<div class="b-main-form__total-content">
-						<p><span>Вы берете:</span><span id="credit-total-1">10000 грн</span></p>
-						<p><span>На срок:</span> <span id="termin-total-1">14 дней</span></p>
-						<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span>550 грн/нед.</span></p>
+						<p><span>{% trans "Вы берете" %}:</span><span id="credit-total-1">10000 грн</span></p>
+						<p><span>{% trans "На срок" %}:</span> <span id="termin-total-1">14 {% trans "дней" %}</span></p>
+						<p class="b-main-form__total-cost"><span>{% trans "Платеж по кредиту" %}:</span> <span>550 {% trans "грн/нед" %}.</span></p>
 					</div>
 
 					<button class="b-btn-main" name="submit" type="submit"><span class="icon icon--check-mark"></span></button>
@@ -81,13 +83,13 @@
 			<div class="b-form-group">
 
 				<div class="b-personal">
-					<p class="b-personal__alert">Небольшой текст о том, куда и зачем отправляются эти данные пользователем сервиса, а так же небольшая инструкция по алгоритму дальнейших действий.</p>
+					<p class="b-personal__alert">{% trans "Небольшой текст о том, куда и зачем отправляются эти данные пользователем сервиса, а так же небольшая инструкция по алгоритму дальнейших действий" %}.</p>
 
 					<form action="#" class="b-personal-form">
-						<h4 class="b-personal-form__title">Укажите Ваши <br>личные данные</h4>
+						<h4 class="b-personal-form__title">{% trans "Укажите Ваши" %} <br>{% trans "личные данные" %}</h4>
 
 						<div class="b-input">
-							<input type="text" placeholder="Ввведите свое имя">
+							<input type="text" placeholder="{% trans 'Ввведите свое имя' %}">
 							<span class="icon icon--avatar"></span>
 						</div>
 
@@ -96,20 +98,20 @@
 							<span class="icon icon--phone-call"></span>
 						</div>
 
-						<button class="b-btn-primary" type="submit">Отправить данные</button>
+						<button class="b-btn-primary" type="submit">{% trans 'Отправить данные' %}</button>
 					</form>
 				</div>
 
 				<div class="b-callback">
-					<h4 class="b-callback__title">Получить решение онлайн</h4>
-					<p class="b-callback__info">Небольшой текст о том, куда и зачем отправляются эти данные пользователем сервиса, а так же небольшая инструкция по алгоритму дальнейших действий.</p>
+					<h4 class="b-callback__title">{% trans "Получить решение онлайн" %}</h4>
+					<p class="b-callback__info">{% trans "Небольшой текст о том, куда и зачем отправляются эти данные пользователем сервиса, а так же небольшая инструкция по алгоритму дальнейших действий" %}.</p>
 					<form action="#" class="b-callback-form">
 						<div class="b-input b-input--secondary">
 							<input placeholder="+38 (0__) ___ __ __" type="tel">
 							<span class="icon icon--phone-call"></span>
 						</div>
 
-						<button class="b-btn-primary b-btn-primary--dark">Получить решение</button>
+						<button class="b-btn-primary b-btn-primary--dark">{% trans "Получить решение" %}</button>
 					</form>
 				</div>
 			</div>
@@ -149,7 +151,7 @@
 						{{ index.discount.title|safe }}
 					</h4>
 					<p class="s-advanteges-message__content-main">{{ index.discount.text|safe }}</p>
-					<a href="{{ index.discount.link }}" class="b-btn-stretch">Как стать участником программы?</a>
+					<a href="{{ index.discount.link }}" class="b-btn-stretch">{% trans "Как стать участником программы" %}?</a>
 				</div>
 
 			</div>
@@ -170,28 +172,28 @@
 					<div class="s-packages-content__item">
 						<div class="s-packages-content__item-img" style="background-image: url({{ obj.image.url }})"></div>
 						<div class="s-packages-content__item-wrap">
-							<h3 class="s-packages-content__item-subcaption">кредитный тариф</h3>
+							<h3 class="s-packages-content__item-subcaption">{% trans "кредитный тариф" %}</h3>
 							<h4 class="s-packages-content__item-caption">{{ obj.name }} 
 							</h4>
 							<p class="s-packages-content__item-info">
-								<span>Размер кредита:</span>
-								<b>от {{ obj.sum_min|intcomma|replace_comma_with_space }} до {{ obj.sum_max|intcomma|replace_comma_with_space}} грн</b>	
+								<span>{% trans "Размер кредита" %}:</span>
+								<b>{% trans "от" %} {{ obj.sum_min|intcomma|replace_comma_with_space }} {% trans "до" %} {{ obj.sum_max|intcomma|replace_comma_with_space}} грн</b>	
 							</p>
 							<p class="s-packages-content__item-info">
-								Параметр кредита:
-								<b>от {{ obj.term_min }} до {{ obj.term_max }} недель</b>	
+								{% trans "Параметр кредита" %}:
+								<b>{% trans "от" %} {{ obj.term_min }} {% trans "до" %} {{ obj.term_max }} {% if obj.term_type %}{% trans "месяцев" %}{% trans "недель" %}{% endif %}</b>	
 							</p>
 							<p class="s-packages-content__item-info">
-								% ставка:
-								<b>от {{ obj.rate_min }} до {{ obj.rate_max }}%</b>
+								% {% trans "ставка" %}:
+								<b>{% trans "от" %} {{ obj.rate_min }} {% trans "до" %} {{ obj.rate_max }}%</b>
 							</p>
 							<p class="s-packages-content__item-info">
-								Платеж:
+								{% trans "Платеж" %}:
 								{% for pl in obj.payment_terms.get_queryset %}
 									<b>{{ pl.term }}</b>
 								{% endfor %}
 							</p>
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">Подать заявку</a>
+							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">{% trans "Подать заявку" %}</a>
 						</div>
 					</div>
 				</div>
@@ -203,44 +205,44 @@
 	<section class="s-howto">
 		<div class="wrapper">
 			<div class="b-section-header">
-				<h2 class="b-section-title">Как получить кредит?</h2>
+				<h2 class="b-section-title">{% trans "Как получить кредит?" %}</h2>
 			</div>
 
 			<div class="b-step-wrapper">
 				<div class="b-step">
 					<div class="b-step-number">1</div>
-					<h4 class="b-step-title">Выберите сумму займа и срок</h4>
+					<h4 class="b-step-title">{% trans "Выберите сумму займа и срок" %}</h4>
 					
 					<div class="b-step__content b-step__content--special">
 						<div class="b-step__content--special-item">
-							<span>Сумма кредите</span>
+							<span>{% trans "Сумма кредите" %}</span>
 							<span>10 000</span>
 							<span>грн</span>
 						</div>
 
 						<div class="b-step__content--special-item">
-							<span>Срок займа</span>
+							<span>{% trans "Срок займа" %}</span>
 							<span>10</span>
-							<span>дней</span>
+							<span>{% trans "дней" %}</span>
 						</div>
 					</div>
 				</div>
 
 				<div class="b-step">
 					<div class="b-step-number">2</div>
-					<h4 class="b-step-title">Заполните заявку</h4>
+					<h4 class="b-step-title">{% trans "Заполните заявку" %}</h4>
 
 					<div class="b-step__content b-step__content--main">
-						<p class="b-step__content-data">Имя</p>
-						<p class="b-step__content-data">Фамилия</p>
-						<p class="b-step__content-data">Дата рождения</p>
-						<p class="b-step__content-data">Идентификационный код</p>
+						<p class="b-step__content-data">{% trans "Имя" %}</p>
+						<p class="b-step__content-data">{% trans "Фамилия" %}</p>
+						<p class="b-step__content-data">{% trans "Дата рождения" %}</p>
+						<p class="b-step__content-data">{% trans "Идентификационный код" %}</p>
 					</div>
 				</div>
 
 				<div class="b-step">
 					<div class="b-step-number">3</div>
-					<h4 class="b-step-title">Привяжите карту</h4>
+					<h4 class="b-step-title">{% trans "Привяжите карту" %}</h4>
 					
 					<div class="b-step__content b-step__content--card">
 						<img class="b-step__content-img" src="{% static 'dist/img/card.png' %}" alt="card">
@@ -253,12 +255,12 @@
 
 				<div class="b-step">
 					<div class="b-step-number">4</div>
-					<h4 class="b-step-title">Получите деньги на карту</h4>
+					<h4 class="b-step-title">{% trans "Получите деньги на карту" %}</h4>
 
 					<div class="b-step__content b-step__content--secondary">
 						<span class="b-arrows"></span>
-						<p class="b-step__content-data">Пополнение карты</p>
-						<p class="b-step__content-data">Отправитель: Экспресс Финанс</p>
+						<p class="b-step__content-data">{% trans "Пополнение карты" %}</p>
+						<p class="b-step__content-data">{% trans "Отправитель: Экспресс Финанс" %}</p>
 						<p class="b-step__content-data">
 							<span class="b-step__content-total">10 000 <span>.00</span></span>
 							грн
@@ -306,7 +308,7 @@
 	<section class="s-review">
 		<div class="wrapper">
 			<div class="b-section-header b-section-header--secondary">
-				<h2 class="b-section-title">Нам доверяют сотни людей</h2>
+				<h2 class="b-section-title">{% trans "Нам доверяют сотни людей" %}</h2>
 			</div>
 
 			<div class="b-review">
@@ -342,7 +344,7 @@
 
 	<section class="s-region">
 		<div class="wrapper">
-			<h2 class="b-section-title">Вы можете взять кредит в другом городе</h2>
+			<h2 class="b-section-title">{% trans "Вы можете взять кредит в другом городе" %}</h2>
 
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
@@ -361,7 +363,7 @@
 					
 					<div class="popup-cities">
 						<ul class="popup-list">	</ul>
-						<button class="b-btn-primary b-btn-primary--main btn-show">Показать все города</button>
+						<button class="b-btn-primary b-btn-primary--main btn-show">{% trans "Показать все города" %}</button>
 					</div>
 					
 
@@ -370,30 +372,30 @@
 					<div class="popup-info">
 						<h3 class="popup-info__adress">
 							<span class="icon icon--arrow"></span>
-							<span id="data-adress">Адресс не найден</span>
+							<span id="data-adress">{% trans "Адресс не найден" %}</span>
 						</h3>
-						<h4 class="popup-info__title">Информация</h4>
+						<h4 class="popup-info__title">{% trans "Информация" %}</h4>
 						<div class="popup-info__item">
-							<span class="popup-info__item-title">Город:</span>
-							<span class="popup-info__item-main" id="data-city">Город не найден</span>
+							<span class="popup-info__item-title">{% trans "Город" %}:</span>
+							<span class="popup-info__item-main" id="data-city">{% trans "Город не найден" %}</span>
 						</div>
 						<div class="popup-info__item">
-							<span class="popup-info__item-title">Адресс:</span>
-							<span class="popup-info__item-main" id="data-localAdress">Адресс не найден</span>
+							<span class="popup-info__item-title">{% trans "Адрес" %}:</span>
+							<span class="popup-info__item-main" id="data-localAdress">{% trans "Адрес не найден" %}</span>
 						</div>
 						<div class="popup-info__item">
-							<span class="popup-info__item-title">Режим работы:</span>
-							<span class="popup-info__item-main" id="data-schedule">Режим работы не найден</span>
+							<span class="popup-info__item-title">{% trans "Режим работы" %}:</span>
+							<span class="popup-info__item-main" id="data-schedule">{% trans "Режим работы не найден" %}</span>
 						</div>
 						<div class="popup-info__item">
-							<span class="popup-info__item-title">Контакты:</span>
+							<span class="popup-info__item-title">{% trans "Контакты" %}:</span>
 							<a class="popup-info__link popup-info__link--mail" href="mailto:rm.kyiv.kharkivskiy@expressfinance.com.ua">
 								<img src="{% static 'dist/img/svgstore/icons/mail.svg' %}">
 								<span id="data-mail">rm.kyiv.kharkivskiy@expressfinance.com.ua</span>
 							</a>
 							<a class="popup-info__link" href="tel:(044)-228-70-51">
 								<img src="{% static 'dist/img/svgstore/icons/phone1.svg' %}">
-								<span id="data-phone">Телефон не найден</span>
+								<span id="data-phone">{% trans "Телефон не найден" %}</span>
 							</a>
 						</div>
 
@@ -418,7 +420,7 @@
 					<h4 class="b-media-item__title">{{ obj.title }}</h4>
 					<p class="b-media-item__info">{{ obj.text }}</p>
 					<a href="{{ obj.link }}">
-						<button class="b-btn-primary b-btn-primary--main">Подробнее</button>
+						<button class="b-btn-primary b-btn-primary--main">{% trans "Подробнее" %}</button>
 					</a>
 				</div>
 			{% endfor %}

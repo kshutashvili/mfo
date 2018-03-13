@@ -48,12 +48,14 @@ INSTALLED_APPS = [
     #3-rd
     'ckeditor',
     'solo',
-    'django_google_maps'
+    'django_google_maps',
+    'modeltranslation'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -75,6 +77,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'content.context_processors.menu_processor',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -130,6 +133,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+gettext = lambda s: s
+LANGUAGES = (
+    ('ru', gettext('Russian')),
+    ('ua', gettext('Ukrainian')),
+)
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 
 # Email
 EMAIL_HOST_USER = ''
@@ -151,6 +161,10 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 try:
     from .local_settings import *

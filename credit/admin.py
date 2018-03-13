@@ -7,11 +7,13 @@ from credit import models
 class CreditRateAdmin(admin.ModelAdmin):
     list_display = ('name', 'sum_min', 'sum_max', 'term_min', 'term_max',
                     'rate_min', 'rate_max')
+    exclude = ('name',)
 
 
 @admin.register(models.PaymentTerm)
 class PaymentTermAdmin(admin.ModelAdmin):
     list_display = ('term',)
+    exclude = ('term',)
 
 
 @admin.register(models.CreditRateUp)

@@ -4,6 +4,8 @@
 
 {% load solo_tags %}
 
+{% load i18n %}
+
 {% block title %}Job{% endblock %}
 
 {% block content %}
@@ -11,23 +13,23 @@
 	<section class="s-job">
 		<div class="wrapper">
 			<div class="b-top-nav">
-				<a href="{% url 'main' %}" class="b-top-nav__item active">Главная</a>
-				<a href="{% url 'job' %}" class="b-top-nav__item">Вакансии</a>
+				<a href="{% url 'main' %}" class="b-top-nav__item active">{% trans "Главная" %}</a>
+				<a href="{% url 'job' %}" class="b-top-nav__item">{% trans "Вакансии" %}</a>
 			</div>
 
-			<h2 class="b-top-title">Вакансии</h2>
+			<h2 class="b-top-title">{% trans "Вакансии" %}</h2>
 			{% get_solo 'content.JobStaticPage' as job_static %}
 			<div class="b-job">
 				<div class="b-job-info">
 					<img src="{{ job_static.image.url }}" alt="bag" class="b-job-info__img">
 					<p class="b-job-info__text">{{ job_static.text|safe }}</p>
 					<a href="mailto:express.finance@example.com" class="b-job-info__link">
-						<span class="b-job-info__link-title">Напишите нам на почту</span> 
+						<span class="b-job-info__link-title">{% trans "Напишите нам на почту" %}</span> 
 						<span class="b-job-info__link-adress">{{ job_static.email.email }}</span>
 						<span class="icon icon--candidate"></span>
 					</a>
 					<a href="tel:+38(031)3242495" class="b-job-info__link">
-						<span class="b-job-info__link-title">Свяжитесь с нами по телефону</span> 
+						<span class="b-job-info__link-title">{% trans "Свяжитесь с нами по телефону" %}</span> 
 						<span class="b-job-info__link-adress">{{ job_static.phone.number }}</span>
 						<span class="icon icon--phone-call"></span>
 					</a>
@@ -36,7 +38,7 @@
 				<div class="b-vacancies">
 					<!--data-btn and data-content must be the same!-->
 					<div class="b-vacancies__tab-container">
-						<h3 class="b-vacancies__tab-title">Выберите категорию</h3>
+						<h3 class="b-vacancies__tab-title">{% trans "Выберите категорию" %}</h3>
 						{% for obj in categories %}
 							<button data-btn="{{ obj.name }}" class="b-vacancies__tab {% if forloop.first %}active{% endif %}">{{ obj.name }}</button>
 						{% endfor %}
@@ -49,18 +51,18 @@
 							<h4 class="b-spoiler-title">{{ vacancy.name }}</h4>
 							<div class="b-spoiler-content">
 								<div class="b-spoiler__text">
-									<h5 class="b-vacancy__info-title">Требования к кандидату:</h5>
+									<h5 class="b-vacancy__info-title">{% trans "Требования к кандидату" %}:</h5>
 									<ul class="b-vacancy__info">
 										{{ vacancy.demands|safe }}
 									</ul>
 
-									<h5 class="b-vacancy__info-title">Условия:</h5>
+									<h5 class="b-vacancy__info-title">{% trans "Условия" %}:</h5>
 									<ul class="b-vacancy__info">
 										{{ vacancy.conditions|safe }}
 									</ul>					
 								</div>
 
-								<button class="b-btn-primary b-btn-primary--main b-vacancy__apply">Отправить резюме</button>
+								<button class="b-btn-primary b-btn-primary--main b-vacancy__apply">{% trans "Отправить резюме" %}</button>
 							</div>
 						</div>
 						{% endfor %}
