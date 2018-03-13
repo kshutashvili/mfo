@@ -184,10 +184,13 @@ class Advantage(models.Model):
     text = RichTextField(_('Текст'))
     image = models.FileField(_('Иконка'),
                              upload_to='advantages')
+    order = models.PositiveIntegerField(_('Порядок'),
+                                        default=0)
 
     class Meta:
         verbose_name = _('Преимущество')
         verbose_name_plural = _('Преимущества')
+        ordering = ['order',]
 
     def __str__(self):
         return mark_safe(self.text)

@@ -64,7 +64,7 @@ class CreditRateStaticAdmin(admin.ModelAdmin):
 
 @admin.register(models.Advantage)
 class AdvantageAdmin(admin.ModelAdmin):
-    list_display = ('__str__',)
+    list_display = ('__str__', 'order')
     exclude = ('text',)
 
 
