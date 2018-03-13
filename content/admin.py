@@ -17,7 +17,7 @@ class StaticPageAdmin(admin.ModelAdmin):
 
 @admin.register(models.MenuAboutItem)
 class MenuAboutItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'link')
+    list_display = ('name', 'order', 'link')
     exclude = ('name',)
 
 

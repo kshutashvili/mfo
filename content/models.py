@@ -54,10 +54,13 @@ class MenuAboutItem(models.Model):
                             help_text=_("Используйте ссылку вида /#html_id "
                                         "для блока лэндинга. Остальные ссылки "
                                         "указывать полностью (https://...)"))
+    order = models.PositiveIntegerField(_('Порядок'),
+                                        default=0)
 
     class Meta:
         verbose_name = _('Пункт меню')
         verbose_name_plural = _('Пункты меню на странице "О нас"')
+        ordering = ['order',]
 
     def __str__(self):
         return self.name

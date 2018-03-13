@@ -14,7 +14,8 @@ def blog_item(request, item_id):
 def blog_category(request, category_link):
 	category = BlogCategory.objects.filter(link=category_link).first()
 	if category:
-		return render(request, 'blog.html', {'articles':category.blog_items.get_queryset()})
+		return render(request, 'blog.html', {'articles':category.blog_items.get_queryset(),
+											 'title':category.name})
 	else:
 		return Http404()
 
