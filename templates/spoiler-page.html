@@ -37,7 +37,9 @@
 					<div class="b-spoiler-content b-spoiler-content--flex">
 						<div class="b-spoiler__column">
 							<p class="b-spoiler-text">
+							{% if obj.content_left %}
 								{{ obj.content_left|safe }}
+							{% endif %}
 							</p>
 							{% if obj.file %}
 								<a href="#" onclick="window.open('/open_pdf/{{ obj.id }}')" class="b-spoiler__link b-btn-linked">{% trans "Просмотреть" %}</a>
@@ -45,7 +47,9 @@
 						</div>
 						<div class="b-spoiler__column">
 							<p class="b-spoiler-text">
+							{% if obj.content_right %}
 								{{ obj.content_right|safe }}
+							{% endif %}
 							</p>
 							{% if obj.file %}
 								<a href="#" onclick="window.open('/download_pdf/{{ obj.id }}')" class="b-spoiler__link b-btn-linked b-btn-linked--secondary" >{% trans "Скачать" %}</a>
