@@ -5,7 +5,8 @@ from content import models
 @register(models.Spoiler)
 class SpoilerTranslationOptions(TranslationOptions):
     fields = ('topic', 'content_left', 'content_right')
-    required_languages = ('ua', 'ru')
+    required_languages = {'ru':('topic',),
+                          'ua':('topic',)}
 
 
 @register(models.StaticPage)

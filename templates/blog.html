@@ -22,7 +22,13 @@
 				<a href="{% url 'main' %}" class="b-top-nav__item active">{% trans "Главная" %}</a>
 				<a href="{% url 'blog' %}" class="b-top-nav__item">{% trans "Блог" %}</a>
 			</div>
-			<h2 class="b-top-title">{% trans "Блог" %}</h2>
+			<h2 class="b-top-title">
+			{% if title %}
+				{{ title }}
+			{% else %}
+				{% trans "Блог" %}
+			{% endif %}
+			</h2>
 
 			<div class="b-blog-slider">
 

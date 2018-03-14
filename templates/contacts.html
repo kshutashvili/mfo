@@ -84,7 +84,7 @@
 						{% endfor %}
 						</p>
 						<p class="b-contact-info__item">
-							{{ contact.schedule|safe }} <a class="b-contact__link" href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+							{{ contact.schedule|safe }} <a class="b-contact__link" href="mailto:{{ contact.to_email }}">{{ contact.to_email }}</a>
 						</p>
 						<p class="b-contact-info__item">
 							{{ contact.footer_text|safe }}

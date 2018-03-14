@@ -6,7 +6,17 @@
 
 {% load i18n %}
 
-{% block title %}About us{% endblock %}
+
+{% block title %}{{ about.title }}{% endblock %}
+
+{% block meta_title %}{{ about.meta_title }}{% endblock %}
+
+{% block description %}
+{{ about.meta_description|safe }}
+{% for obj in phones %}
+	{{ obj.number }}
+{% endfor %}
+{% endblock %}
 
 {% block content %}
 
@@ -33,7 +43,6 @@
 					<a href="{% url 'about' %}" class="b-top-nav__item">{% trans "О Нас" %}</a>
 				</div>
 
-				{% get_solo 'content.AboutUsStatic' as about %}
 				<h2 class="b-top-title">{{ about.title }}</h2>
 
 				<div class="s-about-info">

@@ -14,8 +14,12 @@ from department.models import Department
 class Spoiler(models.Model):
     topic = models.CharField(_('Тема спойлера'),
                              max_length=64)
-    content_left = RichTextField(_('Текст левой колонки')) 
-    content_right = RichTextField(_('Текст правой колонки'))
+    content_left = RichTextField(_('Текст левой колонки'),
+                                 null=True,
+                                 blank=True) 
+    content_right = RichTextField(_('Текст правой колонки'),
+                                  null=True,
+                                  blank=True)
     file = models.FileField(_('Файл'),
                             upload_to='spoiler_files',
                             null=True,
@@ -446,6 +450,12 @@ class MainPageStatic(SingletonModel):
                                          verbose_name=_('Меню в футере'))
     social_nets = models.ManyToManyField(SocialNet,
                                          verbose_name=_('Социальные сети в футере'))
+    copyright = RichTextField(_('Копирайт в футере'),
+                              null=True)
+    copyright_ru = RichTextField(_('Копирайт в футере [ru]'),
+                              null=True)
+    copyright_ua = RichTextField(_('Копирайт в футере [ua]'),
+                              null=True)
 
     class Meta:
         verbose_name = _('Главная страница')
@@ -459,7 +469,8 @@ class MainPageStatic(SingletonModel):
         self.title = self.title_ru
         self.meta_title = self.meta_title_ru
         self.meta_description = self.meta_description_ru
-
+        self.copyright = self.copyright_ru
+        
 
 class IndexPageStatic(SingletonModel):
     advantage = models.ForeignKey('AdvantageStatic',

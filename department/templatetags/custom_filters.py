@@ -110,3 +110,12 @@ def is_phone_active(phone):
     except:
         return False
 
+
+@register.filter
+def delete_p(text):
+    try:
+        res = text[3:-4]
+        return res
+    except:
+        return None
+

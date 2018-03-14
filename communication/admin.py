@@ -59,11 +59,6 @@ class FaqItemAdmin(admin.ModelAdmin):
     exclude = ('name',)
 
 
-@admin.register(models.WriteUsEmail)
-class WriteUsEmailAdmin(admin.ModelAdmin):
-    list_display = ('email',)
-
-
 @admin.register(models.HotLinePhone)
 class HotLinePhoneAdmin(admin.ModelAdmin):
     list_display = ('number', 'schedule_start', 'schedule_end')

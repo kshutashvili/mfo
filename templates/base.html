@@ -61,7 +61,6 @@
 					<a href="{{ obj.link }}" class="b-nav__link">{{ obj.name }}</a>
 				{% endfor %}
 			</div>
-			{% get_current_language as LC %}
 			<div class="s-header__lang">
 				<a href="{% translate_url ru %}" class="b-btn b-btn--lang">{% trans "Рус" %}</a>
 				<a href="{% translate_url ua %}" class="b-btn b-btn--lang">{% trans "Укр" %}</a>
@@ -141,7 +140,7 @@
 			{% endfor %}
 			</div>
 
-			<div class="s-footer-referal-wrap">
+		<!--	<div class="s-footer-referal-wrap">
 				<div class="s-footer-referal">
 					<h4 class="s-footer-referal__title">{% trans 'Заработай с партнеской программой "Приведи друга"' %}</h4>
 					<p class="s-footer-referal__text">
@@ -151,22 +150,19 @@
 
 					<button class="b-btn-primary b-btn-primary--main">{% trans "Пригласить друга" %}</button>
 				</div>
-			</div>
+			</div>-->
 			
 			<div class="s-footer-base">
 				<a href="#" class="b-logo">
 					<svg><use href="{% static 'sprite.svg' %}#svg-logo">
 					</svg>
 				</a>
-
-				<p class="s-footer-base__info">
-					<span class="mob-hidden">
-						{% trans "Первый в Украине сервис кредитования через интернет" %}. <br>
-						{% trans "Мы предоставляем быстрые и удобные кредиты для всех граждан Украины" %}. <br>
-					</span>
-					&copy 2015 - 2017 MyCredit <span class="mob-hidden">- {% trans "Кредит онлайн на банковскую карту за 20 минут" %}</span>
-				</p>
-
+					{% get_current_language as LC %}
+					{% if '/ru/' in request.path %}
+						{{ main.copyright_ru|delete_p|safe }}
+					{% elif '/ua/' in request.path %}
+						{{ main.copyright_ua|delete_p|safe }} 
+					{% endif %}
 				<div class="s-footer-base__social mob-hidden">
 				{% for obj in main.social_nets.get_queryset %}
 					<a href="{{ obj.link }}"><span class="icon icon--{{ obj|get_icon_class_social_net }}"></span></a>	

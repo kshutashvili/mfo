@@ -25,6 +25,12 @@ class Contact(SingletonModel):
     address = RichTextField(_('Адрес'))
     title_text = RichTextField(_('Текст вверху'))
     schedule = RichTextField(_('График'))
+    to_email = models.OneToOneField('Email',
+                                    verbose_name=_('Электронная почта '
+                                                   'для напишите нам'),
+                                    null=True,
+                                    on_delete=models.CASCADE,
+                                    related_name='to_email')
     footer_text = RichTextField(_('Текст снизу'))
 
     class Meta:
@@ -32,7 +38,7 @@ class Contact(SingletonModel):
         verbose_name_plural = _('Контакты')
 
     def __str__(self):
-        return ' '.join([self.main_phone().number, self.email.email])
+        return 'Контакты'
 
     def main_phone(self):
         return self.phones.get_queryset()[0]
@@ -107,19 +113,6 @@ class Email(models.Model):
 
     def __str__(self):
         return self.email
-
-
-class WriteUsEmail(SingletonModel):
-    email = models.OneToOneField('Email',
-                                 verbose_name=_('Электронная почта'),
-                                 on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = _('Почта')
-        verbose_name_plural = _('Почта для "Напишите нам"')
-
-    def __str__(self):
-        return self.email.email
 
 
 class SocialNet(models.Model):
