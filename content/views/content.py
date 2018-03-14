@@ -15,6 +15,7 @@ from credit.models import CreditRate, CreditRateUp
 from communication.models import Response
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
+from content.helpers import get_city_name
 
 
 def pages(request, page_url):
@@ -25,6 +26,10 @@ def pages(request, page_url):
 
 
 def main(request):
+    city = get_city_name(request)
+
+    print(city)
+
     main = MainPageStatic.get_solo()
     departments = []
     for obj in main.departments.get_queryset():

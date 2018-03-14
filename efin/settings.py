@@ -166,6 +166,8 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
 
+GEOIP_PATH = BASE_DIR + '/geoip'
+
 try:
     from .local_settings import *
 except ImportError:
