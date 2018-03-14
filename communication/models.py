@@ -165,9 +165,6 @@ class BlogItem(models.Model):
             image = image.resize(size, Image.ANTIALIAS)
             image.save(self.image.path)
 
-    def __unicode__(self):
-        return str(self.id)
-
 
 class LastArticles(SingletonModel):
     articles = models.ManyToManyField('BlogItem',
