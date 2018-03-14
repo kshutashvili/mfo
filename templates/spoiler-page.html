@@ -4,6 +4,8 @@
 
 {% load i18n %}
 
+{% load custom_filters %}
+
 {% block title %}Category{% endblock %}
 
 {% block content %}
@@ -37,7 +39,7 @@
 					<div class="b-spoiler-content b-spoiler-content--flex">
 						<div class="b-spoiler__column">
 							<p class="b-spoiler-text">
-							{% if obj.content_left and obj.content_left|safe|cut:' ' != 'None' %}
+							{% if obj.content_left|check_none %}
 								{{ obj.content_left|safe }}
 							{% endif %}
 							</p>
@@ -47,7 +49,7 @@
 						</div>
 						<div class="b-spoiler__column">
 							<p class="b-spoiler-text">
-							{% if obj.content_right and obj.content_right|safe|cut:' ' != 'None' %}
+							{% if obj.content_right|check_none %}
 								{{ obj.content_right|safe }}
 							{% endif %}
 							</p>

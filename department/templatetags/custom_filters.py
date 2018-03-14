@@ -119,3 +119,15 @@ def delete_p(text):
     except:
         return None
 
+
+@register.filter
+def check_none(text):
+    try:
+        if 'None' in text:
+            result = False
+        else:
+            result = True
+        return result
+    except:
+        return False
+
