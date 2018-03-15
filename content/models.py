@@ -40,7 +40,7 @@ class StaticPage(models.Model):
                                       verbose_name=_('Спойлеры'))
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
-                            help_text=_('Используйте ссылки вида: /url'))
+                            help_text=_('Используйте ссылки вида: url'))
 
     class Meta:
         verbose_name = _('Статическая страница')
@@ -58,7 +58,7 @@ class StaticPageDefault(models.Model):
     text = RichTextField(_('Текст'))
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
-                            help_text=_('Используйте ссылки вида: /url'))
+                            help_text=_('Используйте ссылки вида: url'))
 
     class Meta:
         verbose_name = _('Статическая страница')

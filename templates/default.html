@@ -28,7 +28,7 @@
 				<div class="b-top-nav">
 					<a class="b-top-nav__item active" href="{% url 'main' %}" >{% trans "Главная" %}</a>
 					<a href="{% url 'about' %}" class="b-top-nav__item active">{% trans "О Нас" %}</a>
-					<a href="{{ page.link }}" class="b-top-nav__item">{{ page.title }}</a>
+					<a href="{% url 'static_pages' page_url=page.link|str %}" class="b-top-nav__item">{{ page.title }}</a>
 				</div>
 
 				<h2 class="b-top-title">{{ page.title }}</h2>

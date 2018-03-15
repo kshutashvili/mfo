@@ -131,3 +131,10 @@ def check_none(text):
     except:
         return False
 
+
+@register.filter
+def str(text):
+    try:
+        return str(text)
+    except:
+        return False
