@@ -22,6 +22,7 @@ def pages(request, page_url):
     page = StaticPage.objects.filter(link=page_url).first()
     template = 'spoiler-page.html'
     if not page:
+        page_url = '/' + page_url
         page = StaticPageDefault.objects.filter(link=page_url).first()
         template = 'default.html'
     menu_about = MenuAboutItem.objects.all()

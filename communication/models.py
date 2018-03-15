@@ -90,19 +90,6 @@ class Response(models.Model):
         return ' '.join([self.name, self.status])
 
 
-class Agreement(SingletonModel):
-    image = models.ImageField(_('Картинка'),
-                              upload_to='agreement_photo')
-    text = models.TextField(_('Текст'))
-
-    class Meta:
-        verbose_name = _('Договор займа')
-        verbose_name_plural = _('Договор займа')
-
-    def __str__(self):
-        return mark_safe(self.text)
-
-
 class Email(models.Model):
     email = models.EmailField(_('Электронная почта'),
                               max_length=64)

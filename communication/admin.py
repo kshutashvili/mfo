@@ -15,12 +15,6 @@ class PhoneNumberAdmin(admin.ModelAdmin):
     list_display = ('number',)
 
 
-@admin.register(models.Agreement)
-class AgreementAdmin(admin.ModelAdmin):
-    list_display = ('__str__',)
-    exclude = ('text',)
-
-
 @admin.register(models.Email)
 class EmailAdmin(admin.ModelAdmin):
     list_display = ('email',)

@@ -8,12 +8,6 @@ class NewsTranslationOptions(TranslationOptions):
     required_languages = ('ua', 'ru')
 
 
-@register(models.Agreement)
-class AgreementTranslationOptions(TranslationOptions):
-    fields = ('text', )
-    required_languages = ('ua', 'ru')
-
-
 @register(models.Contact)
 class ContactTranslationOptions(TranslationOptions):
     fields = ('title', 'meta_title', 'meta_description', 'address',
