@@ -40,7 +40,25 @@ class StaticPage(models.Model):
                                       verbose_name=_('Спойлеры'))
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
-                            help_text=_('Используйте ссылки вида: url'))
+                            help_text=_('Используйте ссылки вида: /url'))
+
+    class Meta:
+        verbose_name = _('Статическая страница')
+        verbose_name_plural = _('Статические страницы со спойлерами')
+
+    def __str__(self):
+        return ' '.join([self.title, 'ID:', str(self.id)])
+
+
+class StaticPageDefault(models.Model):
+    title = models.CharField(_('Заголовок'),
+                             max_length=128)
+    image = models.ImageField(_('Картинка'),
+                              upload_to='static_page_default')
+    text = RichTextField(_('Текст'))
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255,
+                            help_text=_('Используйте ссылки вида: /url'))
 
     class Meta:
         verbose_name = _('Статическая страница')

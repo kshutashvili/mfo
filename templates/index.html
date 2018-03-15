@@ -355,7 +355,7 @@
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
 				{% for obj in departments %}
-				{% if forloop.counter|divisibleby:8 %}
+				{% if column_list|is_new_column %}
 					</ul>
 					<ul class="b-region-list">
 				{% endif %}

@@ -351,15 +351,15 @@
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
 				{% for obj in departments %}
-				{% if forloop.counter|divisibleby:10 %}
-					</ul>
-					<ul class="b-region-list">
+				{% if not forloop.first %}
+					{% if column_list|is_new_column %}
+						</ul>
+						<ul class="b-region-list">
+					{% endif %}
 				{% endif %}
 					<li><span class="arrow"></span><button class="b-region-list__btn" data-dep_id="{{ obj }}">{{ obj }}</button></li>
-				{% if forloop.last %}
-					</ul>
-				{% endif %}
 				{% endfor %}
+				</ul>
 
 				<div class="popup">
 					

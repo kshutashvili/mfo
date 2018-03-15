@@ -35,7 +35,6 @@ urlpatterns = i18n_patterns(
     path('translate/<str:lang_code>/', content.translate, name='translate'),
     path('job/', job.job, name='job'),
     path('about/', about.about, name='about'),
-    path('about/agreement/', content.agreement, name='agreement'),
     path('about/contacts/', contacts.contacts, name='contacts'),
     path('blog/', blog.blog, name='blog'),
     path('blog/item<int:item_id>/', blog.blog_item, name='blog_item'),

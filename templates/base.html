@@ -8,15 +8,43 @@
 
 {% load translate_urls %}
 
+{% get_solo 'content.MainPageStatic' as main %}
+
+{% get_current_language as LC %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>{% block title %}Редактируемое значение из админки {% endblock %}| expressfinance.com.ua</title>
+	<title>
+	{% block title %}
+	{% if '/ru/' in request.path %}
+		{{ main.title_ru }}
+	{% elif '/ua/' in request.path %}
+		{{ main.title_ua }} 
+	{% endif %}
+	{% endblock %} | expressfinance.com.ua</title>
 	<link rel="stylesheet" href="{% static 'dist/css/styles.css' %}">
 	{% block extrastyles %}{% endblock %}
-	<meta name="title" content="{% block meta_title %}Редактируемое значение из админки {% endblock %}| expressfinance.com.ua" />
-	<meta name="description" content="{% block description %}Всегда на связи ☎ Вывод телефонов, которые заданы в конфиге. . ✔ Весь спектр услуг ✔ Низкие цены ✔ Доставка {% endblock %}| expressfinance.com.ua (expressfinance.com.ua)" />
+	<meta name="title" content="
+	{% block meta_title %}
+	{% if '/ru/' in request.path %}
+		{{ main.meta_title_ru }}
+	{% elif '/ua/' in request.path %}
+		{{ main.meta_title_ua }}
+	{% endif %}
+	{% endblock %} | expressfinance.com.ua" />
+	<meta name="description" content="
+	{% block description %}
+	{% if '/ru/' in request.path %}
+		{{ main.meta_description_ru|safe }}
+	{% elif '/ua/' in request.path %}
+		{{ main.meta_description_ua|safe }}
+	{% endif %}
+	{% for obj in phones %}
+		{{ obj.number }}
+	{% endfor %}
+	{% endblock %}| expressfinance.com.ua (expressfinance.com.ua)" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -71,7 +99,6 @@
 	</header>
 
 {% block content %}{% endblock %}
-{% get_solo 'content.MainPageStatic' as main %}
 
 {% block info %}
 <section class="s-info">

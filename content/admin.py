@@ -15,6 +15,12 @@ class StaticPageAdmin(admin.ModelAdmin):
     exclude = ('title',)
 
 
+@admin.register(models.StaticPageDefault)
+class StaticPageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'link')
+    exclude = ('title', 'text')
+
+
 @admin.register(models.MenuAboutItem)
 class MenuAboutItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'order', 'link')

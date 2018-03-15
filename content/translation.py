@@ -15,6 +15,12 @@ class StaticPageTranslationOptions(TranslationOptions):
     required_languages = ('ua', 'ru')
 
 
+@register(models.StaticPageDefault)
+class StaticPageDefaultTranslationOptions(TranslationOptions):
+    fields = ('title', 'text')
+    required_languages = ('ua', 'ru')
+
+
 @register(models.MenuAboutItem)
 class MenuAboutItemTranslationOptions(TranslationOptions):
     fields = ('name',)

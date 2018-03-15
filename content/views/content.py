@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.utils import translation
 
 from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
-                           MainPageStatic, IndexPageStatic
+                           MainPageStatic, IndexPageStatic, StaticPageDefault
 from credit.models import CreditRate, CreditRateUp
 from communication.models import Response
 from department.models import Department
@@ -20,9 +20,13 @@ from content.helpers import get_city_name
 
 def pages(request, page_url):
     page = StaticPage.objects.filter(link=page_url).first()
+    template = 'spoiler-page.html'
+    if not page:
+        page = StaticPageDefault.objects.filter(link=page_url).first()
+        template = 'default.html'
     menu_about = MenuAboutItem.objects.all()
-    return render(request, 'spoiler-page.html', {'page':page,
-                                                 'menu_about':menu_about})
+    return render(request, template, {'page':page,
+                                      'menu_about':menu_about})
 
 
 def main(request):
@@ -32,8 +36,17 @@ def main(request):
     for obj in main.departments.get_queryset():
         if obj.city not in departments:
             departments.append(obj.city)
+    departments = sorted(departments)
+    length = len(departments)
+    column_list = [0, 0, 0, 0]
+    while length > 0:
+        for i in range(0, 4):
+            if length > 0:
+                column_list[i] += 1
+                length -= 1
     return render(request, 'main.html', {'main':main,
-                                         'departments':sorted(departments)})
+                                         'departments':departments,
+                                         'column_list':column_list})
 
 
 def index(request):
@@ -43,9 +56,18 @@ def index(request):
     for obj in index.departments.get_queryset():
         if obj.city not in departments:
             departments.append(obj.city)
+    departments = sorted(departments)
+    length = len(departments)
+    column_list = [0, 0, 0, 0]
+    while length > 0:
+        for i in range(0, 4):
+            if length > 0:
+                column_list[i] += 1
+                length -= 1
     return render(request, 'index.html', {'index':index,
                                           'main':main,
-                                          'departments':departments})
+                                          'departments':departments,
+                                          'column_list':column_list})
 
 
 def departments_generate(request, dep_id):

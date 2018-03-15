@@ -8,7 +8,7 @@
 
 {% load i18n %}
 
-{% block title %}Agreement{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
 
 {% block content %}
 
@@ -28,15 +28,14 @@
 				<div class="b-top-nav">
 					<a class="b-top-nav__item active" href="{% url 'main' %}" >{% trans "Главная" %}</a>
 					<a href="{% url 'about' %}" class="b-top-nav__item active">{% trans "О Нас" %}</a>
-					<a href="{% url 'agreement' %}" class="b-top-nav__item">{% trans "Договор займа" %}</a>
+					<a href="{{ page.link }}" class="b-top-nav__item">{{ page.title }}</a>
 				</div>
 
-				<h2 class="b-top-title">{% trans "Договор займа" %}</h2>
-	            {% get_solo 'communication.Agreement' as agreement %}
-				<img src="{{ agreement.image.url }}" alt="women" class="s-agreement__img">
+				<h2 class="b-top-title">{{ page.title }}</h2>
+				<img src="{{ page.image.url }}" alt="women" class="s-agreement__img">
 				
 				<p class="s-agreement__text">
-					{{ agreement.text|safe }}
+					{{ page.text|safe|delete_p }}
 				</p>
 			</main>
 
