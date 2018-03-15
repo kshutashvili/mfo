@@ -28,10 +28,11 @@ def main(request):
     main = MainPageStatic.get_solo()
     departments = []
     for obj in main.departments.get_queryset():
+        print(obj.city)
         if obj.city not in departments:
             departments.append(obj.city)
     return render(request, 'main.html', {'main':main,
-                                         'departments':departments})
+                                         'departments':sorted(departments)})
 
 
 def index(request):

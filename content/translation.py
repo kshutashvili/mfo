@@ -112,6 +112,12 @@ class CreditInformationBlockStaticTranslationOptions(TranslationOptions):
     required_languages = ('ua', 'ru')
 
 
+#@register(models.IndexPageStatic)
+#class IndexPageStaticTranslationOptions(TranslationOptions):
+#    fields = ('departments_title',)
+#    required_languages = ('ua', 'ru')
+
+
 #@register(models.MainPageStatic)
 #class MainPageStaticTranslationOptions(TranslationOptions):
 #    fields = ('title', 'meta_title', 'meta_description')

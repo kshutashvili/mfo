@@ -341,7 +341,13 @@
 
 	<section class="s-region">
 		<div class="wrapper">
-			<h2 class="b-section-title">{% trans "Вы можете взять кредит в другом городе" %}</h2>
+			<h2 class="b-section-title">
+			{% if '/ru/' in request.path %}
+				{{ main.departments_title_ru }}
+			{% elif '/ua/' in request.path %}
+				{{ main.departments_title_ua }}
+			{% endif %}
+			</h2>
 			<div class="b-region-list__wrapper">
 				<ul class="b-region-list">
 				{% for obj in departments %}

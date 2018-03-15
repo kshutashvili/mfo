@@ -436,6 +436,15 @@ class MainPageStatic(SingletonModel):
                                  null=True)
     responses = models.ManyToManyField(Response,
                                        verbose_name=_('Блок отзывы'))
+    departments_title = models.CharField(_('Заголовок над отделениями'),
+                                         max_length=128,
+                                         null=True)
+    departments_title_ru = models.CharField(_('Заголовок над отделениями [ru]'),
+                                         max_length=128,
+                                         null=True)
+    departments_title_ua = models.CharField(_('Заголовок над отделениями [ua]'),
+                                         max_length=128,
+                                         null=True)
     departments = models.ManyToManyField(Department,
                                          verbose_name=_('Отделения'))
     credit_close = models.ForeignKey('CloseCreditStatic',
@@ -470,7 +479,8 @@ class MainPageStatic(SingletonModel):
         self.meta_title = self.meta_title_ru
         self.meta_description = self.meta_description_ru
         self.copyright = self.copyright_ru
-        
+        self.departments_title = self.departments_title_ru
+
 
 class IndexPageStatic(SingletonModel):
     advantage = models.ForeignKey('AdvantageStatic',
@@ -492,6 +502,15 @@ class IndexPageStatic(SingletonModel):
                                  null=True)
     responses = models.ManyToManyField(Response,
                                        verbose_name=_('Блок отзывы'))
+    departments_title = models.CharField(_('Заголовок над отделениями'),
+                                         max_length=128,
+                                         null=True)
+    departments_title_ru = models.CharField(_('Заголовок над отделениями [ru]'),
+                                         max_length=128,
+                                         null=True)
+    departments_title_ua = models.CharField(_('Заголовок над отделениями [ua]'),
+                                         max_length=128,
+                                         null=True)
     departments = models.ManyToManyField(Department,
                                          verbose_name=_('Отделения'))
     credit_close = models.ForeignKey('CloseCreditStatic',
@@ -505,6 +524,10 @@ class IndexPageStatic(SingletonModel):
 
     def __str__(self):
         return 'Страница Партнерский лэндинг'
+
+    def save(self):
+        super(IndexPageStatic, self).save()
+        self.departments_title = self.departments_title_ru
 
 
 class CreditInformation(models.Model):

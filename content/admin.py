@@ -124,12 +124,14 @@ class MainPageTopBlockStaticAdmin(admin.ModelAdmin):
 @admin.register(models.MainPageStatic)
 class MainPageStaticAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
-    exclude = ('title', 'meta_title', 'meta_description', 'copyright')
+    exclude = ('title', 'meta_title', 'meta_description', 'copyright',
+               'departments_title')
 
 
 @admin.register(models.IndexPageStatic)
 class IndexPageStaticAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
+    exclude = ('departments_title',)
 
 
 @admin.register(models.CreditInformation)
