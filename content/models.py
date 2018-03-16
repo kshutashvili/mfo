@@ -73,7 +73,7 @@ class MenuAboutItem(models.Model):
                             max_length=128)
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
-                            help_text=_("Используйте ссылку вида /#html_id "
+                            help_text=_("Используйте ссылку вида #html_id "
                                         "для блока лэндинга. Остальные ссылки "
                                         "указывать полностью (https://...)"))
     order = models.PositiveIntegerField(_('Порядок'),
@@ -95,7 +95,7 @@ class MenuHeaderItem(models.Model):
                                         default=0)
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
-                            help_text=_("Используйте ссылку вида html_id "
+                            help_text=_("Используйте ссылку вида #html_id "
                                         "для блока лэндинга. Остальные ссылки "
                                         "указывать полностью (https://...)"))
 
@@ -125,7 +125,7 @@ class MenuFooterItem(models.Model):
                             max_length=128)
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
-                            help_text=_("Используйте ссылку вида /#html_id "
+                            help_text=_("Используйте ссылку вида #html_id "
                                         "для блока лэндинга. Остальные ссылки "
                                         "указывать полностью (https://...)"))
 

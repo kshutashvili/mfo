@@ -118,7 +118,7 @@
 		</div>
 	</section>
 
-		<section class="s-advanteges" style="background-image: url({{ index.discount.image.url }});" >
+		<section class="s-advanteges" id="advantages" style="background-image: url({{ index.discount.image.url }});" >
 		<div class="s-advanteges-header">
 			<h2 class="b-section-title">{{ index.advantage.title }}</h2>
 			<p class="b-section-subtitle">{{ index.advantage.text }}</p>
@@ -159,7 +159,7 @@
 
 	</section>
 
-	<section class="s-packages">
+	<section class="s-packages" id="credits">
 		<div class="wrapper">
 			<div class="b-section-header">
 				<h2 class="b-section-title">{{ index.credit_block.title }}</h2>
@@ -305,7 +305,7 @@
 		</div>
 	</section>
 
-	<section class="s-review">
+	<section class="s-review" id="review">
 		<div class="wrapper">
 			<div class="b-section-header b-section-header--secondary">
 				<h2 class="b-section-title">{% trans "Нам доверяют сотни людей" %}</h2>
@@ -342,7 +342,7 @@
 		</div>
 	</section>
 
-	<section class="s-region">
+	<section class="s-region" id="region">
 		<div class="wrapper">
 			<h2 class="b-section-title">
 			{% if '/ru/' in request.path %}
@@ -409,7 +409,7 @@
 		</div>
 	</section>
 
-	<section class="s-media" action="#!">
+	<section class="s-media" id="payout" action="#!">
 		<div class="wrapper">
 			<h2 class="b-section-title">{{ index.credit_close.title }}</h2>
 			<div class="b-media">

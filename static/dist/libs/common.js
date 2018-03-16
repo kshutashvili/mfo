@@ -3,6 +3,14 @@ window.onload = function() {
 	sliderFiller();
 	sliderInit();
 
+	$('a[href^="#"]').off().on("click", function (event) {
+		event.preventDefault();
+  		var id  = $(this).attr('href'),
+  		top = $(id).offset().top;
+  
+  		$('body,html').stop(true).animate({scrollTop: top}, 1000);
+ 	});
+
 	/*#Slick slider*/
 
 	(function($) {
@@ -189,38 +197,37 @@ window.onload = function() {
 
 	/*#Add files at private profile*/
 
-	$('input[type=file]').on('change', function(e) {
-		var reader = new FileReader();
+$('.profile__docs input[type=file]').on('change', function(e) {
+  	var reader = new FileReader();
 
-		var targ = getTarget(e);
+  	var targ = getTarget(e);
 
-		for (var i = 0; i < targ.files.length; i++) {
-			var file = targ.files[i];
-			var img = document.createElement("img");
-			var div = document.createElement('div');
-			div.classList.add('profile__doc');
-			var title = document.createElement('h3');
-			title.classList.add('profile__doc-title');
-			title.innerHTML = fileName;
+  	for (var i = 0; i < targ.files.length; i++) {
+  	var file = targ.files[i];
+  	var img = document.createElement("img");
+  	var div = document.createElement('div');
+  	var title = document.createElement('span');
+  	title.classList.add('profile__doc-title');
+  	div.classList.add('profile__doc');
+  	title.innerHTML = fileName;
 
-			var _tempArr = $(this).val().split('\\').pop()
-			.split('.');
-			var fileName = _tempArr[0];
+  	var _tempArr = $(this).val().split('\\').pop().split('.');
+  	var fileName = _tempArr[0];
 
-			title.innerHTML = fileName;
+  	title.innerHTML = fileName;
 
-			var reader = new FileReader();
+  	var reader = new FileReader();
 
-			reader.onloadend = function() {
-				img.src = reader.result;
-			}
+  	reader.onloadend = function() {
+  	 	img.src = reader.result;
+  	}
 
-			reader.readAsDataURL(file);
-			$(this).parent().parent().before(div);
-			div.append(img);
-			div.append(title);	
-		}
-	});
+  	reader.readAsDataURL(file);
+  	$(this).parent().parent().before(div);
+  	div.append(img);
+  	div.append(title); 
+  	}
+});
 
 	/*#Form popup at private profile*/
 
