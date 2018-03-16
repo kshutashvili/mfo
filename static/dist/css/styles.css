@@ -837,7 +837,7 @@ fieldset {
   position: relative;
   background: #fff;
   font-size: 1.2rem;
-  z-index: 3;
+  z-index: 2000;
   -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
           box-shadow: 0 0 30px rgba(0, 0, 0, 0.4); }
   .s-header .wrapper {
@@ -3612,6 +3612,7 @@ fieldset {
   .b-main-form--popup {
     position: relative;
     max-width: 40rem;
+    height: auto;
     overflow: visible; }
     .b-main-form--popup .b-main-form__content {
       border-radius: 2rem 2rem 0 0; }

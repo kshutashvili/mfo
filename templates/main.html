@@ -57,7 +57,7 @@
 						<fieldset class="b-main-form__content">
 						
 							<div class="b-form-item">
-								<label class="b-form-item__label" for="credit-value-{{ obj.id }}">{% trans "Сумма кредита" %}:
+								<label class="b-form-item__label b-form-item__label--wide" for="credit-value-{{ obj.id }}">{% trans "Сумма кредита" %}:
 								</label>
 
 								<input class="b-form-item__input b-form-item__input--first" type="text" id="credit-value-{{ obj.id }}">
@@ -76,7 +76,7 @@
 							</div>
 
 							<div class="b-form-item">
-								<label class="b-form-item__label" for="termin-value-{{ obj.id }}">{% trans "Срок займа" %}:</label>
+								<label class="b-form-item__label b-form-item__label--wide" for="termin-value-{{ obj.id }}">{% trans "Срок займа" %}:</label>
 
 								<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-{{ obj.id }}">
 								<span>{% if obj.credit_rate.term_type %} {% trans "месяцев" %} {% else %} {% trans "недель" %} {% endif %}</span>
