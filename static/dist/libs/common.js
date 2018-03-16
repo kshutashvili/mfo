@@ -5,11 +5,11 @@ window.onload = function() {
 
 	$('a[href^="#"]').off().on("click", function (event) {
 		event.preventDefault();
-  		var id  = $(this).attr('href'),
-  		top = $(id).offset().top;
-  
-  		$('body,html').stop(true).animate({scrollTop: top}, 1000);
- 	});
+		var id  = $(this).attr('href'),
+		top = $(id).offset().top;
+
+		$('body,html').stop(true).animate({scrollTop: top}, 1000);
+	});
 
 	/*#Slick slider*/
 
@@ -102,16 +102,32 @@ window.onload = function() {
 
 	/*#Cities list*/
 	
-	$('.b-region-list__wrapper').on('click', '.b-region-list__btn', function(e) {
+	$('.b-region-list').on('click', '.b-region-list__btn', function(e) {
 		var dep_id = $(this).data('dep_id');
-
 		fieldFiller(dep_id, "/ajax/departments_generate/" + dep_id);
+
 		$('.b-region-list__btn').removeClass('btn-active');
 		$(this).addClass('btn-active');
 
-		var listItems = $(this).parent().parent().html();
 
-		$('.popup-list').html(listItems);
+		var btn = $(this).parent();
+		
+		out:for(var i = 0; i < 7; i++) {
+			$('.popup-list').append(btn.clone());
+
+			if (btn.prop('tagName') == undefined) {
+				btn = $(this).parent().prev();
+
+				for(var j = i; j < 7; j++) {
+					$('.popup-list').append(btn.clone());
+					btn = btn.prev();
+				}
+
+				break out;
+			} else {
+				btn = btn.next();
+			}
+		}
 		
 		$('.b-region-list').animate({
 			opacity: "0"
@@ -121,8 +137,17 @@ window.onload = function() {
 		});
 	});
 
+	$('.popup-list').on('click', '.b-region-list__btn', function(e) {
+		var dep_id = $(this).data('dep_id');
+		fieldFiller(dep_id, "/ajax/departments_generate/" + dep_id);
+
+		$('.b-region-list__btn').removeClass('btn-active');
+		$(this).addClass('btn-active');
+	});
+
 	$('.btn-show').on('click', function() {
 		$('.popup').animate({opacity: '0'}, 500, function(){
+			$('.popup-list').empty();
 			$('.b-region-list__btn').removeClass('btn-active');
 			$('.popup').css('z-index', '-1');
 			$('.b-region-list').css('z-index', '1').animate({opacity: 1}, 300);
@@ -197,37 +222,37 @@ window.onload = function() {
 
 	/*#Add files at private profile*/
 
-$('.profile__docs input[type=file]').on('change', function(e) {
-  	var reader = new FileReader();
+	$('.profile__docs input[type=file]').on('change', function(e) {
+		var reader = new FileReader();
 
-  	var targ = getTarget(e);
+		var targ = getTarget(e);
 
-  	for (var i = 0; i < targ.files.length; i++) {
-  	var file = targ.files[i];
-  	var img = document.createElement("img");
-  	var div = document.createElement('div');
-  	var title = document.createElement('span');
-  	title.classList.add('profile__doc-title');
-  	div.classList.add('profile__doc');
-  	title.innerHTML = fileName;
+		for (var i = 0; i < targ.files.length; i++) {
+			var file = targ.files[i];
+			var img = document.createElement("img");
+			var div = document.createElement('div');
+			var title = document.createElement('span');
+			title.classList.add('profile__doc-title');
+			div.classList.add('profile__doc');
+			title.innerHTML = fileName;
 
-  	var _tempArr = $(this).val().split('\\').pop().split('.');
-  	var fileName = _tempArr[0];
+			var _tempArr = $(this).val().split('\\').pop().split('.');
+			var fileName = _tempArr[0];
 
-  	title.innerHTML = fileName;
+			title.innerHTML = fileName;
 
-  	var reader = new FileReader();
+			var reader = new FileReader();
 
-  	reader.onloadend = function() {
-  	 	img.src = reader.result;
-  	}
+			reader.onloadend = function() {
+				img.src = reader.result;
+			}
 
-  	reader.readAsDataURL(file);
-  	$(this).parent().parent().before(div);
-  	div.append(img);
-  	div.append(title); 
-  	}
-});
+			reader.readAsDataURL(file);
+			$(this).parent().parent().before(div);
+			div.append(img);
+			div.append(title); 
+		}
+	});
 
 	/*#Form popup at private profile*/
 
@@ -352,6 +377,17 @@ $('.profile__docs input[type=file]').on('change', function(e) {
 	});
 
 	initMap();
+
+	var header = $('header');
+	var padding = header.height();
+
+	function fixedHeader() {
+		$('body').css({'padding-top': header.height()});
+		header.addClass('sticky');
+	};
+
+	fixedHeader();
+	$( window ).resize(fixedHeader);
 }
 
 function initMap() {
@@ -481,18 +517,18 @@ function fieldFiller (dep_id, url) {
 		url: url,
 		success: function(data) {
 			for(key in data) {
-					
+
 					var obj = data[key];
 					var officeArr = [];
 //					for(var k in obj) officeArr.push(obj[k]);	
 
-						var myLatlng = obj.lats
-						var map = new google.maps.Map(document.getElementById('map'), {
-							zoom: 11,
-							center: myLatlng
-						});
+					var myLatlng = obj.lats;
+					var map = new google.maps.Map(document.getElementById('map'), {
+						zoom: 11,
+						center: myLatlng
+					});
 
-						var iconChosen = {
+					var iconChosen = {
 		    			url: "/static/dist/img/marker-chosen.png", // url
 		    			scaledSize: new google.maps.Size(25, 25), // scaled size
 		    			origin: new google.maps.Point(0,0), // origin
@@ -508,10 +544,10 @@ function fieldFiller (dep_id, url) {
 
 		   			textFill(obj);
 		   			var allMarkers = [];
-	   				var list_deps = []
-	   				for (obj in data){
-	   					list_deps.push(data[obj]);
-	   				}
+		   			var list_deps = []
+		   			for (obj in data){
+		   				list_deps.push(data[obj]);
+		   			}
 		   			for(var i = 0; i < list_deps.length; i++) {
 		   				var marker = new google.maps.Marker({
 		   					id: i,
@@ -536,10 +572,10 @@ function fieldFiller (dep_id, url) {
 
 		   				if(j == allMarkers.length - 1) allMarkers[j].f.setIcon(iconChosen);
 		   			}
-				
-			}
-		}
-	});
+
+		   		}
+		   	}
+		   });
 
 }
 

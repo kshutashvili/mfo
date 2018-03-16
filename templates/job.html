@@ -40,12 +40,12 @@
 					<div class="b-vacancies__tab-container">
 						<h3 class="b-vacancies__tab-title">{% trans "Выберите категорию" %}</h3>
 						{% for obj in categories %}
-							<button data-btn="{{ obj.name }}" class="b-vacancies__tab {% if forloop.first %}active{% endif %}">{{ obj.name }}</button>
+							<button data-btn="{{ obj.id }}" class="b-vacancies__tab {% if forloop.first %}active{% endif %}">{{ obj.name }}</button>
 						{% endfor %}
 					</div>
 
 					{% for obj in categories %}
-					<div class="tab-content {% if forloop.first %}is-showed{% endif %}" data-content="{{ obj.name }}" >
+					<div class="tab-content {% if forloop.first %}is-showed{% endif %}" data-content="{{ obj.id }}" >
 						{% for vacancy in obj.vacancies.get_queryset %}
 						<div class="b-vacancy">
 							<h4 class="b-spoiler-title">{{ vacancy.name }}</h4>
