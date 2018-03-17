@@ -69,3 +69,8 @@ class BlogCategoryAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
     exclude = ('name',)
 
+
+@admin.register(models.Resume)
+class BlogCategoryAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'phone', 'email', 'city')
+

@@ -1,10 +1,13 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.core.validators import RegexValidator
 
 from solo.models import SingletonModel
 from ckeditor.fields import RichTextField
 from PIL import Image
+
+from vacancy.models import Vacancy
 
 
 class Contact(SingletonModel):
@@ -235,4 +238,31 @@ class BlogCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Resume(models.Model):
+    first_name = models.CharField(_('Имя'),
+                                  max_length=128)
+    last_name = models.CharField(_('Фамилия'),
+                                 max_length=128)
+    city = models.CharField(_('Населенный пункт'),
+                            max_length=128)
+    vacancy = models.ForeignKey(Vacancy,
+                                verbose_name=_('Вакансия'),
+                                on_delete=models.CASCADE)
+    phone_regex = RegexValidator(regex=r'^\+{0,1}\d{9,15}$',
+                                 message=_("Неправильный формат телефона: "))
+    phone = models.CharField(_('Номер телефона'),
+                             max_length=32,
+                             validators=[phone_regex])
+    email = models.EmailField(_("Электронная почта"))
+    file = models.FileField(_('Резюме'),
+                            upload_to='resume_files')
+
+    class Meta:
+        verbose_name = _('Резюме')
+        verbose_name_plural = _('Резюме')
+
+    def __str__(self):
+        return ' '.join([self.first_name, self.last_name, self.vacancy.name])
 

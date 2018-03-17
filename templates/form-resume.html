@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% block title %}Resume form{% endblock %}
+
+{% block content %}
+{% if status_message %}
+	{{ status_message }}
+{% endif %}
+	<form class="f-form" action="{% url 'resume' %}" method="post" enctype="multipart/form-data">
+		<h2 class="f-form__title">{% trans 'Отправьте нам Ваше резюме' %}</h2>
+		<div class="f-form__content f-form__content--secondary">
+			{{ form.first_name }}
+            <span class='help-block'>{{ form.errors.first_name }}</span>                    
+			{{ form.last_name }}
+            <span class='help-block'>{{ form.errors.last_name }}</span>                    
+			<select name='city' class="b-select b-select--expanded">
+				<option value="Населенный пункт" selected disabled hidden>{% trans 'Населенный пункт' %}</option>
+				{% for obj in cities %}
+					<option value="{{ obj }}">{{ obj }}</option>
+				{% endfor %}
+			</select>
+            <span class='help-block'>{{ form.errors.city }}</span>                    
+			<select name='vacancy' class="b-select b-select--expanded">
+				<option value="Желаемая должность" selected disabled hidden>{% trans 'Желаемая должность' %}</option>
+				{% for obj in vacancies %}
+					<option value="{{ obj }}">{{ obj }}</option>
+				{% endfor %}				
+			</select>
+            <span class='help-block'>{{ form.errors.vacancy }}</span>                    
+			{{ form.phone }}
+            <span class='help-block'>{{ form.errors.phone }}</span>                    
+			{{ form.email }}
+            <span class='help-block'>{{ form.errors.email }}</span>                    
+			<label class="b-btn-primary b-btn-primary--formed file-upload">
+				<i class="fas fa-paperclip"></i>
+				{{ form.file }}
+            	<span class='help-block'>{{ form.errors.file }}</span>                    
+				<span>{% trans 'Прикрепить резюме' %}</span>
+			</label>
+			{% csrf_token %}
+			<button class="b-btn-primary b-btn-primary--formed" type="submit">{% trans 'Отправить резюме' %}</button>
+			<button class="b-btn-close"></button>
+		</div>
+		<div class="f-form__footer f-form__footer--sm"></div>
+	</form>
+{% endblock %}
+{% block info %}{% endblock %}
+{% block footer %}{% endblock %}

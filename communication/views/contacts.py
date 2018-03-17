@@ -20,7 +20,7 @@ def contacts(request):
     elif request.method == 'POST':
         form = SendEmailForm(request.POST)
         if form.is_valid():
-            to_email = Contact.get_solo().to_email
+            to_email = Contact.get_solo().to_email.email
             from_email = form.cleaned_data.get('email')
             subject = form.cleaned_data.get('name')
             message = form.cleaned_data.get('message')
