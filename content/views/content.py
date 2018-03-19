@@ -3,11 +3,14 @@ import os
 from wsgiref.util import FileWrapper
 
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import (HttpResponse, HttpResponseRedirect, JsonResponse,
+                         HttpResponseBadRequest)
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import urlencode, force_escape
 from django.utils.safestring import mark_safe
 from django.utils import translation
+from django.views.generic.base import TemplateView
+from django.urls import reverse
 
 from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
                            MainPageStatic, IndexPageStatic, StaticPageDefault
@@ -16,6 +19,7 @@ from communication.models import Response
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
 from content.helpers import get_city_name
+from bids.models import Bid
 
 
 def pages(request, page_url):
@@ -46,7 +50,9 @@ def main(request):
                 length -= 1
     return render(request, 'main.html', {'main':main,
                                          'departments':departments,
-                                         'column_list':column_list})
+                                         'column_list':column_list,
+                                         'user_city': city if city else 'Другой город'
+                                         })
 
 
 def index(request):
@@ -167,3 +173,71 @@ def translate(request, lang_code):
     request.session[translation.LANGUAGE_SESSION_KEY] = lang_code
     return HttpResponseRedirect("/")
 
+
+class CallbackView(TemplateView):
+    template_name = "form-callback.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CallbackView, self).get_context_data()
+
+        bid_id = None
+        # get bid's ID form session which set in save_credit_request function
+        if self.request.session.has_key('bid_id'):
+           bid_id = self.request.session.get('bid_id')
+           del self.request.session['bid_id']
+
+        context['bid_id'] = bid_id
+
+        city = get_city_name(self.request)
+        context['city'] = city or "Другой город"
+
+        return context
+
+
+def save_credit_request(request):
+    if request.method == 'POST':
+        # create new Bid
+        new_bid = Bid.objects.create(
+            credit_sum=request.POST.get('credit_sum', 0),
+            termin=request.POST.get('termin'),
+            termin_type=request.POST.get('term_type'),
+            city=request.POST.get('city')
+        )
+        new_bid.save()
+
+        if new_bid.id:
+            # set bid's id to session for accesing in other page
+            request.session["bid_id"] = new_bid.id
+        return HttpResponseRedirect(redirect_to=request.POST.get('callback'))
+
+
+def request_callback(request):
+    if request.method == 'POST':
+        bid_id = request.POST.get("bid_id", None)
+        if bid_id:
+            # if Bid has been created in save_credit_request function
+            if Bid.objects.filter(id=int(bid_id)).exists():
+                bid = Bid.objects.get(id=int(bid_id))
+                bid.contact_phone = request.POST.get("contact_phone")
+                bid.name = request.POST.get("client_name")
+                bid.save()
+            else:
+                new_bid = Bid.objects.create(
+                    city=request.POST.get('city'),
+                    name=request.POST.get("client_name"),
+                    contact_phone=request.POST.get("contact_phone")
+                )
+                new_bid.save()
+        else:
+            new_bid = Bid.objects.create(
+                city=request.POST.get('city'),
+                name=request.POST.get("client_name"),
+                contact_phone=request.POST.get("contact_phone")
+            )
+            new_bid.save()
+        return HttpResponseRedirect(redirect_to=reverse('callback_success'))
+    return HttpResponseBadRequest()
+
+
+class CallbackSuccessView(TemplateView):
+    template_name = "form-success.html"

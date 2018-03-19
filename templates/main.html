@@ -53,14 +53,14 @@
 			<div class="b-main-form-container">
 				{% for obj in main.credits_up.get_queryset %}
 				<div data-content="form-{{ obj.id }}" class="tab-content {% if forloop.first %}is-showed{% endif %}">
-					<form action="#" class="b-main-form b-main-form--prime {% if forloop.counter == 2 %}arrow-mid{% elif forloop.last %}arrow-bot{% endif %}">
+					<form action="{% url 'save_credit_request' %}" class="b-main-form b-main-form--prime {% if forloop.counter == 2 %}arrow-mid{% elif forloop.last %}arrow-bot{% endif %}" method="POST">
 						<fieldset class="b-main-form__content">
 						
 							<div class="b-form-item">
 								<label class="b-form-item__label b-form-item__label--wide" for="credit-value-{{ obj.id }}">{% trans "Сумма кредита" %}:
 								</label>
 
-								<input class="b-form-item__input b-form-item__input--first" type="text" id="credit-value-{{ obj.id }}">
+								<input class="b-form-item__input b-form-item__input--first" type="text" id="credit-value-{{ obj.id }}" name="credit_sum">
 
 								<span>грн</span>
 
@@ -78,7 +78,7 @@
 							<div class="b-form-item">
 								<label class="b-form-item__label b-form-item__label--wide" for="termin-value-{{ obj.id }}">{% trans "Срок займа" %}:</label>
 
-								<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-{{ obj.id }}">
+								<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-{{ obj.id }}" name="termin">
 								<span>{% if obj.credit_rate.term_type %} {% trans "месяцев" %} {% else %} {% trans "недель" %} {% endif %}</span>
 
 								<div data-id="{{ obj.id }}" class="b-form-item__slider" id="termin-slider-{{ obj.id }}">
@@ -99,8 +99,14 @@
 								<p><span>{% trans "На срок" %}:</span> <span id="termin-total-{{ obj.id }}">{{ obj.credit_rate.term_min }} {% if obj.credit_rate.term_type %}{% trans "месяцев" %}{% else %}{% trans "недель" %}{% endif %}</span></p>
 								<p class="b-main-form__total-cost"><span>{% trans "Платеж по кредиту" %}:</span> <span class="pay_spam" data-id="{{ obj.id }}" id="pay_spam{{ obj.id }}" >550 {% if obj.credit_rate.term_type %}{% trans "грн/месяц." %}{% else %}{% trans "грн/неделя." %}{% endif %}</span></p>
 							</div>
-
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">{% trans "Оформить кредит" %}</a>
+							
+							<input type="hidden" value="{% url 'callback' %}" name="callback">
+							<input type="hidden" value="{{ user_city }}" name="city">
+							<input type="hidden" value="{% if obj.credit_rate.term_type %}{% trans 'месяцев' %}{% else %}{% trans 'недель' %}{% endif %}" name="term_type">
+							{% csrf_token %}
+							<button type="submit" class="b-btn-primary b-btn-primary--main">
+								{% trans "Оформить кредит" %}
+							</button>
 						</fieldset>
 					</form>
 				</div>
