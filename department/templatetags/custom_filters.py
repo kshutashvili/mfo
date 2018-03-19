@@ -1,5 +1,8 @@
-from django import template
 from datetime import datetime
+
+from django import template
+from django.utils.safestring import mark_safe
+
 
 register = template.Library()
 
@@ -23,7 +26,7 @@ def replace_comma_with_space(string):
 @register.filter
 def get_few_words(string, number):
     try:
-        result = ' '.join(str(string).split(' ')[:int(number)])
+        result = ' '.join(mark_safe(string).split(' ')[:int(number)])
         result = ''.join([result, '...'])
         return result
     except:
