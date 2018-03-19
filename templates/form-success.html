@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Form-success</title>
+	<link rel="stylesheet" href="{% static 'dist/css/styles.css' %}">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<header class="s-header">
+		<div class="wrapper">
+			<button class="mobile-menu">
+				<div class="mobile-menu__sandwich">
+					<span class="mobile-menu__topper"></span>
+					<span class="mobile-menu__middle"></span>
+					<span class="mobile-menu__footer"></span>
+				</div>
+				<span>Меню</span>
+			</button>
+
+			<a href="main.html" class="b-logo">
+				<svg><use xlink:href="{% static 'sprite.svg' %}#svg-logo">
+				</svg>
+			</a>
+
+			<div class="s-header__phone">
+				<span>Телефон горячей линии</span>
+				<a href="tel:+0800211112">0 800 211 112</a>
+			</div>
+			
+			<div class="mobile-icons">
+				<a href="#" class="mobile-link">
+					<i class="fas fa-phone"></i>
+				</a>
+
+				<a href="private-profile.html" class="mobile-link">
+					<i class="fas fa-sign-in-alt"></i>
+				</a>
+			</div>
+
+			<div class="b-nav">
+				<a href="about.html" class="b-nav__link">О нас</a>
+				<a href="#" class="b-nav__link">Кредиты</a>
+				<a href="spoiler-page.html" class="b-nav__link">Акции</a>
+				<a href="faq.html" class="b-nav__link">Справка</a>
+				<a href="blog.html" class="b-nav__link">Блог</a>
+				<a href="#" class="b-nav__link">Студентам</a>
+			</div>
+
+			<div class="s-header__lang">
+				<button class="b-btn b-btn--lang">Рус</button>
+				<button class="b-btn b-btn--lang">Укр</button>
+			</div>
+
+			<a href="private-profile.html" class="b-btn-login">Мой кабинет <span class="icon icon--login"></span></a>
+		</div>
+	</header>
+
+	
+	<form action="#" class="f-form">
+		<h2 class="f-form__title">Онлайн решение получения кредита</h2>
+		<div class="f-form__content f-form__content--stretch">
+			<p class="f-form__content-message f-form__content-message--big">
+				<img class="f-form__content-img" src="{% static 'dist/img/svgstore/icons/guarantee.svg' %}" alt="guarantee">
+				Ваша заявка принята в обработку, в ближайшее время с вами свяжется менеджер для заполнения заявки!
+			</p>
+			<div class="f-form__content-multiple">
+				<p class="f-form__content-multiple-item">
+					Дополнительный текст в обработке, в ближайшее время с вами свяжется копирайтер для заполнения форм.
+				</p>
+				<div class="f-form__content-multiple-item f-form__counter">
+					<div class="f-form__counter-info">Переход на главную страницу :</div>
+					<div class="f-form__counter-heart">Через <span>10</span> секунд</div>
+				</div>
+			</div>
+
+		</div>
+		
+		<div class="f-form__footer"></div>
+
+		<a href="index.html" class="b-btn-close"></a>
+	</form>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="{% static 'dist/libs/slick.js' %}"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+	<script src="{% static 'dist/libs/common.js' %}"></script>
+</body>
+</html>

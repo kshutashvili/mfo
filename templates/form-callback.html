@@ -65,7 +65,7 @@
 
 	<div class="wrapper wrapper-mob">
 		<div action="#" class="b-form-group">
-			<form action="#" class="f-callback-left">
+			<form action="{% url 'request_callback' %}" class="f-callback-left" method="POST">
 				<img class="f-callback__img" src="{% static 'dist/img/callback-person.jpg' %}" alt="operator">
 				<div class="f-callback__info">
 					<h2 class="f-callback__info-title">Заказать звонок менеджера</h2>
@@ -73,13 +73,16 @@
 				</div>
 				
 				<div class="b-input b-input--main">
-					<input type="text" placeholder="Введите свое имя">
+					<input type="text" placeholder="Введите свое имя" name="client_name">
 					<span class="icon icon--avatar"></span>
 				</div>
 				<div class="b-input b-input--main">
-					<input type="tel" placeholder="+38 (0__) ___ __ __">
+					<input type="tel" placeholder="+38 (0__) ___ __ __" name="contact_phone">
 					<span class="icon icon--phone-call"></span>
 				</div>
+				{% csrf_token %}
+				<input type="hidden" value="{{ bid_id|default:"" }}" name="bid_id">
+				<input type="hidden" value="{% if user_city %}{{ user_city }}{% else %}{{ city }}{% endif %}" name="city">
 				<button class="b-btn-primary b-btn-primary--main" type="submit">Заказать звонок</button>
 			</form>
 

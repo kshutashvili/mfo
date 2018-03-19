@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'content',
     'vacancy',
     'credit',
+    'bids',
     #3-rd
     'ckeditor',
     'solo',

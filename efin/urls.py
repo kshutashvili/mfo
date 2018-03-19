@@ -28,7 +28,11 @@ from vacancy.views import job
 urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
     path('loan/', content.index, name='index'),
-    path('callback/', TemplateView.as_view(template_name='form-callback.html'), name='callback'),
+    # path('callback/', TemplateView.as_view(template_name='form-callback.html'), name='callback'),
+    path('callback/', content.CallbackView.as_view(), name='callback'),
+    path('request-callback/', content.request_callback, name='request_callback'),
+    path('callback-success/', content.CallbackSuccessView.as_view(), name='callback_success'),
+    path('save_credit_request/', content.save_credit_request, name='save_credit_request'),
     path('', content.main, name='main'),
     path('download_pdf/<int:spoiler_id>/', content.download_pdf, name='download_pdf'),
     path('open_pdf/<int:spoiler_id>/', content.open_pdf, name='open_pdf'),
