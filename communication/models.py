@@ -35,6 +35,11 @@ class Contact(SingletonModel):
                                     on_delete=models.CASCADE,
                                     related_name='to_email')
     footer_text = RichTextField(_('Текст снизу'))
+    success_form = models.ForeignKey('SuccessFormStatic',
+                                     verbose_name=_('Форма при успешной '
+                                                    'отправке сообщения'),
+                                     on_delete=models.CASCADE,
+                                     null=True)
 
     class Meta:
         verbose_name = _('Контакты')
@@ -265,4 +270,21 @@ class Resume(models.Model):
 
     def __str__(self):
         return ' '.join([self.first_name, self.last_name, self.vacancy.name])
+
+
+class SuccessFormStatic(models.Model):
+    title = models.CharField(_('Заголовок формы'),
+                             max_length=128)
+    text = models.TextField(_('Текст формы'),
+                            max_length=400)
+    extra_text = models.CharField(_('Дополнительный текст в левом нижнем '
+                                    'углу'),
+                                  max_length=255)
+
+    class Meta:
+        verbose_name = _('Форма успешно выполненного действия')
+        verbose_name_plural = _('Формы успешно выполненного действия')
+
+    def __str__(self):
+        return self.title
 

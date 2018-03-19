@@ -45,7 +45,8 @@ def resume(request):
                     break
             resume.save()
 
-            to_email = JobStaticPage.get_solo().email.email
+            job_page = JobStaticPage.get_solo()
+            to_email = job_page.email.email
             from_email = form.cleaned_data.get('email')
             subject = ' '.join([form.cleaned_data.get('first_name'),
                                 form.cleaned_data.get('last_name')])
@@ -58,14 +59,19 @@ def resume(request):
                 mail = EmailMessage(subject, message, from_email, [to_email,])
                 mail.attach(file.name, file.read(), file.content_type)
                 mail.send()
-                status_message = _('Заявка успешно отправлена')
+                url = reverse('success', kwargs={'id_mess':job_page.success_form.id})
+                return HttpResponseRedirect(url)
             except:
                 status_message = _('Произошла ошибка при отправке заявки, '
                                    'попробуйте позже...')
         else:
             status_message = _('Исправьте ошибки в данных')
+    previous_page = request.META.get('HTTP_REFERER')
+    if previous_page:
+        previous_page = previous_page.split('/')[-2]
     return render(request, 'form-resume.html', {'form':form,
                                                 'cities':cities,
                                                 'vacancies':vacancies,
-                                                'status_message':status_message})
+                                                'status_message':status_message,
+                                                'previous_page':previous_page})
 

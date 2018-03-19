@@ -6,7 +6,8 @@ from django.utils.html import format_html
 from solo.models import SingletonModel
 from ckeditor.fields import RichTextField
 
-from communication.models import Email, PhoneNumber, Response, SocialNet
+from communication.models import Email, PhoneNumber, Response, SocialNet,\
+                                 SuccessFormStatic
 from credit.models import CreditRateUp, CreditRate
 from department.models import Department
 
@@ -165,6 +166,11 @@ class JobStaticPage(SingletonModel):
                               null=True,
                               blank=True,
                               on_delete=models.CASCADE)
+    success_form = models.ForeignKey(SuccessFormStatic,
+                                     verbose_name=_('Форма при успешной '
+                                                    'отправке резюме'),
+                                     on_delete=models.CASCADE,
+                                     null=True)
 
     class Meta:
         verbose_name = _('Статический блок')

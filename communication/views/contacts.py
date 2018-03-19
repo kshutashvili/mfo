@@ -29,9 +29,8 @@ def contacts(request):
                 mail = EmailMessage(subject, message, from_email, [to_email,])
                 mail.send()
                 status_message = _('Сообщение успешно отправлено')
-                return render(request, 'contacts.html', {'contact':contact,
-                                                         'status_message':status_message,
-                                                         'form':SendEmailForm()})
+                url = reverse('success', kwargs={'id_mess': contact.success_form.id})
+                return HttpResponseRedirect(url)
             except Exception as e:
                 status_message = _('Произошла ошибка при отправке сообщения, попробуйте позже...')
         else:
@@ -40,4 +39,3 @@ def contacts(request):
                                                  'form':form,
                                                  'status_message':status_message,
                                                  'menu_about':menu_about})
-

@@ -20,7 +20,8 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 
-from communication.views import contacts, about, blog, faq, resume
+from communication.views import contacts, about, blog, faq, resume,\
+                                success_message
 from content.views import content
 from vacancy.views import job
 
@@ -41,6 +42,7 @@ urlpatterns = i18n_patterns(
     path('blog/<str:category_link>/', blog.blog_category, name='blog_category'),
     path('faq/', faq.faq, name='faq'),
     path('resume/', resume.resume, name='resume'),
+    path('success/<int:id_mess>/', success_message.success_message, name='success'),
     path('<str:page_url>/', content.pages, name='static_pages'),
     path('ajax/departments_generate/<str:dep_id>/', content.departments_generate, name='departments_generate'),
     path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),

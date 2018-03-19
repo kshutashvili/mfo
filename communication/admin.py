@@ -74,3 +74,9 @@ class BlogCategoryAdmin(admin.ModelAdmin):
 class BlogCategoryAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'phone', 'email', 'city')
 
+
+@admin.register(models.SuccessFormStatic)
+class SuccessFormStaticAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+    exclude = ('title', 'text', 'extra_text')
+

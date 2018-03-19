@@ -37,3 +37,10 @@ class FaqPageStaticTranslationOptions(TranslationOptions):
 class BlogCategoryOptions(TranslationOptions):
     fields = ('name',)
     required_languages = ('ua', 'ru')
+
+
+@register(models.SuccessFormStatic)
+class SuccessFormStaticTranslationOptions(TranslationOptions):
+    fields = ('title', 'text', 'extra_text')
+    required_languages = ('ua', 'ru')
+

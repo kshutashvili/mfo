@@ -22,7 +22,7 @@ msgstr ""
 
 #: communication/forms.py:12
 msgid "ФИО"
-msgstr "ПІБ"
+msgstr "ФИО"
 
 #: communication/forms.py:14 communication/forms.py:37
 msgid "E-mail"

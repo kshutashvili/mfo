@@ -43,7 +43,11 @@
 			</label>
 			{% csrf_token %}
 			<button class="b-btn-primary b-btn-primary--formed" type="submit">{% trans 'Отправить резюме' %}</button>
-			<button class="b-btn-close"></button>
+			{% if previous_page %}
+				<button onclick="location.href='{% url previous_page %}';" class="b-btn-close"></button>
+			{% else %}
+				<button onclick='location.href="{% url 'main' %}";' class="b-btn-close"></button>
+			{% endif %}
 		</div>
 		<div class="f-form__footer f-form__footer--sm"></div>
 	</form>
