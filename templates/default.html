@@ -44,7 +44,7 @@
 					<h3 class="b-sidebar-banner__title">
 						<span>{% trans "Всего" %}</span>{% trans "в пару кликов" %}!
 					</h3>
-					<a href="form-callback.html" class="b-btn-primary b-btn-primary--main b-btn-primary--bordered">{% trans "Оформить кредит" %}</a>
+					<a href="{% url 'callback' %}" class="b-btn-primary b-btn-primary--main b-btn-primary--bordered">{% trans "Оформить кредит" %}</a>
 					<img class="b-sidebar-banner__img b-sidebar-banner__img--left" src="{% static 'dist/img/car.png' %}" alt="car">
 					<img class="b-sidebar-banner__img b-sidebar-banner__img--right" src="{% static 'dist/img/grn.png' %}" alt="money">
 				</div>

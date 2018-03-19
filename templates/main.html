@@ -42,7 +42,7 @@
 	<section class="s-main" style="background-image: url({{ main.top_block.image.url }});" >
 		<div class="wrapper wrapper--flex">
 			<ul class="s-main__list">
-				<li class="s-main__list-title">{% trans "Выберите Ваш" %}<br>{% trans "кредний тариф" %}</li>
+				<li class="s-main__list-title">{% trans "Выберите Ваш" %}<br>{% trans "кредитный тариф" %}</li>
 			{% for obj in main.credits_up.get_queryset %}
 				<li>
 					<button data-btn="form-{{ obj.id }}" class="b-btn b-btn--secondary {% if forloop.first %}active{% endif %}"><span class="icon icon--{{ obj.icon_class }}"></span>{{ obj.credit_rate.name }}</button> 
@@ -196,7 +196,7 @@
 									<b>{{ pl.term }}</b>
 								{% endfor %}
 							</p>
-							<a href="form-callback.html" class="b-btn-primary b-btn-primary--main">{% trans "Подать заявку" %}</a>
+							<a href="{% url 'callback' %}" class="b-btn-primary b-btn-primary--main">{% trans "Подать заявку" %}</a>
 						</div>
 					</div>
 				</div>

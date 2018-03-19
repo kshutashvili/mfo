@@ -105,7 +105,7 @@
 				<div class="b-callback">
 					<h4 class="b-callback__title">{% trans "Получить решение онлайн" %}</h4>
 					<p class="b-callback__info">{% trans "Небольшой текст о том, куда и зачем отправляются эти данные пользователем сервиса, а так же небольшая инструкция по алгоритму дальнейших действий" %}.</p>
-					<form action="#" class="b-callback-form">
+					<form action="{% url 'callback' %}" class="b-callback-form">
 						<div class="b-input b-input--secondary">
 							<input placeholder="+38 (0__) ___ __ __" type="tel">
 							<span class="icon icon--phone-call"></span>

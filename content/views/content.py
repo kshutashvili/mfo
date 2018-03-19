@@ -11,6 +11,7 @@ from django.utils.safestring import mark_safe
 from django.utils import translation
 from django.views.generic.base import TemplateView
 from django.urls import reverse
+from django.http import Http404 
 
 from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
                            MainPageStatic, IndexPageStatic, StaticPageDefault
@@ -27,6 +28,8 @@ def pages(request, page_url):
     template = 'spoiler-page.html'
     if not page:
         page = StaticPageDefault.objects.filter(link=page_url).first()
+        if not page:
+            raise Http404
         template = 'default.html'
     menu_about = MenuAboutItem.objects.all()
     return render(request, template, {'page':page,
