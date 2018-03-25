@@ -135,3 +135,9 @@ class CreditInformationBlockStaticTranslationOptions(TranslationOptions):
 #    fields = ('title',)
 #    required_languages = ('ua', 'ru')
 
+
+#@register(models.MainPageTopBlockStatic)
+#class MainPageTopBlockStaticTranslationOptions(TranslationOptions):
+#    fields = ('title', 'subtitle', 'footer')
+#    required_languages = ('ua', 'ru')
+

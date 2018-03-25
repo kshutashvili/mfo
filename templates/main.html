@@ -114,9 +114,15 @@
 			</div>
 			
 			<h1 class="s-main-title">
-				<span class="s-main-title__top">{{ main.top_block.title }}</span>
-				<span class="s-main-title__middle">{{ main.top_block.subtitle }}</span>
-				<span class="s-main-title__bottom">{{ main.top_block.footer }}</span>
+			{% if '/ru/' in request.path %}
+				<span class="s-main-title__top">{{ main.top_block.title_ru }}</span>
+				<span class="s-main-title__middle">{{ main.top_block.subtitle_ru }}</span>
+				<span class="s-main-title__bottom">{{ main.top_block.footer_ru }}</span>
+			{% elif '/ua/' in request.path %}
+				<span class="s-main-title__top">{{ main.top_block.title_ua }}</span>
+				<span class="s-main-title__middle">{{ main.top_block.subtitle_ua }}</span>
+				<span class="s-main-title__bottom">{{ main.top_block.footer_ua }}</span>
+			{% endif %}
 			</h1>
 		</div>
 	</section>
@@ -180,7 +186,7 @@
 							</h4>
 							<p class="s-packages-content__item-info">
 								<span>{% trans "Размер кредита" %}:</span>
-								<b>{% trans "от" %} {{ obj.sum_min|intcomma|replace_comma_with_space }} {% trans "до" %} {{ obj.sum_max|intcomma|replace_comma_with_space}} грн</b>	
+								<b>{% trans "от" %} {{ obj.sum_min|intcomma }} {% trans "до" %} {{ obj.sum_max|intcomma }} грн</b>	
 							</p>
 							<p class="s-packages-content__item-info">
 								{% trans "Параметр кредита" %}:

@@ -125,6 +125,7 @@ class AboutUsStaticAdmin(admin.ModelAdmin):
 @admin.register(models.MainPageTopBlockStatic)
 class MainPageTopBlockStaticAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'footer')
+    exclude = ('title', 'subtitle', 'footer')
 
 
 @admin.register(models.MainPageStatic)

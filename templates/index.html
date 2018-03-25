@@ -165,7 +165,6 @@
 				<h2 class="b-section-title">{{ index.credit_block.title }}</h2>
 				<h3 class="b-section-subtitle">{{ index.credit_block.text }}</h3>
 			</div>
-
 			<div class="s-packages-content">
 			{% for obj in index.credit_block.credit_rates.get_queryset %}
 				<div>
@@ -177,7 +176,7 @@
 							</h4>
 							<p class="s-packages-content__item-info">
 								<span>{% trans "Размер кредита" %}:</span>
-								<b>{% trans "от" %} {{ obj.sum_min|intcomma|replace_comma_with_space }} {% trans "до" %} {{ obj.sum_max|intcomma|replace_comma_with_space}} грн</b>	
+								<b>{% trans "от" %} {{ obj.sum_min|intcomma }} {% trans "до" %} {{ obj.sum_max|intcomma }} грн</b>	
 							</p>
 							<p class="s-packages-content__item-info">
 								{% trans "Параметр кредита" %}:
@@ -188,7 +187,7 @@
 								<b>{% trans "от" %} {{ obj.rate_min }} {% trans "до" %} {{ obj.rate_max }}%</b>
 							</p>
 							<p class="s-packages-content__item-info">
-								{% trans "Платеж" %}:
+								{% trans "Платеж" %}: 
 								{% for pl in obj.payment_terms.get_queryset %}
 									<b>{{ pl.term }}</b>
 								{% endfor %}

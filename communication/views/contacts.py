@@ -25,14 +25,15 @@ def contacts(request):
             subject = form.cleaned_data.get('name')
             message = form.cleaned_data.get('message')
             message = '\nFrom E-mail: '.join([message, from_email])
-            try:
-                mail = EmailMessage(subject, message, from_email, [to_email,])
-                mail.send()
-                status_message = _('Сообщение успешно отправлено')
-                url = reverse('success', kwargs={'id_mess': contact.success_form.id})
-                return HttpResponseRedirect(url)
-            except Exception as e:
-                status_message = _('Произошла ошибка при отправке сообщения, попробуйте позже...')
+            #try:
+            mail = EmailMessage(subject, message, from_email, [to_email,])
+            print(to_email, from_email, mail)
+            mail.send()
+            status_message = _('Сообщение успешно отправлено')
+            url = reverse('success', kwargs={'id_mess': contact.success_form.id})
+            return HttpResponseRedirect(url)
+            #except Exception as e:
+            status_message = _('Произошла ошибка при отправке сообщения, попробуйте позже...')
         else:
             status_message = _('Исправьте ошибки в данных')
         return render(request, 'contacts.html', {'contact':contact,

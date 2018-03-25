@@ -396,10 +396,28 @@ class ImportantAspect(models.Model):
 class MainPageTopBlockStatic(SingletonModel):
     title = models.CharField(_('Первая строка заголовка'),
                              max_length=128)
+    title_ru = models.CharField(_('Первая строка заголовка [ru]'),
+                                max_length=128,
+                                null=True)
+    title_ua = models.CharField(_('Первая строка заголовка [ua]'),
+                                max_length=128,
+                                null=True)
     subtitle = models.CharField(_('Вторая строка заголовка'),
                                 max_length=128)
+    subtitle_ru = models.CharField(_('Вторая строка заголовка [ru]'),
+                                max_length=128,
+                                null=True)
+    subtitle_ua = models.CharField(_('Вторая строка заголовка [ua]'),
+                                max_length=128,
+                                null=True) 
     footer = models.CharField(_('Подзаголовок'),
                               max_length=128)
+    footer_ru = models.CharField(_('Подзаголовок [ru]'),
+                                 max_length=128,
+                                 null=True)
+    footer_ua = models.CharField(_('Подзаголовок [ua]'),
+                                 max_length=128,
+                                 null=True)
     image = models.ImageField(_('Картинка на заднем фоне'),
                               upload_to='main_top_block')
 
@@ -408,7 +426,13 @@ class MainPageTopBlockStatic(SingletonModel):
         verbose_name_plural = _('Блок вверху главной страницы')
 
     def __str__(self):
-        return ' '.join([self.title, self.subtitle]) 
+        return ' '.join([self.title, self.subtitle])
+
+    def save(self):
+      super(MainPageTopBlockStatic, self).save()
+      self.title = self.title_ru
+      self.subtitle = self.subtitle_ru
+      self.footer = self.footer_ru
 
 
 class MainPageStatic(SingletonModel):

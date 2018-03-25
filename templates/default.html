@@ -34,9 +34,7 @@
 				<h2 class="b-top-title">{{ page.title }}</h2>
 				<img src="{{ page.image.url }}" alt="women" class="s-agreement__img">
 				
-				<p class="s-agreement__text">
-					{{ page.text|safe|delete_p }}
-				</p>
+					{{ page.text|safe }}
 			</main>
 
 			<aside class="b-sidebar">
