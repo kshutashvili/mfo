@@ -22,19 +22,9 @@ from users.views import clear_phone
 api = AuthyApiClient(auth_token)
 
 def sms(request, phone):
-    # client = Client(account_sid, auth_token)
-    # code = random_code(6)
     phone = clear_phone(phone)
     request.session['phone'] = phone
-    # user = Profile.objects.filter(phone=phone).first()
-    # user.verify_code = str(code)
-    # user.save()
-
-    api.phones.verification_start(phone, '+380', via='sms')
-
-#    message = client.messages.create(to=phone,
-#                                     body=''.join(["Ваш код подтверждения: ", str(code)]),
-#                                     from_="+18034085480")
+    res = api.phones.verification_start(phone, '+380', via='sms')
     return HttpResponseRedirect(reverse('verify'))
 
 
