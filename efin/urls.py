@@ -47,7 +47,7 @@ urlpatterns = i18n_patterns(
     path('register/', register, name='register'),
     path('password/', set_password, name='set_password'),
 
-    path('про компанию/', about.about, name='about'),
+    path('pro-kompaniyu/', about.about, name='about'),
     path('about/contacts/', contacts.contacts, name='contacts'),
     path('blog/', blog.blog, name='blog'),
     path('blog/item<int:item_id>/', blog.blog_item, name='blog_item'),

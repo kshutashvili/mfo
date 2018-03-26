@@ -14,6 +14,8 @@ class CreditRate(models.Model):
                               upload_to='credit_rate')
     sum_min = models.PositiveIntegerField(_('Минимальная сумма кредита'))
     sum_max = models.PositiveIntegerField(_('Максимальная сумма кредита'))
+    is_insurance = models.BooleanField(_('Страховка'),
+                                       default=False)
     term_min = models.PositiveIntegerField(_('Минимальный срок кредита'))
     term_max = models.PositiveIntegerField(_('Максимальный срок кредита'))
     term_type = models.BooleanField(_('Тип срока кредита'),

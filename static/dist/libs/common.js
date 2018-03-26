@@ -459,7 +459,6 @@ function Slider(initialId, min, max) {
 	var arr = initialId.split("-");
 	var id = arr[2];
 	var kind = arr[0];
-
 	var sliderValue = $(kind + "-value-" + id);
 	var sliderTotal = $(kind + "-total-" + id);
 	var sliderHandle = $(initialId + ' .ui-slider-val');

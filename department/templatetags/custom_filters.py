@@ -141,3 +141,11 @@ def str(text):
         return str(text)
     except:
         return False
+
+
+@register.filter
+def divide(number, divider):
+    try:
+        return int(float(number)/float(divider))
+    except:
+        return None

@@ -68,7 +68,7 @@
 									<div class="ui-slider-helper">
 										<a class='ui-slider-handle'>
 											<span class="icon icon--arrow icon--left"></span>
-											<span class="ui-slider-val">{{ obj.credit_rate.sum_min }} грн</span>
+											<span class="ui-slider-val">{% if not obj.credit_rate.is_insurance %}{{ obj.credit_rate.sum_min }}{% else %}{{ obj.credit_rate.sum_min|divide:'1.25' }}{% endif %} грн</span>
 											<span class="icon icon--arrow icon--right"></span>
 										</a>
 									</div>
@@ -95,7 +95,7 @@
 
 						<fieldset class="b-main-form__total">
 							<div class="b-main-form__total-content">
-								<p><span>{% trans "Вы берете" %}:</span><span id="credit-total-{{ obj.id }}">{{ obj.credit_rate.sum_min }} грн</span></p>
+								<p><span>{% trans "Вы берете" %}:</span><span id="credit-total-{{ obj.id }}">{% if not obj.credit_rate.is_insurance %}{{ obj.credit_rate.sum_min }}{% else %}{{ obj.credit_rate.sum_min|divide:'1.25' }}{% endif %} грн</span></p>
 								<p><span>{% trans "На срок" %}:</span> <span id="termin-total-{{ obj.id }}">{{ obj.credit_rate.term_min }} {% if obj.credit_rate.term_type %}{% trans "месяцев" %}{% else %}{% trans "недель" %}{% endif %}</span></p>
 								<p class="b-main-form__total-cost"><span>{% trans "Платеж по кредиту" %}:</span> <span class="pay_spam" data-id="{{ obj.id }}" id="pay_spam{{ obj.id }}" >550 {% if obj.credit_rate.term_type %}{% trans "грн/месяц." %}{% else %}{% trans "грн/неделя." %}{% endif %}</span></p>
 							</div>

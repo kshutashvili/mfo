@@ -106,10 +106,14 @@ def slider_filler(request):
     data = CreditRateUp.objects.all()
     result = dict()
     for obj in data:
+        sum_min = obj.credit_rate.sum_min if not obj.credit_rate.is_insurance \
+                                          else obj.credit_rate.sum_min / 1.25
+        sum_max = obj.credit_rate.sum_max if not obj.credit_rate.is_insurance \
+                                          else obj.credit_rate.sum_max / 1.25
         result[str(obj.id)] = {'term_min':obj.credit_rate.term_min,
                                'term_max':obj.credit_rate.term_max,
-                               'sum_min':obj.credit_rate.sum_min,
-                               'sum_max':obj.credit_rate.sum_max}
+                               'sum_min':sum_min,
+                               'sum_max':sum_max}
     return JsonResponse(result)
 
 
@@ -120,6 +124,8 @@ def agreement(request):
 
 def credit_calculator(request, rate_id, term, summ):
     rate = CreditRate.objects.filter(id=rate_id).first()
+    if rate.is_insurance:
+        summ /= 0.8
     json_data = rate.rate_file.read()
     data = json.loads(json_data.decode('utf-8'))
     key = ''
