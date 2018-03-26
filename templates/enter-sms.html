@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Enter sms{% endblock %}
+
+{% block content %}
+
+	<div class="wrapper wrapper-mob"> 
+		<form action="{% url 'verify' %}" method="post" class="f-form">
+			<h2 class="f-form__title">Вход в личный кабинет</h2>
+{% csrf_token %}
+			<div class="f-form__content">
+				<p class="f-form__content-message f-form__content-message--big">{% if status_message %}{{ status_message }}<br>{% endif %}Вы уже зарегестрированы для входа<br>Введите код из SMS</p>
+
+				<div class="b-input b-input--main">
+					<input type="tel" name="code" placeholder="Введите код из смс">
+					<span class="icon icon--padlock"></span>
+				</div>
+
+				<button class="b-btn-primary b-btn-primary--formed" type="submit">Ввойти в личный кабинет</button>
+			</div>
+
+			<div class="f-form__footer"></div>
+
+			<a href="{% url 'main' %}" class="b-btn-close"></a>
+		</form>
+	</div>
+{% endblock %}

@@ -21,9 +21,10 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 
 from communication.views import contacts, about, blog, faq, resume,\
-                                success_message
+                                success_message, sms
 from content.views import content
 from vacancy.views import job
+from users.views import register, set_password
 
 
 urlpatterns = i18n_patterns(
@@ -39,14 +40,24 @@ urlpatterns = i18n_patterns(
     path('open_pdf/<int:spoiler_id>/', content.open_pdf, name='open_pdf'),
     path('translate/<str:lang_code>/', content.translate, name='translate'),
     path('job/', job.job, name='job'),
-    path('about/', about.about, name='about'),
+
+    path('login/', TemplateView.as_view(template_name='enter.html'), name='login'),
+    path('verify/', sms.verify, name='verify'),
+    path('sms/<str:phone>/', sms.sms, name='sms'),
+    path('register/', register, name='register'),
+    path('password/', set_password, name='set_password'),
+
+    path('про компанию/', about.about, name='about'),
     path('about/contacts/', contacts.contacts, name='contacts'),
     path('blog/', blog.blog, name='blog'),
     path('blog/item<int:item_id>/', blog.blog_item, name='blog_item'),
     path('blog/<str:category_link>/', blog.blog_category, name='blog_category'),
     path('faq/', faq.faq, name='faq'),
     path('resume/', resume.resume, name='resume'),
-    path('success/<int:id_mess>/', success_message.success_message, name='success'),
+
+    path('message/<int:id_mess>/', success_message.success_message, name='success'),
+    path('message/<int:id_mess>/<str:redirect_url>/', success_message.success_message, name='success'),
+
     path('<str:page_url>/', content.pages, name='static_pages'),
     path('ajax/departments_generate/<str:dep_id>/', content.departments_generate, name='departments_generate'),
     path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),

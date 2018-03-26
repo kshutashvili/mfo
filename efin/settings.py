@@ -23,6 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-w8(up#n)ea%v0@5olsz37y(kt8!^@p(750bqp4#=hs-%n7n7y'
 GOOGLE_MAPS_API_KEY = 'AIzaSyAntT27HQnaY0z2nOKEk7eyEimuzZOerMM'
 
+TWILIO_ACCOUNT_SID = 'ACf55d9d99a44962e78c13798ccbeb9522'
+TWILIO_AUTH_TOKEN = 'b273f33bdd09287ca70db6a6226ca0e3'
+AUTHY_API_KEY = 'xVr6iPtwsTspiQU0LpJHWoyfcjoinqt6'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -46,11 +50,13 @@ INSTALLED_APPS = [
     'vacancy',
     'credit',
     'bids',
+    'users',
     #3-rd
     'ckeditor',
     'solo',
     'django_google_maps',
-    'modeltranslation'
+    'modeltranslation',
+    'django_twilio'
 ]
 
 MIDDLEWARE = [
@@ -119,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/

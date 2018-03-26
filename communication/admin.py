@@ -80,3 +80,7 @@ class SuccessFormStaticAdmin(admin.ModelAdmin):
     list_display = ('title',)
     exclude = ('title', 'text', 'extra_text')
 
+
+@admin.register(models.UserExistMessage)
+class UserExistMessageAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)

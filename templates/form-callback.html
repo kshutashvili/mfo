@@ -86,9 +86,9 @@
 				<button class="b-btn-primary b-btn-primary--main" type="submit">Заказать звонок</button>
 			</form>
 
-			<form action="#" class="f-callback-right">
+			<form action="{% url 'register' %}" method="post" class="f-callback-right">
 				<h3 class="f-callback__caption">Сегодня одобрено</h3>
-
+				{% csrf_token %}
 				<div class="b-total-number">
 					<span class="b-total-number__count">3495</span>
 					<span class="b-total-number__caption">Заявок</span>
@@ -99,13 +99,13 @@
 					<p class="f-callback__info-text">Заказать звонок менеджера бесплатно без регистрации и смс и тому подобный сопроводительный текст для пользователей до 20:00, после чего форма будет не доступна </p>
 				</div>
 				<div class="b-input b-input--secondary">
-					<input placeholder="+38 (0__) ___ __ __" type="tel">
+					<input name="phone" placeholder="+38 (0__) ___ __ __" type="tel">
 					<span class="icon icon--phone-call"></span>
 				</div>
 
 				<button class="b-btn-primary b-btn-primary--light" type="submit">Получить решение</button>
 
-				<a href="#" class="already-link">Уже есть аккаунт Экспресс финанс? <b>Войти</b></a>
+				<a href="{% url 'login' %}" class="already-link">Уже есть аккаунт Экспресс финанс? <b>Войти</b></a>
 			</form>
 		</div>
 	</div>
