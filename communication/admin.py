@@ -84,3 +84,27 @@ class SuccessFormStaticAdmin(admin.ModelAdmin):
 @admin.register(models.UserExistMessage)
 class UserExistMessageAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
+
+
+@admin.register(models.UserQuestion)
+class UserQuestionAdmin(admin.ModelAdmin):
+    list_display = ('content', 'updated_at', 'created_at', 'is_closed')
+    list_display_links = ('content', 'updated_at', 'created_at')
+    list_editable = ('is_closed',)
+    exclude = ('end_message',)
+
+
+@admin.register(models.QuestionComment)
+class QuestionCommentAdmin(admin.ModelAdmin):
+    list_display = ('content', 'created_at', 'is_admin')
+    list_display_links = ('content', 'created_at')
+    list_editable = ('is_admin',)
+
+
+@admin.register(models.QuestionConfig)
+class QuestionConfigAdmin(admin.ModelAdmin):
+    list_display = ('name', 'message')
+    list_display_links = None
+    list_editable = ('message', 'name')
+    exclude = ('name', 'message')
+

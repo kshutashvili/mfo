@@ -1,0 +1,505 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% load solo_tags %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+{% get_solo 'communication.QuestionConfig' as config %}
+		<section class="s-head">
+			<div class="wrapper">
+				<!--data-btn and data-content must be the same!-->
+				<nav class="s-head__nav s-head__nav--primary">
+					<div class="s-head__nav-more">Больше информации</div>
+					
+					<button data-btn="program" class="s-head__nav-btn">Программа лояльности</button>
+					<button data-btn="application" class="s-head__nav-btn">Мои заявки</button>
+					<button data-btn="condition" class="s-head__nav-btn">Состояние кредита</button>
+					<button data-btn="profile" class="s-head__nav-btn {% if not active %}active{% endif %}">Профиль</button>
+					<button data-btn="message" class="s-head__nav-btn {% if active and active == 'mess' %}active{% endif %}">Сообщения</button>
+
+					<button class="s-head__more-btn">
+						<span class="icon icon--arrow"></span>
+					</button>
+				</nav>
+			</div>
+		</section>
+
+		<section class="s-profile">
+			<div class="wrapper" id="wrapper">	
+				<div data-content="profile" class="tab-content{% if not active %} is-showed{% endif %}">
+					<div class="profile">
+						<h3 class="s-title">Мой профиль</h3>
+						<div class="profile__container">
+							<div class="profile-data">
+								<h4 class="profile__title">Ф.И.О</h4>
+								<p class="profile-data__info">Антипенко Виталий Викторовичь</p>
+							</div>
+							<div class="profile-data">
+								<h4 class="profile__title">Дата рождения</h4>
+								<p class="profile-data__info">11.11.1975</p>
+							</div>
+							<div class="profile-data">
+								<h4 class="profile__title">Место рождения</h4>
+								<p class="profile-data__info">г.Киев</p>
+							</div>
+							<div class="profile-data">
+								<h4 class="profile__title">Контактный телефон</h4>
+								<div class="profile__input">
+									<label for="profile-tel">
+										<img src="{% static 'dist/img/redact.png' %}" alt="redact-pic">
+									</label>
+									<input id="profile-tel" type="tel" value="065 99 99 456" disabled>
+								</div>
+							</div>
+							<div class="profile-data">
+								<h4 class="profile__title">Адресс места проживания</h4>
+								<p class="profile-data__info">г.Киев, улица Крещатик 21б, квартира 45</p>
+							</div>
+							<div class="profile-data">
+								<h4 class="profile__title">E-mail</h4>
+								<div class="profile__input">
+									<label for="profile-mail">
+										<img src="{% static 'dist/img/redact.png' %}" alt="redact-pic">
+									</label>
+									<input id="profile-mail" type="email" class="profile-data__info" value="mail@gamil.com" disabled>
+								</div>	
+							</div>
+						</div>
+						<div class="profile__container">
+							<h4 class="profile__title">Двухфакторная авторизация</h4>
+							<label for="profile-checkbox" class="profile__checkbox">
+								<input id="profile-checkbox" type="checkbox">
+								<span class="profile__checkbox-switcher"></span>
+							</label>
+						</div>
+						<div class="profile__container">
+							<h4 class="profile__title">Документы</h4>
+							<div class="profile__docs">
+								<div class="profile__doc profile__doc--default">
+									<label class="profile__doc-add">
+										<input type="file">		
+									</label>
+									<h4 class="profile__doc-title">Добавить документ</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+					<p class="s-profile__info">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus minima corrupti labore aliquid est pariatur nesciunt. Iste atque nemo ipsa, a, eos illum totam quasi suscipit beatae nulla ducimus sed.
+					</p>
+				</div>
+
+				<div data-content="application" class="tab-content">
+					<div class="application-container">
+						<div class="application">
+							<div class="application__info">
+								<p class="application__person">Антипенко Виталий Викторович</p>
+								<p class="application__goal">(витрати на розвито бізнесу)</p>
+								<p class="application__sum">Сумма кредита с процентами: <b>80 364 грн</b></p>
+								<p class="application__termin">Строк кредита: <b>11 мес 2 недели</b></p>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Сума внеску</h3>
+								<div class="application__block-sum">11.234</div>
+								<div class="application__block-termin">в месяц</div>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Состояние заявки</h3>
+								<div class="application__block-icon is-consider">
+									<i class="far fa-clock"></i>
+								</div>
+								<div class="application__block-info">На рассматрении</div>
+							</div>
+						</div>
+
+						<div class="application">
+							<div class="application__info">
+								<p class="application__person">Антипенко Виталий Викторович</p>
+								<p class="application__goal">(витрати на розвито бізнесу)</p>
+								<p class="application__sum">Сумма кредита с процентами: <b>80 364 грн</b></p>
+								<p class="application__termin">Строк кредита: <b>11 мес 2 недели</b></p>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Сума внеску</h3>
+								<div class="application__block-sum">11.234</div>
+								<div class="application__block-termin">в месяц</div>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Состояние заявки</h3>
+								<div class="application__block-icon is-approved">
+									<i class="far fa-check-circle"></i>
+								</div>
+								<div class="application__block-info">Принята</div>
+							</div>
+						</div>
+
+						<button class="application-add">
+							<span>+</span>
+							<span>Создать заявку</span>
+						</button>
+					</div>
+				</div>
+
+				<div data-content="condition" class="tab-content">
+					<div class="condition">
+						<h3 class="s-title">Состояние кредита</h3>
+
+						<div class="application">
+							<div class="application__info">
+								<p class="application__person">Антипенко Виталий Викторович</p>
+								<p class="application__goal">(витрати на розвито бізнесу)</p>
+								<p class="application__sum">№ договора: <b>21343456</b></p>
+								<p class="application__termin">Дата договора: <b> 23.02.17</b></p>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Сума внеску</h3>
+								<div class="application__block-sum application__block-sum--secondary">11.234</div>
+								<button class="b-btn-app">Оплатить</button>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Осталось оплатить</h3>
+								<div class="application__block-sum application__block-sum--secondary">69 300</div>
+								<div class="application__block-termin">до 21.11.19<i>(6 взносов)</i>
+								</div>		
+							</div>
+							<div class="application__block">
+								<button class="b-btn-app">Погасить кредит</button>
+							</div>
+						</div>
+
+						<div class="application">
+							<div class="application__info">
+								<p class="application__person">Антипенко Виталий Викторович</p>
+								<p class="application__goal">(витрати на розвито бізнесу)</p>
+								<p class="application__sum">№ договора: <b>21343456</b></p>
+								<p class="application__termin">Дата договора: <b> 23.02.17</b></p>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Сума внеску</h3>
+								<div class="application__block-sum application__block-sum--secondary">11.234</div>
+								<button class="b-btn-app" disabled="">Оплачено</button>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Осталось оплатить</h3>
+								<div class="application__block-sum application__block-sum--secondary">69 300</div>
+								<div class="application__block-termin">до 21.11.19<i>(6 взносов)</i>
+								</div>
+								
+							</div>
+							<div class="application__block">
+								<button class="b-btn-app">Погасить кредит</button>
+							</div>
+						</div>
+
+						<div class="application">
+							<div class="application__info">
+								<p class="application__person">Антипенко Виталий Викторович</p>
+								<p class="application__goal">(витрати на розвито бізнесу)</p>
+								<p class="application__sum">№ договора: <b>21343456</b></p>
+								<p class="application__termin">Дата договора: <b> 23.02.17</b></p>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Сума внеску</h3>
+								<div class="application__block-sum application__block-sum--secondary">11.234</div>
+								<button class="b-btn-app">Оплатить</button>
+							</div>
+							<div class="application__block">
+								<h3 class="application__block-title">Осталось оплатить</h3>
+								<div class="application__block-sum application__block-sum--secondary">69 300</div>
+								<div class="application__block-termin">до 21.11.19<i>(6 взносов)</i>
+								</div>
+								
+							</div>
+							<div class="application__block">
+								<button class="b-btn-app">Погасить кредит</button>
+							</div>
+						</div>
+
+						<button class="b-btn-unactive">Архив</button>
+					</div>
+
+					<p class="s-profile__info">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus minima corrupti labore aliquid est pariatur nesciunt. Iste atque nemo ipsa, a, eos illum totam quasi suscipit beatae nulla ducimus sed.
+					</p>
+				</div>
+
+				<div data-content="program" class="tab-content">
+					<div class="programs">
+						<div class="program">
+							<img src="{% static 'dist/img/program-img/program-img-1.jpg' %}" alt="program image" class="program__img">
+							<div class="program__content">
+								<h3 class="program__content-title">Программа лояльности для студентов</h3>
+								<p class="program__content-info">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis nam id quaerat voluptates!</p>		
+							</div>	
+							<a href="" class="program__apply">Зарегестрироваться</a>
+						</div>
+
+						<div class="program">
+							<img src="{% static 'dist/img/program-img/program-img-2.jpg' %}" alt="program image" class="program__img">
+							<div class="program__content">
+								<h3 class="program__content-title">Программа лояльности для студентов</h3>
+								<p class="program__content-info">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis nam id quaerat voluptates!</p>		
+							</div>	
+							<a href="" class="program__apply">Зарегестрироваться</a>
+						</div>
+
+						<div class="program">
+							<img src="{% static 'dist/img/program-img/program-img-3.jpg' %}" alt="program image" class="program__img">
+							<div class="program__content">
+								<h3 class="program__content-title">Программа лояльности для студентов</h3>
+								<p class="program__content-info">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis nam id quaerat voluptates!</p>		
+							</div>	
+							<a href="" class="program__apply">Зарегестрироваться</a>
+						</div>
+
+						<div class="program">
+							<img src="{% static 'dist/img/program-img/program-img-4.jpg' %}" alt="program image" class="program__img">
+							<div class="program__content">
+								<h3 class="program__content-title">Программа лояльности для студентов</h3>
+								<p class="program__content-info">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis nam id quaerat voluptates!</p>		
+							</div>	
+							<a href="" class="program__apply">Зарегестрироваться</a>
+						</div>
+					</div>
+					<p class="s-profile__info">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus minima corrupti labore aliquid est pariatur nesciunt. Iste atque nemo ipsa, a, eos illum totam quasi suscipit beatae nulla ducimus sed.
+					</p>
+				</div>
+
+				<div data-content="support" class="tab-content">
+					<div class="private-support">
+						<h3 class="s-title s-title--mid">{% trans 'Поддержка' %}</h3>
+						<p class="private-support__info">{% trans 'Опишите вашу проблему и мы постараемся вам помочь' %}</p>
+
+						<form action="{% url 'question_add' %}" enctype="multipart/form-data" method="POST" id="question_add" class="f-support">
+							<fieldset class="f-support__textarea">
+							{% csrf_token %}
+								{{ question_form.support_text }}
+								<button class="b-btn-app" type="submit">{% trans 'Отправить' %}</button>
+							</fieldset>
+							<fieldset class="f-support__docs">
+								<div class="profile__doc profile__doc--default">
+									<label class="profile__doc-add">
+										{{ question_form.file }}
+									</label>
+									<h4 class="profile__doc-title">{% trans 'Добавить документ' %}</h4>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+
+				<div data-content="message" class="tab-content {% if active and active == 'mess' %}is-showed{% endif %}">
+					<div class="support-message" style="display: none">
+						<h3 class="s-title">{% trans 'Поддержка' %}</h3>
+						<i class="fa fa-envelope"></i>
+						<p class="support-message__text">
+							{% trans 'Сообщение отправлено' %}. <br>
+							{% trans 'Ответ будет отправлен на Вашу почту в течении 3 рабочих дней' %}.
+						</p>
+
+						<p class="support-message__text-bottom">{% trans 'Спасибо, что выбрали' %}' <span>{% trans '"Экспресс Финанс"' %}</span></p>
+					</div>
+
+					<div class="messages">
+						<button data-btn="support" class="b-btn-app b-btn-app--sm support-btn">{% trans 'Написать в поддержку' %}</button>
+						<h3 class="s-title s-title--mid">{% trans 'Сообщения' %}</h3>
+						<div class="messages__container" id="messages_container">
+
+							<h4 class="messages__subject-title">{% trans 'Тема' %}</h4>
+							<h4 class="messages__date-title">Дата</h4>
+							{% for obj in questions %}
+								<div data-btn="chat{{ obj.id }}" class="message unreaded" id="message_new{{ foloop.counter }}">
+									<p class="message__text">{% trans 'Служба поддержки' %} | {{ obj.content }}</p>
+									<time class="message__date">
+									{% if '/ua/' in request.path %}
+										{% language 'uk' %}
+											{{ obj.updated_at.date }}
+										{% endlanguage %}
+									{% else %}
+										{{ obj.updated_at.date }}
+									{% endif %}
+									</time>
+								</div>
+							{% endfor %}
+						</div>
+
+						<div class="messages__nav">
+							<button class="messages__nav-btn active">1</button>
+							<button class="messages__nav-btn">2</button>
+							<button class="messages__nav-btn">3</button>
+						</div>
+
+					</div>
+				</div>
+				{% for obj in questions %}
+				<div data-content="chat{{ obj.id }}" id="chat{{ obj.id }}" class="tab-content">
+					<section class="chat">
+						<button data-btn="support" class="b-btn-app b-btn-app--sm support-btn">{% trans 'Написать в поддержку' %}</button>
+						<h3 class="s-title s-title--mid">{% trans 'Сообщения' %}</h3>
+						<div class="chat__header">
+							<h4 class="chat__from">{{ config.name }}</h4>
+							<time class="chat__date">
+							{% if '/ua/' in request.path %}
+								{% language 'uk' %}
+									{{ obj.updated_at.date }}
+								{% endlanguage %}
+							{% else %}
+								{{ obj.updated_at.date }}
+							{% endif %}
+							</time>
+						</div>
+						<main class="chat__body" id="chat_body{{ obj.id }}" >
+						<div class="chat__message chat__message--received">
+								<strong>
+									{% trans 'Служба поддержки' %}
+								</strong>
+								<p>
+									{{ obj.content }}
+								</p>
+								<time class="chat__message-date">
+								{% if '/ua/' in request.path %}
+									{% language 'uk' %}
+										{{ obj.created_at|date:"H:i" }}, {{ obj.created_at.date }}
+									{% endlanguage %}
+								{% else %}
+									{{ obj.created_at|date:"H:i" }}, {{ obj.created_at.date }}
+								{% endif %}
+								</time>
+						</div>
+						{% for comment in obj.comments.get_queryset %}
+							<div class="chat__message chat__message--{% if not comment.is_admin %}received{% else %}sended{% endif %}">
+								<p>
+									{{ comment.content }}
+								</p>
+								<time class="chat__message-date">
+								{% if '/ua/' in request.path %}
+									{% language 'uk' %}
+										{{ comment.created_at|date:"H:i" }}, {{ comment.created_at.date }}
+									{% endlanguage %}
+								{% else %}
+										{{ comment.created_at|date:"H:i" }}, {{ comment.created_at.date }}
+								{% endif %}
+								</time>
+							</div>
+						{% endfor %}
+						{% if obj.is_closed %}
+							<div class="chat__message chat__message--sended">
+									<p>
+										{{ obj.end_message.content }}
+									</p>
+									<time class="chat__message-date">
+									{% if '/ua/' in request.path %}
+										{% language 'uk' %}
+											{{ obj.end_message.created_at|date:"H:i" }}, {{ obj.end_message.created_at.date }}
+										{% endlanguage %}
+									{% else %}
+										{{ obj.end_message.created_at|date:"H:i" }}, {{ obj.end_message.created_at.date }}
+									{% endif %}
+									</time>
+							</div>
+						{% endif %}
+						</main>
+						{% if not obj.is_closed %}
+							<form action="{% url 'comment_add' %}" data-id="{{ obj.id }}" id="chat__send{{ obj.id }}" method="POST" class="chat__send">
+								{{ comment_form.content }}
+								{% csrf_token %}
+								<button type="submit" class="b-btn chat__send-btn"><i class="fab fa-telegram-plane"></i></button>
+							</form>
+						{% endif %}
+					</section>
+				</div>
+				{% endfor %}
+			</div>
+		</section>
+
+		<section class="s-more-information">
+			<div class="wrapper">
+				<p>{% trans 'Больше информации на полной версии сайта' %}</p>
+				<a href="#" class="b-btn-primary b-btn-primary--main">{% trans 'Перейти' %}</a>
+			</div>
+		</section>
+{% endblock %}
+
+{% block info %}{% endblock %}
+
+{% block extra %}
+	<div class="overlay">
+		<form data-form="1" action="#" class="b-main-form b-main-form--popup">
+			<fieldset class="b-main-form__content">
+				<div class="b-form-item">
+					<label class="b-form-item__label b-form-item__label--wide" for="credit-value-1">{% trans 'Сумма кредита' %}:
+					</label>
+
+					<input class="b-form-item__input b-form-item__input--first" type="text" id="credit-value-1">
+
+					<span>грн</span>
+
+					<div class="b-form-item__slider" id="credit-slider-1">
+						<div class="ui-slider-helper">
+							<a class='ui-slider-handle'>
+								<span class="icon icon--arrow icon--left"></span>
+								<span class="ui-slider-val">750 грн</span>
+								<span class="icon icon--arrow icon--right"></span>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="b-form-item">
+					<label class="b-form-item__label b-form-item__label--wide" for="termin-value-1">{% trans 'Срок займа' %}:</label>
+
+					<input class="b-form-item__input b-form-item__input--second" type="text" id="termin-value-1">
+					<span>{% trans 'дней' %}</span>
+
+					<div class="b-form-item__slider" id="termin-slider-1">
+						<div class="ui-slider-helper ui-slider-helper--sm">
+							<a class='ui-slider-handle ui-slider-handle--sm'>
+								<span class="icon icon--arrow icon--left"></span>
+								<span class="ui-slider-val">56 {% trans 'дней' %}</span>
+								<span class="icon icon--arrow icon--right"></span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset class="b-main-form__total">
+				<div class="b-main-form__total-content">
+					<p><span>Вы берете:</span><span id="credit-total-1">10000 грн</span></p>
+					<p><span>На срок:</span> <span id="termin-total-1">14 дней</span></p>
+					<p class="b-main-form__total-cost"><span>Платеж по кредиту:</span> <span>550 грн/нед.</span></p>
+				</div>
+
+				<button class="b-btn-primary b-btn-primary--main" type="submit">Оформить кредит</button>
+			</fieldset>
+
+			<span class="b-btn-close b-btn-close--bolder active"></span>
+		</form>
+
+		<form action="#" class="f-form" style="display: none">
+			<h2 class="f-form__title">Подтверждение заявки</h2>
+
+			<div class="f-form__content">
+				<p class="f-form__content-message f-form__content-message--big">На ваш телефон отправлено СМС с кодом. Введите ниже полученый код для подтверждения заявки</p>
+
+				<div class="b-input b-input--main">
+					<input type="tel" placeholder="Введите код из смс">
+					<span class="icon icon--padlock"></span>
+				</div>
+
+				<button class="b-btn-primary b-btn-primary--formed" type="submit">Подтвердить</button>
+			</div>
+
+			<div class="f-form__footer"></div>
+
+			<span id="cancel" title="Отмена заявки" class="b-btn-close b-btn-close--bolder"></span>
+		</form>
+	</div>
+{% endblock %}

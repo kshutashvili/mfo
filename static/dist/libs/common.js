@@ -2,6 +2,7 @@ window.onload = function() {
 
 	sliderFiller();
 	sliderInit();
+	writeComment();
 
 	$('a[href^="#"]').off().on("click", function (event) {
 		event.preventDefault();
@@ -590,6 +591,70 @@ function sliderFiller(){
 		}
 	})
 }
+
+
+function writeComment(){
+	$(".chat__send").on('submit', function(event){
+	event.preventDefault();
+    var more = $(this);
+    var id_quest = more.data('id');
+    var input = document.getElementById('chat__send' + id_quest).getElementsByClassName('chat__send-input')[0];
+   	var container = $('#chat_body' + more.data('id'));
+    $.ajax(more.attr('action'),{
+        'type':'POST',
+        'async':true,
+        'dataType':'html',
+        'data':{'content':input.value,
+        		'id_quest':id_quest,
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if (data != 'fail'){
+        		container_html = document.querySelector('#chat_body' + id_quest);
+        		container.append(data);
+        		input.value = '';
+        		container_html.scrollTop = container_html.scrollHeight;
+        	}
+        },
+        'error':function(xhr,status,error){
+            //console.log(status);
+        }
+    });
+    });
+}
+
+
+/*function wrtieQuestion(){
+	$("#question_add").on('submit', function(event){
+	event.preventDefault();
+    var more = $(this);
+    var input = $('#question_input');
+    $.ajax(more.attr('action'),{
+        'type':'POST',
+        'async':true,
+        'dataType':'json',
+        'data':{'support_text':input.val(),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if (data['status'] != '500'){
+        		var container_2 = $('.tab-content');
+        		var container_1 = $('#message_new1');
+        		container_1.before(data['container_1']);
+        		container_2.before(data['container_2']);
+        		input.val('');
+        		console.log('success');
+        	}
+        	else{
+        		console.log(0);
+        	}
+        },
+        'error':function(xhr,status,error){
+            console.log(status);
+        }
+    });
+    });
+}*/
 
 
 function sliderInit(){

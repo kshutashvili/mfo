@@ -138,12 +138,9 @@
 
 			<div class="s-advanteges-message">
 				<div class="s-advanteges-message__image-box">
-					<svg class="s-advanteges-message__svg-1"><use href="{% static 'sprite.svg' %}#svg-money-bag">
-					</svg>
-					<svg class="s-advanteges-message__svg-2"><use href="{% static 'sprite.svg' %}#svg-money-bag">
-					</svg>
-					<svg class="s-advanteges-message__svg-3"><use href="{% static 'sprite.svg' %}#svg-money-bag">
-					</svg>
+					<img class="s-advanteges-message__svg-1" src="{{ main.discount.icon.url }}">
+					<img class="s-advanteges-message__svg-2" src="{{ main.discount.icon.url }}">
+					<img class="s-advanteges-message__svg-3" src="{{ main.discount.icon.url }}">
 				</div>
 
 				<div class="s-advanteges-message__content">
@@ -176,7 +173,7 @@
 							</h4>
 							<p class="s-packages-content__item-info">
 								<span>{% trans "Размер кредита" %}:</span>
-								<b>{% trans "от" %} {{ obj.sum_min|intcomma }} {% trans "до" %} {{ obj.sum_max|intcomma }} грн</b>	
+								<b>{% trans "от" %} {{ obj.get_sum_min|intcomma }} {% trans "до" %} {{ obj.get_sum_max|intcomma }} грн</b>	
 							</p>
 							<p class="s-packages-content__item-info">
 								{% trans "Параметр кредита" %}:

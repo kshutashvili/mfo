@@ -16,13 +16,11 @@ from efin.settings import TWILIO_AUTH_TOKEN as auth_token
 from efin.settings import AUTHY_API_KEY as auth_token
 
 from users.models import Profile
-from users.views import clear_phone
 
 
 api = AuthyApiClient(auth_token)
 
 def sms(request, phone):
-    phone = clear_phone(phone)
     request.session['phone'] = phone
     res = api.phones.verification_start(phone, '+380', via='sms')
     return HttpResponseRedirect(reverse('verify'))
@@ -40,7 +38,7 @@ def verify(request):
             if verification.ok():
                 user.user.is_active = True
                 user.user.save()
-                return HttpResponseRedirect(reverse('main'))
+                return HttpResponseRedirect(reverse('login'))
             else:
                 return render(request, 'enter-sms.html', {'status_message':_('Неправильный код')})
     elif request.method == 'GET':

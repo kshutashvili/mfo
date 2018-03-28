@@ -7,24 +7,26 @@
 {% block content %}
 
 	<div class="wrapper wrapper-mob"> 
-		<form action="#" class="f-form">
+		<form action="{% url 'login' %}" method="post" class="f-form">
 			<h2 class="f-form__title">Вход в личный кабинет</h2>
 			<div class="f-form__content">
 				<p class="f-form__content-message">В своем личном кабинете Вы сможете настроить определенные функции, сохранить свои личные данные и смотреть свою кредитную историю. </p>
-
+				{% if status_message %}
+					<p>{{ status_message }}</p>
+				{% endif %}
 				<div class="b-input b-input--main">
-					<input placeholder="+38 (0__) ___ __ __" type="tel">
+				{{ form.username }}
 					<span class="icon icon--phone-call"></span>
 				</div>
 
 				<div class="b-input b-input--main">
-					<input type="password" placeholder="Введите пароль">
+					{{ form.password }}
 					<span class="icon icon--padlock"></span>
 				</div>
-
+				{% csrf_token %}
 				<div class="b-remind">
 					<div class="b-checkbox">
-						<input id="checkbox" type="checkbox"><label for="checkbox">Запомнить меня</label>
+						<input id="checkbox" name="remember_me" type="checkbox"><label for="checkbox">Запомнить меня</label>
 					</div>
 					<a href="#" class="b-remind-link">Забыли пароль?</a>
 				</div>

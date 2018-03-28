@@ -42,6 +42,12 @@ class CreditRate(models.Model):
     def __str__(self):
         return self.name
 
+    def get_sum_min(self):
+      return self.sum_min if not self.is_insurance else int(self.sum_min / 1.25)
+
+    def get_sum_max(self):
+      return self.sum_max if not self.is_insurance else int(self.sum_max / 1.25)
+
     def get_term_min_days(self):
         return self.term_min * 7
 

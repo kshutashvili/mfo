@@ -16,11 +16,15 @@ from django.http import Http404
 from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
                            MainPageStatic, IndexPageStatic, StaticPageDefault
 from credit.models import CreditRate, CreditRateUp
-from communication.models import Response
+from communication.models import Response, QuestionComment, UserQuestion,\
+                                 QuestionConfig
+from communication.forms import WriteCommentForm, WriteQuestionForm
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
 from content.helpers import get_city_name
 from bids.models import Bid
+from users.forms import RegisterNumberForm
+from users.models import Profile
 
 
 def pages(request, page_url):
@@ -199,6 +203,9 @@ class CallbackView(TemplateView):
 
         city = get_city_name(self.request)
         context['city'] = city or "Другой город"
+        context['form'] = RegisterNumberForm()
+        if kwargs.get('status_message'):
+            context['status_message'] = kwargs.get('status_message')
 
         return context
 
@@ -250,3 +257,41 @@ def request_callback(request):
 
 class CallbackSuccessView(TemplateView):
     template_name = "form-success.html"
+
+
+def comment_add(request):
+    if request.method == 'POST':
+        content = {'content':request.POST.get('content')}
+        comment_form = WriteCommentForm(content)
+        if comment_form.is_valid():
+            question = UserQuestion.objects.filter(id=request.POST.get('id_quest')).first()
+            comment = QuestionComment(content=comment_form.cleaned_data.get('content'))
+            comment.save()
+            question.comments.add(comment)
+            question.save()
+            result = render(request, 'ajax_generate/comment_generate.html', {'comment':comment})
+            return HttpResponse(result)
+        else:
+            result = 'fail'
+            return HttpResponse(result)
+    else:
+        result = 'fail'
+        return HttpResponse(result)
+
+
+def question_add(request):
+    if request.method == 'POST':
+        question_form = WriteQuestionForm(request.POST, request.FILES)
+        if question_form.is_valid():
+            user = Profile.objects.filter(user=request.user).first()
+            content = question_form.cleaned_data.get('support_text')
+            file = question_form.cleaned_data.get('file')
+            question = UserQuestion(user=user, content=content, file=file)
+            question.save()
+            url = reverse('profile', kwargs={'active':'mess'})
+            return HttpResponseRedirect(url)
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
+

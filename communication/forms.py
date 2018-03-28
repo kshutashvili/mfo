@@ -16,16 +16,16 @@ class SendEmailForm(forms.Form):
                                                           'name':'email'}))
     message = forms.CharField(widget=forms.Textarea(attrs={'class':'f-contact-textarea',
                                                            'name':'message',
-                                                           'placeholder':'Ваше сообщение...'}))
+                                                           'placeholder':_('Ваше сообщение...')}))
 
 
 class SendResumeForm(forms.Form):
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'f-form__input f-form__input--mt',
-                                                         'name':'first_name',
-                                                         'placeholder':_('Имя')}))
+                                                               'name':'first_name',
+                                                               'placeholder':_('Имя')}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'f-form__input',
-                                                         'name':'last_name',
-                                                         'placeholder':_('Фамилия')}))
+                                                              'name':'last_name',
+                                                              'placeholder':_('Фамилия')}))
     city = forms.CharField(widget=forms.TextInput(attrs={'class':'f-form__input',
                                                          'name':'city'}))
     vacancy = forms.CharField(widget=forms.TextInput(attrs={'class':'f-form__input',
@@ -48,3 +48,21 @@ class SendResumeForm(forms.Form):
             self.add_error('phone', _('Неправильный формат телефона'))
 
         return cleaned_data
+
+
+class WriteCommentForm(forms.Form):
+    content = forms.CharField(widget=forms.TextInput(attrs={'class':'chat__send-input',
+                                                            'placeholder':_('Ваше сообщение...'),
+                                                            'name':'content'}))
+
+
+class WriteQuestionForm(forms.Form):
+    support_text = forms.CharField(widget=forms.Textarea(attrs={'class':'chat__send-input',
+                                                                'cols':'30',
+                                                                'rows':'10',
+                                                                'id':'question_input',
+                                                                'placeholder':_('Ваше сообщение...'),
+                                                                'name':'support-text'}))
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'name':'file'}),
+                           required=False)
+

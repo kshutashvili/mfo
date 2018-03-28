@@ -320,8 +320,12 @@ class SecurityItem(models.Model):
 class DiscountStatic(SingletonModel):
     title = RichTextField(_('Заголовок'))
     image = models.ImageField(_('Картинка заднего фона'),
-                              upload_to='discount')
+                              upload_to='discount',
+                              null=True)
     text = RichTextField(_('Текст'))
+    icon = models.FileField(_('Иконки'),
+                             upload_to='discount_icons',
+                             null=True)
     link = models.CharField(_('URL-адрес'),
                             max_length=255,
                             help_text=_("Используйте ссылку вида /#html_id "

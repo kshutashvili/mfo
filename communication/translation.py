@@ -44,3 +44,9 @@ class SuccessFormStaticTranslationOptions(TranslationOptions):
     fields = ('title', 'text', 'extra_text')
     required_languages = ('ua', 'ru')
 
+
+@register(models.QuestionConfig)
+class QuestionConfigTranslationOptions(TranslationOptions):
+    fields = ('name', 'message')
+    required_languages = ('ua', 'ru')
+

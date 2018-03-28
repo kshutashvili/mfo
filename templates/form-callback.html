@@ -1,68 +1,14 @@
+{% extends 'base.html' %}
+
 {% load static %}
 
 {% load custom_filters %}
 
 {% load solo_tags %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Callback</title>
-	<link rel="stylesheet" href="{% static 'dist/css/styles.css' %}">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-	<header class="s-header">
-		<div class="wrapper">
-			<button class="mobile-menu">
-				<div class="mobile-menu__sandwich">
-					<span class="mobile-menu__topper"></span>
-					<span class="mobile-menu__middle"></span>
-					<span class="mobile-menu__footer"></span>
-				</div>
-				<span>Меню</span>
-			</button>
+{% block title %}Callback{% endblock %}
 
-			<a href="{% url 'main' %}" class="b-logo">
-				<svg><use xlink:href="{% static 'sprite.svg' %}#svg-logo">
-				</svg>
-			</a>
-
-			<div class="s-header__phone">
-			{% if hot_line_phone|is_phone_active %}
-				<span>Телефон горячей линии</span>
-				<a href="tel:+{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }}</a>
-			{% endif %}
-			</div>
-			
-			<div class="mobile-icons">
-				<a href="#" class="mobile-link">
-					<i class="fas fa-phone"></i>
-				</a>
-
-				<a href="private-profile.html" class="mobile-link">
-					<i class="fas fa-sign-in-alt"></i>
-				</a>
-			</div>
-
-			<div class="b-nav">
-				{% get_solo 'content.MenuHeaderBlock' as menu_header %}
-				{% for obj in menu_header.items.get_queryset %}
-					<a href="{{ obj.link }}" class="b-nav__link">{{ obj.name }}</a>
-				{% endfor %}
-			</div>
-
-			<div class="s-header__lang">
-				<button class="b-btn b-btn--lang">Рус</button>
-				<button class="b-btn b-btn--lang">Укр</button>
-			</div>
-
-			<a href="private-profile.html" class="b-btn-login">Мой кабинет <span class="icon icon--login"></span></a>
-		</div>
-	</header>
-
-
+{% block content %}
 	<div class="wrapper wrapper-mob">
 		<div action="#" class="b-form-group">
 			<form action="{% url 'request_callback' %}" class="f-callback-left" method="POST">
@@ -98,8 +44,11 @@
 					<h2 class="f-callback__info-title">Получить решение онлайн</h2>
 					<p class="f-callback__info-text">Заказать звонок менеджера бесплатно без регистрации и смс и тому подобный сопроводительный текст для пользователей до 20:00, после чего форма будет не доступна </p>
 				</div>
+				{% if status_message %}
+					{{ status_message }}
+				{% endif %}
 				<div class="b-input b-input--secondary">
-					<input name="phone" placeholder="+38 (0__) ___ __ __" type="tel">
+					{{ form.phone }}
 					<span class="icon icon--phone-call"></span>
 				</div>
 
@@ -109,11 +58,8 @@
 			</form>
 		</div>
 	</div>
+{% endblock %}
 
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<script src="{% static 'dist/libs/slick.js' %}"></script>
-	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-	<script src="{% static 'dist/libs/common.js' %}"></script>
-</body>
-</html>
+{% block info %}{% endblock %}
+
+{% block footer %}{% endblock %}

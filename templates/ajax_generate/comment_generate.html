@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="chat__message chat__message--{% if not comment.is_admin %}received{% else %}sended{% endif %}">
+	<p>
+		{{ comment.content }}
+	</p>
+	<time class="chat__message-date">
+	{% if '/ua/' in request.path %}
+		{% language 'uk' %}
+			{{ comment.created_at|date:"H:i" }}, {{ comment.created_at.date }}
+		{% endlanguage %}
+	{% else %}
+		{{ comment.created_at|date:"H:i" }}, {{ comment.created_at.date }}
+	{% endif %}
+	</time>
+</div>

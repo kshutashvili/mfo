@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -19,9 +21,39 @@ class SetPasswordForm(forms.Form):
             self.add_error('password', _('Введенные пароли не совпадают'))
 
         if not self.errors:
-            cleaned_data = {
-                'password': cleaned_data.get('password'),
-            }
+            cleaned_data = {'password': cleaned_data.get('password')}
 
         return cleaned_data
 
+
+class RegisterNumberForm(forms.Form):
+    phone = forms.CharField(widget=forms.TextInput(attrs={'placeholder':_('+38 (0__) ___ __ __'),
+                                                          'type':'tel',
+                                                          'name':'phone'}))
+    def clean(self):
+        cleaned_data = super(RegisterNumberForm, self).clean()
+
+        phone = cleaned_data.get('phone')
+        phone = phone.translate ({ord(c): "" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=_+"})
+        for i in range(0,100):
+            if len(phone) > 9:
+                phone = phone[1:]
+            else:
+                break
+
+        if re.match(r'\d{9}$', phone) == None:
+            self.add_error('phone', _('Неправильный телефон'))
+        
+        if not self.errors:
+            cleaned_data = {'phone':phone}
+        
+        return cleaned_data
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder':_('+38 (0__) ___ __ __'),
+                                                             'type':'tel',
+                                                             'name':'username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':_('Введите пароль'),
+                                                                 'type':'password',
+                                                                 'name':'password'}))
