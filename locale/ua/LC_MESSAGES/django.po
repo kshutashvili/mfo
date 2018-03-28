@@ -1418,20 +1418,16 @@ msgid "Скачать"
 msgstr "Завантажити"
 
 #: users/forms.py:21
-#, fuzzy
-#| msgid "Мгновенные кредиты онлайн"
 msgid "Введенные пароли не совпадают"
-msgstr "Кредити онлайн"
+msgstr "Введені паролі не співпадають"
 
 #: users/forms.py:30 users/forms.py:54
 msgid "+38 (0__) ___ __ __"
-msgstr ""
+msgstr "+38 (0__) ___ __ __"
 
 #: users/forms.py:45
-#, fuzzy
-#| msgid "Контактный телефон"
 msgid "Неправильный телефон"
-msgstr "Контактний телефон"
+msgstr "Неправильний телефон"
 
 #: users/forms.py:57
 #, fuzzy

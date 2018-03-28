@@ -107,9 +107,15 @@ def profile(request, active=None):
         comment_form = WriteCommentForm()
         question_form = WriteQuestionForm()
         user = Profile.objects.filter(user=request.user).first()
-        questions = UserQuestion.objects.filter(user=user).order_by('updated_at').reverse()
+        count = UserQuestion.objects.count()
+        pagination = int(count / 8)
+        if count % 8 != 0:
+            pagination += 1
+        pagination = [0 for x in range(0, pagination)]
+        questions = UserQuestion.objects.filter(user=user).order_by('updated_at').reverse()[:8]
         return render(request, 'private-profile.html', {'questions':questions,
                                                         'active':active,
                                                         'question_form':question_form,
+                                                        'pagination':pagination,
                                                         'comment_form':comment_form})
 

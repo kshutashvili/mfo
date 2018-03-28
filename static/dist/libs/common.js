@@ -3,6 +3,7 @@ window.onload = function() {
 	sliderFiller();
 	sliderInit();
 	writeComment();
+	questionsPaginate();
 
 	$('a[href^="#"]').off().on("click", function (event) {
 		event.preventDefault();
@@ -614,6 +615,38 @@ function writeComment(){
         		container.append(data);
         		input.value = '';
         		container_html.scrollTop = container_html.scrollHeight;
+        	}
+        },
+        'error':function(xhr,status,error){
+            //console.log(status);
+        }
+    });
+    });
+}
+
+
+function questionsPaginate(){
+	$(".messages__nav-btn").on('click', function(event){
+    var more = $(this);
+   	var container_chat = $('#chat_container');
+   	var container_quest = $('#quest_container');
+    $.ajax(more.data('url'),{
+        'type':'GET',
+        'async':true,
+        'dataType':'html',
+        'data':{'page':more.data('page'),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if (data != 'fail'){
+        		container_quest.html(data.split('ёёёёё')[0]);
+        		container_chat.html(data.split('ёёёёё')[1]);
+        		var page_btns = document.getElementsByClassName('messages__nav-btn');
+        		for(var i=0; i < page_btns.length; i++){
+        			page_btns[i].classList.remove('active');
+        		}
+        		page_btns[parseInt(more.data('page')) - 1].classList.add('active');
+				$('.message').on('click', tabs);
         	}
         },
         'error':function(xhr,status,error){

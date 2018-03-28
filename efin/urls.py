@@ -53,7 +53,7 @@ urlpatterns = i18n_patterns(
     path('password/', set_password, name='set_password'),
     path('my/', login_required(profile), name='profile'),
     path('my/<str:active>/', login_required(profile), name='profile'),
-    path('question_add/', login_required(content.question_add), name='question_add'),
+    path('my/<str:active>/<str:page>/', login_required(profile), name='profile'),
 
     path('pro-kompaniyu/', about.about, name='about'),
     path('about/contacts/', contacts.contacts, name='contacts'),
@@ -71,6 +71,8 @@ urlpatterns = i18n_patterns(
     path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
     path('ajax/credit_calculate/<int:rate_id>/<int:term>/<int:summ>/', content.credit_calculator, name='cred_calc'),
     path('ajax/comment_add/', content.comment_add, name='comment_add'),
+    path('question_add/', login_required(content.question_add), name='question_add'),
+    path('ajax/question_generate/', login_required(content.question_generate), name='question_generate'),
 
 )
 if settings.DEBUG:

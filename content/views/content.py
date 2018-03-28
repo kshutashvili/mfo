@@ -3,6 +3,7 @@ import os
 from wsgiref.util import FileWrapper
 
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.http import (HttpResponse, HttpResponseRedirect, JsonResponse,
                          HttpResponseBadRequest)
 from django.utils.translation import ugettext_lazy as _
@@ -295,3 +296,18 @@ def question_add(request):
     else:
         return HttpResponseBadRequest()
 
+
+def question_generate(request):
+    #try:
+    page = request.GET.get('page')
+    start = int(page) * 8 - 8
+    end = int(page) * 8
+    user = Profile.objects.filter(user=request.user).first()
+    questions = UserQuestion.objects.filter(user=user).order_by('updated_at').reverse()[start:end]
+    str1 = render_to_string('ajax_generate/quest_generate.html', {'questions':questions})
+    str2 = render_to_string('ajax_generate/chat_generate.html', {'questions':questions})
+    result = 'ёёёёё'.join([str1, str2])
+    return HttpResponse(result)
+    #except:
+    #    result = 'fail'
+    #    return HttpResponse(result)

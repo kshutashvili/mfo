@@ -1,0 +1,16 @@
+{% load i18n %}
+
+							{% for obj in questions %}
+								<div data-btn="chat{{ obj.id }}" class="message unreaded" id="message_new{{ forloop.counter }}">
+									<p class="message__text">{% trans 'Служба поддержки' %} | {{ obj.content }}</p>
+									<time class="message__date">
+									{% if '/ua/' in request.path %}
+										{% language 'uk' %}
+											{{ obj.updated_at.date }}
+										{% endlanguage %}
+									{% else %}
+										{{ obj.updated_at.date }}
+									{% endif %}
+									</time>
+								</div>
+							{% endfor %}

@@ -314,6 +314,7 @@
 
 							<h4 class="messages__subject-title">{% trans 'Тема' %}</h4>
 							<h4 class="messages__date-title">Дата</h4>
+							<div id="quest_container">
 							{% for obj in questions %}
 								<div data-btn="chat{{ obj.id }}" class="message unreaded" id="message_new{{ foloop.counter }}">
 									<p class="message__text">{% trans 'Служба поддержки' %} | {{ obj.content }}</p>
@@ -328,16 +329,18 @@
 									</time>
 								</div>
 							{% endfor %}
+							</div>
 						</div>
 
 						<div class="messages__nav">
-							<button class="messages__nav-btn active">1</button>
-							<button class="messages__nav-btn">2</button>
-							<button class="messages__nav-btn">3</button>
+						{% for obj in pagination %}
+							<button data-page="{{ forloop.counter }}" data-url="{% url 'question_generate' %}" class="messages__nav-btn {% if forloop.first %}active{% endif %}">{{ forloop.counter }}</button>
+						{% endfor %}
 						</div>
 
 					</div>
 				</div>
+				<div id="chat_container">
 				{% for obj in questions %}
 				<div data-content="chat{{ obj.id }}" id="chat{{ obj.id }}" class="tab-content">
 					<section class="chat">
@@ -416,6 +419,7 @@
 					</section>
 				</div>
 				{% endfor %}
+				</div>
 			</div>
 		</section>
 

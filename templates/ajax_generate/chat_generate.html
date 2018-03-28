@@ -1,0 +1,80 @@
+{% load i18n %}
+
+{% for obj in questions %}
+				<div data-content="chat{{ obj.id }}" id="chat{{ obj.id }}" class="tab-content">
+					<section class="chat">
+						<button data-btn="support" class="b-btn-app b-btn-app--sm support-btn">{% trans 'Написать в поддержку' %}</button>
+						<h3 class="s-title s-title--mid">{% trans 'Сообщения' %}</h3>
+						<div class="chat__header">
+							<h4 class="chat__from">{{ config.name }}</h4>
+							<time class="chat__date">
+							{% if '/ua/' in request.path %}
+								{% language 'uk' %}
+									{{ obj.updated_at.date }}
+								{% endlanguage %}
+							{% else %}
+								{{ obj.updated_at.date }}
+							{% endif %}
+							</time>
+						</div>
+						<main class="chat__body" id="chat_body{{ obj.id }}" >
+						<div class="chat__message chat__message--received">
+								<strong>
+									{% trans 'Служба поддержки' %}
+								</strong>
+								<p>
+									{{ obj.content }}
+								</p>
+								<time class="chat__message-date">
+								{% if '/ua/' in request.path %}
+									{% language 'uk' %}
+										{{ obj.created_at|date:"H:i" }}, {{ obj.created_at.date }}
+									{% endlanguage %}
+								{% else %}
+									{{ obj.created_at|date:"H:i" }}, {{ obj.created_at.date }}
+								{% endif %}
+								</time>
+						</div>
+						{% for comment in obj.comments.get_queryset %}
+							<div class="chat__message chat__message--{% if not comment.is_admin %}received{% else %}sended{% endif %}">
+								<p>
+									{{ comment.content }}
+								</p>
+								<time class="chat__message-date">
+								{% if '/ua/' in request.path %}
+									{% language 'uk' %}
+										{{ comment.created_at|date:"H:i" }}, {{ comment.created_at.date }}
+									{% endlanguage %}
+								{% else %}
+										{{ comment.created_at|date:"H:i" }}, {{ comment.created_at.date }}
+								{% endif %}
+								</time>
+							</div>
+						{% endfor %}
+						{% if obj.is_closed %}
+							<div class="chat__message chat__message--sended">
+									<p>
+										{{ obj.end_message.content }}
+									</p>
+									<time class="chat__message-date">
+									{% if '/ua/' in request.path %}
+										{% language 'uk' %}
+											{{ obj.end_message.created_at|date:"H:i" }}, {{ obj.end_message.created_at.date }}
+										{% endlanguage %}
+									{% else %}
+										{{ obj.end_message.created_at|date:"H:i" }}, {{ obj.end_message.created_at.date }}
+									{% endif %}
+									</time>
+							</div>
+						{% endif %}
+						</main>
+						{% if not obj.is_closed %}
+							<form action="{% url 'comment_add' %}" data-id="{{ obj.id }}" id="chat__send{{ obj.id }}" method="POST" class="chat__send">
+								{{ comment_form.content }}
+								{% csrf_token %}
+								<button type="submit" class="b-btn chat__send-btn"><i class="fab fa-telegram-plane"></i></button>
+							</form>
+						{% endif %}
+					</section>
+				</div>
+				{% endfor %}
