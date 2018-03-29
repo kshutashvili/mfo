@@ -34,13 +34,13 @@ class RegisterNumberForm(forms.Form):
         cleaned_data = super(RegisterNumberForm, self).clean()
 
         phone = cleaned_data.get('phone')
-        phone = phone.translate ({ord(c): "" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=_+"})
-        for i in range(0,100):
-            if len(phone) > 9:
-                phone = phone[1:]
-            else:
-                break
-
+        phone = phone.translate ({ord(c): "" for c in " !@#$%^&*()[]{};:,./<>?\|`~-=_+"})
+        if len(phone) == 12:
+            phone = phone[3:]
+        elif len(phone) == 11:
+            phone = phone[2:]
+        elif len(phone) == 10:
+            phone = phone[1:]
         if re.match(r'\d{9}$', phone) == None:
             self.add_error('phone', _('Неправильный телефон'))
         

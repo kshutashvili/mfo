@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% block title %}Form-success{% endblock %}
+
+{% block content %}
+	<form action="#" class="f-form">
+		<h2 class="f-form__title">{% trans 'Ошибка' %}</h2>
+		<div class="f-form__content f-form__content--stretch">
+			<p class="f-form__content-message f-form__content-message--big">
+				<img class="f-form__content-img" src="{% static 'dist/img/svgstore/icons/guarantee.svg' %}" alt="guarantee">
+				{% trans 'Неправильная или не действительная ссылка' %}
+			</p>
+			<div class="f-form__content-multiple">
+				<div class="f-form__content-multiple-item f-form__counter">
+					<div class="f-form__counter-info">{% trans 'Переход' %} :</div>
+					<div class="f-form__counter-heart">Через <span id="timer" >5</span> секунд</div>
+				</div>
+			</div>
+
+		</div>
+		
+		<div class="f-form__footer"></div>
+		<a href="{% url 'main' %}" data-url="{% url 'main' %}" class="b-btn-close"></a>
+	</form>
+{% endblock %}
+
+{% block info %}{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extrascrypts %}
+<script src="{% static 'redirect.js' %}" ></script>
+{% endblock %}

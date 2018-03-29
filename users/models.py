@@ -16,6 +16,8 @@ class Profile(models.Model):
                              max_length=16,
                              unique=True,
                              verbose_name=_('Номер телефона'))
+    two_authy = models.BooleanField(_('Двухфакторная аутентификация'),
+    								default=False)
     verify_code = models.CharField(_('Код подтверждения'),
     							   max_length=6,
     							   null=True,

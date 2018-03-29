@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.http import Http404 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 from users.models import Profile
 from users.forms import SetPasswordForm, RegisterNumberForm, LoginForm
@@ -104,6 +106,7 @@ def user_logout(request):
 
 def profile(request, active=None):
     if request.method == 'GET':
+        profile = Profile.objects.filter(user=request.user).first()
         comment_form = WriteCommentForm()
         question_form = WriteQuestionForm()
         user = Profile.objects.filter(user=request.user).first()
@@ -115,7 +118,50 @@ def profile(request, active=None):
         questions = UserQuestion.objects.filter(user=user).order_by('updated_at').reverse()[:8]
         return render(request, 'private-profile.html', {'questions':questions,
                                                         'active':active,
+                                                        'profile':profile,
                                                         'question_form':question_form,
                                                         'pagination':pagination,
                                                         'comment_form':comment_form})
 
+
+def alter_profile(request):
+    if request.method == 'POST':
+        field = request.POST.get('field_name')
+        if field == 'phone':
+            phone = {'phone':request.POST.get('field_value')}
+            number_form = RegisterNumberForm(phone)
+            if number_form.is_valid():
+                if number_form.cleaned_data.get('phone') != request.user.username:
+                    url = reverse('sms', kwargs={'phone':number_form.cleaned_data.get('phone')})
+                    result = {'url':url}
+                    return JsonResponse(result)
+                else:
+                    return JsonResponse({'phone':number_form.cleaned_data.get('phone')})
+
+            else:
+                result = {'status':'500',
+                          'status_message':_('Неправильный номер телефона')}
+                return JsonResponse(result)
+
+        elif field == 'email':
+            email = request.POST.get('field_value')
+            try:
+                validate_email(email)
+                request.session['email'] = email
+                url = reverse('change_email')
+                result = {'url':url}
+                return JsonResponse(result)
+
+            except ValidationError:
+                result = {'status':'500',
+                          'status_message':_('Неправильный электронный адрес')}
+                return JsonResponse(result)
+
+        elif field == 'authy':
+            profile = Profile.objects.filter(user=request.user).first()
+            profile.two_authy = True if profile.two_authy == False else False
+            profile.save()
+            return JsonResponse({'status':'200'})
+
+    else:
+        return HttpResponseBadRequest()

@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
@@ -26,7 +26,7 @@ from communication.views import contacts, about, blog, faq, resume,\
 from content.views import content
 from vacancy.views import job
 from users.views import register, set_password, user_login, user_logout,\
-                        profile
+                        profile, alter_profile
 
 
 urlpatterns = i18n_patterns(
@@ -54,6 +54,9 @@ urlpatterns = i18n_patterns(
     path('my/', login_required(profile), name='profile'),
     path('my/<str:active>/', login_required(profile), name='profile'),
     path('my/<str:active>/<str:page>/', login_required(profile), name='profile'),
+    path('change_email/', login_required(sms.change_email), name='change_email'),
+    re_path(r'^email_confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})',
+            sms.email_confirm, name='email_confirm'),
 
     path('pro-kompaniyu/', about.about, name='about'),
     path('about/contacts/', contacts.contacts, name='contacts'),
@@ -73,6 +76,7 @@ urlpatterns = i18n_patterns(
     path('ajax/comment_add/', content.comment_add, name='comment_add'),
     path('question_add/', login_required(content.question_add), name='question_add'),
     path('ajax/question_generate/', login_required(content.question_generate), name='question_generate'),
+    path('ajax/profile_alter/', login_required(alter_profile), name='alter_profile'),
 
 )
 if settings.DEBUG:

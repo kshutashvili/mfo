@@ -48,35 +48,46 @@
 								<h4 class="profile__title">Место рождения</h4>
 								<p class="profile-data__info">г.Киев</p>
 							</div>
+							<form action="{% url 'alter_profile' %}" class="profile_data" data-field='phone' method="post">
 							<div class="profile-data">
 								<h4 class="profile__title">Контактный телефон</h4>
-								<div class="profile__input">
-									<label for="profile-tel">
-										<img src="{% static 'dist/img/redact.png' %}" alt="redact-pic">
-									</label>
-									<input id="profile-tel" type="tel" value="065 99 99 456" disabled>
+			                        <span id="help_phone" class='help-block profile__title'></span>
+									<div class="profile__input">
+										<label for="profile-tel">
+										{% csrf_token %}
+											<img src="{% static 'dist/img/redact.png' %}" alt="redact-pic">
+										</label>
+										<input id="profile-tel" type="tel" value="{{ profile.phone }}" disabled>
+									</div>
 								</div>
-							</div>
+							</form>
 							<div class="profile-data">
 								<h4 class="profile__title">Адресс места проживания</h4>
 								<p class="profile-data__info">г.Киев, улица Крещатик 21б, квартира 45</p>
 							</div>
-							<div class="profile-data">
-								<h4 class="profile__title">E-mail</h4>
-								<div class="profile__input">
-									<label for="profile-mail">
-										<img src="{% static 'dist/img/redact.png' %}" alt="redact-pic">
-									</label>
-									<input id="profile-mail" type="email" class="profile-data__info" value="mail@gamil.com" disabled>
-								</div>	
-							</div>
+							<form action="{% url 'alter_profile' %}" class="profile_data" data-field="email" method="post">
+								<div class="profile-data">
+								{% csrf_token %}
+									<h4 class="profile__title">E-mail</h4>
+                        			<span id="help_email" class='help-block profile__title' ></span>
+									<div class="profile__input">
+										<label for="profile-mail">
+											<img src="{% static 'dist/img/redact.png' %}" alt="redact-pic">
+										</label>
+										<input id="profile-mail" type="email" class="profile-data__info" value="{{ request.user.email }}" disabled>
+									</div>	
+								</div>
+							</form>
 						</div>
 						<div class="profile__container">
 							<h4 class="profile__title">Двухфакторная авторизация</h4>
-							<label for="profile-checkbox" class="profile__checkbox">
-								<input id="profile-checkbox" type="checkbox">
-								<span class="profile__checkbox-switcher"></span>
-							</label>
+							<form action="{% url 'alter_profile' %}" class="profile_data" data-field="authy" method="post">
+							{% csrf_token %}
+								<label for="profile-checkbox" class="profile__checkbox">
+									<input id="profile-checkbox" {% if profile.two_authy %}checked{% endif %} type="checkbox">
+									<span class="profile__checkbox-switcher"></span>
+								</label>
+							</form>
 						</div>
 						<div class="profile__container">
 							<h4 class="profile__title">Документы</h4>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+<div>
+Если Вы действительно хотите изменить почтовый адрес,
+то перейдите по <a href="http://{{ site.domain }}{% url 'email_confirm' uidb64=uid token=token %}">ссылке</a>. 
+Если это письмо вы получили случайно, пожалуйста,
+проигнорируйте его.
+</div>
+</body>

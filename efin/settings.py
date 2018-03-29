@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'credit',
     'bids',
     'users',
+    'token_confirm',
     #3-rd
     'ckeditor',
     'solo',
@@ -147,13 +148,22 @@ LANGUAGES = (
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 
-# Email
-EMAIL_HOST_USER = 'robot@expressfinance.com.ua'
-EMAIL_HOST_PASSWORD = 'Qwerty+1'
-EMAIL_HOST = 'mail.expressfinance.com.ua'
+# Email от заказчиков
+# EMAIL_HOST_USER = 'robot@expressfinance.com.ua'
+# EMAIL_HOST_PASSWORD = 'Qwerty+1'
+# EMAIL_HOST = 'mail.expressfinance.com.ua'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = False
+# EMAIL_USE_SSL = True
+
+
+ADMIN_EMAIL = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True
+EMAIL_SSL = False
 
 
 # Static files (CSS, JavaScript, Images)

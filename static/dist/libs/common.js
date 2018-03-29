@@ -4,6 +4,7 @@ window.onload = function() {
 	sliderInit();
 	writeComment();
 	questionsPaginate();
+	profileAlter();
 
 	$('a[href^="#"]').off().on("click", function (event) {
 		event.preventDefault();
@@ -12,6 +13,21 @@ window.onload = function() {
 
 		$('body,html').stop(true).animate({scrollTop: top}, 1000);
 	});
+
+	/*#Minimal height*/
+	(function($) {
+		var slides = $('.b-response__info');
+		var maxH = 0;
+		for(var i = 0; i < slides.length; i++) {
+			if(slides.eq(i).height() > maxH) {
+				maxH = slides.eq(i).height();
+			}
+		}
+
+		slides.css({
+			'height': maxH
+		});
+	})($);
 
 	/*#Slick slider*/
 
@@ -256,6 +272,25 @@ window.onload = function() {
 		}
 	});
 
+	$(".file-upload input[type=file]").change(function(){
+		var filename = $(this).val().replace(/.*\\/, "");
+		var span = $('<span>');
+		var icon = $('<i>');
+		icon.addClass('far');
+		icon.addClass('fa-times-circle');
+		var div = $('<div>');
+		div.addClass('file-upload__item');
+		div.html(filename)
+		$(this).parent().before(div);
+		div.append(span);
+		span.append(icon);
+
+		span.on('click', function(e) {
+			$(this).parent().remove();
+		});
+	});
+
+
 	/*#Form popup at private profile*/
 
 	$('.application-add').on('click', function(e) {
@@ -391,6 +426,66 @@ window.onload = function() {
 	fixedHeader();
 	$( window ).resize(fixedHeader);
 }
+
+/*#Validation*/
+
+	$('[data-validate]').unbind().blur( function(e){
+		var valType = $(this).data('validate');
+		var val = $(this).val();
+		var parent = this.parentElement;
+
+		while(parent.tagName != "BODY") {
+			if(parent.tagName == "FORM") {
+				var form = parent;
+				break;
+			}else {
+				parent = parent.parentElement;
+			}
+		}
+
+		switch(valType)
+		{
+			case 'number':
+			var rvNumb = /^\d+$/;
+			if(val.length > 2 && val != ' ' && rvNumb.test(val))
+			{
+				$(this).removeClass('error').addClass('error-not');
+				$(this).next('.error-box')
+				.removeClass('active');
+			} else {
+				$(this).removeClass('error-not').addClass('error');
+				$(this).next('.error-box')
+				.addClass('active');
+			}
+			break; 
+		}
+
+		if($('[data-validate]').hasClass('error')) {
+			form.classList.add('error-form');
+		}else {
+			form.classList.remove('error-form');
+		}
+	});
+
+	$('.validateForm').on('submit', function(e) {
+		e.preventDefault();
+		location.href = $(this).data('link');
+
+		if(!$(this).hasClass('error-form')) {
+
+			$.ajax({
+				url: $(this).attr('action'),
+				type: 'post',
+				data: $(this).serialize(),
+
+				success: function(data){
+					/*#Do something with data*/
+				}
+			}); 
+		};
+	});
+
+
 
 function initMap() {
 	if (document.getElementById('map') == null) return;
@@ -654,6 +749,64 @@ function questionsPaginate(){
         }
     });
     });
+}
+
+
+function profileAlter(){
+	$('.profile_data').on('change', function (event){
+	var more = $(this);
+	var field = more.data('field');
+
+	if(field == 'phone'){
+		var value = $('#profile-tel').val();
+	}
+	else if(field == 'email'){
+		var value = $('#profile-mail').val();
+	}
+	else if(field == 'authy'){
+		var value = $('#profile-checkbox').val();
+	}
+    $.ajax(more.attr('action'),{
+        'type':'POST',
+        'async':true,
+        'dataType':'json',
+        'data':{'field_name':field,
+        		'field_value':value,
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if(data['url']){
+        		window.location.replace(data['url']);
+        	}
+        	else{        		
+        		if (data['status'] == '500'){
+        			if(field == 'phone'){
+        				var container = document.getElementById('help_phone');
+        				container.innerHTML = data['status_message'];
+        			}
+        			else if(field == 'email'){
+        				var container = document.getElementById('help_email');
+        				container.innerHTML = data['status_message'];
+        			}
+        		}
+        		else{
+        			if(field == 'phone'){
+        				var container = document.getElementById('help_phone');
+        				$('#profile-tel').val(data['phone']);
+        				container.innerHTML = '';
+        			}
+        			else if(field == 'email'){
+        				var container = document.getElementById('help_email');
+        				container.innerHTML = '';
+        			}
+        		}
+        	}
+        },
+        'error':function(xhr,status,error){
+            //console.log(status);
+        }
+    });
+});
 }
 
 
