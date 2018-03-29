@@ -18,7 +18,7 @@ from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
                            MainPageStatic, IndexPageStatic, StaticPageDefault
 from credit.models import CreditRate, CreditRateUp
 from communication.models import Response, QuestionComment, UserQuestion,\
-                                 QuestionConfig
+                                 QuestionConfig, CallbackSuccessForm
 from communication.forms import WriteCommentForm, WriteQuestionForm
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
@@ -252,7 +252,10 @@ def request_callback(request):
                 contact_phone=request.POST.get("contact_phone")
             )
             new_bid.save()
-        return HttpResponseRedirect(redirect_to=reverse('callback_success'))
+        callback_success = CallbackSuccessForm.get_solo()
+        url = reverse('success', kwargs={'id_mess':callback_success.success.id,
+                                         'redirect_url':'main'})
+        return HttpResponseRedirect(url)
     return HttpResponseBadRequest()
 
 
@@ -298,16 +301,16 @@ def question_add(request):
 
 
 def question_generate(request):
-    #try:
-    page = request.GET.get('page')
-    start = int(page) * 8 - 8
-    end = int(page) * 8
-    user = Profile.objects.filter(user=request.user).first()
-    questions = UserQuestion.objects.filter(user=user).order_by('updated_at').reverse()[start:end]
-    str1 = render_to_string('ajax_generate/quest_generate.html', {'questions':questions})
-    str2 = render_to_string('ajax_generate/chat_generate.html', {'questions':questions})
-    result = 'ёёёёё'.join([str1, str2])
-    return HttpResponse(result)
-    #except:
-    #    result = 'fail'
-    #    return HttpResponse(result)
+    try:
+        page = request.GET.get('page')
+        start = int(page) * 8 - 8
+        end = int(page) * 8
+        user = Profile.objects.filter(user=request.user).first()
+        questions = UserQuestion.objects.filter(user=user).order_by('updated_at').reverse()[start:end]
+        str1 = render_to_string('ajax_generate/quest_generate.html', {'questions':questions})
+        str2 = render_to_string('ajax_generate/chat_generate.html', {'questions':questions})
+        result = 'ёёёёё'.join([str1, str2])
+        return HttpResponse(result)
+    except:
+        result = 'fail'
+        return HttpResponse(result)

@@ -108,3 +108,7 @@ class QuestionConfigAdmin(admin.ModelAdmin):
     list_editable = ('message', 'name')
     exclude = ('name', 'message')
 
+
+@admin.register(models.CallbackSuccessForm)
+class CallbackSuccessFormAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)

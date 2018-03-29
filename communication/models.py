@@ -381,3 +381,16 @@ class UserQuestion(models.Model):
             self.end_message.end.clear()
             self.end_message.delete()
 
+
+class CallbackSuccessForm(SingletonModel):
+    success = models.ForeignKey('SuccessFormStatic',
+                                verbose_name=_('Форма успешного заказа'),
+                                on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('Форма')
+        verbose_name_plural =_('Форма после успешного заказа звонка')
+
+    def __str__(self):
+        return self.success.title
+

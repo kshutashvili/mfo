@@ -6,7 +6,7 @@ from users.models import Profile
 
 class ProfileInline(admin.StackedInline):
 	model = Profile
-	exclude = ('verify_code',)
+	exclude = ('verify_code', 'two_authy')
 
 
 class UserAdmin(auth_admin.UserAdmin):
