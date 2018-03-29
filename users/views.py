@@ -147,10 +147,13 @@ def alter_profile(request):
             email = request.POST.get('field_value')
             try:
                 validate_email(email)
-                request.session['email'] = email
-                url = reverse('change_email')
-                result = {'url':url}
-                return JsonResponse(result)
+                if email != request.user.email:
+                    request.session['email'] = email
+                    url = reverse('change_email')
+                    result = {'url':url}
+                    return JsonResponse(result)
+                else:
+                    return JsonResponse({})
 
             except ValidationError:
                 result = {'status':'500',
