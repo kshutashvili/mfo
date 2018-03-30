@@ -360,6 +360,10 @@ class UserQuestion(models.Model):
                                     related_name='end',
                                     blank=True,
                                     null=True)
+    # choices : 'read', '!read', 'force read'
+    is_read = models.CharField(_('Прочитан'),
+                               max_length=10,
+                               default='read')
 
     class Meta:
         verbose_name = _('Вопрос пользователя')
@@ -368,18 +372,6 @@ class UserQuestion(models.Model):
 
     def __str__(self):
         return ' | '.join([self.user.phone, self.content]) 
-
-    def save(self):
-        super(UserQuestion, self).save()
-        if self.is_closed and not self.end_message:
-            self.end_message = QuestionComment.objects.create()
-            self.end_message.end.add(self)
-            self.end_message.content = QuestionConfig.get_solo().message
-            self.end_message.is_admin = True
-            self.end_message.save()
-        elif self.end_message:
-            self.end_message.end.clear()
-            self.end_message.delete()
 
 
 class CallbackSuccessForm(SingletonModel):

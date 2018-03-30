@@ -91,7 +91,7 @@ class UserQuestionAdmin(admin.ModelAdmin):
     list_display = ('content', 'updated_at', 'created_at', 'is_closed')
     list_display_links = ('content', 'updated_at', 'created_at')
     list_editable = ('is_closed',)
-    exclude = ('end_message',)
+    exclude = ('end_message', 'is_read')
 
 
 @admin.register(models.QuestionComment)

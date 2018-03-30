@@ -5,6 +5,7 @@ window.onload = function() {
 	writeComment();
 	questionsPaginate();
 	profileAlter();
+	messageRead();
 
 	$('a[href^="#"]').off().on("click", function (event) {
 		event.preventDefault();
@@ -808,6 +809,44 @@ function profileAlter(){
     });
 });
 }
+
+
+function messageRead(){
+	$(".message.unreaded").on('click', function(event){
+    var more = $(this);
+    $.ajax(more.data('url'),{
+        'type':'POST',
+        'async':true,
+        'dataType':'json',
+        'data':{'id_quest':more.data('id'),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if (data['status'] != '500'){
+        		var numb = $('.message-numb');
+        		var count = parseInt(numb.data('count')) - 1;
+        		if(count == 0){
+        			numb.html('');
+        		}
+        		else{
+        			numb.html('+' + count);
+        		}
+        		numb.data('count', count);
+        		var text = $('#chat_text' + more.data('id'));
+        		var date = $('#chat_date' + more.data('id'));
+        		text.css('color', '#575757');
+        		date.css('color', '#575757');
+        		more.removeClass('unreaded');
+        		more.addClass('readed');
+        	}
+        },
+        'error':function(xhr,status,error){
+            //console.log(status);
+        }
+    });
+    });
+}
+
 
 
 /*function wrtieQuestion(){

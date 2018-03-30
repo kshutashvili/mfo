@@ -115,10 +115,16 @@ def profile(request, active=None):
         if count % 8 != 0:
             pagination += 1
         pagination = [0 for x in range(0, pagination)]
-        questions = UserQuestion.objects.filter(user=user).order_by('updated_at').reverse()[:8]
+        questions = UserQuestion.objects.filter(user=user).select_related().order_by('is_read', 'updated_at').reverse()
+        count_not_read_questions = 0
+        for obj in questions:
+            if not obj.is_read == 'read':
+                count_not_read_questions += 1
+        questions = questions[:8]
         return render(request, 'private-profile.html', {'questions':questions,
                                                         'active':active,
                                                         'profile':profile,
+                                                        'count_not_read_questions':count_not_read_questions,
                                                         'question_form':question_form,
                                                         'pagination':pagination,
                                                         'comment_form':comment_form})
@@ -127,6 +133,7 @@ def profile(request, active=None):
 def alter_profile(request):
     if request.method == 'POST':
         field = request.POST.get('field_name')
+
         if field == 'phone':
             phone = {'phone':request.POST.get('field_value')}
             number_form = RegisterNumberForm(phone)
@@ -168,3 +175,17 @@ def alter_profile(request):
 
     else:
         return HttpResponseBadRequest()
+
+
+def message_read(request):
+    if request.method == 'POST':
+        question = UserQuestion.objects.filter(id=request.POST.get('id_quest')).first()
+        # choices: 'read', '!read', 'force !read'
+        question.is_read = 'force read'
+        question.save()
+        result = {'status':'200'}
+        return JsonResponse(result)
+    else:
+        result = {'status':'500'}
+        return JsonResponse(result)
+

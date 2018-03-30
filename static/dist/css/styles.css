@@ -1815,6 +1815,8 @@ fieldset {
       .s-head__nav-btn.active, .s-head__nav-link.active {
         background: -o-linear-gradient(175deg, #f6a40f 0%, #fcc400 100%);
         background: linear-gradient(-85deg, #f6a40f 0%, #fcc400 100%); }
+        .s-head__nav-btn.active .message-numb, .s-head__nav-link.active .message-numb {
+          background: none; }
     .s-head__nav-more {
       display: none;
       margin-bottom: 4rem;
@@ -1870,6 +1872,13 @@ fieldset {
       transition: transform .3s, -webkit-transform .3s; }
     .s-head__more-btn:focus {
       outline: none; }
+
+.message-numb {
+  display: inline-block;
+  background: -o-linear-gradient(175deg, #f6a40f 0%, #fcc400 100%);
+  background: linear-gradient(-85deg, #f6a40f 0%, #fcc400 100%);
+  padding: .2rem .4rem;
+  border-radius: 5px; }
 
 .b-top-nav {
   padding: 5.5rem 0; }

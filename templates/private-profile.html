@@ -6,6 +6,8 @@
 
 {% load solo_tags %}
 
+{% load custom_filters %}
+
 {% block title %}Profile{% endblock %}
 
 {% block content %}
@@ -21,7 +23,7 @@
 					<button data-btn="application" class="s-head__nav-btn">Мои заявки</button>
 					<button data-btn="condition" class="s-head__nav-btn">Состояние кредита</button>
 					<button data-btn="profile" class="s-head__nav-btn {% if not active %}active{% endif %}">Профиль</button>
-					<button data-btn="message" class="s-head__nav-btn {% if active and active == 'mess' %}active{% endif %}">Сообщения</button>
+					<button data-btn="message" class="s-head__nav-btn {% if active and active == 'mess' %}active{% endif %}">Сообщения {% if count_not_read_questions != 0 %}<span data-count="{{ count_not_read_questions }}" class="message-numb">+{{ count_not_read_questions }}</span>{% endif %}</button>
 
 					<button class="s-head__more-btn">
 						<span class="icon icon--arrow"></span>
@@ -326,10 +328,11 @@
 							<h4 class="messages__subject-title">{% trans 'Тема' %}</h4>
 							<h4 class="messages__date-title">Дата</h4>
 							<div id="quest_container">
+							{% csrf_token %}
 							{% for obj in questions %}
-								<div data-btn="chat{{ obj.id }}" class="message unreaded" id="message_new{{ foloop.counter }}">
-									<p class="message__text">{% trans 'Служба поддержки' %} | {{ obj.content }}</p>
-									<time class="message__date">
+								<div data-btn="chat{{ obj.id }}" data-url="{% url 'message_read' %}" data-id="{{ obj.id }}" class="message {% if obj.is_read == '!read' %}un{% endif %}readed" id="message_new{{ foloop.counter }}">
+									<p class="message__text" id="chat_text{{ obj.id }}" {% if obj.is_read == '!read' %}style="color:#000000;"{% endif %}>{% trans 'Служба поддержки' %} | {{ obj.content }}</p>
+									<time class="message__date" id="chat_date{{ obj.id }}" {% if obj.is_read == '!read' %}style="color:#000000;"{% endif %}>
 									{% if '/ua/' in request.path %}
 										{% language 'uk' %}
 											{{ obj.updated_at.date }}

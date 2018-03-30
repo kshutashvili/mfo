@@ -26,7 +26,7 @@ from communication.views import contacts, about, blog, faq, resume,\
 from content.views import content
 from vacancy.views import job
 from users.views import register, set_password, user_login, user_logout,\
-                        profile, alter_profile
+                        profile, alter_profile, message_read
 
 
 urlpatterns = i18n_patterns(
@@ -77,6 +77,7 @@ urlpatterns = i18n_patterns(
     path('question_add/', login_required(content.question_add), name='question_add'),
     path('ajax/question_generate/', login_required(content.question_generate), name='question_generate'),
     path('ajax/profile_alter/', login_required(alter_profile), name='alter_profile'),
+    path('ajax/message_read/', login_required(message_read), name='message_read'),
 
 )
 if settings.DEBUG:

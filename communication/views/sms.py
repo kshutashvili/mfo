@@ -78,7 +78,6 @@ def change_email(request):
         token_db.save()
 
     uid = str(urlsafe_base64_encode(force_bytes(request.user.pk))).split("'")[1]
-    print(uid)
     data ={'site':site,
            'uid':uid,
            'token':token}
