@@ -1,24 +1,19 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-02 15:14+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-04-02 13:31+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: LANGUAGE\n"
+"Language: zxx\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Loco-Source-Locale: ru_RU\n"
+"X-Loco-Parser: loco_parse_po\n"
+"X-Generator: Loco https://localise.biz/"
 
 #: communication/forms.py:12
 msgid "ФИО"
@@ -28,17 +23,17 @@ msgstr "ФИО"
 msgid "E-mail"
 msgstr ""
 
-#: communication/forms.py:19 communication/forms.py:55
+#: communication/forms.py:19 communication/forms.py:55 
 #: communication/forms.py:64
 msgid "Ваше сообщение..."
 msgstr ""
 
-#: communication/forms.py:25 communication/models.py:250
+#: communication/forms.py:25 communication/models.py:250 
 #: templates/index.html:232 templates/main.html:242
 msgid "Имя"
 msgstr ""
 
-#: communication/forms.py:28 communication/models.py:252
+#: communication/forms.py:28 communication/models.py:252 
 #: templates/index.html:233 templates/main.html:243
 msgid "Фамилия"
 msgstr ""
@@ -51,18 +46,18 @@ msgstr ""
 msgid "Неправильный формат телефона"
 msgstr ""
 
-#: communication/models.py:15 communication/models.py:211 content/models.py:344
-#: content/models.py:443
+#: communication/models.py:15 communication/models.py:211 
+#: content/models.py:344 content/models.py:443
 msgid "Title страницы"
 msgstr ""
 
-#: communication/models.py:18 communication/models.py:214 content/models.py:347
-#: content/models.py:452
+#: communication/models.py:18 communication/models.py:214 
+#: content/models.py:347 content/models.py:452
 msgid "Meta title страницы"
 msgstr ""
 
-#: communication/models.py:21 communication/models.py:217 content/models.py:350
-#: content/models.py:461
+#: communication/models.py:21 communication/models.py:217 
+#: content/models.py:350 content/models.py:461
 msgid "Meta description страницы"
 msgstr ""
 
@@ -70,8 +65,8 @@ msgstr ""
 msgid "Телефоны"
 msgstr ""
 
-#: communication/models.py:26 communication/models.py:103
-#: communication/models.py:107 communication/models.py:264
+#: communication/models.py:26 communication/models.py:103 
+#: communication/models.py:107 communication/models.py:264 
 #: department/models.py:24 templates/contacts.html:56
 msgid "Электронная почта"
 msgstr ""
@@ -100,13 +95,13 @@ msgstr ""
 msgid "Форма при успешной отправке сообщения"
 msgstr ""
 
-#: communication/models.py:46 communication/models.py:47
-#: templates/contacts.html:44 templates/contacts.html:46
+#: communication/models.py:46 communication/models.py:47 
+#: templates/contacts.html:44 templates/contacts.html:46 
 #: templates/index.html:395 templates/main.html:405
 msgid "Контакты"
 msgstr ""
 
-#: communication/models.py:57 communication/models.py:61
+#: communication/models.py:57 communication/models.py:61 
 #: communication/models.py:69 communication/models.py:261 users/models.py:18
 msgid "Номер телефона"
 msgstr ""
@@ -155,15 +150,15 @@ msgstr ""
 msgid "Электронные почты"
 msgstr ""
 
-#: communication/models.py:115 communication/models.py:196
-#: communication/models.py:233 content/models.py:42 content/models.py:60
-#: content/models.py:75 content/models.py:97 content/models.py:127
+#: communication/models.py:115 communication/models.py:196 
+#: communication/models.py:233 content/models.py:42 content/models.py:60 
+#: content/models.py:75 content/models.py:97 content/models.py:127 
 #: content/models.py:253 content/models.py:329 content/models.py:359
 msgid "URL-адрес"
 msgstr ""
 
-#: communication/models.py:117 communication/models.py:198
-#: communication/models.py:235 content/models.py:255 content/models.py:331
+#: communication/models.py:117 communication/models.py:198 
+#: communication/models.py:235 content/models.py:255 content/models.py:331 
 #: content/models.py:361
 msgid ""
 "Используйте ссылку вида /#html_id для блока лэндинга. Остальные ссылки "
@@ -178,9 +173,9 @@ msgstr ""
 msgid "Социальные сети"
 msgstr ""
 
-#: communication/models.py:130 content/models.py:38 content/models.py:55
-#: content/models.py:184 content/models.py:197 content/models.py:228
-#: content/models.py:247 content/models.py:268 content/models.py:321
+#: communication/models.py:130 content/models.py:38 content/models.py:55 
+#: content/models.py:184 content/models.py:197 content/models.py:228 
+#: content/models.py:247 content/models.py:268 content/models.py:321 
 #: content/models.py:352 content/models.py:385 content/models.py:586
 msgid "Заголовок"
 msgstr ""
@@ -189,7 +184,7 @@ msgstr ""
 msgid "Текст статьи"
 msgstr ""
 
-#: communication/models.py:133 content/models.py:57 content/models.py:158
+#: communication/models.py:133 content/models.py:57 content/models.py:158 
 #: content/models.py:364 content/models.py:388 credit/models.py:13
 msgid "Картинка"
 msgstr ""
@@ -222,12 +217,12 @@ msgstr ""
 msgid "Название"
 msgstr ""
 
-#: communication/models.py:180 content/models.py:213 content/models.py:250
+#: communication/models.py:180 content/models.py:213 content/models.py:250 
 #: credit/models.py:79
 msgid "Иконка"
 msgstr ""
 
-#: communication/models.py:186 communication/models.py:242
+#: communication/models.py:186 communication/models.py:242 
 #: templates/spoiler-page.html:30 vacancy/models.py:16
 msgid "Категория"
 msgstr ""
@@ -280,7 +275,7 @@ msgstr ""
 msgid "Неправильный формат телефона: "
 msgstr ""
 
-#: communication/models.py:265 communication/models.py:269
+#: communication/models.py:265 communication/models.py:269 
 #: communication/models.py:270
 msgid "Резюме"
 msgstr ""
@@ -305,7 +300,7 @@ msgstr ""
 msgid "Формы успешно выполненного действия"
 msgstr ""
 
-#: communication/models.py:295 communication/models.py:299
+#: communication/models.py:295 communication/models.py:299 
 #: communication/models.py:383
 msgid "Форма"
 msgstr ""
@@ -454,9 +449,9 @@ msgstr ""
 msgid "Статические страницы со спойлерами"
 msgstr ""
 
-#: content/models.py:59 content/models.py:160 content/models.py:186
-#: content/models.py:212 content/models.py:249 content/models.py:310
-#: content/models.py:325 content/models.py:356 content/models.py:387
+#: content/models.py:59 content/models.py:160 content/models.py:186 
+#: content/models.py:212 content/models.py:249 content/models.py:310 
+#: content/models.py:325 content/models.py:356 content/models.py:387 
 #: content/models.py:588 content/models.py:599
 msgid "Текст"
 msgstr ""
@@ -495,9 +490,9 @@ msgstr ""
 msgid "Пункты"
 msgstr ""
 
-#: content/models.py:117 content/models.py:150 content/models.py:189
-#: content/models.py:204 content/models.py:235 content/models.py:280
-#: content/models.py:302 content/models.py:336 content/models.py:429
+#: content/models.py:117 content/models.py:150 content/models.py:189 
+#: content/models.py:204 content/models.py:235 content/models.py:280 
+#: content/models.py:302 content/models.py:336 content/models.py:429 
 #: content/models.py:604
 msgid "Блок"
 msgstr ""
@@ -882,7 +877,7 @@ msgstr ""
 msgid "Кредитный тариф"
 msgstr ""
 
-#: credit/models.py:59 credit/models.py:64 templates/index.html:187
+#: credit/models.py:59 credit/models.py:64 templates/index.html:187 
 #: templates/main.html:197
 msgid "Платеж"
 msgstr ""
@@ -927,13 +922,13 @@ msgstr ""
 msgid "Ukrainian"
 msgstr ""
 
-#: templates/about.html:26 templates/contacts.html:27
+#: templates/about.html:26 templates/contacts.html:27 
 #: templates/spoiler-page.html:15
 msgid "Больше информации"
 msgstr ""
 
-#: templates/about.html:42 templates/blog-item.html:19 templates/blog.html:22
-#: templates/contacts.html:42 templates/default.html:29 templates/faq.html:26
+#: templates/about.html:42 templates/blog-item.html:19 templates/blog.html:22 
+#: templates/contacts.html:42 templates/default.html:29 templates/faq.html:26 
 #: templates/job.html:16 templates/spoiler-page.html:29
 msgid "Главная"
 msgstr ""
@@ -942,24 +937,24 @@ msgstr ""
 msgid "О Нас"
 msgstr ""
 
-#: templates/about.html:68 templates/blog-item.html:40
-#: templates/contacts.html:115 templates/default.html:45 templates/faq.html:37
+#: templates/about.html:68 templates/blog-item.html:40 
+#: templates/contacts.html:115 templates/default.html:45 templates/faq.html:37 
 #: templates/main.html:108
 msgid "Оформить кредит"
 msgstr ""
 
-#: templates/ajax_generate/chat_generate.html:6
+#: templates/ajax_generate/chat_generate.html:6 
 #: templates/private-profile.html:324 templates/private-profile.html:361
 msgid "Написать в поддержку"
 msgstr ""
 
-#: templates/ajax_generate/chat_generate.html:7
+#: templates/ajax_generate/chat_generate.html:7 
 #: templates/private-profile.html:325 templates/private-profile.html:362
 msgid "Сообщения"
 msgstr ""
 
-#: templates/ajax_generate/chat_generate.html:23
-#: templates/ajax_generate/quest_generate.html:5
+#: templates/ajax_generate/chat_generate.html:23 
+#: templates/ajax_generate/quest_generate.html:5 
 #: templates/private-profile.html:334 templates/private-profile.html:378
 msgid "Служба поддержки"
 msgstr ""
@@ -1020,18 +1015,18 @@ msgstr ""
 msgid "Блог"
 msgstr ""
 
-#: templates/blog-item.html:38 templates/contacts.html:113
+#: templates/blog-item.html:38 templates/contacts.html:113 
 #: templates/default.html:43 templates/faq.html:35
 msgid "Всего"
 msgstr ""
 
-#: templates/blog-item.html:38 templates/contacts.html:113
+#: templates/blog-item.html:38 templates/contacts.html:113 
 #: templates/default.html:43 templates/faq.html:35
 msgid "в пару кликов"
 msgstr ""
 
-#: templates/blog-item.html:50 templates/blog.html:41
-#: templates/contacts.html:125 templates/default.html:55
+#: templates/blog-item.html:50 templates/blog.html:41 
+#: templates/contacts.html:125 templates/default.html:55 
 #: templates/index.html:427 templates/main.html:443
 msgid "Подробнее"
 msgstr ""
@@ -1064,7 +1059,7 @@ msgstr ""
 msgid "Почта успешно изменена"
 msgstr ""
 
-#: templates/email/changed.html:19 templates/email/link_invalid.html:19
+#: templates/email/changed.html:19 templates/email/link_invalid.html:19 
 #: templates/email/sended.html:19 templates/form-success.html:22
 msgid "Переход"
 msgstr ""
@@ -1134,6 +1129,8 @@ msgid ""
 "сопроводительный текст для пользователей до 20:00, после чего форма будет не "
 "доступна"
 msgstr ""
+"После заполнения формы и отправления заявки, в течении 30 минут с Вами "
+"свяжется наш менеджер."
 
 #: templates/form-callback.html:24
 msgid "Введите свое имя"
@@ -1195,18 +1192,18 @@ msgstr ""
 msgid "Выберите суму и срок необходимого Вам кредита в форме ниже"
 msgstr ""
 
-#: templates/index.html:25 templates/main.html:60
+#: templates/index.html:25 templates/main.html:60 
 #: templates/private-profile.html:455
 msgid "Сумма кредита"
 msgstr ""
 
-#: templates/index.html:43 templates/index.html:220 templates/main.html:79
+#: templates/index.html:43 templates/index.html:220 templates/main.html:79 
 #: templates/main.html:230 templates/private-profile.html:474
 msgid "Срок займа"
 msgstr ""
 
-#: templates/index.html:50 templates/index.html:57 templates/index.html:75
-#: templates/index.html:222 templates/main.html:232
+#: templates/index.html:50 templates/index.html:57 templates/index.html:75 
+#: templates/index.html:222 templates/main.html:232 
 #: templates/private-profile.html:477 templates/private-profile.html:483
 msgid "дней"
 msgstr ""
@@ -1277,12 +1274,12 @@ msgstr ""
 msgid "Размер кредита"
 msgstr ""
 
-#: templates/index.html:176 templates/index.html:180 templates/index.html:184
+#: templates/index.html:176 templates/index.html:180 templates/index.html:184 
 #: templates/main.html:186 templates/main.html:190
 msgid "от"
 msgstr ""
 
-#: templates/index.html:176 templates/index.html:180 templates/index.html:184
+#: templates/index.html:176 templates/index.html:180 templates/index.html:184 
 #: templates/main.html:186 templates/main.html:190
 msgid "до"
 msgstr ""
@@ -1291,12 +1288,12 @@ msgstr ""
 msgid "Параметр кредита"
 msgstr ""
 
-#: templates/index.html:180 templates/main.html:82 templates/main.html:88
+#: templates/index.html:180 templates/main.html:82 templates/main.html:88 
 #: templates/main.html:99 templates/main.html:105 templates/main.html:190
 msgid "месяцев"
 msgstr ""
 
-#: templates/index.html:180 templates/main.html:82 templates/main.html:88
+#: templates/index.html:180 templates/main.html:82 templates/main.html:88 
 #: templates/main.html:99 templates/main.html:105 templates/main.html:190
 msgid "недель"
 msgstr ""
@@ -1381,7 +1378,7 @@ msgstr ""
 msgid "Телефон не найден"
 msgstr ""
 
-#: templates/job.html:17 templates/job.html:20 vacancy/models.py:13
+#: templates/job.html:17 templates/job.html:20 vacancy/models.py:13 
 #: vacancy/models.py:31
 msgid "Вакансии"
 msgstr ""
