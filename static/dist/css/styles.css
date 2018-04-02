@@ -3880,9 +3880,7 @@ fieldset {
   padding: 8.5rem 0 1rem 0;
   background: -o-linear-gradient(150deg, rgba(245, 152, 9, 0.85) 0%, rgba(248, 174, 6, 0.85) 15%, rgba(251, 196, 3, 0.85) 100%), url("../img/grn.jpg") center no-repeat;
   background: linear-gradient(-60deg, rgba(245, 152, 9, 0.85) 0%, rgba(248, 174, 6, 0.85) 15%, rgba(251, 196, 3, 0.85) 100%), url("../img/grn.jpg") center no-repeat;
-  background-size: cover;
-  opacity: .3;
-  pointer-events: none; }
+  background-size: cover; }
   .f-callback-right .b-total-number {
     margin: 0 0 4.5rem 0;
     font-weight: bold;
@@ -3976,9 +3974,7 @@ fieldset {
     border-radius: 5px;
     background-color: #E4E4E4;
     font-size: 1.2rem;
-    font-weight: bold;
-    opacity: .3;
-    pointer-events: none; }
+    font-weight: bold; }
     .b-btn-login .icon {
       position: absolute;
       top: 50%;

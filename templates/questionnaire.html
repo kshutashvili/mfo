@@ -1,0 +1,869 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Questionnaire{% endblock %}
+
+{% block content %}
+		<section class="s-question">
+			<div class="wrapper">
+				<nav class="b-top-nav">
+					<a class="b-top-nav__item active">Главная</a>
+					<a href="#!" class="b-top-nav__item">Заявка на кредит</a>
+				</nav>
+
+
+				<h2 class="s-title s-title--mid">Заявка на видачу кредиту</h2>
+				
+				<form action="#" class="questionnaire">
+					<fieldset class="questionnaire__step">
+						<h3 class="questionnaire__step-title">Персональні (Ідентифікаційні) дані клієнта</h3>
+						<div class="questionnaire-progress">
+							<span class="questionnaire-progress__line step-1"></span>
+						</div>
+
+						<fieldset class="questionnaire__field">
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="surname">Прізвище</label>
+								<input id="surname" placeholder="Прізвище" class="questionnaire__input" type="text" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="name" class="questionnaire__label" for="">Ім'я</label>
+								<input id="name" placeholder="Ім'я" class="questionnaire__input" type="text" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="middle-name" class="questionnaire__label" for="">Побатькові</label>
+								<input id="middle-name" placeholder="Ім'я" class="questionnaire__input" type="text" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Дата народження</label>
+
+								<select class="b-select b-select--days">
+								</select>
+
+								<select class="b-select">
+									<option value="Січень">Січень</option>
+									<option value="Лютий">Лютий</option>
+									<option value="Березень">Березень</option>
+									<option value="Квітень">Квітень</option>
+									<option value="Травень">Травень</option>
+									<option value="Червень">Червень</option>
+									<option value="Липень">Липень</option>
+									<option value="Серпень">Серпень</option>
+									<option value="Вересень">Вересень</option>
+									<option value="Жовтень">Жовтень</option>
+									<option value="Листопад">Листопад</option>
+									<option value="Грудень">Грудень</option>
+								</select>
+
+								<select class="b-select b-select--years">
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Громадянство</label>
+								<div class="questionnaire__multiple">
+									<div class="b-checkbox">
+										<input value="off" name="switchCitizen" id="country" type="radio">
+										<label for="country">Україна</label>	
+									</div>
+									<div class="b-checkbox">
+										<input value="on" name="switchCitizen" id="another-country" type="radio" checked>
+										<label for="another-country">інше громадаянство</label>
+									</div>
+									<select id="citizen" class="b-select">
+										<option selected disabled hidden>Виберіть ваше громадянство</option>
+										<option value="Россия">Россия</option>
+										<option value="Беларусь">Беларусь</option>
+										<option value="Польша">Польша</option>
+										<option value="Молдавия">Молдавия</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="ind-code">ІПРПП</label>
+								<input class="questionnaire__input" id="ind-code" type="tel" placeholder="Ідентифікаційний код" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="contact-phone">Контактний телефон</label>
+								<span class="questionnaire__input-telholder">+380</span>
+								<input id="contact-phone" class="questionnaire__input questionnaire__input--phone" type="tel" placeholder="Введіть ваші дані" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="contact-mail">E-mail</label>
+								<input id="contact-mail" class="questionnaire__input" type="email" placeholder="Введіть ваші дані">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Адреса реєстрації</label>
+								<div class="questionnaire__multiple">
+									<div class="b-checkbox">
+										<input value="off" name="switchRegistration" id="country-1" type="radio"><label for="country-1">Україна</label>
+									</div>
+									<div class="b-checkbox">
+										<input value="on" name="switchRegistration" id="another-country-1" type="radio" checked>
+										<label for="another-country-1">інше громадаянство</label>
+									</div>
+									<select id="selectRegistration" class="b-select">
+										<option selected disabled hidden>Виберіть місце реєстрації</option>
+										<option value="Украина">Украина</option>
+										<option value="Россия">Россия</option>
+										<option value="Беларусь">Беларусь</option>
+										<option value="Польша">Польша</option>
+										<option value="Молдавия">Молдавия</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="region">Регіон</label>
+								<input id="region" class="questionnaire__input" placeholder="Введіть ваші дані" type="text" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="district">Район</label>
+								<input id="district" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="town">Місто(село, селище)</label>
+								<input id="town" class="questionnaire__input" placeholder="Введіть ваші дані" type="text" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="house">№ Будівлі(корпусу)</label>
+								<input id="house" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="flat">№ Квартири</label>
+								<input id="flat" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+
+							<div class="b-checkbox">
+								<input data-disable="field-adress" id="the-same" type="checkbox">
+								<label for="the-same">Адреса місця проживання(перебування) співпадає з місцем реєстрації</label>
+							</div>
+						</fieldset>
+
+						<fieldset data-field="field-adress" class="questionnaire__field">
+							<h4 class="questionnaire__caption">Адреса місця проживання (перебування у т.ч. тимчасового)</h4>
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="region-1">Регіон</label>
+								<input id="region-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="district-1">Район</label>
+								<input id="district-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="town-1">Місто(село, селище)</label>
+								<input id="town-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="house-1">№ Будівлі(корпусу)</label>
+								<input id="house-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+
+							<div>
+								<label class="questionnaire__label" for="flat-1">№ Квартири</label>
+								<input id="flat-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+						</fieldset>
+						
+						<fieldset class="questionnaire__field">
+							<h4 class="questionnaire__caption">Документ, що посвідчує особу</h4>
+
+							<div class="questionnaire__multiple questionnaire__multiple--flexs">
+								<div class="questionnaire__item ">
+									<label class="questionnaire__label" for="serial">Серія</label>
+									<input id="serial" type="text" class="questionnaire__input questionnaire__input--serial" maxlength="2" placeholder="XX">
+								</div>
+
+								<div class="questionnaire__item questionnaire__item">
+									<label class="questionnaire__label" for="serial-num">Номер</label>
+									<input class="questionnaire__input questionnaire__input--serial-numb" id="serial-num" type="tel" maxlength="8" placeholder="XXXXXXXX"> 
+								</div>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Дата видачі</label>
+
+								<select name="passport-day" class="b-select b-select--days">
+								</select>
+
+								<select name="passport-month" class="b-select">
+									<option value="Січень">Січень</option>
+									<option value="Лютий">Лютий</option>
+									<option value="Березень">Березень</option>
+									<option value="Квітень">Квітень</option>
+									<option value="Травень">Травень</option>
+									<option value="Червень">Червень</option>
+									<option value="Липень">Липень</option>
+									<option value="Серпень">Серпень</option>
+									<option value="Вересень">Вересень</option>
+									<option value="Жовтень">Жовтень</option>
+									<option value="Листопад">Листопад</option>
+									<option value="Грудень">Грудень</option>
+								</select>
+
+								<select name="passport-year" class="b-select b-select--years">
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="passport-region">Орган видачі</label>
+								<input id="passport-region" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+							</div>
+
+							<div class="b-checkbox">
+								<input id="personal-agree-1" type="checkbox">
+								<label for="personal-agree-1" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
+							</div>
+						</fieldset>
+						
+						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+					</fieldset>
+
+					<fieldset class="questionnaire__step">
+						<h3 class="questionnaire__step-title">Зайнятість</h3>
+						<div class="questionnaire-progress">
+							<span class="questionnaire-progress__line step-2"></span>
+						</div>
+
+						<fieldset class="questionnaire__field">
+							<label class="questionnaire__label">Зайнятість</label>
+
+							<select class="b-select b-select--stretch">
+								<option selected disabled hidden>Фізична особа - підприємець - зазначається з одночасним над...</option>
+								<option value="ФОП">ФОП</option>
+							</select>
+						</fieldset>
+
+						<fieldset class="questionnaire__field">
+							<h4 class="questionnaire__caption">Для осіб, які займаються незалежною професійною діяльністю або є особами-підприємцями</h4>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Дата державної реєстрації</label>
+
+								<select name="passport-day" class="b-select b-select--days">
+								</select>
+
+								<select name="passport-month" class="b-select">
+									<option value="Січень">Січень</option>
+									<option value="Лютий">Лютий</option>
+									<option value="Березень">Березень</option>
+									<option value="Квітень">Квітень</option>
+									<option value="Травень">Травень</option>
+									<option value="Червень">Червень</option>
+									<option value="Липень">Липень</option>
+									<option value="Серпень">Серпень</option>
+									<option value="Вересень">Вересень</option>
+									<option value="Жовтень">Жовтень</option>
+									<option value="Листопад">Листопад</option>
+									<option value="Грудень">Грудень</option>
+								</select>
+
+								<select name="passport-year" class="b-select b-select--years">
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="gover-reg-place" class="questionnaire__label">Орган держовної реєстрації</label>
+								<input id="gover-reg-place" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+							</div>
+
+							<div class="questionnaire__item">
+								<select class="b-select">
+									<option selected disabled hidden>Види діяльності</option>
+									<option value="ФОП">ФОП</option>
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="gover-doc" class="questionnaire__label">Документ, що підтверджує державну реєстрацію</label>
+								<input id="gover-doc" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="client-work" class="questionnaire__label">Місце роботи клієнта/посада/сфера діяльності</label>
+								<input id="client-work" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Джерело походження коштів</label>
+
+								<select class="b-select">
+									<option value="Від підприємницької діяльності">Від підприємницької діяльності</option>
+									<option value="Не від підприємницької діяльності">Не від підприємницької діяльності</option>
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Наявність майна</label>
+
+								<select class="b-select">
+									<option value="квартира">Квартира</option>
+									<option value="автомобіль">автомобіль</option>
+								</select>
+							</div>
+
+							<div class="b-checkbox">
+								<input id="personal-agree-2" type="checkbox">
+								<label for="personal-agree-2" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
+							</div>
+						</fieldset>
+
+						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+					</fieldset>
+					
+					<fieldset class="questionnaire__step">
+						<h3 class="questionnaire__step-title">Основні параметри кредиту</h3>
+						<div class="questionnaire-progress">
+							<span class="questionnaire-progress__line step-3"></span>
+						</div>
+
+						<fieldset class="questionnaire__field">
+							<div class="questionnaire__item">
+								<label for="quest-credit" class="questionnaire__label">Загальна сума з урахуванням відсотків</label>
+								<input id="quest-credit" type="tel" class="questionnaire__input" placeholder="Введіть ваші дані">
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="quest-prod" class="questionnaire__label">Продукт</label>
+								<input id="quest-prod" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Срок кредиту</label>
+
+								<select name="cred-term" class="b-select">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+								</select>
+
+								<span class="b-select-label">місяців</span>
+
+								<select name="cred-term" class="b-select">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select>
+
+								<span class="b-select-label">тижнів</span>
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="quest-sum" class="questionnaire__label">Сума внеску</label>
+								<input id="quest-sum" type="tel" class="questionnaire__input" placeholder="Введіть ваші дані">
+								<span class="questionnaire__item-notification">*сума внеску містить тіло та відсотки по кредиту</span>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Дата першого внеску</label>
+								<select class="b-select b-select--days">
+									<option selected disabled hidden>дд</option>
+								</select>
+
+								<select class="b-select">
+									<option selected disabled hidden>мм</option>
+									<option value="Січень">Січень</option>
+									<option value="Лютий">Лютий</option>
+									<option value="Березень">Березень</option>
+									<option value="Квітень">Квітень</option>
+									<option value="Травень">Травень</option>
+									<option value="Червень">Червень</option>
+									<option value="Липень">Липень</option>
+									<option value="Серпень">Серпень</option>
+									<option value="Вересень">Вересень</option>
+									<option value="Жовтень">Жовтень</option>
+									<option value="Листопад">Листопад</option>
+									<option value="Грудень">Грудень</option>
+								</select>
+
+								<select class="b-select">
+									<option value="2018">2018</option>
+									<option value="2019">2019</option>
+									<option value="2020">2020</option>
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Періодичність оплати</label>
+
+								<div class="questionnaire__multiple questionnaire__multiple--flexs">
+									<div class="b-checkbox questionnaire__multiple-item">
+										<input value="off" name="switchPeriod" id="everyMonth" type="radio">
+										<label for="everyMonth">Щомісяця</label>	
+									</div>
+									<div class="b-checkbox">
+										<input value="on" name="switchPeriod" id="everyWeek" type="radio" checked>
+										<label for="everyWeek" checked>Щотижня</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="b-checkbox">
+								<input id="personal-agree-3" type="checkbox">
+								<label for="personal-agree-3" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
+							</div>
+						</fieldset>
+
+						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+					</fieldset>
+
+					<fieldset class="questionnaire__step">
+						<h3 class="questionnaire__step-title">Доходи/витрати</h3>
+						<div class="questionnaire-progress">
+							<span class="questionnaire-progress__line step-4"></span>
+						</div>
+
+						<fieldset class="questionnaire__field">
+							<h4 class="questionnaire__caption">Доходи</h4>
+
+							<div class="questionnaire__item">
+								<label for="payment-1" class="questionnaire__label">Зарплата</label>
+								<input id="payment-1" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-2" class="questionnaire__label">Зарплата дружини/чоловіка</label>
+								<input id="payment-2" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-2" class="questionnaire__label">Бонуси і премії</label>
+								<input id="payment-2" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-3" class="questionnaire__label">Соціальні пільги</label>
+								<input id="payment-3" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-4" class="questionnaire__label">Дохід ві оренди</label>
+								<input id="payment-4" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-5" class="questionnaire__label">ЦПД</label>
+								<input id="payment-5" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-6" class="questionnaire__label">Пенсія</label>
+								<input id="payment-6" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-7" class="questionnaire__label">Пенсія чоловіка/дружини</label>
+								<input id="payment-7" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-8" class="questionnaire__label">Інші</label>
+								<input id="payment-8" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="payment-total" class="questionnaire__label">ЗАГАЛЬНИЙ ДОХІД</label>
+								<input id="payment-total" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+						</fieldset>
+
+						<fieldset class="questionnaire__field">
+							<h4 class="questionnaire__caption">Витрати</h4>
+
+							<div class="questionnaire__item">
+								<label for="expend-1" class="questionnaire__label">Продукти і одяг</label>
+								<input id="expend-1" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-2" class="questionnaire__label">Діти</label>
+								<input id="expend-2" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-2" class="questionnaire__label">Електроенергія</label>
+								<input id="expend-2" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-3" class="questionnaire__label">Соціальні пільги</label>
+								<input id="expend-3" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-4" class="questionnaire__label">Опалення</label>
+								<input id="expend-4" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-5" class="questionnaire__label">Інтернет і ТБ</label>
+								<input id="expend-5" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-6" class="questionnaire__label">Телефон</label>
+								<input id="expend-6" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-7" class="questionnaire__label">Оренда</label>
+								<input id="expend-7" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-8" class="questionnaire__label">Транспорт</label>
+								<input id="expend-8" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-9" class="questionnaire__label">Напої, сигарети, розваги</label>
+								<input id="expend-9" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-10" class="questionnaire__label">Фінансові зобов'язання перед банком</label>
+								<input id="expend-10" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-sum" class="questionnaire__label">Сума</label>
+								<input id="expend-sum" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-total" class="questionnaire__label">ЗАГАЛЬНІ ВИТРАТИ</label>
+								<input id="expend-total" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="expend-part" class="questionnaire__label">Частковий дохід за місяць</label>
+								<input id="expend-part" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+							</div>
+
+							<div class="b-checkbox">
+								<input id="personal-agree-4" type="checkbox">
+								<label for="personal-agree-4" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
+							</div>
+						</fieldset>
+
+						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+					</fieldset>
+
+					<fieldset class="questionnaire__step">
+						<h3 class="questionnaire__step-title">Інформація про належність особи до публічних діячів</h3>
+						<div class="questionnaire-progress">
+							<span class="questionnaire-progress__line step-5"></span>
+						</div>
+
+						<fieldset class="questionnaire__field">
+							<label class="questionnaire__label">Інформація про надежність особи до національних або іноземних публічних діячів, до близьких чи повёязаних з ними осіб<b>*</b>:</label>
+
+							<div class="questionnaire__item"> 
+								<div class="questionnaire__multiple questionnaire__multiple--flexs">
+									<div class="b-checkbox questionnaire__multiple-item">
+										<input value="off" name="switchDeal" id="deal-no" type="radio">
+										<label for="deal-no">Ні</label>	
+									</div>
+
+									<div class="b-checkbox">
+										<input value="on" name="switchDeal" id="deal-yes" type="radio" checked>
+										<label for="deal-yes" checked>Так</label>
+									</div>
+								</div>
+							</div>
+
+							<fieldset id="hideDeal" class="questionnaire__field">
+								<div class="questionnaire__item">
+									<label for="deal-1" class="questionnaire__label">Посада на період виконання функцій для публ. осіб</label>
+									<input id="deal-1" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+								</div>
+
+								<div class="questionnaire__item">
+									<label for="deal-2" class="questionnaire__label">Для близьких до публічних осіб - повідомте ПІП особи, до відношенню якої ви є близькою людиною</label>
+									<input id="deal-2" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+								</div>
+
+								<div class="questionnaire__item">
+									<label for="deal-3" class="questionnaire__label">Для зв,язаних з публічною особою - повідомте ПІП особи, до відношенню якої ви є близькою людиною</label>
+									<input id="deal-3" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+								</div>
+
+								<div class="questionnaire__item">
+									<div class="b-checkbox">
+										<input id="personal-agree-5" type="checkbox">
+										<label for="personal-agree-5" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
+									</div>
+								</div>
+							</fieldset>
+						</fieldset>		
+						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+					</fieldset>
+
+					<fieldset class="questionnaire__step">
+						<h3 class="questionnaire__step-title">Дані підприємця</h3>
+						<div class="questionnaire-progress">
+							<span class="questionnaire-progress__line step-6"></span>
+						</div>
+
+						<fieldset class="questionnaire__field">	
+							
+							<ol class="questionnaire__list">
+								<li class="questionnaire__list-item">
+									<span class="questionnaire__list-caption">Галузь</span>
+									<div class="questionnaire__item">
+										<select class="b-select b-select--stretch">
+											<option value="Видавнича справа">Видавнича справа</option>
+											<option value="Видавнича справа">Видавнича справа</option>
+											<option value="Видавнича справа">Видавнича справа</option>
+										</select>
+									</div>
+
+									<div class="questionnaire__item">
+										<label for="" class="questionnaire__label" for="business-1">Кількість працівників</label>
+										<input id="business-1" type="text" class="questionnaire__input" placeholder="X X X X">
+									</div>
+								</li>
+
+								<li class="questionnaire__list-item">
+									<span class="questionnaire__list-caption">Трудові правовідносини  клієнта</span>
+									<div class="questionnaire__item">
+										<select class="b-select b-select--stretch">
+											<option value="Працює без договору">Працює без договору</option>
+											<option value="Працює без договору">Працює без договору</option>
+											<option value="Працює без договору">Працює без договору</option>
+										</select>
+									</div>
+								</li>
+
+								<li class="questionnaire__list-item">
+									<span class="questionnaire__list-caption">Категорія посади</span>
+									<div class="questionnaire__item">
+										<select class="b-select b-select--stretch">
+											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
+											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
+											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
+										</select>
+									</div>
+
+									<div class="questionnaire__item">
+										<label for="" class="questionnaire__label" for="business-1">Форма власності</label>
+										<select class="b-select b-select--stretch">
+											<option value="Спільне підприємство">Спільне підприємство</option>
+											<option value="Спільне підприємство">Спільне підприємство</option>
+											<option value="Спільне підприємство">Спільне підприємство</option>
+										</select>
+									</div>
+								</li>
+
+								<li class="questionnaire__list-item">
+									<span class="questionnaire__list-caption">Спеціальність</span>
+									<div class="questionnaire__item">
+										<select class="b-select b-select--stretch">
+											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
+											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
+											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
+										</select>
+									</div>
+								</li>
+
+								<li class="questionnaire__list-item">
+									<span class="questionnaire__list-caption">Освіта клієнта</span>
+									<div class="questionnaire__item">
+										<select class="b-select b-select--stretch">
+											<option value="Вища освіта">Вища освіта</option>
+											<option value="Базова середня осіта">Базова середня осіта</option>
+											<option value="2 та більше вищих">2 та більше вищих</option>
+										</select>
+									</div>
+								</li>
+							</ol>
+							
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Підтвердження місця роботи шляхом</label>
+								<div class="questionnaire__multiple">
+									<div class="b-checkbox">
+										<input value="off" name="switchWorkPlace" id="work-place-1" type="radio">
+										<label for="work-place-1">Перевірка службового телефону</label>	
+									</div>
+									<div class="b-checkbox">
+										<input value="on" name="switchWorkPlace" id="work-place-2" type="radio" checked>
+										<label for="work-place-2">Відвідування місця роботи</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="questionnaire__item questionnaire__item--column">
+								<label class="questionnaire__label">Надані документи</label>
+								<div class="b-checkbox">
+									<input data-disable="field-adress" id="doc-1" type="checkbox">
+									<label for="doc-1">01 - Копія паспорта</label>
+								</div>
+
+								<div class="b-checkbox">
+									<input data-disable="field-adress" id="doc-2" type="checkbox">
+									<label for="doc-2">02 - копія трудового договору</label>
+								</div>
+
+								<div class="b-checkbox">
+									<input data-disable="field-adress" id="doc-3" type="checkbox">
+									<label for="doc-3">03 - копія додаткової угоди</label>
+								</div>
+
+								<div class="b-checkbox">
+									<input data-disable="field-adress" id="doc-4" type="checkbox">
+									<label for="doc-4">04 - річний фінансовий звіт</label>
+								</div>
+
+								<div class="b-checkbox">
+									<input data-disable="field-adress" id="doc-5" type="checkbox">
+									<label for="doc-5">01 - Копія паспорта</label>
+								</div>
+
+								<div class="b-checkbox">
+									<input data-disable="field-adress" id="doc-6" type="checkbox">
+									<label for="doc-6">02 - копія трудового договору</label>
+								</div>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Підтвердження місця роботи шляхом</label>
+								<div class="questionnaire__multiple questionnaire__multiple--flexs">
+									<div class="b-checkbox questionnaire__multiple-item">
+										<input name="switchCreditkind" id="credit-kind-1" type="radio">
+										<label for="credit-kind-1">Перший</label>	
+									</div>
+									<div class="b-checkbox questionnaire__multiple-item">
+										<input value="on" name="switchCreditkind" id="credit-kind-2" type="radio" checked>
+										<label for="credit-kind-2">Повторний</label>
+									</div>
+									<div class="b-checkbox">
+										<input value="on" name="switchCreditkind" id="credit-kind-3" type="radio" checked>
+										<label for="credit-kind-3">Рефінанс</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Про Компанію дізнався</label>
+								<select class="b-select b-select--stretch">
+									<option value="Листівка">Листівка</option>
+									<option value="Сайт">Сайт</option>
+									<option value="Знайомі">Знайомі</option>
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label for="word-pass" class="questionnaire__label">Про Компанію дізнався</label>
+								<input id="word-pass" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Автомобілі</label>
+								<select class="b-select b-select--stretch">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Житло</label>
+								<select class="b-select b-select--stretch">
+									<option value="Власне">Власне</option>
+									<option value="Не власне">Не власне</option>
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Сімейний стан</label>
+								<select class="b-select b-select--stretch">
+									<option value="Одружений(а)">Одружений(а)</option>
+									<option value="Не одружений(а)">Не одружений(а)</option>
+								</select>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Оцінка КК</label>
+								<div class="questionnaire__multiple questionnaire__multiple--flexs">
+									<div class="b-checkbox questionnaire__multiple-item">
+										<input value="yes" name="switchScore1" id="yes-score-1" type="radio">
+										<label for="yes-score-1">Так</label>	
+									</div>
+									<div class="b-checkbox">
+										<input value="no" name="switchScore1" id="no-score-1" type="radio">
+										<label for="no-score-1">Ні</label>	
+									</div>
+								</div>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Оцінка РМ</label>
+								<div class="questionnaire__multiple questionnaire__multiple--flexs">
+									<div class="b-checkbox questionnaire__multiple-item">
+										<input value="yes" name="switchScore2" id="yes-score-2" type="radio">
+										<label for="yes-score-2">Так</label>	
+									</div>
+									<div class="b-checkbox">
+										<input value="no" name="switchScore2" id="no-score-2" type="radio">
+										<label for="no-score-2">Ні</label>	
+									</div>
+								</div>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Оцінка МК</label>
+								<div class="questionnaire__multiple questionnaire__multiple--flexs">
+									<div class="b-checkbox questionnaire__multiple-item">
+										<input value="yes" name="switchScore3" id="yes-score-3" type="radio">
+										<label for="yes-score-3">Так</label>	
+									</div>
+									<div class="b-checkbox">
+										<input value="no" name="switchScore3" id="no-score-3" type="radio">
+										<label for="no-score-3">Ні</label>	
+									</div>
+								</div>
+							</div>
+
+							<div class="questionnaire__item">
+								<input id="total-score" type="text" class="questionnaire__input" placeholder="Дані оцінки">
+							</div>
+						</fieldset>
+
+						<button class="b-btn-primary b-btn-primary--main" type="submit">Зберегти</button>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+</div>
+{% endblock %}
+
+{% block info %}{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra %}{% endblock %}

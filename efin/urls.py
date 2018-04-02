@@ -43,6 +43,7 @@ urlpatterns = i18n_patterns(
     path('open_pdf/<int:spoiler_id>/', content.open_pdf, name='open_pdf'),
     path('translate/<str:lang_code>/', content.translate, name='translate'),
     path('job/', job.job, name='job'),
+    path('order/', TemplateView.as_view(template_name='questionnaire.html'), name='order'),
 
     path('login/', user_login, name='login'),
     path('login/<str:status_message>/', user_login, name='login'),
@@ -57,6 +58,7 @@ urlpatterns = i18n_patterns(
     path('change_email/', login_required(sms.change_email), name='change_email'),
     re_path(r'^email_confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})',
             sms.email_confirm, name='email_confirm'),
+    path('payonline/', TemplateView.as_view(template_name='form-payment.html'), name='payonline'),
 
     path('pro-kompaniyu/', about.about, name='about'),
     path('about/contacts/', contacts.contacts, name='contacts'),
