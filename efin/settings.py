@@ -148,22 +148,15 @@ LANGUAGES = (
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 # Email от заказчиков
-# EMAIL_HOST_USER = 'robot@expressfinance.com.ua'
-# EMAIL_HOST_PASSWORD = 'Qwerty+1'
-# EMAIL_HOST = 'mail.expressfinance.com.ua'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = False
-# EMAIL_USE_SSL = True
-
-
-ADMIN_EMAIL = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'robot@expressfinance.com.ua'
+EMAIL_HOST_PASSWORD = 'Qwerty+1'
+EMAIL_HOST = 'mail.expressfinance.com.ua'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_SSL = False
 
 
 # Static files (CSS, JavaScript, Images)
