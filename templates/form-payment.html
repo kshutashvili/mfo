@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% block title %}Form payment{% endblock %}
+
+{% block content %}	
+	<section>
+		<div class="wrapper">
+			<form action="https://easypay.ua/provider/order" class="f-form validateForm" method="post">
+				<h3 class="f-form__title">{% trans 'Онлайн оплата с карты любого банка Украины (EasyPay)' %}</h3>
+				<div class="f-form__content">
+					<label for="payment-numb" class="f-form__label">№ {% trans 'договора' %}</label>
+					<input name="payment-numb" id="payment-numb" type="tel" class="f-form__input" required data-validate="number">
+					<div class="error-box">
+						{% trans 'Поле введено неверно' %}!
+					</div>
+					<label for="payment-sum" class="f-form__label">{% trans 'Сумма платежа' %}</label>
+					<input name="payment-sum" id="payment-sum" type="tel" class="f-form__input" required data-validate="number">
+					<div class="error-box">
+						{% trans 'Поле введено неверно' %}!
+					</div>
+				</div>
+				<button class="b-btn-primary b-btn-primary--main" type="submit">{% trans 'Оплатить' %}</button>
+				<div class="f-form__footer"></div>
+			</form>
+		</div>
+	</section>
+{% endblock %}
+
+{% block info %}{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra %}{% endblock %}
