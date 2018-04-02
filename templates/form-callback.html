@@ -6,7 +6,9 @@
 
 {% load solo_tags %}
 
-{% block title %}Callback{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'Обратная связь' %}{% endblock %}
 
 {% block content %}
 	<div class="wrapper wrapper-mob">
@@ -14,12 +16,12 @@
 			<form action="{% url 'request_callback' %}" class="f-callback-left" method="POST">
 				<img class="f-callback__img" src="{% static 'dist/img/callback-person.jpg' %}" alt="operator">
 				<div class="f-callback__info">
-					<h2 class="f-callback__info-title">Заказать звонок менеджера</h2>
-					<p class="f-callback__info-text">Заказать звонок менеджера бесплатно без регистрации и смс и тому подобный сопроводительный текст для пользователей до 20:00, после чего форма будет не доступна </p>
+					<h2 class="f-callback__info-title">{% trans 'Заказать звонок менеджера' %}</h2>
+					<p class="f-callback__info-text">{% trans 'Заказать звонок менеджера бесплатно без регистрации и смс и тому подобный сопроводительный текст для пользователей до 20:00, после чего форма будет не доступна' %} </p>
 				</div>
 				
 				<div class="b-input b-input--main">
-					<input type="text" placeholder="Введите свое имя" name="client_name">
+					<input type="text" placeholder="{% trans 'Введите свое имя' %}" name="client_name">
 					<span class="icon icon--avatar"></span>
 				</div>
 				<div class="b-input b-input--main">
@@ -29,20 +31,20 @@
 				{% csrf_token %}
 				<input type="hidden" value="{{ bid_id|default:"" }}" name="bid_id">
 				<input type="hidden" value="{% if user_city %}{{ user_city }}{% else %}{{ city }}{% endif %}" name="city">
-				<button class="b-btn-primary b-btn-primary--main" type="submit">Заказать звонок</button>
+				<button class="b-btn-primary b-btn-primary--main" type="submit">{% trans 'Заказать звонок' %}</button>
 			</form>
 
 			<form action="{% url 'register' %}" method="post" class="f-callback-right">
-				<h3 class="f-callback__caption">Сегодня одобрено</h3>
+				<h3 class="f-callback__caption">{% trans 'Сегодня одобрено' %}</h3>
 				{% csrf_token %}
 				<div class="b-total-number">
 					<span class="b-total-number__count">3495</span>
-					<span class="b-total-number__caption">Заявок</span>
+					<span class="b-total-number__caption">{% trans 'Заявок' %}</span>
 				</div>
 
 				<div class="f-callback__info f-callback__info--secondary">
-					<h2 class="f-callback__info-title">Получить решение онлайн</h2>
-					<p class="f-callback__info-text">Заказать звонок менеджера бесплатно без регистрации и смс и тому подобный сопроводительный текст для пользователей до 20:00, после чего форма будет не доступна </p>
+					<h2 class="f-callback__info-title">{% trans 'Получить решение онлайн' %}</h2>
+					<p class="f-callback__info-text">{% trans 'Заказать звонок менеджера бесплатно без регистрации и смс и тому подобный сопроводительный текст для пользователей до 20:00, после чего форма будет не доступна' %} </p>
 				</div>
 				{% if status_message %}
 					{{ status_message }}
@@ -52,9 +54,9 @@
 					<span class="icon icon--phone-call"></span>
 				</div>
 
-				<button class="b-btn-primary b-btn-primary--light" type="submit">Получить решение</button>
+				<button class="b-btn-primary b-btn-primary--light" type="submit">{% trans 'Получить решение' %}</button>
 
-				<a href="{% url 'login' %}" class="already-link">Уже есть аккаунт Экспресс финанс? <b>Войти</b></a>
+				<a href="{% url 'login' %}" class="already-link">{% trans 'Уже есть аккаунт Экспресс финанс?' %} <b>{% trans 'Войти' %}</b></a>
 			</form>
 		</div>
 	</div>

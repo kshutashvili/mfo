@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-29 20:45+0300\n"
+"POT-Creation-Date: 2018-04-02 15:14+0300\n"
 "PO-Revision-Date: 2018-03-15 22:11+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -311,6 +311,7 @@ msgid "Формы успешно выполненного действия"
 msgstr ""
 
 #: communication/models.py:295 communication/models.py:299
+#: communication/models.py:383
 #, fuzzy
 #| msgid "Информация"
 msgid "Форма"
@@ -398,17 +399,33 @@ msgstr ""
 msgid "Завершающий ответ"
 msgstr "Питання та відповіді"
 
-#: communication/models.py:365
+#: communication/models.py:364
+msgid "Прочитан"
+msgstr ""
+
+#: communication/models.py:369
 #, fuzzy
 #| msgid "Вопросы и ответы"
 msgid "Вопрос пользователя"
 msgstr "Питання та відповіді"
 
-#: communication/models.py:366
+#: communication/models.py:370
 #, fuzzy
 #| msgid "Вопросы и ответы"
 msgid "Вопросы пользователей"
 msgstr "Питання та відповіді"
+
+#: communication/models.py:379
+#, fuzzy
+#| msgid "Сообщение успешно отправлено"
+msgid "Форма успешного заказа"
+msgstr "Повідомлення успішно відправлено"
+
+#: communication/models.py:384
+#, fuzzy
+#| msgid "Сообщение успешно отправлено"
+msgid "Форма после успешного заказа звонка"
+msgstr "Повідомлення успішно відправлено"
 
 #: communication/views/contacts.py:32
 msgid "Сообщение успешно отправлено"
@@ -426,7 +443,7 @@ msgstr ""
 msgid "Произошла ошибка при отправке заявки, попробуйте позже..."
 msgstr ""
 
-#: communication/views/sms.py:55
+#: communication/views/sms.py:58
 #, fuzzy
 #| msgid "Контактный телефон"
 msgid "Неправильный код"
@@ -935,11 +952,11 @@ msgstr "Режим роботи"
 msgid "Отделение"
 msgstr "Відділення"
 
-#: efin/settings.py:144
+#: efin/settings.py:146
 msgid "Russian"
 msgstr ""
 
-#: efin/settings.py:145
+#: efin/settings.py:147
 msgid "Ukrainian"
 msgstr ""
 
@@ -965,12 +982,12 @@ msgid "Оформить кредит"
 msgstr "Оформити кредит"
 
 #: templates/ajax_generate/chat_generate.html:6
-#: templates/private-profile.html:322 templates/private-profile.html:358
+#: templates/private-profile.html:324 templates/private-profile.html:361
 msgid "Написать в поддержку"
 msgstr ""
 
 #: templates/ajax_generate/chat_generate.html:7
-#: templates/private-profile.html:323 templates/private-profile.html:359
+#: templates/private-profile.html:325 templates/private-profile.html:362
 #, fuzzy
 #| msgid "Отделения"
 msgid "Сообщения"
@@ -978,7 +995,7 @@ msgstr "Відділення"
 
 #: templates/ajax_generate/chat_generate.html:23
 #: templates/ajax_generate/quest_generate.html:5
-#: templates/private-profile.html:331 templates/private-profile.html:375
+#: templates/private-profile.html:334 templates/private-profile.html:378
 msgid "Служба поддержки"
 msgstr ""
 
@@ -1008,11 +1025,11 @@ msgstr "Мій кабінет"
 msgid "Мой кабинет "
 msgstr "Мій кабінет"
 
-#: templates/base.html:130 templates/private-profile.html:439
+#: templates/base.html:130 templates/private-profile.html:442
 msgid "Больше информации на полной версии сайта"
 msgstr "Більше інформації на повній версії сайту"
 
-#: templates/base.html:131 templates/private-profile.html:440
+#: templates/base.html:131 templates/private-profile.html:443
 msgid "Перейти"
 msgstr "Перейти"
 
@@ -1076,9 +1093,44 @@ msgstr "(безкоштовний багатоканальний телефон)
 msgid "Напишите нам"
 msgstr "Напишіть нам"
 
-#: templates/contacts.html:105 templates/private-profile.html:295
+#: templates/contacts.html:105 templates/private-profile.html:297
 msgid "Отправить"
 msgstr "Відправити"
+
+#: templates/email/changed.html:11 templates/email/changed.html:15
+#, fuzzy
+#| msgid "Сообщение успешно отправлено"
+msgid "Почта успешно изменена"
+msgstr "Повідомлення успішно відправлено"
+
+#: templates/email/changed.html:19 templates/email/link_invalid.html:19
+#: templates/email/sended.html:19 templates/form-success.html:22
+#, fuzzy
+#| msgid "Перейти"
+msgid "Переход"
+msgstr "Перейти"
+
+#: templates/email/link_invalid.html:11
+msgid "Ошибка"
+msgstr ""
+
+#: templates/email/link_invalid.html:15
+#, fuzzy
+#| msgid "Контактный телефон"
+msgid "Неправильная или не действительная ссылка"
+msgstr "Контактний телефон"
+
+#: templates/email/sended.html:11
+#, fuzzy
+#| msgid "Сообщение успешно отправлено"
+msgid "Сообщение на почту отправлено"
+msgstr "Повідомлення успішно відправлено"
+
+#: templates/email/sended.html:15
+msgid ""
+"Для завершения изменения почты перейдите по ссылке, отправленной на "
+"указанную Вами почту"
+msgstr ""
 
 #: templates/enter-sms.html:13
 #, fuzzy
@@ -1120,6 +1172,61 @@ msgstr ""
 msgid "Больше информации в категориях"
 msgstr "Більше інформації в категоріях"
 
+#: templates/form-callback.html:11
+msgid "Обратная связь"
+msgstr ""
+
+#: templates/form-callback.html:19
+#, fuzzy
+#| msgid "Показать все города"
+msgid "Заказать звонок менеджера"
+msgstr "Усі міста"
+
+#: templates/form-callback.html:20 templates/form-callback.html:47
+msgid ""
+"Заказать звонок менеджера бесплатно без регистрации и смс и тому подобный "
+"сопроводительный текст для пользователей до 20:00, после чего форма будет не "
+"доступна"
+msgstr ""
+
+#: templates/form-callback.html:24
+#, fuzzy
+#| msgid "Ввведите свое имя"
+msgid "Введите свое имя"
+msgstr "Ваше ім'я"
+
+#: templates/form-callback.html:34
+#, fuzzy
+#| msgid "Показать все города"
+msgid "Заказать звонок"
+msgstr "Усі міста"
+
+#: templates/form-callback.html:38
+msgid "Сегодня одобрено"
+msgstr ""
+
+#: templates/form-callback.html:42 templates/index.html:65
+msgid "Заявок"
+msgstr "Заявок"
+
+#: templates/form-callback.html:46 templates/index.html:106
+msgid "Получить решение онлайн"
+msgstr "Отримати рішення онлайн"
+
+#: templates/form-callback.html:57 templates/index.html:114
+msgid "Получить решение"
+msgstr "Отримати рішення"
+
+#: templates/form-callback.html:59
+#, fuzzy
+#| msgid "Отправитель: Экспресс Финанс"
+msgid "Уже есть аккаунт Экспресс финанс?"
+msgstr "Відправник: Експрес Фінанс"
+
+#: templates/form-callback.html:59
+msgid "Войти"
+msgstr ""
+
 #: templates/form-resume.html:14
 msgid "Отправьте нам Ваше резюме"
 msgstr "Відправити резюме"
@@ -1136,12 +1243,6 @@ msgstr "Прикріпити резюме"
 msgid "Отправить резюме"
 msgstr "Відправити резюме"
 
-#: templates/form-success.html:22
-#, fuzzy
-#| msgid "Перейти"
-msgid "Переход"
-msgstr "Перейти"
-
 #: templates/index.html:21
 msgid "Экспресс-финанс"
 msgstr "Експрес-фінанс"
@@ -1155,24 +1256,20 @@ msgid "Выберите суму и срок необходимого Вам к�
 msgstr "Оберіть суму і термін необхідного Вам кредиту в формі нижче"
 
 #: templates/index.html:25 templates/main.html:60
-#: templates/private-profile.html:452
+#: templates/private-profile.html:455
 msgid "Сумма кредита"
 msgstr "Сума кредиту"
 
 #: templates/index.html:43 templates/index.html:220 templates/main.html:79
-#: templates/main.html:230 templates/private-profile.html:471
+#: templates/main.html:230 templates/private-profile.html:474
 msgid "Срок займа"
 msgstr "Термін позики"
 
 #: templates/index.html:50 templates/index.html:57 templates/index.html:75
 #: templates/index.html:222 templates/main.html:232
-#: templates/private-profile.html:474 templates/private-profile.html:480
+#: templates/private-profile.html:477 templates/private-profile.html:483
 msgid "дней"
 msgstr "днів"
-
-#: templates/index.html:65
-msgid "Заявок"
-msgstr "Заявок"
 
 #: templates/index.html:69
 msgid "Более"
@@ -1227,14 +1324,6 @@ msgstr "Ваше ім'я"
 #: templates/index.html:101
 msgid "Отправить данные"
 msgstr "Відправити данні"
-
-#: templates/index.html:106
-msgid "Получить решение онлайн"
-msgstr "Отримати рішення онлайн"
-
-#: templates/index.html:114
-msgid "Получить решение"
-msgstr "Отримати рішення"
 
 #: templates/index.html:151 templates/main.html:160
 msgid "Как стать участником программы"
@@ -1393,41 +1482,41 @@ msgstr "грн/тиждень."
 msgid "Как получить кредит"
 msgstr "Як отримати кредит"
 
-#: templates/private-profile.html:288 templates/private-profile.html:311
+#: templates/private-profile.html:290 templates/private-profile.html:313
 msgid "Поддержка"
 msgstr ""
 
-#: templates/private-profile.html:289
+#: templates/private-profile.html:291
 msgid "Опишите вашу проблему и мы постараемся вам помочь"
 msgstr ""
 
-#: templates/private-profile.html:302
+#: templates/private-profile.html:304
 #, fuzzy
 #| msgid "Отправить данные"
 msgid "Добавить документ"
 msgstr "Відправити данні"
 
-#: templates/private-profile.html:314
+#: templates/private-profile.html:316
 #, fuzzy
 #| msgid "Сообщение успешно отправлено"
 msgid "Сообщение отправлено"
 msgstr "Повідомлення успішно відправлено"
 
-#: templates/private-profile.html:315
+#: templates/private-profile.html:317
 msgid "Ответ будет отправлен на Вашу почту в течении 3 рабочих дней"
 msgstr ""
 
-#: templates/private-profile.html:318
+#: templates/private-profile.html:320
 msgid "Спасибо, что выбрали"
 msgstr ""
 
-#: templates/private-profile.html:318
+#: templates/private-profile.html:320
 #, fuzzy
 #| msgid "Экспресс-финанс"
 msgid "\"Экспресс Финанс\""
 msgstr "Експрес-фінанс"
 
-#: templates/private-profile.html:326
+#: templates/private-profile.html:328
 msgid "Тема"
 msgstr ""
 
@@ -1491,13 +1580,13 @@ msgstr "Контактний телефон"
 msgid "Неправильный номер или пароль"
 msgstr "Контактний телефон"
 
-#: users/views.py:143
+#: users/views.py:150
 #, fuzzy
 #| msgid "Контактный телефон"
 msgid "Неправильный номер телефона"
 msgstr "Контактний телефон"
 
-#: users/views.py:155
+#: users/views.py:167
 #, fuzzy
 #| msgid "Неправильный телефон"
 msgid "Неправильный электронный адрес"
