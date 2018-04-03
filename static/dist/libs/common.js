@@ -1,16 +1,19 @@
 window.onload = function() {
 
-	new Slider('#credit-slider-1', 0, 15000, 500);
+	sliderFiller();
+	sliderInit();
+	writeComment();
+	questionsPaginate();
+	profileAlter();
+	messageRead();
 
-	new Slider('#termin-slider-1', 56, 99, 1);
+	$('a[href^="#"]').off().on("click", function (event) {
+		event.preventDefault();
+		var id  = $(this).attr('href'),
+		top = $(id).offset().top;
 
-	new Slider('#credit-slider-2', 0, 15000, 500);
-
-	new Slider('#termin-slider-2', 1, 12, 1);
-
-	new Slider('#credit-slider-3', 0, 15000, 500);
-
-	new Slider('#termin-slider-3', 1, 12, 1);
+		$('body,html').stop(true).animate({scrollTop: top}, 1000);
+	});
 
 	/*#Minimal height*/
 	(function($) {
@@ -119,8 +122,9 @@ window.onload = function() {
 	/*#Cities list*/
 	
 	$('.b-region-list').on('click', '.b-region-list__btn', function(e) {
-		var dataCity = $(this).data('city');
-		fieldFiller(dataCity, "data-city.json");
+		var dep_id = $(this).data('dep_id');
+		fieldFiller(dep_id, "/ajax/departments_generate/" + dep_id);
+
 		$('.b-region-list__btn').removeClass('btn-active');
 		$(this).addClass('btn-active');
 
@@ -153,8 +157,8 @@ window.onload = function() {
 	});
 
 	$('.popup-list').on('click', '.b-region-list__btn', function(e) {
-		var dataCity = $(this).data('city');
-		fieldFiller(dataCity, "data-city.json");
+		var dep_id = $(this).data('dep_id');
+		fieldFiller(dep_id, "/ajax/departments_generate/" + dep_id);
 
 		$('.b-region-list__btn').removeClass('btn-active');
 		$(this).addClass('btn-active');
@@ -251,8 +255,7 @@ window.onload = function() {
 			div.classList.add('profile__doc');
 			title.innerHTML = fileName;
 
-			var _tempArr = $(this).val().split('\\').pop()
-			.split('.');
+			var _tempArr = $(this).val().split('\\').pop().split('.');
 			var fileName = _tempArr[0];
 
 			title.innerHTML = fileName;
@@ -266,7 +269,7 @@ window.onload = function() {
 			reader.readAsDataURL(file);
 			$(this).parent().parent().before(div);
 			div.append(img);
-			div.append(title);	
+			div.append(title); 
 		}
 	});
 
@@ -410,7 +413,7 @@ window.onload = function() {
 	$('.s-head__more-btn').on('click', function(e) {
 		$('.s-head__nav').toggleClass('active');
 	});
-	
+
 	initMap();
 
 	var header = $('header');
@@ -423,8 +426,9 @@ window.onload = function() {
 
 	fixedHeader();
 	$( window ).resize(fixedHeader);
+}
 
-	/*#Validation*/
+/*#Validation*/
 
 	$('[data-validate]').unbind().blur( function(e){
 		var valType = $(this).data('validate');
@@ -465,6 +469,9 @@ window.onload = function() {
 	});
 
 	$('.validateForm').on('submit', function(e) {
+		e.preventDefault();
+		location.href = $(this).data('link');
+
 		if(!$(this).hasClass('error-form')) {
 
 			$.ajax({
@@ -472,19 +479,21 @@ window.onload = function() {
 				type: 'post',
 				data: $(this).serialize(),
 
-				success: function(){
+				success: function(data){
 					/*#Do something with data*/
 				}
 			}); 
 		};
 	});
-}
+
+
 
 function initMap() {
 	if (document.getElementById('map') == null) return;
 	var map = new google.maps.Map(document.getElementById('map'), {
 	});
 }
+
 function disableSelect(context, select) {
 	if(context.val() === 'on') {
 		select.attr('disabled', false);
@@ -541,14 +550,13 @@ function pagination() {
 	});
 };
 
-function Slider(initialId, min, max, step) {
+function Slider(initialId, min, max) {
 
 	if (document.querySelector(initialId) == null) return;
 
 	var arr = initialId.split("-");
 	var id = arr[2];
 	var kind = arr[0];
-
 	var sliderValue = $(kind + "-value-" + id);
 	var sliderTotal = $(kind + "-total-" + id);
 	var sliderHandle = $(initialId + ' .ui-slider-val');
@@ -559,11 +567,25 @@ function Slider(initialId, min, max, step) {
 		max: max,
 		range: "min",
 		animate: "slow",
-		step: step,
 		slide: function( event, ui) {
-			sliderValue.val(ui.value);
+			sliderValue.val(ui.value + ' ');
 			sliderHandle.html(ui.value + ' ' + quantity);
 			sliderTotal.html(ui.value + ' ' + quantity);
+		},
+		stop: function( event, ui) {
+			var slider = $(this);
+			var rate_id = slider.data('id');
+			if (!rate_id) return 0;
+			var term = $('#termin-total' + '-' + rate_id).html().split(' ')[0];
+			var summ = $('#credit-total' + '-' + rate_id).html().split(' ')[0];
+			$.ajax({
+				url:'/ajax/credit_calculate/' + rate_id + '/' + term + '/' + summ,
+				success: function(data){
+					var res = $('#pay_spam' + rate_id);
+					var value = res.html();
+					res.html(data['result'] + ' ' + value.split(' ')[1]);
+				}
+			})
 		}
 	});
 
@@ -575,72 +597,62 @@ function Slider(initialId, min, max, step) {
 		sliderHandle.html(value + ' ' + quantity);
 		sliderTotal.html(value + ' ' + quantity);
 	});
-
-	/*Scroll*/
-	$("a[href^='#']").off().on("click", function (event) {
-		event.preventDefault();
-		var id  = $(this).attr('href'),
-
-		top = $(id).offset().top;
-		
-		$('body,html').stop(true).animate({scrollTop: top}, 1000);
-	});
-
-
 }
 
-function fieldFiller (datacity, url) {
-	function textFill(item) {
-		$('#data-adress').html(item.adress);
-		$('#data-city').html(item.name);
-		$('#data-localAdress').html(item.localAdress);
-		$('#data-schedule').html(item.schedule);
-		$('#data-mail').html(item.mail).attr('href',
-			'mailto:'+ item.mail);
-		$('#data-phone').html(item.phone).attr('href',
-			'tel:' + item.phone);
+function fieldFiller (dep_id, url) {
+	function textFill(data){
+		$('#data-adress').html(data.address);
+		$('#data-city').html(data.city);
+		$('#data-localAdress').html(data.address);
+		$('#data-schedule').html(data.schedule);
+		$('#data-mail').html(data.email).attr('href',
+			'mailto:'+ data.email);
+		$('#data-phone').html(data.phone).attr('href',
+			'tel:' + data.phone);
 	}
 	$.ajax({
 		url: url,
 		success: function(data) {
 			for(key in data) {
-				if (key === datacity) {	
+
 					var obj = data[key];
 					var officeArr = [];
-					for(var k in obj) officeArr.push(obj[k]);	
+//					for(var k in obj) officeArr.push(obj[k]);	
 
-						var myLatlng = officeArr[0].lats;
-
+					var myLatlng = obj.lats;
 					var map = new google.maps.Map(document.getElementById('map'), {
-						zoom: 4,
+						zoom: 11,
 						center: myLatlng
 					});
 
 					var iconChosen = {
-		    			url: "dist/img/marker-chosen.png", // url
+		    			url: "/static/dist/img/marker-chosen.png", // url
 		    			scaledSize: new google.maps.Size(25, 25), // scaled size
 		    			origin: new google.maps.Point(0,0), // origin
 		   				anchor: new google.maps.Point(0, 0) // anchor
 		   			};
 
 		   			var icon = {
-		    			url: "dist/img/marker.png", // url
+		    			url: "/static/dist/img/marker.png", // url
 		    			scaledSize: new google.maps.Size(25, 25), // scaled size
 		    			origin: new google.maps.Point(0,0), // origin
 		   				anchor: new google.maps.Point(0, 0) // anchor
 		   			};
 
-		   			textFill(officeArr[0]);
+		   			textFill(obj);
 		   			var allMarkers = [];
-
-		   			for(var i = 0; i < officeArr.length; i++) {
+		   			var list_deps = []
+		   			for (obj in data){
+		   				list_deps.push(data[obj]);
+		   			}
+		   			for(var i = 0; i < list_deps.length; i++) {
 		   				var marker = new google.maps.Marker({
 		   					id: i,
-		   					position: officeArr[i].lats,
+		   					position: list_deps[i].lats,
 		   					map: map,
 		   					title: 'Нажмите, чтобы получить информацию по отделению'
 		   				}).addListener('click', function() {
-		   					textFill(officeArr[this.id]);
+		   					textFill(list_deps[this.id]);
 
 		   					for(var j = 0; j < allMarkers.length; j++) {
 		   						allMarkers[j].f.setIcon(icon);
@@ -655,13 +667,239 @@ function fieldFiller (datacity, url) {
 		   			for(var j = 0; j < allMarkers.length; j++) {
 		   				allMarkers[j].f.setIcon(icon);
 
-		   				if(j == 0) allMarkers[j].f.setIcon(iconChosen);
+		   				if(j == allMarkers.length - 1) allMarkers[j].f.setIcon(iconChosen);
 		   			}
+
 		   		}
 		   	}
-		   }
-		 });
+		   });
+
 }
+
+
+function sliderFiller(){
+	$.ajax({
+		url:'/ajax/slider_filler/',
+		success: function(data){
+			for(key in data){
+				new Slider('#credit-slider-' + key, data[key].sum_min, data[key].sum_max);
+				new Slider('#termin-slider-' + key, data[key].term_min, data[key].term_max);
+			}
+		}
+	})
+}
+
+
+function writeComment(){
+	$(".chat__send").on('submit', function(event){
+	event.preventDefault();
+    var more = $(this);
+    var id_quest = more.data('id');
+    var input = document.getElementById('chat__send' + id_quest).getElementsByClassName('chat__send-input')[0];
+   	var container = $('#chat_body' + more.data('id'));
+    $.ajax(more.attr('action'),{
+        'type':'POST',
+        'async':true,
+        'dataType':'html',
+        'data':{'content':input.value,
+        		'id_quest':id_quest,
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if (data != 'fail'){
+        		container_html = document.querySelector('#chat_body' + id_quest);
+        		container.append(data);
+        		input.value = '';
+        		container_html.scrollTop = container_html.scrollHeight;
+        	}
+        },
+        'error':function(xhr,status,error){
+            //console.log(status);
+        }
+    });
+    });
+}
+
+
+function questionsPaginate(){
+	$(".messages__nav-btn").on('click', function(event){
+    var more = $(this);
+   	var container_chat = $('#chat_container');
+   	var container_quest = $('#quest_container');
+    $.ajax(more.data('url'),{
+        'type':'GET',
+        'async':true,
+        'dataType':'html',
+        'data':{'page':more.data('page'),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if (data != 'fail'){
+        		container_quest.html(data.split('ёёёёё')[0]);
+        		container_chat.html(data.split('ёёёёё')[1]);
+        		var page_btns = document.getElementsByClassName('messages__nav-btn');
+        		for(var i=0; i < page_btns.length; i++){
+        			page_btns[i].classList.remove('active');
+        		}
+        		page_btns[parseInt(more.data('page')) - 1].classList.add('active');
+				$('.message').on('click', tabs);
+        	}
+        },
+        'error':function(xhr,status,error){
+            //console.log(status);
+        }
+    });
+    });
+}
+
+
+function profileAlter(){
+	$('.profile_data').on('change', function (event){
+	var more = $(this);
+	var field = more.data('field');
+
+	if(field == 'phone'){
+		var value = $('#profile-tel').val();
+	}
+	else if(field == 'email'){
+		var value = $('#profile-mail').val();
+	}
+	else if(field == 'authy'){
+		var value = $('#profile-checkbox').val();
+	}
+    $.ajax(more.attr('action'),{
+        'type':'POST',
+        'async':true,
+        'dataType':'json',
+        'data':{'field_name':field,
+        		'field_value':value,
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if(data['url']){
+        		window.location.replace(data['url']);
+        	}
+        	else{        		
+        		if (data['status'] == '500'){
+        			if(field == 'phone'){
+        				var container = document.getElementById('help_phone');
+        				container.innerHTML = data['status_message'];
+        			}
+        			else if(field == 'email'){
+        				var container = document.getElementById('help_email');
+        				container.innerHTML = data['status_message'];
+        			}
+        		}
+        		else{
+        			if(field == 'phone'){
+        				var container = document.getElementById('help_phone');
+        				$('#profile-tel').val(data['phone']);
+        				container.innerHTML = '';
+        			}
+        			else if(field == 'email'){
+        				var container = document.getElementById('help_email');
+        				container.innerHTML = '';
+        			}
+        		}
+        	}
+        },
+        'error':function(xhr,status,error){
+            //console.log(status);
+        }
+    });
+});
+}
+
+
+function messageRead(){
+	$(".message.unreaded").on('click', function(event){
+    var more = $(this);
+    $.ajax(more.data('url'),{
+        'type':'POST',
+        'async':true,
+        'dataType':'json',
+        'data':{'id_quest':more.data('id'),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if (data['status'] != '500'){
+        		var numb = $('.message-numb');
+        		var count = parseInt(numb.data('count')) - 1;
+        		if(count == 0){
+        			numb.html('');
+        		}
+        		else{
+        			numb.html('+' + count);
+        		}
+        		numb.data('count', count);
+        		var text = $('#chat_text' + more.data('id'));
+        		var date = $('#chat_date' + more.data('id'));
+        		text.css('color', '#575757');
+        		date.css('color', '#575757');
+        		more.removeClass('unreaded');
+        		more.addClass('readed');
+        	}
+        },
+        'error':function(xhr,status,error){
+            //console.log(status);
+        }
+    });
+    });
+}
+
+
+
+/*function wrtieQuestion(){
+	$("#question_add").on('submit', function(event){
+	event.preventDefault();
+    var more = $(this);
+    var input = $('#question_input');
+    $.ajax(more.attr('action'),{
+        'type':'POST',
+        'async':true,
+        'dataType':'json',
+        'data':{'support_text':input.val(),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            	},
+        'success':function(data,status,xhr){
+        	if (data['status'] != '500'){
+        		var container_2 = $('.tab-content');
+        		var container_1 = $('#message_new1');
+        		container_1.before(data['container_1']);
+        		container_2.before(data['container_2']);
+        		input.val('');
+        		console.log('success');
+        	}
+        	else{
+        		console.log(0);
+        	}
+        },
+        'error':function(xhr,status,error){
+            console.log(status);
+        }
+    });
+    });
+}*/
+
+
+function sliderInit(){
+	var containers = $('.pay_spam');
+	for(var i=0; i < containers.length; i++){
+		var id = $('#' + containers[i].id).data('id');
+		var term = $('#termin-total-' + id).html().split(' ')[0];
+		var summ = $('#credit-total-' + id).html().split(' ')[0];
+		$.ajax({
+			url:'/ajax/credit_calculate/' + id + '/' + term + '/' + summ,
+			async:false,
+			success: function(data){
+				var res = $('#pay_spam' + id);
+				var value = res.html();
+				res.html(data['result'] + ' ' + value.split(' ')[1]);
+			}
+		})
+	}
+}
+
 
 function tabs() {
 	var dataBtn = $(this).data('btn');
