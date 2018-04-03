@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-02 15:14+0300\n"
-"PO-Revision-Date: 2018-04-02 13:33+0000\n"
+"PO-Revision-Date: 2018-04-03 08:47+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
 "Language: zxx\n"
@@ -1149,9 +1149,8 @@ msgid "Обратная связь"
 msgstr ""
 
 #: templates/form-callback.html:19
-#, fuzzy
 msgid "Заказать звонок менеджера"
-msgstr "Усі міста"
+msgstr "Замовити дзвінок менеджера"
 
 #: templates/form-callback.html:20 templates/form-callback.html:47
 msgid ""
@@ -1168,9 +1167,8 @@ msgid "Введите свое имя"
 msgstr "Ваше ім'я"
 
 #: templates/form-callback.html:34
-#, fuzzy
 msgid "Заказать звонок"
-msgstr "Усі міста"
+msgstr "Замовити дзвінок"
 
 #: templates/form-callback.html:38
 msgid "Сегодня одобрено"
@@ -1297,7 +1295,7 @@ msgstr "Відправити данні"
 
 #: templates/index.html:151 templates/main.html:160
 msgid "Как стать участником программы"
-msgstr "Як стати учасником програми"
+msgstr "Оформити Кредит‎"
 
 #: templates/index.html:171 templates/main.html:45 templates/main.html:181
 msgid "кредитный тариф"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-02 15:14+0300\n"
-"PO-Revision-Date: 2018-04-02 13:31+0000\n"
+"PO-Revision-Date: 2018-04-03 08:48+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
 "Language: zxx\n"
@@ -1264,7 +1264,7 @@ msgstr ""
 
 #: templates/index.html:151 templates/main.html:160
 msgid "Как стать участником программы"
-msgstr ""
+msgstr "Оформить кредит"
 
 #: templates/index.html:171 templates/main.html:45 templates/main.html:181
 msgid "кредитный тариф"
