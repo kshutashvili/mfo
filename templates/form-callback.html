@@ -25,12 +25,13 @@
 					<span class="icon icon--avatar"></span>
 				</div>
 				<div class="b-input b-input--main">
-					<input type="tel" placeholder="+38 (0__) ___ __ __" name="contact_phone">
+					{# <input type="tel" placeholder="+38 (0__) ___ __ __" name="contact_phone"> #}
+					<input type="tel" placeholder="380991112200" name="contact_phone">
 					<span class="icon icon--phone-call"></span>
 				</div>
 				{% csrf_token %}
 				<input type="hidden" value="{{ bid_id|default:"" }}" name="bid_id">
-				<input type="hidden" value="{% if user_city %}{{ user_city }}{% else %}{{ city }}{% endif %}" name="city">
+				<input type="hidden" value="{{ city }}" name="city">
 				<button class="b-btn-primary b-btn-primary--main" type="submit">{% trans 'Заказать звонок' %}</button>
 			</form>
 

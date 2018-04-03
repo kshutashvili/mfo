@@ -22,7 +22,7 @@ from communication.models import Response, QuestionComment, UserQuestion,\
 from communication.forms import WriteCommentForm, WriteQuestionForm
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
-from content.helpers import get_city_name
+from content.helpers import get_city_name, process_bid
 from bids.models import Bid
 from users.forms import RegisterNumberForm
 from users.models import Profile
@@ -238,6 +238,7 @@ def request_callback(request):
                 bid.contact_phone = request.POST.get("contact_phone")
                 bid.name = request.POST.get("client_name")
                 bid.save()
+                process_bid(bid)
             else:
                 new_bid = Bid.objects.create(
                     city=request.POST.get('city'),
@@ -245,6 +246,7 @@ def request_callback(request):
                     contact_phone=request.POST.get("contact_phone")
                 )
                 new_bid.save()
+                process_bid(new_bid)
         else:
             new_bid = Bid.objects.create(
                 city=request.POST.get('city'),
@@ -252,6 +254,8 @@ def request_callback(request):
                 contact_phone=request.POST.get("contact_phone")
             )
             new_bid.save()
+            process_bid(new_bid)
+
         callback_success = CallbackSuccessForm.get_solo()
         url = reverse('success', kwargs={'id_mess':callback_success.success.id,
                                          'redirect_url':'main'})
