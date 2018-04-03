@@ -140,7 +140,7 @@
 				<a class="b-tel b-tel--primary" href="tel:{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }} <span>{% trans "Бесплатные звонки по Украине" %}</span></a>
 			{% endif %}
 			{% for obj in phones %}
-				<a class="b-tel b-tel--secondary" href="tel:{{ obj.number|cut:' ' }}"><span class="icon icon--{{ obj|get_icon_class_phone_number }}"></span>{{ obj.number }}</a>
+				{#<a class="b-tel b-tel--secondary" href="tel:{{ obj.number|cut:' ' }}"><span class="icon icon--{{ obj|get_icon_class_phone_number }}"></span>{{ obj.number }}</a>#}
 			{% endfor %}
 			</div>
 			<div class="s-footer__social">

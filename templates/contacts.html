@@ -80,7 +80,7 @@
 							<a class="b-contact__link b-contact__link--bg b-contact__link--iconed" href="tel:{{ hot_line_phone.number|cut:' ' }}"><span class="icon icon--phone-call"></span>{{ hot_line_phone.number }}</a> {% trans "(бесплатный многоканальный телефон)" %}" <br>
 						{% endif %}
 						{% for phone in contact.phones.get_queryset %}
-							<a class="b-contact__link b-contact__link--bg b-contact__link--iconed" href="tel:{{ phone.number|cut:' ' }}">{{ phone.number }}</a>
+							{#<a class="b-contact__link b-contact__link--bg b-contact__link--iconed" href="tel:{{ phone.number|cut:' ' }}">{{ phone.number }}</a>#}
 						{% endfor %}
 						</p>
 						<p class="b-contact-info__item">
