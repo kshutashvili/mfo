@@ -10,8 +10,8 @@ function refresh_time(){
     timer.html(time);
 }
 
-var time = 5;
+var time = 10;
 $(document).ready(function(){
     setInterval(refresh_time, 1000);
-    setTimeout(redirect, 5000);
+    setTimeout(redirect, 10000);
 });

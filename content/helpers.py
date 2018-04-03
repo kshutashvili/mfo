@@ -92,4 +92,4 @@ def process_bid(bid):
         data=data
     )
 
-    print(r.json())
+    # print(r.json())
