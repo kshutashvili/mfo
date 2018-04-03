@@ -77,14 +77,14 @@ def process_bid(bid):
 
     saleshub_URI = "https://saleshub.co.ua/api/v1/leads/"
     data = {
-        "partner_name": "admitad",
+        "partner_name": "website",
         "contact_phone": bid.contact_phone,
         "city": bid.city,
         "first_name": bid.name,
         # "first_name": " ".join(bid.name.split(" ")[0]),
         # "last_name": " ".join(bid.name.split(" ")[1]),
         "credit_sum": bid.credit_sum,
-        "key": "2bf6cc539cb72107347a1d0cca2dd95d"
+        "key": "46de62b4db97e9f855129f9f5edcd595"
     }
 
     r = requests.post(
@@ -92,4 +92,4 @@ def process_bid(bid):
         data=data
     )
 
-    # print(r.json())
+    print(r.json())
