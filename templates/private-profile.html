@@ -36,23 +36,23 @@
 			<div class="wrapper" id="wrapper">	
 				<div data-content="profile" class="tab-content{% if not active %} is-showed{% endif %}">
 					<div class="profile">
-						<h3 class="s-title">Мой профиль</h3>
+						<h3 class="s-title">{% trans 'Мой профиль' %}</h3>
 						<div class="profile__container">
 							<div class="profile-data">
-								<h4 class="profile__title">Ф.И.О</h4>
+								<h4 class="profile__title">{% trans 'Ф.И.О' %}</h4>
 								<p class="profile-data__info">Антипенко Виталий Викторовичь</p>
 							</div>
 							<div class="profile-data">
-								<h4 class="profile__title">Дата рождения</h4>
+								<h4 class="profile__title">{% trans 'Дата рождения' %}</h4>
 								<p class="profile-data__info">11.11.1975</p>
 							</div>
 							<div class="profile-data">
-								<h4 class="profile__title">Место рождения</h4>
+								<h4 class="profile__title">{% trans 'Место рождения' %}</h4>
 								<p class="profile-data__info">г.Киев</p>
 							</div>
 							<form action="{% url 'alter_profile' %}" class="profile_data" data-field='phone' method="post">
 							<div class="profile-data">
-								<h4 class="profile__title">Контактный телефон</h4>
+								<h4 class="profile__title">{% trans 'Контактный телефон' %}</h4>
 			                        <span id="help_phone" class='help-block profile__title'></span>
 									<div class="profile__input">
 										<label for="profile-tel">
@@ -64,7 +64,7 @@
 								</div>
 							</form>
 							<div class="profile-data">
-								<h4 class="profile__title">Адресс места проживания</h4>
+								<h4 class="profile__title">{% trans 'Адрес места проживания' %}</h4>
 								<p class="profile-data__info">г.Киев, улица Крещатик 21б, квартира 45</p>
 							</div>
 							<form action="{% url 'alter_profile' %}" class="profile_data" data-field="email" method="post">
@@ -82,7 +82,7 @@
 							</form>
 						</div>
 						<div class="profile__container">
-							<h4 class="profile__title">Двухфакторная авторизация</h4>
+							<h4 class="profile__title">{% trans 'Двухфакторная авторизация' %}</h4>
 							<form action="{% url 'alter_profile' %}" class="profile_data" data-field="authy" method="post">
 							{% csrf_token %}
 								<label for="profile-checkbox" class="profile__checkbox">
@@ -92,13 +92,13 @@
 							</form>
 						</div>
 						<div class="profile__container">
-							<h4 class="profile__title">Документы</h4>
+							<h4 class="profile__title">{% trans 'Документы' %}</h4>
 							<div class="profile__docs">
 								<div class="profile__doc profile__doc--default">
 									<label class="profile__doc-add">
 										<input type="file">		
 									</label>
-									<h4 class="profile__doc-title">Добавить документ</h4>
+									<h4 class="profile__doc-title">{% trans 'Добавить документ' %}</h4>
 								</div>
 							</div>
 						</div>

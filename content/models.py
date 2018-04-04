@@ -295,6 +295,10 @@ class SecurityStatic(SingletonModel):
                               upload_to='secutiry_block')
     image3 = models.FileField(_('Картинка третьего партнера'),
                               upload_to='secutiry_block')
+    image4 = models.FileField(_('Картинка четвертого партнера'),
+                              upload_to='secutiry_block')
+    image5 = models.FileField(_('Картинка пятого партнера'),
+                              upload_to='secutiry_block')
     security_items = models.ManyToManyField('SecurityItem',
                                             verbose_name=_('Элементы безопасности'))
 
@@ -306,8 +310,16 @@ class SecurityStatic(SingletonModel):
         return ' '.join(['Блок о безопасности', 'ID:', str(self.id)])
 
 
+SECURITY_ITEMS_ICON_CHOICES = (('handshake','Рукопожатие'),
+                               ('shield','Щит'),
+                               ('wax','Достижение'))
+
 class SecurityItem(models.Model):
     text = RichTextField(_('Текст'))
+    icon_class = models.CharField(_('Иконка'),
+                                  max_length=128,
+                                  choices=SECURITY_ITEMS_ICON_CHOICES) 
+
 
     class Meta:
         verbose_name = _('Элемент безопасности')

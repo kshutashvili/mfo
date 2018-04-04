@@ -282,27 +282,18 @@
 			</div>
 
 			<div class="b-section-cards">
-				<div class="b-section-cards__item">
-					<img class="visa-img" src="{{ index.security.image1.url }}" alt="visa-card">
-					<img class="master-card" src="{{ index.security.image2.url }}" alt="master-card">
-
-					<img class="b-section-cards__img" src="{% static 'dist/img/pcidss.png' %}" alt="pci">
-
-					<img class="b-section-cards__img" src="{% static 'dist/img/logo-comodo1.png' %}" alt="comodo">
-
-					<div class="b-section-cards__item-square">
-					</div>
-					<div class="b-section-cards__item-square">
-					</div>
+				<div class="b-section-cards__logo-wrap">
+					<img class="b-section-cards__logo" src="{{ index.security.image1.url }}" alt="visa-card">
+					<img class="b-section-cards__logo master-card" src="{{ index.security.image2.url }}" alt="master-card">
+					<img class="b-section-cards__logo" src="{{ index.security.image3.url }}" alt="pci">
+					<img class="b-section-cards__logo" src="{{ index.security.image4.url }}" alt="comodo">
+					<img class="svg-bank" src="{{ index.security.image5.url }}" alt="credit-card">
 
 					<div class="b-section-cards__icons">
 					{% for obj in index.security.security_items.get_queryset %}
-						<span class="icon icon--sticker">{{ obj.text|safe }}</span>
+						<span class="icon icon--{{ obj.icon_class }}">{{ obj.text|safe }}</span>
 					{% endfor %}
 					</div>
-				</div>
-				<div class="b-section-cards__item">
-					<img class="svg-bank" src="{{ index.security.image3.url }}" alt="credit-card">
 				</div>
 			</div>
 		</div>
