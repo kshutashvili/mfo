@@ -70,3 +70,26 @@ def get_city_name(request):
             city = component["long_name"]
 
     return city
+
+
+def process_bid(bid):
+    # send new Bid to Saleshub site
+
+    saleshub_URI = "https://saleshub.co.ua/api/v1/leads/"
+    data = {
+        "partner_name": "website",
+        "contact_phone": bid.contact_phone,
+        "city": bid.city,
+        "first_name": bid.name,
+        # "first_name": " ".join(bid.name.split(" ")[0]),
+        # "last_name": " ".join(bid.name.split(" ")[1]),
+        "credit_sum": bid.credit_sum,
+        "key": "46de62b4db97e9f855129f9f5edcd595"
+    }
+
+    r = requests.post(
+        saleshub_URI,
+        data=data
+    )
+
+    # print(r.json())

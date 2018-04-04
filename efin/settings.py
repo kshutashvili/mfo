@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'solo',
     'django_google_maps',
     'modeltranslation',
-    'django_twilio'
+    'django_twilio',
+    'rosetta'
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,7 @@ EMAIL_HOST = 'mail.expressfinance.com.ua'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+ADMIN_EMAIL = 'robot@expressfinance.com.ua'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

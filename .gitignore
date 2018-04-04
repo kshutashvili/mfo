@@ -1,7 +1,7 @@
 .idea/
 
 *.pyc
-locale/ru/LC_MESSAGES/django.mo
+*.mo
 db.sqlite3
 __pycache__/
 env/
