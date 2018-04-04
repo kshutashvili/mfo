@@ -535,6 +535,10 @@ class MainPageStatic(SingletonModel):
 
 
 class IndexPageStatic(SingletonModel):
+    credit_rate = models.ForeignKey(CreditRate,
+                                    verbose_name=_('Кредитный тариф калькулятора'),
+                                    on_delete=models.CASCADE,
+                                    null=True)
     advantage = models.ForeignKey('AdvantageStatic',
                                   verbose_name=_('Блок преимущества'),
                                   on_delete=models.CASCADE)

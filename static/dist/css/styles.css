@@ -1528,6 +1528,16 @@ fieldset {
           justify-content: space-between;
   margin-top: 6rem; }
   .b-media-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     position: relative;
     width: calc(33% - 20rem/3);
     text-align: center;
@@ -1555,8 +1565,8 @@ fieldset {
       margin: 3rem 0 0 0;
       text-transform: uppercase; }
     .b-media-item__info {
-      margin: 2rem 0 3rem 0;
-      padding: 0 2rem;
+      margin: 2rem 0 auto 0;
+      padding: 0 2rem 3rem 2rem;
       font-size: 14px;
       font-family: "Myriad Pro";
       line-height: 1.429; }

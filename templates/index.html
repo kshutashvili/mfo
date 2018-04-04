@@ -16,7 +16,7 @@
 	
 	<section class="s-credits">
 		<div class="wrapper">
-			<form action="#" class="b-main-form">
+			<form action="{% url 'save_credit_request' %}" data-id="{{ index.credit_rate.id }}" id="credit_form" class="b-main-form">
 				<fieldset class="b-main-form__content">
 					<h3 class="b-main-form__content-title"><span>"{% trans 'Экспресс-финанс' %}"</span>{% trans 'Мгновенные кредиты онлайн' %}</h3>
 					<p class="b-main-form__content-message">{% trans "Выберите суму и срок необходимого Вам кредита в форме ниже" %}</p>
@@ -24,17 +24,17 @@
 					<div class="b-form-item">
 						<label class="b-form-item__label" for="credit-value-1">{% trans "Сумма кредита" %}:</label>
 
-						<div class="b-form-item__slider" id="credit-slider-1">
+						<div data-id="{{ index.credit_rate.id }}" class="b-form-item__slider" id="credit-slider-{{ index.credit_rate.id }}">
 							<div class="ui-slider-helper">
 								<a class='ui-slider-handle'>
 									<span class="icon icon--arrow icon--left"></span>
-									<span class="ui-slider-val">750 грн</span>
+									<span class="ui-slider-val">{{ index.credit_rate.get_sum_min }} грн</span>
 									<span class="icon icon--arrow icon--right"></span>
 								</a>
 							</div>
 						</div>
 
-						<input class="b-form-item__input b-form-item__input--first" value="750" type="tel" id="credit-value-1">
+						<input class="b-form-item__input b-form-item__input--first" value="750" type="tel" id="credit-value-{{ index.credit_rate.id }}">
 						<span>грн</span>
 
 					</div>
@@ -43,18 +43,18 @@
 						<label class="b-form-item__label" for="termin-value-1">{% trans "Срок займа" %}:
 						</label>
 						
-						<div class="b-form-item__slider" id="termin-slider-1">
+						<div data-id="{{ index.credit_rate.id }}" class="b-form-item__slider" id="termin-slider-{{ index.credit_rate.id }}">
 							<div class="ui-slider-helper ui-slider-helper--sm">
 								<a class='ui-slider-handle ui-slider-handle--sm'>
 									<span class="icon icon--arrow icon--left"></span>
-									<span class="ui-slider-val">56 {% trans "дней" %}</span>
+									<span class="ui-slider-val">{{ index.credit_rate.term_min }} {% if index.credit_rate.term_type %}{% trans "месяцев" %}{% else %}{% trans "недель" %}{% endif %}</span>
 									<span class="icon icon--arrow icon--right"></span>
 								</a>
 							</div>
 						</div>
 
-						<input class="b-form-item__input b-form-item__input--second" value="56" type="tel" id="termin-value-1">
-						<span>{% trans "дней" %}</span>	
+						<input class="b-form-item__input b-form-item__input--second" value="56" type="tel" id="termin-value-{{ index.credit_rate.id }}">
+						<span>{% if index.credit_rate.term_type %}{% trans "месяцев" %}{% else %}{% trans "недель" %}{% endif %}</span>	
 					</div>
 				</fieldset>
 
@@ -71,33 +71,36 @@
 					</div>
 
 					<div class="b-main-form__total-content">
-						<p><span>{% trans "Вы берете" %}:</span><span id="credit-total-1">10000 грн</span></p>
-						<p><span>{% trans "На срок" %}:</span> <span id="termin-total-1">14 {% trans "дней" %}</span></p>
-						<p class="b-main-form__total-cost"><span>{% trans "Платеж по кредиту" %}:</span> <span>550 {% trans "грн/нед" %}.</span></p>
+						<p><span>{% trans "Вы берете" %}:</span><span id="credit-total-{{ index.credit_rate.id }}">{{ index.credit_rate.get_sum_min }} грн</span></p>
+						<p><span>{% trans "На срок" %}:</span> <span id="termin-total-{{ index.credit_rate.id }}">{{ index.credit_rate.term_min }} {% if index.credit_rate.term_type %}{% trans "месяцев" %}{% else %}{% trans "недель" %}{% endif %}</span></p>
+						<p class="b-main-form__total-cost"><span>{% trans "Платеж по кредиту" %}:</span> </span> <span class="pay_spam" data-id="{{ index.credit_rate.id }}" id="pay_spam{{ index.credit_rate.id }}" >550 {% if index.credit_rate.term_type %}{% trans "грн/месяц." %}{% else %}{% trans "грн/неделя." %}{% endif %}</span></p>
 					</div>
-
+					<input type="hidden" id="term_type" value="{{ index.credit_rate.term_type }}" name="term_type">
+					<input type="hidden" id="city_id" value="{% if user_city %}{{ user_city }}{% else %}{{ city }}{% endif %}" name="city">
 					<button class="b-btn-main" name="submit" type="submit"><span class="icon icon--check-mark"></span></button>
 				</fieldset>
 			</form>
 
-			<div class="b-form-group">
+			<div class="b-form-group" id="personal_alert">
 
 				<div class="b-personal">
 					<p class="b-personal__alert">{% trans "Небольшой текст о том, куда и зачем отправляются эти данные пользователем сервиса, а так же небольшая инструкция по алгоритму дальнейших действий" %}.</p>
 
-					<form action="#" class="b-personal-form">
+					<form action="{% url 'request_callback' %}" method="post" class="b-personal-form">
 						<h4 class="b-personal-form__title">{% trans "Укажите Ваши" %} <br>{% trans "личные данные" %}</h4>
-
+						{% csrf_token %}
 						<div class="b-input">
-							<input type="text" placeholder="{% trans 'Ввведите свое имя' %}">
+							<input type="text" name="client_name" placeholder="{% trans 'Ввведите свое имя' %}">
 							<span class="icon icon--avatar"></span>
 						</div>
 
 						<div class="b-input">
-							<input type="tel" placeholder="+38 (0__) ___ __ __">
+							<input type="tel" name="contact_phone" placeholder="+38 (0__) ___ __ __">
 							<span class="icon icon--phone-call"></span>
 						</div>
 
+						<input type="hidden" value="{{ request.session.bid_id }}" id="bid_id" name="bid_id">
+						<input type="hidden" value="{% if user_city %}{{ user_city }}{% else %}{{ city }}{% endif %}" name="city">
 						<button class="b-btn-primary" type="submit">{% trans 'Отправить данные' %}</button>
 					</form>
 				</div>
@@ -105,12 +108,12 @@
 				<div class="b-callback">
 					<h4 class="b-callback__title">{% trans "Получить решение онлайн" %}</h4>
 					<p class="b-callback__info">{% trans "Небольшой текст о том, куда и зачем отправляются эти данные пользователем сервиса, а так же небольшая инструкция по алгоритму дальнейших действий" %}.</p>
-					<form action="{% url 'callback' %}" class="b-callback-form">
+					<form action="{% url 'register' %}" method="post" class="b-callback-form">
 						<div class="b-input b-input--secondary">
-							<input placeholder="+38 (0__) ___ __ __" type="tel">
+							{{ form.phone }}
 							<span class="icon icon--phone-call"></span>
 						</div>
-
+						{% csrf_token %}
 						<button class="b-btn-primary b-btn-primary--dark">{% trans "Получить решение" %}</button>
 					</form>
 				</div>

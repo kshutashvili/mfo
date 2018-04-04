@@ -64,6 +64,7 @@ def main(request):
 
 
 def index(request):
+    city = get_city_name(request)
     index = IndexPageStatic.get_solo()
     main = MainPageStatic.get_solo()
     departments = []
@@ -78,8 +79,11 @@ def index(request):
             if length > 0:
                 column_list[i] += 1
                 length -= 1
+    form = RegisterNumberForm()
     return render(request, 'index.html', {'index':index,
                                           'main':main,
+                                          'form':form,
+                                          'user_city': city if city else 'Другой город',
                                           'departments':departments,
                                           'column_list':column_list})
 
@@ -225,7 +229,13 @@ def save_credit_request(request):
         if new_bid.id:
             # set bid's id to session for accesing in other page
             request.session["bid_id"] = new_bid.id
-        return HttpResponseRedirect(redirect_to=request.POST.get('callback'))
+
+        # for ajax query from index.html shoudn't redirect
+        if request.POST.get('no_redirect', False):
+            return JsonResponse({'status':'200',
+                                 'bid_id':new_bid.id})
+        else:
+            return HttpResponseRedirect(redirect_to=request.POST.get('callback'))
 
 
 def request_callback(request):

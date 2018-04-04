@@ -6,6 +6,7 @@ window.onload = function() {
 	questionsPaginate();
 	profileAlter();
 	messageRead();
+	creditFormSubmit();
 
 	$('a[href^="#"]').off().on("click", function (event) {
 		event.preventDefault();
@@ -550,7 +551,7 @@ function pagination() {
 	});
 };
 
-function Slider(initialId, min, max) {
+function Slider(initialId, min, max, step) {
 
 	if (document.querySelector(initialId) == null) return;
 
@@ -565,6 +566,7 @@ function Slider(initialId, min, max) {
 	$(initialId).slider({
 		min: min,
 		max: max,
+		step:step,
 		range: "min",
 		animate: "slow",
 		slide: function( event, ui) {
@@ -682,7 +684,7 @@ function sliderFiller(){
 		url:'/ajax/slider_filler/',
 		success: function(data){
 			for(key in data){
-				new Slider('#credit-slider-' + key, data[key].sum_min, data[key].sum_max);
+				new Slider('#credit-slider-' + key, data[key].sum_min, data[key].sum_max, 500);
 				new Slider('#termin-slider-' + key, data[key].term_min, data[key].term_max);
 			}
 		}
@@ -718,6 +720,36 @@ function writeComment(){
         }
     });
     });
+}
+
+
+function creditFormSubmit() {
+	$('#credit_form').on('submit', function(event){
+		event.preventDefault();
+    	var more = $(this);
+    	var id = more.data('id');
+    	$.ajax(more.attr('action'),{
+    	    'type':'POST',
+        	'async':true,
+        	'dataType':'json',
+        	'data':{'no_redirect':true,
+        			'term_type':$('#term_type').val(),
+        			'credit_sum':$('#credit-value-' + id).val(),
+        			'termin':$('#termin-value-' + id).val(),
+        			'city':$('#city_id').val(),
+                	'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            		},
+        	'success':function(data,status,xhr){
+        		var block = $('#personal_alert');
+        		window.scrollTo(block.position().left, block.position().top);
+        		$('#bid_id').val(data['bid_id']);
+        	}
+        	,
+        	'error':function(xhr,status,error){
+           		console.log(status);
+        	}
+    	});
+	});
 }
 
 

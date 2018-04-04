@@ -180,7 +180,7 @@ def alter_profile(request):
 def message_read(request):
     if request.method == 'POST':
         question = UserQuestion.objects.filter(id=request.POST.get('id_quest')).first()
-        # choices: 'read', '!read', 'force !read'
+        # choices: 'read', '!read', 'force read'
         question.is_read = 'force read'
         question.save()
         result = {'status':'200'}
