@@ -47,13 +47,21 @@ def verify(request):
             code = request.POST.get('code','')
             verification = api.phones.verification_check(phone, '+380', code)
             if verification.ok():
+                url = None
                 profile.user.is_active = True
-                profile = Profile.objects.filter(user=request.user).first()
-                profile.phone = phone
-                request.user.username = phone
+              
+                if profile.phone != phone:
+                    profile.phone = phone
+                    profile.user.username = phone
+                    url = reverse('profile')
+               
+                profile.user.save()
                 profile.save()
-                request.user.save()
-                return HttpResponseRedirect(reverse('profile'))
+
+                if not url:
+                    url = reverse('order')
+
+                return HttpResponseRedirect(url)
             else:
                 return render(request, 'enter-sms.html', {'status_message':_('Неправильный код')})
     elif request.method == 'GET':
