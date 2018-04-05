@@ -27,6 +27,7 @@ from content.views import content
 from vacancy.views import job
 from users.views import register, set_password, user_login, user_logout,\
                         profile, alter_profile, message_read
+from payment_gateways.views import pb_terminal_view
 
 
 urlpatterns = i18n_patterns(
@@ -80,8 +81,12 @@ urlpatterns = i18n_patterns(
     path('ajax/question_generate/', login_required(content.question_generate), name='question_generate'),
     path('ajax/profile_alter/', login_required(alter_profile), name='alter_profile'),
     path('ajax/message_read/', login_required(message_read), name='message_read'),
-
 )
+
+urlpatterns += [
+    path('payment/pb/', pb_terminal_view, name='pb_terminal'),
+]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

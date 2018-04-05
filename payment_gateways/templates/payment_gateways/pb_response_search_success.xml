@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Transfer xmlns="http://debt.privatbank.ua/Transfer" interface="Debt" action="Search">
+    <Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DebtPack">
+        <PayerInfo billIdentifier="{{ contract_num }}"></PayerInfo>
+        <ServiceGroup>
+            <DebtService serviceCode="{{ service_code }}">
+                <Message>Внесение платежа по кредиту № дог. {{ contract_num }}</Message>
+                <DebtInfo amountToPay="{{ vnoska }}" />
+                <PayerInfo billIdentifier="{{ contract_num }}">
+                    <Fio>{{ client_fio }}</Fio>
+                </PayerInfo>
+            </DebtService>
+        </ServiceGroup>
+    </Data>
+</Transfer>

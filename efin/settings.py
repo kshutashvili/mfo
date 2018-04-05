@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'bids',
     'users',
     'token_confirm',
+    'payment_gateways',
     #3-rd
     'ckeditor',
     'solo',
@@ -182,6 +183,8 @@ LOCALE_PATHS = (
 )
 
 GEOIP_PATH = BASE_DIR + '/geoip'
+
+PB_SERVICE_CODE = 1
 
 try:
     from .local_settings import *
