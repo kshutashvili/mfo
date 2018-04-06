@@ -153,7 +153,7 @@ def easypay_terminal_view(request):
             except Exception as e:
                 print('Error: ', e)
         ctx = {
-            'status_code': 0,
+            'status_code': -1,
             'status_detail': 'Договор не найден',
             'date_time': timezone.now().strftime(
                 settings.EASYPAY_DATE_FORMAT
@@ -170,22 +170,32 @@ def easypay_terminal_view(request):
 
     elif action == constants.EASYPAY_PAYMENT:
         template = 'payment_gateways/easypay/response_2_payment_success.xml'
-        with transaction.atomic():
-            payment = EasypayPayment.objects.create(
-                service_id=action_data['ServiceId'],
-                order_id=action_data['OrderId'],
-                account=action_data['Account'],
-                amount=action_data['Amount'],
-            )
+        try:
+            with transaction.atomic():
+                payment = EasypayPayment.objects.create(
+                    service_id=action_data['ServiceId'],
+                    order_id=action_data['OrderId'],
+                    account=action_data['Account'],
+                    amount=action_data['Amount'],
+                )
 
-        ctx = {
-            'status_code': 0,
-            'status_detail': 'Платеж создан',
-            'date_time': timezone.now().strftime(settings.EASYPAY_DATE_FORMAT),
-            'signature': '',
-            'payment_id': payment.id
-        }
-        resp = render(request, template, ctx, content_type='application/xml')
+            ctx = {
+                'status_code': 0,
+                'status_detail': 'Платеж создан',
+                'date_time': timezone.now().strftime(settings.EASYPAY_DATE_FORMAT),
+                'signature': '',
+                'payment_id': str(payment.id)
+            }
+        except Exception as e:
+            print(e)
+            ctx = {
+                'status_code': -1,
+                'status_detail': 'Ошибка при создании платежа',
+                'date_time': timezone.now().strftime(settings.EASYPAY_DATE_FORMAT),
+                'signature': '',
+                'payment_id': ''
+            }
+        return render(request, template, ctx, content_type='application/xml')
 
     elif action == constants.EASYPAY_CONFIRM:
         template = 'payment_gateways/easypay/response_3_payment_confirm_success.xml'
@@ -218,7 +228,7 @@ def easypay_terminal_view(request):
 
         except EasypayPayment.DoesNotExist:
             ctx['status_code'] = -1
-            ctx['status_detail'] = 'Код платежа не найден'
+            ctx['status_detail'] = 'Платеж не найден'
 
         return render(request, template, ctx, content_type='application/xml')
 
@@ -246,7 +256,7 @@ def easypay_terminal_view(request):
 
         except EasypayPayment.DoesNotExist:
             ctx['status_code'] = -1
-            ctx['status_detail'] = 'Код платежа не найден'
+            ctx['status_detail'] = 'Платеж не найден'
 
         return render(request, template, ctx, content_type='application/xml')
     else:
