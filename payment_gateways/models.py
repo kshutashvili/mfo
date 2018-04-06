@@ -65,7 +65,7 @@ class Tcash(models.Model):
         "Тип (in/out, type)",
         max_length=32
     )
-    pb_code = models.CharField(
+    service_code = models.CharField(
         "ID платежа в системе PrivatBank",
         max_length=128
     )
@@ -80,3 +80,46 @@ class Tcash(models.Model):
 
     def __str__(self):
         return self.note
+
+
+class EasypayPayment(models.Model):
+    service_id = models.IntegerField(
+        "Номер EF в системе EasyPay"
+    )
+    order_id = models.BigIntegerField(
+        "Уникальный идентификатор транзакции EasyPay"
+    )
+    account = models.CharField(
+        "Идентификатор пользователя (№ договора)",
+        max_length=128
+    )
+    amount = models.DecimalField(
+        "Cумма платежа",
+        max_digits=10,
+        decimal_places=2
+    )
+    confirmed = models.BooleanField(
+        "Подтвержден?",
+        default=False
+    )
+    confirmed_dt = models.DateTimeField(
+        "Дата заказа",
+        blank=True,
+        null=True
+    )
+    canceled = models.BooleanField(
+        "Отменен?",
+        default=False
+    )
+    cancel_dt = models.DateTimeField(
+        "Дата отмены заказа",
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        verbose_name = 'Транзакция EasyPay'
+        verbose_name_plural = 'Транзакции EasyPay'
+
+    def __str__(self):
+        return str(self.order_id)

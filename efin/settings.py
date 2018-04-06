@@ -185,6 +185,7 @@ LOCALE_PATHS = (
 GEOIP_PATH = BASE_DIR + '/geoip'
 
 PB_SERVICE_CODE = 1
+EASYPAY_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
 try:
     from .local_settings import *

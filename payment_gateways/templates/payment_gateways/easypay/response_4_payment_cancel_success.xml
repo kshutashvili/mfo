@@ -1,0 +1,7 @@
+<Response>
+    <StatusCode>{{ status_code }}</StatusCode>
+    <StatusDetail>{{ status_detail }}</StatusDetail>
+    <DateTime>{{ date_time }}</DateTime>
+    <Sign>{{ signature }}</Sign>
+    <CancelDate>{{ cancel_date }}</CancelDate>
+</Response>

@@ -16,3 +16,8 @@ class TpersonsAdmin(admin.ModelAdmin):
 @admin.register(Tcash)
 class TcashAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(EasypayPayment)
+class EasypayPaymentAdmin(admin.ModelAdmin):
+    pass
