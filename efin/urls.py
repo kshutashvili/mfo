@@ -27,7 +27,8 @@ from content.views import content
 from vacancy.views import job
 from users.views import register, set_password, user_login, user_logout,\
                         profile, alter_profile, message_read
-from payment_gateways.views import pb_terminal_view, easypay_terminal_view
+from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
+                                    city24_terminal_view)
 
 
 urlpatterns = i18n_patterns(
@@ -86,6 +87,7 @@ urlpatterns = i18n_patterns(
 urlpatterns += [
     path('payment/pb/', pb_terminal_view, name='pb_terminal'),
     path('payment/easypay/', easypay_terminal_view, name='easypay_terminal'),
+    path('payment/city24/', city24_terminal_view, name='city24_terminal'),
 ]
 
 if settings.DEBUG:

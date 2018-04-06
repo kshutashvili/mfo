@@ -9,7 +9,8 @@ from django.db import transaction
 from django.utils import timezone
 
 from payment_gateways.utils import process_pb_request, process_easypay_request
-from payment_gateways.models import Tcredits, Tpersons, Tcash, EasypayPayment
+from payment_gateways.models import (Tcredits, Tpersons, Tcash,
+                                     EasypayPayment, City24Payment)
 from payment_gateways import constants
 
 
@@ -226,7 +227,8 @@ def easypay_terminal_view(request):
                     service_code=payment.order_id
                 )
 
-        except EasypayPayment.DoesNotExist:
+        except Exception as e:
+            print(e)
             ctx['status_code'] = -1
             ctx['status_detail'] = 'Платеж не найден'
 
@@ -254,7 +256,173 @@ def easypay_terminal_view(request):
                     settings.EASYPAY_DATE_FORMAT
                 )
 
-        except EasypayPayment.DoesNotExist:
+        except Exception as e:
+            print(e)
+            ctx['status_code'] = -1
+            ctx['status_detail'] = 'Платеж не найден'
+
+        return render(request, template, ctx, content_type='application/xml')
+    else:
+        resp = HttpResponse()
+
+    return resp
+
+
+@csrf_exempt
+@require_POST
+def city24_terminal_view(request):
+
+    is_valid, action, action_data = process_easypay_request(request)
+
+    if not is_valid:
+        return HttpResponseBadRequest("Операция не поддерживается")
+
+    if action == constants.EASYPAY_CHECK:
+        template = 'payment_gateways/easypay/response_1_check_success.xml'
+        contract_num = action_data['Account']
+        if contract_num:
+            try:
+                credit = Tcredits.objects.get(
+                    contract_num=int(contract_num)
+                )
+                client_qs = Tpersons.objects.filter(id=credit.client_id)
+                if client_qs:
+                    client = client_qs[0]
+                    client_fio = "{0} {1}. {2}.".format(
+                        client.name3,
+                        client.name[0].upper(),
+                        client.name2[0].upper(),
+                    )
+                    ctx = {
+                        'status_code': 0,
+                        'status_detail': 'Платеж разрешен',
+                        'date_time': timezone.now().strftime(
+                            settings.EASYPAY_DATE_FORMAT
+                        ),
+                        'signature': '',
+                        'account_params': {
+                            'Contract': str(contract_num),
+                            'Fio': client_fio,
+                            'Sum': str(credit.vnoska),
+                        }
+                    }
+                    return render(
+                        request,
+                        template,
+                        ctx,
+                        content_type='application/xml'
+                    )
+            except Exception as e:
+                print('Error: ', e)
+        ctx = {
+            'status_code': -1,
+            'status_detail': 'Договор не найден',
+            'date_time': timezone.now().strftime(
+                settings.EASYPAY_DATE_FORMAT
+            ),
+            'signature': '',
+            'account_params': {}
+        }
+        return render(
+            request,
+            template,
+            ctx,
+            content_type='application/xml'
+        )
+
+    elif action == constants.EASYPAY_PAYMENT:
+        template = 'payment_gateways/easypay/response_2_payment_success.xml'
+        try:
+            with transaction.atomic():
+                payment = City24Payment.objects.create(
+                    service_id=action_data['ServiceId'],
+                    order_id=action_data['OrderId'],
+                    account=action_data['Account'],
+                    amount=action_data['Amount'],
+                )
+
+            ctx = {
+                'status_code': 0,
+                'status_detail': 'Платеж создан',
+                'date_time': timezone.now().strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                ),
+                'signature': '',
+                'payment_id': str(payment.id)
+            }
+        except Exception as e:
+            print(e)
+            ctx = {
+                'status_code': -1,
+                'status_detail': 'Ошибка при создании платежа',
+                'date_time': timezone.now().strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                ),
+                'signature': '',
+                'payment_id': ''
+            }
+        return render(request, template, ctx, content_type='application/xml')
+
+    elif action == constants.EASYPAY_CONFIRM:
+        template = 'payment_gateways/easypay/response_3_payment_confirm_success.xml'
+        ctx = {
+            'status_code': 0,
+            'status_detail': 'Платеж успешно проведен',
+            'date_time': timezone.now().strftime(settings.EASYPAY_DATE_FORMAT),
+            'signature': '',
+            'order_date': ''
+        }
+
+        try:
+            with transaction.atomic():
+                payment = City24Payment.objects.select_for_update().get(
+                    id=action_data['PaymentId']
+                )
+                payment.confirmed = True
+                payment.confirmed_dt = timezone.now()
+                payment.save()
+                ctx['order_date'] = payment.confirmed_dt.strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                )
+
+                cash = Tcash.objects.create(
+                    sum=payment.amount,
+                    note='city24',
+                    type='in',
+                    service_code=payment.order_id
+                )
+
+        except Exception as e:
+            print(e)
+            ctx['status_code'] = -1
+            ctx['status_detail'] = 'Платеж не найден'
+
+        return render(request, template, ctx, content_type='application/xml')
+
+    elif action == constants.EASYPAY_CANCEL:
+        template = 'payment_gateways/easypay/response_4_payment_cancel_success.xml'
+        ctx = {
+            'status_code': 0,
+            'status_detail': 'Платеж успешно отменен',
+            'date_time': timezone.now().strftime(settings.EASYPAY_DATE_FORMAT),
+            'signature': '',
+            'cancel_date': ''
+        }
+
+        try:
+            with transaction.atomic():
+                payment = City24Payment.objects.select_for_update().get(
+                    id=action_data['PaymentId']
+                )
+                payment.canceled = True
+                payment.cancel_dt = timezone.now()
+                payment.save()
+                ctx['cancel_date'] = payment.cancel_dt.strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                )
+
+        except Exception as e:
+            print(e)
             ctx['status_code'] = -1
             ctx['status_detail'] = 'Платеж не найден'
 

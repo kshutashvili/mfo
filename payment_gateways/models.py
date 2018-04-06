@@ -123,3 +123,46 @@ class EasypayPayment(models.Model):
 
     def __str__(self):
         return str(self.order_id)
+
+
+class City24Payment(models.Model):
+    service_id = models.IntegerField(
+        "Номер EF в системе City24"
+    )
+    order_id = models.BigIntegerField(
+        "Уникальный идентификатор транзакции City24"
+    )
+    account = models.CharField(
+        "Идентификатор пользователя (№ договора)",
+        max_length=128
+    )
+    amount = models.DecimalField(
+        "Cумма платежа",
+        max_digits=10,
+        decimal_places=2
+    )
+    confirmed = models.BooleanField(
+        "Подтвержден?",
+        default=False
+    )
+    confirmed_dt = models.DateTimeField(
+        "Дата заказа",
+        blank=True,
+        null=True
+    )
+    canceled = models.BooleanField(
+        "Отменен?",
+        default=False
+    )
+    cancel_dt = models.DateTimeField(
+        "Дата отмены заказа",
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        verbose_name = 'Транзакция City24'
+        verbose_name_plural = 'Транзакции City24'
+
+    def __str__(self):
+        return str(self.order_id)
