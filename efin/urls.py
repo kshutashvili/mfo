@@ -28,7 +28,7 @@ from vacancy.views import job
 from users.views import register, set_password, user_login, user_logout,\
                         profile, alter_profile, message_read
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
-                                    city24_terminal_view)
+                                    city24_terminal_view, TurnesView)
 
 
 urlpatterns = i18n_patterns(
@@ -73,6 +73,8 @@ urlpatterns = i18n_patterns(
     path('message/<int:id_mess>/', success_message.success_message, name='success'),
     path('message/<int:id_mess>/<str:redirect_url>/', success_message.success_message, name='success'),
 
+    path('test_turnes1/', TurnesView.as_view(), name="test_turnes"),
+
     path('ajax/departments_generate/<str:dep_id>/', content.departments_generate, name='departments_generate'),
     path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
     path('ajax/credit_calculate/<int:rate_id>/<int:term>/<int:summ>/', content.credit_calculator, name='cred_calc'),
@@ -82,7 +84,7 @@ urlpatterns = i18n_patterns(
     path('ajax/profile_alter/', login_required(alter_profile), name='alter_profile'),
     path('ajax/message_read/', login_required(message_read), name='message_read'),
     
-    path('<str:page_url>/', content.pages, name='static_pages'),
+    path('<str:page_url>/', login_required(content.pages), name='static_pages'),
 )
 
 urlpatterns += [

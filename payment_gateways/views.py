@@ -1,5 +1,7 @@
 from decimal import Decimal
 
+import MySQLdb
+
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -7,6 +9,7 @@ from django.http.response import HttpResponseBadRequest, HttpResponse
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
+from django.views.generic.base import TemplateView
 
 from payment_gateways.utils import process_pb_request, process_easypay_request
 from payment_gateways.models import (Tcredits, Tpersons, Tcash,
@@ -431,3 +434,33 @@ def city24_terminal_view(request):
         resp = HttpResponse()
 
     return resp
+
+
+class TurnesView(TemplateView):
+    template_name = "test_turnes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(TurnesView, self).get_context_data()
+        exfin_connection = MySQLdb.connect(
+            host="10.10.100.27",                # host of MySQL database
+            # host="77.88.239.48",                # host of MySQL database
+            user="root",                        # user's username
+            passwd="Orraveza(99)",              # your password
+            db="mbank",                         # name of the database
+            charset="utf8"
+        )
+
+        # create CURSOR and set UTF8 params
+        exfin_cursor = exfin_connection.cursor()
+        exfin_cursor.execute('SET NAMES utf8;')
+        exfin_cursor.execute('SET CHARACTER SET utf8;')
+        exfin_cursor.execute('SET character_set_connection=utf8;')
+
+        exfin_cursor.execute(
+            """
+                SELECT city 
+                FROM mbank.tobjects;
+            """
+        )
+        context["rows"] = exfin_cursor.fetchall()
+        return context
