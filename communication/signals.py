@@ -12,7 +12,7 @@ def comment_add(sender, instance, **kwargs):
             message = QuestionComment.objects.create(content=content, is_admin=True)
         instance.end_message = message
         instance.end_message.save()
-    elif instance.end_message:
+    elif not instance.is_closed and instance.end_message:
         instance.end_message = None
 
     if instance.is_read == 'force read':
