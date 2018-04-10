@@ -17,16 +17,6 @@ def comment_add(sender, instance, **kwargs):
 
     if instance.is_read == 'force read':
         instance.is_read = 'read'
-    elif instance.comments.last() and instance.comments.last().is_admin or instance.end_message:
+    else:
         instance.is_read = '!read'
-
-
-#@receiver(pre_save, sender=UserQuestion)
-#def set_is_read_field(sender, **kwargs):
-#    instance = kwargs['instance']
-#    if instance.comments.last() and instance.comments.last().is_admin:
-#        instance.is_read = False
-#        instance.save()
-#    elif instance.comments.last() and not instance.comments.last().is_admin:
-#        instance.is_read = True
 

@@ -304,8 +304,10 @@ def question_add(request):
             user = Profile.objects.filter(user=request.user).first()
             content = question_form.cleaned_data.get('support_text')
             file = question_form.cleaned_data.get('file')
-            question = UserQuestion(user=user, content=content, file=file)
-            question.save()
+            question = UserQuestion.objects.create(content=content,
+                                                   file=file,
+                                                   user=user,
+                                                   is_read='force read')
             url = reverse('profile', kwargs={'active':'mess'})
             return HttpResponseRedirect(url)
         else:
