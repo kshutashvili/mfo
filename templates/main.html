@@ -124,6 +124,12 @@
 				<span class="s-main-title__bottom">{{ main.top_block.footer_ua }}</span>
 			{% endif %}
 			</h1>
+
+			<ul class="social-main">
+				{% for obj in nets %}
+					<li><a href="{{ obj.link }}" class="social-main__link"><i class="fab fa-{{ obj.image }}{% if not obj.image == 'linkedin' %}-square{% endif %}"></i></a></li>
+				{% endfor %}
+			</ul>
 		</div>
 	</section>
 

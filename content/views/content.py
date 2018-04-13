@@ -18,7 +18,8 @@ from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
                            MainPageStatic, IndexPageStatic, StaticPageDefault
 from credit.models import CreditRate, CreditRateUp
 from communication.models import Response, QuestionComment, UserQuestion,\
-                                 QuestionConfig, CallbackSuccessForm
+                                 QuestionConfig, CallbackSuccessForm,\
+                                 SocialNetUnderHeader
 from communication.forms import WriteCommentForm, WriteQuestionForm
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
@@ -44,6 +45,7 @@ def pages(request, page_url):
 def main(request):
     city = get_city_name(request)
     main = MainPageStatic.get_solo()
+    nets = SocialNetUnderHeader.objects.all()
     departments = []
     for obj in main.departments.get_queryset():
         if obj.city not in departments:
@@ -58,9 +60,9 @@ def main(request):
                 length -= 1
     return render(request, 'main.html', {'main':main,
                                          'departments':departments,
+                                         'nets':nets,
                                          'column_list':column_list,
-                                         'user_city': city if city else 'Другой город'
-                                         })
+                                         'user_city': city if city else 'Другой город'})
 
 
 def index(request):

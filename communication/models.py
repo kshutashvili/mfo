@@ -392,3 +392,22 @@ class CallbackSuccessForm(SingletonModel):
         return self.success.title
 
 
+SOCIAL_NETS_ICONS_CLASSES = (('twitter', 'Twitter'),
+                             ('pinterest', 'Pinterest'),
+                             ('linkedin', 'LinkedIn'),
+                             ('facebook', 'Facebook'))
+
+class SocialNetUnderHeader(models.Model):
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255)
+    image = models.CharField(_('Иконка'),
+                             max_length=25,
+                             choices=SOCIAL_NETS_ICONS_CLASSES)
+
+    class Meta:
+        verbose_name = _('Социальная сеть')
+        verbose_name_plural = _('Социальные сети под хедером')
+
+    def __str__(self):
+        return self.link
+

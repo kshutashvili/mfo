@@ -112,3 +112,8 @@ class QuestionConfigAdmin(admin.ModelAdmin):
 @admin.register(models.CallbackSuccessForm)
 class CallbackSuccessFormAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
+
+
+@admin.register(models.SocialNetUnderHeader)
+class SocialNetUnderHeaderFormAdmin(admin.ModelAdmin):
+    list_display = ('link',)
