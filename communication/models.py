@@ -340,7 +340,9 @@ class UserQuestion(models.Model):
                                     default=False)
     user = models.ForeignKey(Profile,
                              verbose_name=_('Пользователь'),
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE,
+                             blank=True,
+                             null=True)
     created_at = models.DateTimeField(_('Дата создания вопроса'),
                                       auto_now_add=True)
     updated_at = models.DateTimeField(_('Дата обновления вопроса'),
@@ -371,7 +373,10 @@ class UserQuestion(models.Model):
         ordering = ['-updated_at',]
 
     def __str__(self):
-        return ' | '.join([self.user.phone, self.content]) 
+        if self.user:
+            return ' | '.join([self.user.phone, self.content])
+        else:
+            return self.content
 
 
 class CallbackSuccessForm(SingletonModel):
@@ -385,4 +390,24 @@ class CallbackSuccessForm(SingletonModel):
 
     def __str__(self):
         return self.success.title
+
+
+SOCIAL_NETS_ICONS_CLASSES = (('twitter', 'Twitter'),
+                             ('pinterest', 'Pinterest'),
+                             ('linkedin', 'LinkedIn'),
+                             ('facebook', 'Facebook'))
+
+class SocialNetUnderHeader(models.Model):
+    link = models.CharField(_('URL-адрес'),
+                            max_length=255)
+    image = models.CharField(_('Иконка'),
+                             max_length=25,
+                             choices=SOCIAL_NETS_ICONS_CLASSES)
+
+    class Meta:
+        verbose_name = _('Социальная сеть')
+        verbose_name_plural = _('Социальные сети под хедером')
+
+    def __str__(self):
+        return self.link
 

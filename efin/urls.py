@@ -75,16 +75,16 @@ urlpatterns = i18n_patterns(
 
     path('test_turnes1/', TurnesView.as_view(), name="test_turnes"),
 
-    path('<str:page_url>/', content.pages, name='static_pages'),
     path('ajax/departments_generate/<str:dep_id>/', content.departments_generate, name='departments_generate'),
     path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
     path('ajax/credit_calculate/<int:rate_id>/<int:term>/<int:summ>/', content.credit_calculator, name='cred_calc'),
     path('ajax/comment_add/', content.comment_add, name='comment_add'),
-    path('question_add/', login_required(content.question_add), name='question_add'),
+    path('question_add/', content.question_add, name='question_add'),
     path('ajax/question_generate/', login_required(content.question_generate), name='question_generate'),
     path('ajax/profile_alter/', login_required(alter_profile), name='alter_profile'),
     path('ajax/message_read/', login_required(message_read), name='message_read'),
-
+    
+    path('<str:page_url>/', login_required(content.pages), name='static_pages'),
 )
 
 urlpatterns += [
