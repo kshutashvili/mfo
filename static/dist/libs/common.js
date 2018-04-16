@@ -8,6 +8,34 @@ window.onload = function() {
 	messageRead();
 	creditFormSubmit();
 
+	(function($) {
+		var params = window.location.search.replace('?','').split('&')
+		.reduce(
+			function(p,e){
+				var a = e.split('=');
+				p[ decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+				return p;
+			},
+			{}
+		);
+		if(params["any_param"] != undefined && params["wm_id"] != undefined){
+			localStorage.setItem('lp_any_param', params["any_param"]);
+			localStorage.setItem('lp_wm_id', params["wm_id"]);
+		}
+		$('form').on('submit', function(e){
+			if($(this).attr('action') == '/ru/request-callback/' 
+			&& localStorage.getItem('lp_any_param') != null 
+			&& localStorage.getItem('lp_wm_id') != null){
+				$.post( 'https://cpa.linkprofit.ru/sale?OrderID=' + $('input[name=bid_id]', $(this)).val()
+				+ '&ClickHash=' + localStorage.getItem('lp_any_param') 
+				+ '&CampaignID=032dpyhs&AffiliateID=' + localStorage.getItem('lp_wm_id'), function( data ) {
+					console.dir(data);
+				});
+			}
+			
+		});
+	})($);
+	
 	$('a[href^="#"]').off().on("click", function (event) {
 		event.preventDefault();
 		var id  = $(this).attr('href'),
