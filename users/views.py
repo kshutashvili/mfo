@@ -14,6 +14,7 @@ from users.models import Profile
 from users.forms import SetPasswordForm, RegisterNumberForm, LoginForm
 from communication.models import UserExistMessage, UserQuestion
 from communication.forms import WriteCommentForm, WriteQuestionForm
+from users.utils import test_user_turnes
 
 
 def register(request):
@@ -106,6 +107,8 @@ def user_logout(request):
 
 def profile(request, active=None):
     if request.method == 'GET':
+        turnes_profile = test_user_turnes()
+
         profile = Profile.objects.filter(user=request.user).first()
         comment_form = WriteCommentForm()
         question_form = WriteQuestionForm()
@@ -124,6 +127,7 @@ def profile(request, active=None):
         return render(request, 'private-profile.html', {'questions':questions,
                                                         'active':active,
                                                         'profile':profile,
+                                                        'turnes_profile':turnes_profile,
                                                         'count_not_read_questions':count_not_read_questions,
                                                         'question_form':question_form,
                                                         'pagination':pagination,

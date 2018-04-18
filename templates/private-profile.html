@@ -40,15 +40,15 @@
 						<div class="profile__container">
 							<div class="profile-data">
 								<h4 class="profile__title">{% trans 'Ф.И.О' %}</h4>
-								<p class="profile-data__info">Антипенко Виталий Викторовичь</p>
+								<p class="profile-data__info">{{ turnes_profile.names }}</p>
 							</div>
 							<div class="profile-data">
 								<h4 class="profile__title">{% trans 'Дата рождения' %}</h4>
-								<p class="profile-data__info">11.11.1975</p>
+								<p class="profile-data__info">{{ turnes_profile.birthday }}</p>
 							</div>
 							<div class="profile-data">
 								<h4 class="profile__title">{% trans 'Место рождения' %}</h4>
-								<p class="profile-data__info">г.Киев</p>
+								<p class="profile-data__info">{{ turnes_profile.birthday_place }}</p>
 							</div>
 							<form action="{% url 'alter_profile' %}" class="profile_data" data-field='phone' method="post">
 							<div class="profile-data">
@@ -59,13 +59,13 @@
 										{% csrf_token %}
 											<img src="{% static 'dist/img/redact.png' %}" alt="redact-pic">
 										</label>
-										<input id="profile-tel" type="tel" value="{{ profile.phone }}" disabled>
+										<input id="profile-tel" type="tel" value="{{ turnes_profile.mobile_phone }}" disabled>
 									</div>
 								</div>
 							</form>
 							<div class="profile-data">
 								<h4 class="profile__title">{% trans 'Адрес места проживания' %}</h4>
-								<p class="profile-data__info">г.Киев, улица Крещатик 21б, квартира 45</p>
+								<p class="profile-data__info">{{ turnes_profile.address }}</p>
 							</div>
 							<form action="{% url 'alter_profile' %}" class="profile_data" data-field="email" method="post">
 								<div class="profile-data">
@@ -76,7 +76,7 @@
 										<label for="profile-mail">
 											<img src="{% static 'dist/img/redact.png' %}" alt="redact-pic">
 										</label>
-										<input id="profile-mail" type="email" class="profile-data__info" value="{{ request.user.email }}" disabled>
+										<input id="profile-mail" type="email" class="profile-data__info" value="{{ turnes_profile.email }}" disabled>
 									</div>	
 								</div>
 							</form>
