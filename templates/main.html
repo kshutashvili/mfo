@@ -283,6 +283,7 @@
 
 			<div class="b-section-message">
 			{% for obj in main.credit_take.get_queryset %}
+				{% if forloop.first %}
 				<div class="b-section-message__item {% if forloop.first %}active{% endif %}">
 					<h3 class="b-section-message__item-title">
 						{{ obj.title }}
@@ -291,7 +292,11 @@
 						{{ obj.text }}
 					</p>
 				</div>
+				{% endif %}
 			{% endfor %}
+				<div class="b-section-message__item active">
+					<a href="https://ikapusta.com.ua/" target="_blank"><img src="{% static 'dist/img/kapusta 500х500.png' %}" alt=""></a>
+				</div>
 			</div>
 
 			<div class="b-section-cards">
