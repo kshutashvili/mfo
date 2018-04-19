@@ -84,7 +84,7 @@ urlpatterns = i18n_patterns(
     path('ajax/profile_alter/', login_required(alter_profile), name='alter_profile'),
     path('ajax/message_read/', login_required(message_read), name='message_read'),
     
-    path('<str:page_url>/', login_required(content.pages), name='static_pages'),
+    path('<str:page_url>/', content.pages, name='static_pages'),
 )
 
 urlpatterns += [

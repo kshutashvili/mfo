@@ -1,4 +1,6 @@
+from pprint import pprint
 from datetime import datetime
+
 import MySQLdb
 
 
@@ -32,13 +34,15 @@ def test_user_turnes():
                 email,
                 name,
                 name2,
-                name3
+                name3,
+                egn
             FROM
                 mbank.tpersons
             WHERE id = 144580;
         """
     )
     person_data = exfin_cursor.fetchall()[0]
+    print(person_data)
 
     exfin_cursor.execute(
         """
@@ -101,6 +105,32 @@ def test_user_turnes():
     )
     person_street_type = exfin_cursor.fetchall()[0]
 
+
+    exfin_cursor.execute(
+        """
+            SELECT 
+                id, vnoska, suma, egn,
+                contract_date, contract_num
+            FROM
+                mbank.tcredits
+            WHERE
+                egn = {0};
+        """.format(person_data[13])
+    )
+    person_credits = exfin_cursor.fetchall()
+    credits = []
+    for credit in person_credits:
+        credits.append(
+            {
+                "pay_step": credit[1],
+                "sum": credit[2],
+                "contract_date": credit[4].strftime("%d.%m.%Y"),
+                "contract_num": credit[5],
+            }
+        )
+    pprint(credits)
+
+
     return {
         "names": " ".join([
             person_data[12],
@@ -122,5 +152,6 @@ def test_user_turnes():
         "mobile_phone": " ".join([
             person_mobile_operator_code[0],
             person_data[8]
-        ])
+        ]),
+        "credits": credits
     }
