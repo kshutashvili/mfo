@@ -112,7 +112,7 @@
 					<div class="application-container">
 						<div class="application">
 							<div class="application__info">
-								<p class="application__person">Антипенко Виталий Викторович</p>
+								<p class="application__person">{{ turnes_profile.names }}</p>
 								<p class="application__goal">(витрати на розвито бізнесу)</p>
 								<p class="application__sum">Сумма кредита с процентами: <b>80 364 грн</b></p>
 								<p class="application__termin">Строк кредита: <b>11 мес 2 недели</b></p>
@@ -133,7 +133,7 @@
 
 						<div class="application">
 							<div class="application__info">
-								<p class="application__person">Антипенко Виталий Викторович</p>
+								<p class="application__person">{{ turnes_profile.names }}</p>
 								<p class="application__goal">(витрати на розвито бізнесу)</p>
 								<p class="application__sum">Сумма кредита с процентами: <b>80 364 грн</b></p>
 								<p class="application__termin">Строк кредита: <b>11 мес 2 недели</b></p>
@@ -166,20 +166,20 @@
 						{% for credit in turnes_profile.credits %}
 						<div class="application">
 							<div class="application__info">
-								<p class="application__person">Антипенко Виталий Викторович</p>
-								<p class="application__goal">----</p>
+								<p class="application__person">{{ turnes_profile.names }}</p>
+								<p class="application__goal">Сумма: {{ credit.sum }} грн.</p>
 								<p class="application__sum">№ договора: <b>{{ credit.contract_num }}</b></p>
 								<p class="application__termin">Дата договора: <b> {{ credit.contract_date }}</b></p>
 							</div>
 							<div class="application__block">
 								<h3 class="application__block-title">Сума внеску</h3>
-								<div class="application__block-sum application__block-sum--secondary">{{ credit.pay_step }}</div>
+								<div class="application__block-sum application__block-sum--secondary">{{ credit.pay_step_with_dolg }}</div>
 								<a href="{% url 'payonline' %}" class="b-btn-app">Оплатить</a>
 							</div>
 							<div class="application__block">
 								<h3 class="application__block-title">Осталось оплатить</h3>
-								<div class="application__block-sum application__block-sum--secondary">---</div>
-								<div class="application__block-termin">до ---<i>(-- взносов)</i>
+								<div class="application__block-sum application__block-sum--secondary">{{ credit.rest_pays_sum }}</div>
+								<div class="application__block-termin">до {{ credit.last_pay_date }}<i>(еще {{ credit.number_of_rest_pays }} взносов)</i>
 								</div>		
 							</div>
 							<div class="application__block">
@@ -190,7 +190,7 @@
 
 						<div class="application">
 							<div class="application__info">
-								<p class="application__person">Антипенко Виталий Викторович</p>
+								<p class="application__person">{{ turnes_profile.names }}</p>
 								<p class="application__goal">(витрати на розвито бізнесу)</p>
 								<p class="application__sum">№ договора: <b>21343456</b></p>
 								<p class="application__termin">Дата договора: <b> 23.02.17</b></p>

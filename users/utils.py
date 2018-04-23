@@ -42,7 +42,7 @@ def test_user_turnes():
         """
     )
     person_data = exfin_cursor.fetchall()[0]
-    print(person_data)
+    # print(person_data)
 
     exfin_cursor.execute(
         """
@@ -109,27 +109,82 @@ def test_user_turnes():
     exfin_cursor.execute(
         """
             SELECT 
-                id, vnoska, suma, egn,
-                contract_date, contract_num
+                tcr.id,
+                tcr.vnoska,
+                tcr.suma,
+                tcr.egn,
+                tcr.contract_date,
+                tcr.contract_num,
+
+                pays_calendar.number_of_pays,
+                pays_calendar.full_sum,
+                pays_calendar.already_paid,
+                pays_calendar.rest_pays_sum,
+                pays_calendar.number_of_rest_pays,
+                pays_calendar.last_pay_date,
+                tst.status
             FROM
-                mbank.tcredits
+                mbank.tcredits tcr
+            left join(
+                SELECT 
+                    tpp_main.id,
+                    tpp_main.credit_id,
+                    count(*) as number_of_pays,
+                    sum(tpp_main.sum) as full_sum,
+                    ifnull(tpp_join.already_paid, 0) as already_paid,
+                    sum(tpp_main.sum) - ifnull(tpp_join.already_paid, 0) as rest_pays_sum,
+                    count(*) - tpp_join.paid_pays as number_of_rest_pays,
+                    date(max(tpp_main.data)) as last_pay_date
+                FROM
+                    mbank.tpp tpp_main
+                LEFT join 
+                (   
+                    select id, sum(sum) as already_paid, count(*) as paid_pays
+                    from mbank.tpp
+                    where ispaid = 1
+                    group by credit_id
+                ) tpp_join on tpp_join.id = tpp_main.id
+                group by tpp_main.credit_id
+            ) pays_calendar on pays_calendar.credit_id = tcr.id
+
+            join mbank.tstatuses tst on tst.credit_id = tcr.id and tst.status = 5 and tst.credit_id not in (
+                select tst11.credit_id from mbank.tstatuses tst11 
+                where tst11.status in (11, 111)
+            )
             WHERE
-                egn = {0};
+                tcr.egn = {0} and tcr.is_otpusnat = 1;
         """.format(person_data[13])
     )
     person_credits = exfin_cursor.fetchall()
     credits = []
+    credits_ids = []
     for credit in person_credits:
+        exfin_cursor.execute(
+            """
+                SELECT max(dt) last_date, dolg_all, crd_id
+                from dwh.credits_saldo
+                where crd_id = {0}
+                group by crd_id
+            """.format(credit[0])
+        )
+        credit_dolg = exfin_cursor.fetchall()
         credits.append(
             {
                 "pay_step": credit[1],
                 "sum": credit[2],
                 "contract_date": credit[4].strftime("%d.%m.%Y"),
                 "contract_num": credit[5],
+                "number_of_pays": credit[6],
+                "full_sum": credit[7],
+                "already_paid": credit[8],
+                "rest_pays_sum": credit[9],
+                "number_of_rest_pays": credit[10],
+                "last_pay_date": credit[11].strftime("%d.%m.%Y"),
+                "dolg": credit_dolg[0][1],
+                "pay_step_with_dolg": credit[1] + credit_dolg[0][1],
             }
         )
-    pprint(credits)
-
+    # pprint(credits)
 
     return {
         "names": " ".join([
