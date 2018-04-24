@@ -21,18 +21,17 @@
 				</div>
 				
 				<div class="b-input b-input--main">
-					<input type="text" placeholder="{% trans 'Введите свое имя' %}" name="client_name">
+					<input type="text" placeholder="{% trans 'Введите свое имя' %}" name="client_name" required>
 					<span class="icon icon--avatar"></span>
 				</div>
 				<div class="b-input b-input--main">
-					{# <input type="tel" placeholder="+38 (0__) ___ __ __" name="contact_phone"> #}
-					<input type="tel" placeholder="380991112200" name="contact_phone">
+					<input type="tel" placeholder="+38 (0__) ___ __ __" name="contact_phone" class="phone-mask" required>
 					<span class="icon icon--phone-call"></span>
 				</div>
 				{% csrf_token %}
 				<input type="hidden" value="{{ bid_id|default:"" }}" name="bid_id">
 				<input type="hidden" value="{{ city }}" name="city">
-				<button class="b-btn-primary b-btn-primary--main" type="submit">{% trans 'Заказать звонок' %}</button>
+				<button class="b-btn-primary b-btn-primary--main hidding" id="submit-callback" type="submit">{% trans 'Заказать звонок' %}</button>
 			</form>
 
 			<form action="{% url 'register' %}" method="post" class="f-callback-right">

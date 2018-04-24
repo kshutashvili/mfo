@@ -36,6 +36,7 @@
 	{% endblock %} | expressfinance.com.ua</title>
 	<link rel="icon" type="image/vnd.microsoft.icon" href="{% static 'dist/img/favicon.ico' %}">
 	<link rel="stylesheet" href="{% static 'dist/css/styles.css' %}">
+	<link rel="stylesheet" href="{% static 'dist/css/custom.css' %}">
 	{% block extrastyles %}{% endblock %}
 	<meta name="title" content="
 	{% block meta_title %}
@@ -228,6 +229,7 @@
 	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 	<script src="{% static 'dist/libs/common.js' %}"></script>
  	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGHOC0W3HeH12bCj22i3kGPUFvHMrpPYM&callback=initMap"></script>
+	<script src="{% static 'dist/libs/input-mask.min.js' %}"></script>
  	<script type="text/javascript">
 	(function(){
 		var sitehelp_s = document.createElement('script');
@@ -236,6 +238,24 @@
 		sitehelp_s.src = top.location.protocol + '//c.sitehelp.im/code.cgi?c=3211' + (top.location.protocol=='http:' ? '' : '&ssl=1') + '&rnd=' + Math.random();
 		document.body.appendChild(sitehelp_s);
 	})();
+	</script>
+	<script>
+		$(document).ready(function(){
+			// $('.phone-mask').inputmask({"mask": "+38 (099) 999 99 99"});
+			$(".phone-mask").inputmask("+38 (099) 999 99 99", {
+				"oncomplete": function(){
+					$("#submit-callback").removeClass('hidding')
+				},
+				"onincomplete": function(){
+					$("#submit-callback").addClass('hidding')
+				}
+			});
+			// $(".phone-mask").inputmask("+38 (099) 999 99 99", {
+			// 	"onincomplete": function(){
+			// 		$("#submit-callback").addClass('hidding')
+			// 	}
+			// });
+		});
 	</script>
 {% block extrascrypts %}{% endblock %}
 

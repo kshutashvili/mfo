@@ -93,3 +93,15 @@ def process_bid(bid):
     )
 
     # print(r.json())
+
+
+def clear_contact_phone(contact_phone):
+    return contact_phone.replace(
+        "+", ""
+    ).replace(
+        "(", ""
+    ).replace(
+        ")", ""
+    ).replace(
+        " ", ""
+    )

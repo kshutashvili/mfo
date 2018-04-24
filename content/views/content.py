@@ -23,7 +23,7 @@ from communication.models import Response, QuestionComment, UserQuestion,\
 from communication.forms import WriteCommentForm, WriteQuestionForm
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
-from content.helpers import get_city_name, process_bid
+from content.helpers import get_city_name, process_bid, clear_contact_phone
 from bids.models import Bid
 from users.forms import RegisterNumberForm
 from users.models import Profile
@@ -243,11 +243,14 @@ def save_credit_request(request):
 def request_callback(request):
     if request.method == 'POST':
         bid_id = request.POST.get("bid_id", None)
+        contact_phone = request.POST.get("contact_phone")
+        valid_phone_clean = clear_contact_phone(contact_phone)
+        print(contact_phone, valid_phone_clean)
         if bid_id:
             # if Bid has been created in save_credit_request function
             if Bid.objects.filter(id=int(bid_id)).exists():
                 bid = Bid.objects.get(id=int(bid_id))
-                bid.contact_phone = request.POST.get("contact_phone")
+                bid.contact_phone = valid_phone_clean
                 bid.name = request.POST.get("client_name")
                 bid.save()
                 process_bid(bid)
@@ -255,7 +258,7 @@ def request_callback(request):
                 new_bid = Bid.objects.create(
                     city=request.POST.get('city'),
                     name=request.POST.get("client_name"),
-                    contact_phone=request.POST.get("contact_phone")
+                    contact_phone=valid_phone_clean
                 )
                 new_bid.save()
                 process_bid(new_bid)
@@ -263,7 +266,7 @@ def request_callback(request):
             new_bid = Bid.objects.create(
                 city=request.POST.get('city'),
                 name=request.POST.get("client_name"),
-                contact_phone=request.POST.get("contact_phone")
+                contact_phone=valid_phone_clean
             )
             new_bid.save()
             process_bid(new_bid)
