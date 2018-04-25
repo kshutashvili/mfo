@@ -83,8 +83,11 @@ urlpatterns = i18n_patterns(
     path('ajax/question_generate/', login_required(content.question_generate), name='question_generate'),
     path('ajax/profile_alter/', login_required(alter_profile), name='alter_profile'),
     path('ajax/message_read/', login_required(message_read), name='message_read'),
-    
+
+    path('pay/', include('payments.urls', namespace='payments')),
+
     path('<str:page_url>/', content.pages, name='static_pages'),
+
 )
 
 urlpatterns += [

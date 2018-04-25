@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'users',
     'token_confirm',
     'payment_gateways',
+    'payments',
     #3-rd
     'ckeditor',
     'solo',
@@ -186,6 +187,15 @@ GEOIP_PATH = BASE_DIR + '/geoip'
 
 PB_SERVICE_CODE = 1
 EASYPAY_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
+
+
+# 4bill settings
+PROVIDER_4BILL_ACCOUNT = 103
+PROVIDER_4BILL_WALLET = 184
+PROVIDER_4BILL_POINT = 94
+PROVIDER_4BILL_SERVICE = 2
+PROVIDER_4BILL_API_KEY = 'ytb23Bda8fhUX@omw7'
+
 
 try:
     from .local_settings import *

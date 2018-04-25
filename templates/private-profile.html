@@ -4,6 +4,8 @@
 
 {% load i18n %}
 
+{% load l10n %}
+
 {% load solo_tags %}
 
 {% load custom_filters %}
@@ -174,7 +176,12 @@
 							<div class="application__block">
 								<h3 class="application__block-title">Сума внеску</h3>
 								<div class="application__block-sum application__block-sum--secondary">{{ credit.pay_step_with_dolg }}</div>
-								<a href="{% url 'payonline' %}" class="b-btn-app">Оплатить</a>
+								<form action="{% url 'payments:create' %}" method="POST">
+									{% csrf_token %}
+									<input type="hidden" name="contract_num" id="id_contract_num" value="{{ credit.contract_num }}">
+									<input type="hidden" name="pay_amount" id="id_pay_amount" value="{{ credit.pay_step_with_dolg|unlocalize }}">
+									<button type="submit" class="b-btn-app">Оплатить</a>
+								</form>
 							</div>
 							<div class="application__block">
 								<h3 class="application__block-title">Осталось оплатить</h3>

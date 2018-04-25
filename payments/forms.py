@@ -1,0 +1,30 @@
+from django import forms
+from django.utils.translation import ugettext_lazy as _
+
+from .models import Payment
+
+
+class PayForm(forms.Form):
+    contract_num = forms.CharField(
+        label=_("№ договора"),
+        max_length=128,
+        widget=forms.HiddenInput()
+    )
+    pay_amount = forms.DecimalField(
+        label=_("Сумма платежа"),
+        widget=forms.HiddenInput()
+    )
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = (
+            'account_id',
+            'wallet_id',
+            'service_id',
+            'customer_ip_address',
+            'amount',
+            'description',
+            'status'
+        )

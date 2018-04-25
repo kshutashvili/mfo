@@ -15,6 +15,7 @@ from users.forms import SetPasswordForm, RegisterNumberForm, LoginForm
 from communication.models import UserExistMessage, UserQuestion
 from communication.forms import WriteCommentForm, WriteQuestionForm
 from users.utils import test_user_turnes
+from payments.forms import PayForm
 
 
 def register(request):
@@ -108,6 +109,7 @@ def user_logout(request):
 def profile(request, active=None):
     if request.method == 'GET':
         turnes_profile = test_user_turnes()
+        pay_form = PayForm()
 
         profile = Profile.objects.filter(user=request.user).first()
         comment_form = WriteCommentForm()
@@ -131,7 +133,8 @@ def profile(request, active=None):
                                                         'count_not_read_questions':count_not_read_questions,
                                                         'question_form':question_form,
                                                         'pagination':pagination,
-                                                        'comment_form':comment_form})
+                                                        'comment_form':comment_form,
+                                                        'pay_form': pay_form})
 
 
 def alter_profile(request):
