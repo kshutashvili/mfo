@@ -231,6 +231,22 @@
 	<script src="{% static 'dist/libs/input-mask.min.js' %}"></script>
 
 	<script>
+	  window.senderCallback = function() {
+	    SenderWidget.init({
+	      companyId: "i41477763570"
+	    });
+	  }
+	</script>
+	<script>
+	  (function(d, s, id) {
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    js = d.createElement(s);
+	    js.id = id;
+	    js.src = "https://widget.sender.mobi/build/init.js";
+	    fjs.parentNode.insertBefore(js, fjs, 'sender-widget');
+	  })(document, 'script');
+	</script>
+	<script>
 		$(document).ready(function(){
 			// $('.phone-mask').inputmask({"mask": "+38 (099) 999 99 99"});
 			$(".phone-mask").inputmask("+38 (099) 999 99 99", {
