@@ -218,7 +218,6 @@
 			</div>
 		</div>
 	</footer>
-	<div id="SITEHELP_CONTAINER_3211" class="SITEHELP_CONTAINER_3211"></div>
 {% endblock %}
 {% block extra %}{% endblock %}
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -230,15 +229,25 @@
 	<script src="{% static 'dist/libs/common.js' %}"></script>
  	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGHOC0W3HeH12bCj22i3kGPUFvHMrpPYM&callback=initMap"></script>
 	<script src="{% static 'dist/libs/input-mask.min.js' %}"></script>
- 	<script type="text/javascript">
-	 (function(){
-	  var sitehelp_s = document.createElement('script');
-	  sitehelp_s.type = 'text/javascript';
-	  sitehelp_s.async = true;
-	  sitehelp_s.src = top.location.protocol + '//c.sitehelp.im/code.cgi?c=3211' + (top.location.protocol=='http:' ? '' : '&ssl=1') + '&rnd=' + Math.random();
-	  document.body.appendChild(sitehelp_s);
-	 })();
-	</script>
+ 	<!-- Start SiteHeart code -->
+<script>
+(function(){
+var widget_id = 895082;
+_shcp =[{widget_id : widget_id}];
+var lang =(navigator.language || navigator.systemLanguage 
+|| navigator.userLanguage ||"en")
+.substr(0,2).toLowerCase();
+var url ="widget.siteheart.com/widget/sh/"+ widget_id +"/"+ lang +"/widget.js";
+var hcc = document.createElement("script");
+hcc.type ="text/javascript";
+hcc.async =true;
+hcc.src =("https:"== document.location.protocol ?"https":"http")
++"://"+ url;
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hcc, s.nextSibling);
+})();
+</script>
+<!-- End SiteHeart code -->
 	<script>
 		$(document).ready(function(){
 			// $('.phone-mask').inputmask({"mask": "+38 (099) 999 99 99"});
