@@ -4,6 +4,10 @@ import json
 
 import requests
 
+from django.db.models import F
+
+from .models import KeyFor4billAPI
+
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -53,14 +57,19 @@ class Provider4billAPI:
         str_for_hashing = "{0}{1}{2}".format(point, api_key, key)
         return hashlib.md5(str_for_hashing.encode()).hexdigest()
 
-    def make_key(self):
-        # MUST BE REALISED
+    def get_key(self):
         # https://docs.4bill.io/#/docs/documentation-2
-        return 1
+        key_object = KeyFor4billAPI.get_solo()
+        return key_object.key
+
+    def set_key(self):
+        key_object = KeyFor4billAPI.get_solo()
+        key_object.key += 1
+        key_object.save()
 
     def transaction_create(self, request, payment_object):
         # incremented key value for request
-        request_key = self.make_key()
+        request_key = self.get_key()
 
         request_data = {
             "auth": {
@@ -94,11 +103,13 @@ class Provider4billAPI:
             headers={"Content-Type": "application/json"}
         )
 
+        self.set_key()
+
         return r.json()
 
     def transaction_find(self, payment_object):
         # incremented key value for request
-        request_key = self.make_key()
+        request_key = self.get_key()
 
         request_data = {
             "auth": {
@@ -119,5 +130,7 @@ class Provider4billAPI:
             data=json.dumps(request_data),
             headers={"Content-Type": "application/json"}
         )
+
+        self.set_key()
 
         return r.json()

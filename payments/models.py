@@ -1,3 +1,5 @@
+from solo.models import SingletonModel
+
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -79,3 +81,14 @@ class Payment(models.Model):
             self.amount,
             self.status
         )
+
+
+class KeyFor4billAPI(SingletonModel):
+    key = models.BigIntegerField(
+        "Значение Key для 4bill API",
+        default=20,
+        help_text="Изменять можно только в том случае, если перестали работать запросы к API"
+    )
+
+    class Meta:
+        verbose_name = 'Key для 4bill API'

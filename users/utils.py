@@ -42,7 +42,6 @@ def test_user_turnes():
         """
     )
     person_data = exfin_cursor.fetchall()[0]
-    # print(person_data)
 
     exfin_cursor.execute(
         """
@@ -156,8 +155,8 @@ def test_user_turnes():
         """.format(person_data[13])
     )
     person_credits = exfin_cursor.fetchall()
+
     credits = []
-    credits_ids = []
     for credit in person_credits:
         exfin_cursor.execute(
             """
@@ -168,6 +167,104 @@ def test_user_turnes():
             """.format(credit[0])
         )
         credit_dolg = exfin_cursor.fetchall()
+
+        exfin_cursor.execute(
+            """
+                SELECT
+                    id,
+                    credit_id,
+                    sum,
+                    data,
+                    ispaid
+                from mbank.tpp
+                where credit_id = {0}
+            """.format(credit[0])
+        )
+        credit_tpp = exfin_cursor.fetchall()
+
+
+        tpp_data_list = []
+        pay_sums = []
+        dolg_sums = []
+        rest_sums = []
+        for i, tpp in enumerate(credit_tpp):
+            try:
+                exfin_cursor.execute(
+                    """
+                        SELECT sum(sum) as how_paid, iscredit, vreme
+                        from mbank.tcash
+                        where type = 'in' 
+                          and nomenclature = 4 
+                          and iscredit = {0} 
+                          and date(vreme) between '{1}' and '{2}'
+                        group by iscredit
+                    """.format(credit[0], tpp[3], credit_tpp[i+1][3])
+                )
+            except Exception:
+                exfin_cursor.execute(
+                    """
+                        SELECT sum(sum) as how_paid, iscredit, vreme
+                        from mbank.tcash
+                        where type = 'in' 
+                          and nomenclature = 4 
+                          and iscredit = {0} 
+                          and date(vreme) > '{1}'
+                        group by iscredit
+                    """.format(credit[0], tpp[3])
+                )
+            tcash_in_sum = exfin_cursor.fetchall()
+
+
+            try:
+                exfin_cursor.execute(
+                    """
+                        SELECT sum(sum) as how_paid, iscredit, vreme
+                        from mbank.tcash
+                        where type = 'out' 
+                          and nomenclature = 7
+                          and iscredit = {0} 
+                          and date(vreme) between '{1}' and '{2}'
+                        group by iscredit
+                    """.format(credit[0], tpp[3], credit_tpp[i+1][3])
+                )
+            except Exception:
+                exfin_cursor.execute(
+                    """
+                        SELECT sum(sum) as how_paid, iscredit, vreme
+                        from mbank.tcash
+                        where type = 'out' 
+                          and nomenclature = 7
+                          and iscredit = {0} 
+                          and date(vreme) > '{1}'
+                        group by iscredit
+                    """.format(credit[0], tpp[3])
+                )
+            tcash_dolg_sum = exfin_cursor.fetchall()
+
+            # print(tcash_dolg_sum)
+
+            pay_sum = tcash_in_sum[0][0] if tcash_in_sum else 0
+            pay_sums.append(pay_sum)
+            dolg_sum = tcash_dolg_sum[0][0] if tcash_dolg_sum else 0
+            dolg_sums.append(dolg_sum)
+
+            rest_sum = credit[7] - sum(dolg_sums) - sum(pay_sums)
+            rest_sums.append(rest_sum)
+
+            tpp_data_list.append(
+                {
+                    "data": tpp[3],
+                    "pay_sum": pay_sum,
+                    "dolg_sum": dolg_sum,
+                    "ispaid": tpp[4],
+                    "sum_must_pay": float(tpp[2]) - float(dolg_sum),
+                    "rest_sum": rest_sums[i-1] if i > 0 else credit[7] - dolg_sum
+                }
+            )
+
+
+
+
         credits.append(
             {
                 "pay_step": credit[1],
@@ -182,6 +279,7 @@ def test_user_turnes():
                 "last_pay_date": credit[11].strftime("%d.%m.%Y"),
                 "dolg": credit_dolg[0][1],
                 "pay_step_with_dolg": credit[1] + credit_dolg[0][1],
+                "tpp": tpp_data_list
             }
         )
     # pprint(credits)
