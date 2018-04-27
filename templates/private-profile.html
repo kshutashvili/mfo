@@ -176,11 +176,24 @@
 							</div>
 							<div class="application__block">
 								<h3 class="application__block-title">Сума внеску</h3>
-								<div class="application__block-sum application__block-sum--secondary">{{ tpp.sum_must_pay }}</div>
+								<div class="application__block-sum application__block-sum--secondary">
+									{% if tpp.rest_sum < tpp.sum_must_pay %}
+										{{ tpp.rest_sum|floatformat:"2" }}
+									{% else %}
+										{{ tpp.sum_must_pay|floatformat:"2" }}
+									{% endif %}
+								</div>
 								<form action="{% url 'payments:create' %}" method="POST">
 									{% csrf_token %}
 									<input type="hidden" name="contract_num" id="id_contract_num" value="{{ credit.contract_num }}">
-									<input type="hidden" name="pay_amount" id="id_pay_amount" value="{{ credit.pay_step_with_dolg|unlocalize }}">
+
+									{% if tpp.rest_sum < tpp.sum_must_pay %}
+										<input type="hidden" name="pay_amount" id="id_pay_amount" value="{{ tpp.rest_sum|unlocalize }}">
+									{% else %}
+										<input type="hidden" name="pay_amount" id="id_pay_amount" value="{{ tpp.sum_must_pay|unlocalize }}">
+									{% endif %}
+
+									<input type="hidden" name="tpp_id" id="id_tpp_id" value="{{ tpp.id }}">
 									{% if tpp.ispaid %}
 										<button type="submit" class="b-btn-app" disabled>Оплачено</a>
 									{% else %}
@@ -190,8 +203,8 @@
 							</div>
 							<div class="application__block">
 								<h3 class="application__block-title">Осталось оплатить</h3>
-								<div class="application__block-sum application__block-sum--secondary">{{ tpp.rest_sum }}</div>
-								<div class="application__block-termin">до {{ tpp.data|date:"d.m.Y" }}<i>(еще {{ credit.number_of_rest_pays }} взносов)</i>
+								<div class="application__block-sum application__block-sum--secondary">{{ tpp.rest_sum|floatformat:"2" }}</div>
+								<div class="application__block-termin">до {{ tpp.date|date:"d.m.Y" }}<i>Долг {{ tpp.dolg_sum|floatformat:"2" }} грн.</i>
 								</div>		
 							</div>
 							<div class="application__block">

@@ -14,6 +14,10 @@ class PayForm(forms.Form):
         label=_("Сумма платежа"),
         widget=forms.HiddenInput()
     )
+    tpp_id = forms.IntegerField(
+        label=_("tpp ID"),
+        widget=forms.HiddenInput()
+    )
 
 
 class PaymentForm(forms.ModelForm):
@@ -26,5 +30,6 @@ class PaymentForm(forms.ModelForm):
             'customer_ip_address',
             'amount',
             'description',
-            'status'
+            'status',
+            'tpp_id'
         )

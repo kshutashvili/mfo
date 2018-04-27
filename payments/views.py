@@ -26,6 +26,7 @@ def create_payment(request):
                 'wallet_id': settings.PROVIDER_4BILL_WALLET,
                 'service_id': settings.PROVIDER_4BILL_SERVICE,
                 'customer_ip_address': get_client_ip(request),
+                'tpp_id': pay_form.cleaned_data["tpp_id"],
                 'amount': float(pay_form.cleaned_data["pay_amount"]) * 100,  # amount in kopeks
                 'description': "Пользователь: {0}\n№ договора: {1}\nСумма: {2}".format(
                     request.user.id,
@@ -81,7 +82,10 @@ def success_payment(request, payment_id):
     """
         updating transaction status
     """
-    Payment.objects.filter(id=payment_id).update(status=Payment.SUCCESS)
+    Payment.objects.filter(id=payment_id).update(
+        status=Payment.SUCCESS,
+        is_paid=True
+    )
     return HttpResponseRedirect(
         reverse("profile")
     )
@@ -130,7 +134,10 @@ def callback_payment(request, payment_id):
             # if its raises error (status > 5)
             # then set PENDING status
             try:
-                payment.status = statuses[str(provider_transaction["response"]["status"])]
+                current_pay_status = statuses[str(provider_transaction["response"]["status"])]
+                payment.status = current_pay_status
+                if current_pay_status == Payment.SUCCESS:
+                    payment.is_paid = True
                 payment.save()
             except Exception:
                 payment.status = Payment.PENDING

@@ -46,6 +46,11 @@ class Payment(models.Model):
         max_length=16,
         default="UAH"
     )
+    tpp_id = models.BigIntegerField(
+        "ID записи в таблице tpp БД turnes",
+        blank=True,
+        null=True
+    )
 
     description = models.TextField(
         "Описание транзакции",
@@ -55,6 +60,10 @@ class Payment(models.Model):
     status = models.CharField(
         "Статус транзакции",
         max_length=32
+    )
+    is_paid = models.BooleanField(
+        "Оплачен?",
+        default=False
     )
 
     provider_transaction_id = models.IntegerField(
