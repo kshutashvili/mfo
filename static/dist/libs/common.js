@@ -21,16 +21,28 @@ window.onload = function() {
 		if(params["any_param"] != undefined && params["wm_id"] != undefined){
 			localStorage.setItem('lp_any_param', params["any_param"]);
 			localStorage.setItem('lp_wm_id', params["wm_id"]);
+			localStorage.setItem('lp_visitor', null);
+		}
+		else if(params["v"] != undefined){
+			localStorage.setItem('lp_visitor', params["v"]);
+			localStorage.setItem('lp_any_param', null);
+			localStorage.setItem('lp_wm_id', null);
 		}
 		$('form').on('submit', function(e){
-			if($(this).attr('action') == '/ru/request-callback/' 
-			&& localStorage.getItem('lp_any_param') != null 
-			&& localStorage.getItem('lp_wm_id') != null){
-				$.post( 'https://cpa.linkprofit.ru/sale?OrderID=' + $('input[name=bid_id]', $(this)).val()
-				+ '&ClickHash=' + localStorage.getItem('lp_any_param') 
-				+ '&CampaignID=032dpyhs&AffiliateID=' + localStorage.getItem('lp_wm_id'), function( data ) {
-					console.dir(data);
-				});
+			if($(this).attr('action') == '/ru/request-callback/'){
+				if(localStorage.getItem('lp_any_param') != null 
+				&& localStorage.getItem('lp_wm_id') != null){
+					$.post( 'https://cpa.linkprofit.ru/sale?OrderID=' + $('input[name=bid_id]', $(this)).val()
+					+ '&ClickHash=' + localStorage.getItem('lp_any_param') 
+					+ '&CampaignID=032dpyhs&AffiliateID=' + localStorage.getItem('lp_wm_id'), function( data ) {
+						console.dir(data);
+					});
+				}
+				else if(localStorage.getItem('lp_visitor') != null){
+					$.post( 'https://tracker2.doaffiliate.net/api/expressfinance-com-ua?type=CPL&lead=' +  $('input[name=bid_id]', $(this)).val() + '&v=' + localStorage.getItem('lp_visitor'), function( data ) {
+						console.dir(data);
+					});
+				}
 			}
 			
 		});
