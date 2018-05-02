@@ -39,7 +39,7 @@ window.onload = function() {
 					});
 				}
 				else if(localStorage.getItem('lp_visitor') != null){
-					$.post( 'https://tracker2.doaffiliate.net/api/expressfinance-com-ua?type=CPL&lead=' +  $('input[name=bid_id]', $(this)).val() + '&v=' + localStorage.getItem('lp_visitor'), function( data ) {
+					$.get( 'https://tracker2.doaffiliate.net/api/expressfinance-com-ua?type=CPL&lead=' +  $('input[name=bid_id]', $(this)).val() + '&v=' + localStorage.getItem('lp_visitor'), function( data ) {
 						console.dir(data);
 					});
 				}
