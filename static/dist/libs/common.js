@@ -19,14 +19,14 @@ window.onload = function() {
 			{}
 		);
 		if(params["any_param"] != undefined && params["wm_id"] != undefined){
+			localStorage.removeItem('lp_visitor');
 			localStorage.setItem('lp_any_param', params["any_param"]);
 			localStorage.setItem('lp_wm_id', params["wm_id"]);
-			localStorage.setItem('lp_visitor', null);
 		}
 		else if(params["v"] != undefined){
+			localStorage.removeItem('lp_any_param');
+			localStorage.removeItem('lp_wm_id');
 			localStorage.setItem('lp_visitor', params["v"]);
-			localStorage.setItem('lp_any_param', null);
-			localStorage.setItem('lp_wm_id', null);
 		}
 		$('form').on('submit', function(e){
 			if($(this).attr('action') == '/ru/request-callback/'){
