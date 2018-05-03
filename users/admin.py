@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
-from django.contrib.auth.models import User
-from users.models import Profile, RequestPersonalArea
+from users.models import Profile, RequestPersonalArea, User
 
 
 class ProfileInline(admin.StackedInline):
@@ -9,12 +8,9 @@ class ProfileInline(admin.StackedInline):
     exclude = ('verify_code', 'two_authy')
 
 
-class UserAdmin(auth_admin.UserAdmin):
-    inlines = (ProfileInline,)
-
-
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(RequestPersonalArea)

@@ -283,7 +283,7 @@ class CloseCreditStatic(SingletonModel):
     def __str__(self):
         return self.title
 
-    def save(self):
+    def save(self, *args, **kwargs):
         super(CloseCreditStatic, self).save()
         self.title = self.title_ru
 
@@ -444,7 +444,7 @@ class MainPageTopBlockStatic(SingletonModel):
     def __str__(self):
         return ' '.join([self.title, self.subtitle])
 
-    def save(self):
+    def save(self, *args, **kwargs):
       super(MainPageTopBlockStatic, self).save()
       self.title = self.title_ru
       self.subtitle = self.subtitle_ru
@@ -537,7 +537,7 @@ class MainPageStatic(SingletonModel):
     def __str__(self):
         return 'Главная страница'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         super(MainPageStatic, self).save()
         self.title = self.title_ru
         self.meta_title = self.meta_title_ru
@@ -593,7 +593,7 @@ class IndexPageStatic(SingletonModel):
     def __str__(self):
         return 'Страница Партнерский лэндинг'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         super(IndexPageStatic, self).save()
         self.departments_title = self.departments_title_ru
 

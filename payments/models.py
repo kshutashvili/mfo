@@ -2,9 +2,10 @@ from solo.models import SingletonModel
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 
-User = get_user_model()
+# User = get_user_model()
 
 
 class Payment(models.Model):
@@ -18,7 +19,7 @@ class Payment(models.Model):
     PENDING = "PENDING"
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         related_name='payments',
         on_delete=models.CASCADE
     )
