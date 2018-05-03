@@ -245,7 +245,7 @@ def request_callback(request):
         bid_id = request.POST.get("bid_id", None)
         contact_phone = request.POST.get("contact_phone")
         valid_phone_clean = clear_contact_phone(contact_phone)
-        print(contact_phone, valid_phone_clean)
+
         if bid_id:
             # if Bid has been created in save_credit_request function
             if Bid.objects.filter(id=int(bid_id)).exists():

@@ -104,4 +104,6 @@ def clear_contact_phone(contact_phone):
         ")", ""
     ).replace(
         " ", ""
+    ).replace(
+        "_", ""
     )

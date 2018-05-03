@@ -476,3 +476,38 @@ def test_user_turnes():
         ]),
         "credits": credits
     }
+
+
+def get_person_id(contract_num):
+    """
+        Get person's ID from mbank.tcredits (turnes DB)
+    """
+    exfin_connection = MySQLdb.connect(
+        host="10.10.100.27",                # host of MySQL database
+        user="root",                        # user's username
+        passwd="Orraveza(99)",              # your password
+        db="mbank",                         # name of the database
+        charset="utf8"
+    )
+
+    # create CURSOR and set UTF8 params
+    exfin_cursor = exfin_connection.cursor()
+    exfin_cursor.execute('SET NAMES utf8;')
+    exfin_cursor.execute('SET CHARACTER SET utf8;')
+    exfin_cursor.execute('SET character_set_connection=utf8;')
+
+    exfin_cursor.execute(
+        """
+            SELECT
+                client_id
+            FROM
+                mbank.tcredits
+            WHERE contract_num = {0};
+        """.format(contract_num)
+    )
+    person_id = exfin_cursor.fetchall()
+
+    try:
+        return person_id[0][0]
+    except IndexError:
+        return ""

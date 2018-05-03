@@ -1,3 +1,11 @@
 .hidding{
     pointer-events: none;
 }
+.errorlist{
+    margin-top: 0;
+    padding-left: 25px;
+    width: 27rem;
+}
+.errorlist li{
+    color: rgba(255, 0, 0, 0.8);
+}

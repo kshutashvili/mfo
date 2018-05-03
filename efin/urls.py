@@ -25,8 +25,16 @@ from communication.views import contacts, about, blog, faq, resume,\
                                 success_message, sms
 from content.views import content
 from vacancy.views import job
-from users.views import register, set_password, user_login, user_logout,\
-                        profile, alter_profile, message_read
+from users.views import (
+    register,
+    set_password,
+    user_login,
+    user_logout,
+    profile,
+    alter_profile,
+    message_read,
+    RequestPersonalAreaView
+)
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
                                     city24_terminal_view, TurnesView)
 
@@ -85,6 +93,7 @@ urlpatterns = i18n_patterns(
     path('ajax/message_read/', login_required(message_read), name='message_read'),
 
     path('pay/', include('payments.urls', namespace='payments')),
+    path('request_personal_area/', RequestPersonalAreaView.as_view(), name="request-personal-area"),
 
     path('<str:page_url>/', content.pages, name='static_pages'),
 

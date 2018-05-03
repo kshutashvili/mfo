@@ -9,9 +9,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.views.generic import CreateView, UpdateView
 
-from users.models import Profile
-from users.forms import SetPasswordForm, RegisterNumberForm, LoginForm
+from users.models import Profile, RequestPersonalArea
+from users.forms import (
+    SetPasswordForm,
+    RegisterNumberForm,
+    LoginForm,
+    RequestPersonalAreaForm
+)
 from communication.models import UserExistMessage, UserQuestion
 from communication.forms import WriteCommentForm, WriteQuestionForm
 from users.utils import test_user_turnes
@@ -196,3 +202,9 @@ def message_read(request):
         result = {'status':'500'}
         return JsonResponse(result)
 
+
+class RequestPersonalAreaView(CreateView):
+    model = RequestPersonalArea
+    form_class = RequestPersonalAreaForm
+    template_name = 'request-personal-area.html'
+    success_url = '/'

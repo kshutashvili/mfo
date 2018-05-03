@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Доступ к личному кабинету" %}{% endblock %}
+
+{% block content %}
+<form class="f-form" action="." method="POST">
+    <h2 class="f-form__title">{% trans "Заявка на доступ в личный кабинет" %}</h2>
+    <div class="f-form__content f-form__content--secondary">
+        <p class="f-form__content-message">{% blocktrans %}Заполните форму для получения доступа<br />к личному кабинету {% endblocktrans %}</p>
+        {{ form.name }}
+        {{ form.name.errors }}
+        {{ form.birthday }}
+        {{ form.birthday.errors }}
+        {{ form.contract_num }}
+        {{ form.contract_num.errors }}
+        {{ form.mobile_phone_number }}
+        {{ form.mobile_phone_number.errors }}
+        {% csrf_token %}
+        <button class="b-btn-primary b-btn-primary--formed" type="submit">{% trans "Отправить" %}</button>
+    </div>
+    <div class="f-form__footer f-form__footer--sm"></div>
+</form>
+{% endblock %}
+
+{% block extrascrypts %}
+<script>
+    $(document).ready(function(){
+        $(".mobile-phone").inputmask("+38 (099) 999 99 99", {});
+        $(".contract-num").inputmask("9[9999999999999999999999999999999]", {"placeholder":" ", "clearMaskOnLostFocus": true });
+        $(".date").inputmask("yyyy-mm-dd", {"placeholder": "гггг-мм-дд"});
+    });
+</script>
+{% endblock %}
