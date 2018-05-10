@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 from django.utils import translation
 from django.views.generic.base import TemplateView
 from django.urls import reverse
-from django.http import Http404 
+from django.http import Http404
 
 from content.models import Spoiler, StaticPage, GetCredit, MenuAboutItem,\
                            MainPageStatic, IndexPageStatic, StaticPageDefault
@@ -27,6 +27,7 @@ from content.helpers import get_city_name, process_bid, clear_contact_phone
 from bids.models import Bid
 from users.forms import RegisterNumberForm
 from users.models import Profile
+from communication.views.sms import sms
 
 
 def pages(request, page_url):
@@ -244,37 +245,56 @@ def request_callback(request):
     if request.method == 'POST':
         bid_id = request.POST.get("bid_id", None)
         contact_phone = request.POST.get("contact_phone")
-        valid_phone_clean = clear_contact_phone(contact_phone)
+        clean_phone = clear_contact_phone(contact_phone)
 
         if bid_id:
             # if Bid has been created in save_credit_request function
             if Bid.objects.filter(id=int(bid_id)).exists():
                 bid = Bid.objects.get(id=int(bid_id))
-                bid.contact_phone = valid_phone_clean
+                bid.contact_phone = clean_phone
                 bid.name = request.POST.get("client_name")
                 bid.save()
-                process_bid(bid)
+                # process_bid(bid)
+                request.session['bid_id'] = bid.id
             else:
                 new_bid = Bid.objects.create(
                     city=request.POST.get('city'),
                     name=request.POST.get("client_name"),
-                    contact_phone=valid_phone_clean
+                    contact_phone=clean_phone
                 )
                 new_bid.save()
-                process_bid(new_bid)
+                # process_bid(new_bid)
+                request.session['bid_id'] = new_bid.id
         else:
             new_bid = Bid.objects.create(
                 city=request.POST.get('city'),
                 name=request.POST.get("client_name"),
-                contact_phone=valid_phone_clean
+                contact_phone=clean_phone
             )
             new_bid.save()
-            process_bid(new_bid)
+            # process_bid(new_bid)
+            request.session['bid_id'] = new_bid.id
 
-        callback_success = CallbackSuccessForm.get_solo()
-        url = reverse('success', kwargs={'id_mess':callback_success.success.id,
-                                         'redirect_url':'main'})
-        return HttpResponseRedirect(url)
+        # callback_success = CallbackSuccessForm.get_solo()
+        # url = reverse(
+        #     'success',
+        #     kwargs={
+        #         'id_mess': callback_success.success.id,
+        #         'redirect_url': 'main'
+        #     }
+        # )
+
+        # url  = reverse(
+        #     "sms",
+        #     kwargs={
+        #         "phone": "+380950968326",  # "+{0}".format(clean_phone)
+        #         "url": reverse('callback_confirm')
+        #     }
+        # )
+
+        sms(request, "+380950968326", reverse('callback_confirm'))
+
+        return HttpResponseRedirect(reverse('callback_confirm'))
     return HttpResponseBadRequest()
 
 

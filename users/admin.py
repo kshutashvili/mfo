@@ -10,7 +10,13 @@ class ProfileInline(admin.StackedInline):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "mobile_phone",
+        "email",
+        "turnes_person_id",
+        "is_superuser"
+    )
+    search_fields = ("turnes_person_id", )
 
 
 @admin.register(RequestPersonalArea)

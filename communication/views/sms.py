@@ -14,7 +14,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.core.mail import EmailMessage, EmailMultiAlternatives
-from django.contrib.auth.models import User
 
 # Your Account Sid and Auth Token from twilio.com/user/account
 from efin.settings import TWILIO_ACCOUNT_SID as account_sid
@@ -22,39 +21,53 @@ from efin.settings import TWILIO_AUTH_TOKEN as auth_token
 from efin.settings import AUTHY_API_KEY as auth_token
 from efin.settings import ADMIN_EMAIL
 
-from users.models import Profile
+from users.models import Profile, User
 from token_confirm.models import Token
 from token_confirm.token import account_activation_token
 
 
 api = AuthyApiClient(auth_token)
 
-def sms(request, phone):
+
+def sms(request, phone, url=None):
+    """
+        reset=True mean that sms sending using for Password reset function
+    """
+
+    # set phone number in session
+    # this phone will be used for verification code
     request.session['phone'] = phone
-    res = api.phones.verification_start(phone, '+380', via='sms')
-    return HttpResponseRedirect(reverse('verify'))
+
+    # send SMS to phone number
+    api.phones.verification_start(phone, '+380', via='sms')
+
+    if url:
+        return HttpResponseRedirect(url)
+    else:
+        return HttpResponseRedirect(reverse('verify'))
 
 
 def verify(request):
     if request.method == 'POST':
-        phone = request.session.get('phone','')
+        phone = request.session.get('phone', '')
+        print(phone)
         profile = Profile.objects.filter(phone=phone).first()
         if not profile:
             profile = Profile.objects.filter(user=request.user).first()
         if not profile:
             raise Http404()
         else:
-            code = request.POST.get('code','')
+            code = request.POST.get('code', '')
             verification = api.phones.verification_check(phone, '+380', code)
             if verification.ok():
                 url = None
                 profile.user.is_active = True
-              
+
                 if profile.phone != phone:
                     profile.phone = phone
                     profile.user.username = phone
                     url = reverse('profile')
-               
+
                 profile.user.save()
                 profile.save()
 
@@ -63,14 +76,25 @@ def verify(request):
 
                 return HttpResponseRedirect(url)
             else:
-                return render(request, 'enter-sms.html', {'status_message':_('Неправильный код')})
+                return render(
+                    request,
+                    'enter-sms.html',
+                    {'status_message': _('Неправильный код')}
+                )
     elif request.method == 'GET':
         return render(request, 'enter-sms.html', {})
 
 
+def verify_resetting(phone, code):
+    # verifying entered code
+    verification = api.phones.verification_check(phone, '+380', code)
+    # return True/False result
+    return verification.ok()
+
+
 def random_code(n):
-    range_start = 10**(n-1)
-    range_end = (10**n)-1
+    range_start = 10 ** (n - 1)
+    range_end = (10 ** n) - 1
     return randint(range_start, range_end)
 
 
@@ -85,10 +109,16 @@ def change_email(request):
         token_db.token = token
         token_db.save()
 
-    uid = str(urlsafe_base64_encode(force_bytes(request.user.pk))).split("'")[1]
-    data ={'site':site,
-           'uid':uid,
-           'token':token}
+    uid = str(
+        urlsafe_base64_encode(
+            force_bytes(
+                request.user.pk
+            )
+        )
+    ).split("'")[1]
+    data = {'site': site,
+            'uid': uid,
+            'token': token}
 
     template = get_template('email/change.html')
     message = template.render(data)
@@ -97,8 +127,8 @@ def change_email(request):
     msg.mixed_subtype = 'related'
     try:
         msg.send()
-    except:
-        print('Errooooooooooooooooooooooooooooooooooooooooor')
+    except Exception as e:
+        print(e)
     return render(request, 'email/sended.html', {})
 
 

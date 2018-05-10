@@ -6,7 +6,10 @@ import MySQLdb
 from payments.models import Payment
 
 
-def test_user_turnes():
+def test_user_turnes(turnes_id):
+    if not turnes_id:
+        return None
+
     exfin_connection = MySQLdb.connect(
         host="10.10.100.27",                # host of MySQL database
         user="root",                        # user's username
@@ -59,8 +62,8 @@ def test_user_turnes():
                 egn
             FROM
                 mbank.tpersons
-            WHERE id = 144580;
-        """
+            WHERE id = {0};
+        """.format(int(turnes_id))  # 144580
     )
     person_data = exfin_cursor.fetchall()[0]
 
@@ -478,7 +481,7 @@ def test_user_turnes():
     }
 
 
-def get_person_id(contract_num):
+def get_person_id(contract_num, phone):
     """
         Get person's ID from mbank.tcredits (turnes DB)
     """
@@ -499,15 +502,109 @@ def get_person_id(contract_num):
     exfin_cursor.execute(
         """
             SELECT
-                client_id
+                tc.id,
+                tc.client_id,
+                ts.status as last_status,
+                ts.dt_created,
+                tp.tel_mob_num
             FROM
-                mbank.tcredits
-            WHERE contract_num = {0};
+                mbank.tcredits tc
+            join mbank.tstatuses ts on ts.credit_id = tc.id
+            join mbank.tpersons tp on tp.id = tc.client_id
+            WHERE tc.contract_num =  {0}
+            ORDER BY ts.dt_created DESC
+            LIMIT 1;
         """.format(contract_num)
     )
     person_id = exfin_cursor.fetchall()
 
     try:
-        return person_id[0][0]
+        """
+            if credit status == 5 return client's ID
+            status 5 is 'active credit'
+            and
+            if phone contain tel_mob_num
+        """
+        if person_id[0][2] in [5, '5'] and person_id[0][4] in phone:
+            return person_id[0][1]
+        else:
+            return ""
     except IndexError:
+        return ""
+
+
+def get_person_id_and_tel(contract_num):
+    """
+        Get person's ID from mbank.tcredits (turnes DB)
+    """
+    exfin_connection = MySQLdb.connect(
+        host="10.10.100.27",                # host of MySQL database
+        user="root",                        # user's username
+        passwd="Orraveza(99)",              # your password
+        db="mbank",                         # name of the database
+        charset="utf8"
+    )
+
+    # create CURSOR and set UTF8 params
+    exfin_cursor = exfin_connection.cursor()
+    exfin_cursor.execute('SET NAMES utf8;')
+    exfin_cursor.execute('SET CHARACTER SET utf8;')
+    exfin_cursor.execute('SET character_set_connection=utf8;')
+
+    exfin_cursor.execute(
+        """
+            SELECT
+                tc.id,
+                tc.client_id,
+                ts.status as last_status,
+                ts.dt_created,
+                tp.tel_mob_num,
+                tp.tel_mob_kod
+            FROM
+                mbank.tcredits tc
+            join mbank.tstatuses ts on ts.credit_id = tc.id
+            join mbank.tpersons tp on tp.id = tc.client_id
+            WHERE tc.contract_num =  {0}
+            ORDER BY ts.dt_created DESC
+            LIMIT 1;
+        """.format(contract_num)
+    )
+    person_data = exfin_cursor.fetchall()
+
+    if person_data[0]:
+        exfin_cursor.execute(
+            """
+                SELECT
+                    name
+                FROM
+                    mbank.tdropdown_details
+                WHERE id = {0};
+            """.format(person_data[0][5])
+        )
+        person_mobile_operator_code = exfin_cursor.fetchall()[0]
+
+        try:
+            """
+                if client_id and tel_mob_num exists
+            """
+            if person_data[0][1] and person_data[0][4]:
+                print(
+                    "get_person_id_and_tel",
+                    "+38{0}{1}".format(
+                        person_mobile_operator_code[0],
+                        person_data[0][4]
+                    )
+                )
+                return (
+                    person_data[0][1],
+                    "+38{0}{1}".format(
+                        person_mobile_operator_code[0],
+                        person_data[0][4]
+                    )
+                )
+            else:
+                return ""
+        except IndexError:
+            return ""
+    else:
         return ""

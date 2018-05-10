@@ -33,7 +33,12 @@ from users.views import (
     profile,
     alter_profile,
     message_read,
-    RequestPersonalAreaView
+    RequestPersonalAreaView,
+    FirstChangePassword,
+    ResetPasswordView,
+    ResetPasswordVerifyView,
+    ResetPasswordConfirmView,
+    CallbackConfirmView
 )
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
                                     city24_terminal_view, TurnesView)
@@ -41,30 +46,41 @@ from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
 
 urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
+
     path('loan/', content.index, name='index'),
-    # path('callback/', TemplateView.as_view(template_name='form-callback.html'), name='callback'),
+    path('', content.main, name='main'),
+
     path('kak-poluchit-kredit/', content.CallbackView.as_view(), name='callback'),
     path('kak-poluchit-kredit/<str:status_message>/', content.CallbackView.as_view(), name='callback'),
+
     path('request-callback/', content.request_callback, name='request_callback'),
+    path('callback-confirm/', CallbackConfirmView.as_view(), name='callback_confirm'),
     path('callback-success/', content.CallbackSuccessView.as_view(), name='callback_success'),
     path('save_credit_request/', content.save_credit_request, name='save_credit_request'),
-    path('', content.main, name='main'),
+
     path('download_pdf/<int:spoiler_id>/', content.download_pdf, name='download_pdf'),
     path('open_pdf/<int:spoiler_id>/', content.open_pdf, name='open_pdf'),
+
     path('translate/<str:lang_code>/', content.translate, name='translate'),
     path('job/', job.job, name='job'),
     path('order/', TemplateView.as_view(template_name='questionnaire.html'), name='order'),
 
     path('login/', user_login, name='login'),
-    path('login/<str:status_message>/', user_login, name='login'),
-    path('logout/', user_logout, name='logout'),
-    path('verify/', sms.verify, name='verify'),
-    path('sms/<str:phone>/', sms.sms, name='sms'),
     path('register/', register, name='register'),
-    path('password/', set_password, name='set_password'),
+    # path('login/<str:status_message>/', user_login, name='login'),
+    path('logout/', user_logout, name='logout'),
+
+    path('password/', FirstChangePassword.as_view(), name='set_password'),
+    path('sms/<str:phone>/', sms.sms, name='sms'),
+    path('verify/', sms.verify, name='verify'),
+    path('reset/', ResetPasswordView.as_view(), name="reset-password"),
+    path('reset-verify/', ResetPasswordVerifyView.as_view(), name='reset-password-verify'),
+    path('reset-confirm/', ResetPasswordConfirmView.as_view(), name='reset-password-confirm'),
+
     path('my/', login_required(profile), name='profile'),
     path('my/<str:active>/', login_required(profile), name='profile'),
     path('my/<str:active>/<str:page>/', login_required(profile), name='profile'),
+
     path('change_email/', login_required(sms.change_email), name='change_email'),
     re_path(r'^email_confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})',
             sms.email_confirm, name='email_confirm'),

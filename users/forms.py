@@ -1,10 +1,19 @@
 import re
 
 from django import forms
+from django.urls import reverse
 from django.contrib.auth.password_validation import validate_password
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.forms import (
+    AdminPasswordChangeForm as DjangoAdminPasswordChangeForm
+)
+from django.http.response import HttpResponseRedirect
 
 from users.models import User, RequestPersonalArea
+from users.utils import get_person_id_and_tel
+from communication.views.sms import verify_resetting
+from communication.models import CallbackSuccessForm
+from content.helpers import process_bid
 
 
 class SetPasswordForm(forms.Form):
@@ -61,12 +70,12 @@ class RegisterNumberForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
+    mobile_phone = forms.CharField(
         widget=forms.TextInput(
             attrs={
                 'placeholder': _('+38 (0__) ___ __ __'),
                 'type': 'tel',
-                'name': 'username'
+                'name': 'mobile_phone'
             }
         )
     )
@@ -105,7 +114,6 @@ class RequestPersonalAreaForm(forms.ModelForm):
                 attrs={
                     'class': 'f-form__input contract-num',
                     'placeholder': _('Номер договора'),
-                    # 'min': 1
                 }
             ),
             'mobile_phone_number': forms.TextInput(
@@ -123,3 +131,105 @@ class RequestPersonalAreaForm(forms.ModelForm):
                 self.fields[field_name].widget.attrs["class"] += " error"
             else:
                 self.fields[field_name].widget.attrs["class"].replace(" error", "")
+
+
+class AdminPasswordChangeForm(DjangoAdminPasswordChangeForm):
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(user, *args, **kwargs)
+        self.fields["password1"].widget.attrs["placeholder"] = _('Введите пароль')
+        self.fields["password2"].widget.attrs["placeholder"] = _('Повторите пароль')
+
+
+class ResetPasswordForm(forms.Form):
+    contract_num = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('Номер договора'),
+                'class': 'f-form__input',
+                'name': 'contract_num'
+            }
+        )
+    )
+
+    def clean_contract_num(self):
+        contract_num = self.cleaned_data['contract_num']
+        person_data = get_person_id_and_tel(contract_num)
+        print("VALIDATNG", person_data)
+        self.person_phone = person_data[1]
+        if person_data:
+            user = User.objects.filter(
+                turnes_person_id=person_data[0],
+                # person_data phone w/o +3
+                mobile_phone__icontains=person_data[1][2:],
+            )
+        else:
+            msg = _("Пользователь с таким номером договора не зарегистрирован1")
+            raise forms.ValidationError(msg)
+        if not user:
+            msg = _("Пользователь с таким номером договора не зарегистрирован2")
+            raise forms.ValidationError(msg)
+        return contract_num
+
+
+class ResetPasswordVerifyForm(forms.Form):
+    code = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('Введите код из смс'),
+                'class': 'f-form__input',
+                'name': 'code'
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.phone = kwargs.pop('phone', None)
+        super().__init__(*args, **kwargs)
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        verified = verify_resetting(self.phone, code)
+
+        print(verified)
+        if verified:
+            return HttpResponseRedirect(reverse('profile'))
+        else:
+            msg = _("Вы ввели неверный код из СМС")
+            raise forms.ValidationError(msg)
+
+
+class CallbackConfirmForm(forms.Form):
+    code = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('Введите код из смс'),
+                'class': 'f-form__input',
+                'name': 'code'
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.phone = kwargs.pop('phone', None)
+        self.bid = kwargs.pop('bid', None)
+        super().__init__(*args, **kwargs)
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        verified = verify_resetting(self.phone, code)
+        print("BID form", self.bid)
+        print(verified)
+        if verified:
+            process_bid(self.bid)
+            callback_success = CallbackSuccessForm.get_solo()
+            url = reverse(
+                'success',
+                kwargs={
+                    'id_mess': callback_success.success.id,
+                    'redirect_url': 'main'
+                }
+            )
+            return HttpResponseRedirect(url)
+        else:
+            msg = _("Вы ввели неверный код из СМС")
+            raise forms.ValidationError(msg)

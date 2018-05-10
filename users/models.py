@@ -1,36 +1,61 @@
 from django.db import models
-# from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import RegexValidator
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 
 from users.utils import get_person_id
 from users.validators import mobile_phone_number
 from users.managers import UserManager
+from content.helpers import clear_contact_phone
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    mobile_phone = models.CharField(_('mobile phone'), unique=True, max_length=30)
-    email = models.EmailField(_('email address'), blank=True)
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=30, blank=True)
-    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
-    is_active = models.BooleanField(_('active'), default=True)
+    # auth field
+    mobile_phone = models.CharField(
+        _('mobile phone'),
+        unique=True,
+        max_length=30,
+        validators=[mobile_phone_number, ]
+    )
+
+    email = models.EmailField(
+        _('email address'),
+        blank=True
+    )
+    first_name = models.CharField(
+        _('first name'),
+        max_length=30,
+        blank=True
+    )
+    last_name = models.CharField(
+        _('last name'),
+        max_length=30,
+        blank=True
+    )
+    date_joined = models.DateTimeField(
+        _('date joined'),
+        auto_now_add=True
+    )
+    is_active = models.BooleanField(
+        _('active'),
+        default=True
+    )
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
         help_text=_('Designates whether the user can log into this admin site.'),
     )
-    is_active = models.BooleanField(
-        _('active'),
-        default=True,
-        help_text=_(
-            'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'
-        ),
+
+    turnes_person_id = models.CharField(
+        "ID клиента в БД Turnes",
+        max_length=32,
+        blank=True
     )
-    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+
+    changed_default_password = models.BooleanField(
+        "Стандартный пароль из sms был изменен",
+        default=False
+    )
 
     objects = UserManager()
 
@@ -101,7 +126,8 @@ class RequestPersonalArea(models.Model):
     mobile_phone_number = models.CharField(
         "Номер телефона",
         max_length=32,
-        validators=[mobile_phone_number, ]
+        validators=[mobile_phone_number, ],
+        unique=True
     )
     turnes_person_id = models.CharField(
         "ID клиента в БД Turnes",
@@ -117,16 +143,18 @@ class RequestPersonalArea(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        # search request object with particular
         found_object = RequestPersonalArea.objects.filter(
-            name=self.name,
-            birthday=self.birthday,
-            contract_num=self.contract_num,
-            mobile_phone_number=self.mobile_phone_number
+            contract_num=self.contract_num
         ).exists()
 
         if found_object:
             return
 
-        self.turnes_person_id = get_person_id(self.contract_num)
+        print("CLEARING PHONE", clear_contact_phone(self.mobile_phone_number))
+        self.turnes_person_id = get_person_id(
+            contract_num=self.contract_num,
+            phone=clear_contact_phone(self.mobile_phone_number)
+        )
 
         super(RequestPersonalArea, self).save(*args, **kwargs)

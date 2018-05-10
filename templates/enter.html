@@ -4,7 +4,7 @@
 
 {% load i18n %}
 
-{% block title %}Enter{% endblock %}
+{% block title %}{% trans 'Вход в личный кабинет' %}{% endblock %}
 
 {% block content %}
 
@@ -14,10 +14,10 @@
 			<div class="f-form__content">
 				<p class="f-form__content-message">{% trans 'В своем личном кабинете Вы сможете настроить определенные функции, сохранить свои личные данные и смотреть свою кредитную историю' %}. </p>
 				{% if status_message %}
-					<p>{{ status_message }}</p>
+					<p class="error-message">{{ status_message }}</p>
 				{% endif %}
 				<div class="b-input b-input--main">
-				{{ form.username }}
+					{{ form.mobile_phone }}
 					<span class="icon icon--phone-call"></span>
 				</div>
 
@@ -30,17 +30,25 @@
 					<div class="b-checkbox">
 						<input id="checkbox" name="remember_me" type="checkbox"><label for="checkbox">{% trans 'Запомнить меня' %}</label>
 					</div>
-					<a href="#" class="b-remind-link">{% trans 'Забыли пароль' %}?</a>
+					<a href="{% url 'reset-password' %}" class="b-remind-link">{% trans 'Забыли пароль' %}?</a>
 				</div>
-				<button class="b-btn-primary b-btn-primary--formed" type="submit">{% trans 'Ввойти в личный кабинет' %}</button>
+				<button class="b-btn-primary b-btn-primary--formed" type="submit">{% trans 'Войти в личный кабинет' %}</button>
 			</div>
 			
 			<div class="f-form__footer">
 				<h4 class="f-form__footer-title">{% trans 'Еще нет аккаунта Экспресс Финанс' %}?</h4>
-				<a class="f-form__footer-link" href="#">{% trans 'Зарегистрироваться' %}</a>
+				<a class="f-form__footer-link" href="{% url 'request-personal-area' %}">{% trans 'Зарегистрироваться' %}</a>
 			</div>
 
 			<a href="{% url 'main' %}" class="b-btn-close"></a>
 		</form>
 	</div>
+{% endblock %}
+
+{% block extrascrypts %}
+<script>
+    $(document).ready(function(){
+        $("#id_mobile_phone").inputmask("+38 (099) 999 99 99", {});
+    });
+</script>
 {% endblock %}

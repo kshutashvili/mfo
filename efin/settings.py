@@ -23,8 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-w8(up#n)ea%v0@5olsz37y(kt8!^@p(750bqp4#=hs-%n7n7y'
 GOOGLE_MAPS_API_KEY = 'AIzaSyAntT27HQnaY0z2nOKEk7eyEimuzZOerMM'
 
-TWILIO_ACCOUNT_SID = 'ACf55d9d99a44962e78c13798ccbeb9522'
-TWILIO_AUTH_TOKEN = 'b273f33bdd09287ca70db6a6226ca0e3'
+TWILIO_ACCOUNT_SID = 'ACbe26b6146caf3657c7133a88dc0873e4'
+TWILIO_AUTH_TOKEN = 'e2d909069a7d4c5bd0f9e2064a3bbf43'
 AUTHY_API_KEY = 'xVr6iPtwsTspiQU0LpJHWoyfcjoinqt6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    #own
+    # own
     'communication',
     'department',
     'content',
@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'token_confirm',
     'payment_gateways',
     'payments',
-    #3-rd
+    # 3-rd
     'ckeditor',
     'solo',
     'django_google_maps',
