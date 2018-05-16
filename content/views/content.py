@@ -254,7 +254,7 @@ def request_callback(request):
                 bid.contact_phone = clean_phone
                 bid.name = request.POST.get("client_name")
                 bid.save()
-                # process_bid(bid)
+                process_bid(bid)
                 request.session['bid_id'] = bid.id
             else:
                 new_bid = Bid.objects.create(
@@ -263,7 +263,7 @@ def request_callback(request):
                     contact_phone=clean_phone
                 )
                 new_bid.save()
-                # process_bid(new_bid)
+                process_bid(new_bid)
                 request.session['bid_id'] = new_bid.id
         else:
             new_bid = Bid.objects.create(
@@ -272,7 +272,7 @@ def request_callback(request):
                 contact_phone=clean_phone
             )
             new_bid.save()
-            # process_bid(new_bid)
+            process_bid(new_bid)
             request.session['bid_id'] = new_bid.id
 
         # callback_success = CallbackSuccessForm.get_solo()
