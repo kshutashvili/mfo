@@ -9,6 +9,7 @@ from django.http.response import HttpResponseBadRequest, HttpResponse
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
+from django.utils.formats import number_format
 from django.views.generic.base import TemplateView
 
 from payment_gateways.utils import process_pb_request, process_easypay_request
@@ -55,7 +56,9 @@ def pb_terminal_view(request):
                 {
                     "contract_num": contract_num,
                     "service_code": settings.PB_SERVICE_CODE,
-                    "vnoska": credit.vnoska,
+                    "vnoska": number_format(
+                        value=credit.vnoska,
+                        use_l10n=False),
                     "client_fio": client_fio
                 },
                 content_type="application/xml"
