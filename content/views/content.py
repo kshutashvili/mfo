@@ -292,9 +292,15 @@ def request_callback(request):
         #     }
         # )
 
-        sms(request, "+380950968326", reverse('callback_confirm'))
+        # for NEXT COMMITS
+        # sms(request, "+380950968326", reverse('callback_confirm'))
+        # return HttpResponseRedirect(reverse('callback_confirm'))
 
-        return HttpResponseRedirect(reverse('callback_confirm'))
+        callback_success = CallbackSuccessForm.get_solo()
+        url = reverse('success', kwargs={'id_mess':callback_success.success.id,
+                                         'redirect_url':'main'})
+        return HttpResponseRedirect(url)
+
     return HttpResponseBadRequest()
 
 
