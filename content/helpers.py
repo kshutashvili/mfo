@@ -81,10 +81,9 @@ def process_bid(bid):
         "contact_phone": bid.contact_phone,
         "city": bid.city,
         "first_name": bid.name,
-        # "first_name": " ".join(bid.name.split(" ")[0]),
-        # "last_name": " ".join(bid.name.split(" ")[1]),
         "credit_sum": bid.credit_sum,
-        "key": "46de62b4db97e9f855129f9f5edcd595"
+        "key": "46de62b4db97e9f855129f9f5edcd595",
+        "site_bid_id": bid.id
     }
 
     r = requests.post(
