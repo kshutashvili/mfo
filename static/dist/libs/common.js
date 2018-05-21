@@ -26,7 +26,14 @@ window.onload = function() {
 		else if(params["v"] != undefined){
 			localStorage.removeItem('lp_any_param');
 			localStorage.removeItem('lp_wm_id');
+			localStorage.removeItem('lp_aff_sub');
 			localStorage.setItem('lp_visitor', params["v"]);
+		}
+		else if(params["aff_sub"] != undefined && params["aff_id"] != undefined){
+			localStorage.removeItem('lp_any_param');
+			localStorage.removeItem('lp_wm_id');
+			localStorage.removeItem('lp_visitor');
+			localStorage.setItem('lp_aff_sub', params["aff_sub"]);
 		}
 		$('form').on('submit', function(e){
 			if($(this).attr('action') == '/ru/request-callback/'){
@@ -40,6 +47,11 @@ window.onload = function() {
 				}
 				else if(localStorage.getItem('lp_visitor') != null){
 					$.get( 'https://tracker2.doaffiliate.net/api/expressfinance-com-ua?type=CPL&lead=' +  $('input[name=bid_id]', $(this)).val() + '&v=' + localStorage.getItem('lp_visitor'), function( data ) {
+						console.dir(data);
+					});
+				}
+				else if(localStorage.getItem('lp_aff_sub') != null){
+					$.post( 'http://rdr.salesdoubler.com.ua/in/postback/2212/' + localStorage.getItem('lp_aff_sub') + '?trans_id=' +  $('input[name=bid_id]', $(this)).val() + '&token=ZXhwcmVzc2ZpbmFuY2UuY29tLnVhQHNhbGVzZG91Ymxlci5jb20udWE', function( data ) {
 						console.dir(data);
 					});
 				}
