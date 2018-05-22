@@ -44,48 +44,10 @@ def sms(request, phone, url=None):
     if url:
         return HttpResponseRedirect(url)
     else:
-        return HttpResponseRedirect(reverse('verify'))
+        return HttpResponseRedirect(reverse('main'))
 
 
-def verify(request):
-    if request.method == 'POST':
-        phone = request.session.get('phone', '')
-        print(phone)
-        profile = Profile.objects.filter(phone=phone).first()
-        if not profile:
-            profile = Profile.objects.filter(user=request.user).first()
-        if not profile:
-            raise Http404()
-        else:
-            code = request.POST.get('code', '')
-            verification = api.phones.verification_check(phone, '+380', code)
-            if verification.ok():
-                url = None
-                profile.user.is_active = True
-
-                if profile.phone != phone:
-                    profile.phone = phone
-                    profile.user.username = phone
-                    url = reverse('profile')
-
-                profile.user.save()
-                profile.save()
-
-                if not url:
-                    url = reverse('order')
-
-                return HttpResponseRedirect(url)
-            else:
-                return render(
-                    request,
-                    'enter-sms.html',
-                    {'status_message': _('Неправильный код')}
-                )
-    elif request.method == 'GET':
-        return render(request, 'enter-sms.html', {})
-
-
-def verify_resetting(phone, code):
+def sms_verify(phone, code):
     # verifying entered code
     verification = api.phones.verification_check(phone, '+380', code)
     # return True/False result

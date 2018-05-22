@@ -38,7 +38,7 @@ from users.views import (
     ResetPasswordView,
     ResetPasswordVerifyView,
     ResetPasswordConfirmView,
-    CallbackConfirmView
+    CallbackVerifyView
 )
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
                                     city24_terminal_view, TurnesView)
@@ -54,7 +54,7 @@ urlpatterns = i18n_patterns(
     path('kak-poluchit-kredit/<str:status_message>/', content.CallbackView.as_view(), name='callback'),
 
     path('request-callback/', content.request_callback, name='request_callback'),
-    path('callback-confirm/', CallbackConfirmView.as_view(), name='callback_confirm'),
+    path('callback-confirm/', CallbackVerifyView.as_view(), name='callback_verify'),
     path('callback-success/', content.CallbackSuccessView.as_view(), name='callback_success'),
     path('save_credit_request/', content.save_credit_request, name='save_credit_request'),
 
@@ -72,7 +72,6 @@ urlpatterns = i18n_patterns(
 
     path('password/', FirstChangePassword.as_view(), name='set_password'),
     path('sms/<str:phone>/', sms.sms, name='sms'),
-    path('verify/', sms.verify, name='verify'),
     path('reset/', ResetPasswordView.as_view(), name="reset-password"),
     path('reset-verify/', ResetPasswordVerifyView.as_view(), name='reset-password-verify'),
     path('reset-confirm/', ResetPasswordConfirmView.as_view(), name='reset-password-confirm'),

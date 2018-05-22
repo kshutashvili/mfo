@@ -11,9 +11,9 @@ from django.http.response import HttpResponseRedirect
 
 from users.models import User, RequestPersonalArea
 from users.utils import get_person_id_and_tel
-from communication.views.sms import verify_resetting
+from communication.views.sms import sms_verify
 from communication.models import CallbackSuccessForm
-from content.helpers import process_bid
+from content.helpers import process_bid, clear_contact_phone
 
 
 class SetPasswordForm(forms.Form):
@@ -41,7 +41,8 @@ class RegisterNumberForm(forms.Form):
             attrs={
                 'placeholder': _('+38 (0__) ___ __ __'),
                 'type': 'tel',
-                'name': 'phone'
+                'name': 'phone',
+                'class': 'phone-mask'
             }
         )
     )
@@ -50,21 +51,10 @@ class RegisterNumberForm(forms.Form):
         cleaned_data = super(RegisterNumberForm, self).clean()
 
         phone = cleaned_data.get('phone')
-        phone = phone.translate(
-            {ord(c): "" for c in " !@#$%^&*()[]{};:,./<>?\|`~-=_+"}
-        )
-        if len(phone) == 12:
-            phone = phone[3:]
-        elif len(phone) == 11:
-            phone = phone[2:]
-        elif len(phone) == 10:
-            phone = phone[1:]
 
-        if re.match(r'\d{9}$', phone) is None:
-            self.add_error('phone', _('Неправильный телефон'))
+        valid_phone = clear_contact_phone(phone)
 
-        if not self.errors:
-            cleaned_data = {'phone': phone}
+        cleaned_data["phone"] = valid_phone
 
         return cleaned_data
 
@@ -89,6 +79,32 @@ class LoginForm(forms.Form):
             }
         )
     )
+
+
+class SMSVerifyForm(forms.Form):
+    code = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('Введите код из смс'),
+                'class': 'f-form__input',
+                'name': 'code'
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.phone = kwargs.pop('phone', None)
+        super().__init__(*args, **kwargs)
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        verified = sms_verify(self.phone, code)
+
+        if verified:
+            return code
+        else:
+            msg = _("Вы ввели неверный код из СМС")
+            raise forms.ValidationError(msg)
 
 
 class RequestPersonalAreaForm(forms.ModelForm):
@@ -171,65 +187,22 @@ class ResetPasswordForm(forms.Form):
         return contract_num
 
 
-class ResetPasswordVerifyForm(forms.Form):
-    code = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': _('Введите код из смс'),
-                'class': 'f-form__input',
-                'name': 'code'
-            }
-        )
-    )
+class ResetPasswordVerifyForm(SMSVerifyForm):
+    pass
 
+
+class CallbackVerifyForm(SMSVerifyForm):
     def __init__(self, *args, **kwargs):
-        self.phone = kwargs.pop('phone', None)
-        super().__init__(*args, **kwargs)
-
-    def clean_code(self):
-        code = self.cleaned_data['code']
-        verified = verify_resetting(self.phone, code)
-
-        print(verified)
-        if verified:
-            return HttpResponseRedirect(reverse('profile'))
-        else:
-            msg = _("Вы ввели неверный код из СМС")
-            raise forms.ValidationError(msg)
-
-
-class CallbackConfirmForm(forms.Form):
-    code = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': _('Введите код из смс'),
-                'class': 'f-form__input',
-                'name': 'code'
-            }
-        )
-    )
-
-    def __init__(self, *args, **kwargs):
-        self.phone = kwargs.pop('phone', None)
         self.bid = kwargs.pop('bid', None)
         super().__init__(*args, **kwargs)
 
     def clean_code(self):
         code = self.cleaned_data['code']
-        verified = verify_resetting(self.phone, code)
-        print("BID form", self.bid)
-        print(verified)
+        verified = sms_verify(self.phone, code)
+
         if verified:
             process_bid(self.bid)
-            callback_success = CallbackSuccessForm.get_solo()
-            url = reverse(
-                'success',
-                kwargs={
-                    'id_mess': callback_success.success.id,
-                    'redirect_url': 'main'
-                }
-            )
-            return HttpResponseRedirect(url)
+            return code
         else:
             msg = _("Вы ввели неверный код из СМС")
             raise forms.ValidationError(msg)

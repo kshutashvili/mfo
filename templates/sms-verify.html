@@ -4,16 +4,16 @@
 
 {% load i18n %}
 
-{% block title %}{% trans 'Подтверждение' %}{% endblock %}
+{% block title %}{% trans 'Подтверждение номера телефона' %}{% endblock %}
 
 {% block content %}
 
     <div class="wrapper wrapper-mob"> 
         <form action="." method="post" class="f-form">
-            <h2 class="f-form__title">{% trans 'Заказать звонок менеджера' %}</h2>
+            <h2 class="f-form__title"></h2>
             {% csrf_token %}
             <div class="f-form__content">
-                <p class="f-form__content-message f-form__content-message--big">{% if status_message %}{{ status_message }}<br>{% endif %}<br>{% trans 'На ваш телефон отправлено СМС с кодом. Введите ниже полученый код для подтверждения заявки' %}</p>
+                <p class="f-form__content-message f-form__content-message--big">{% if status_message %}{{ status_message }}<br>{% endif %}<br>{% trans 'На ваш телефон отправлено СМС с кодом. Введите ниже полученый код для подтверждения' %}</p>
                 {{ form.code.errors }}
                 {{ form.code }}
 

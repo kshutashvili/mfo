@@ -29,7 +29,8 @@ from users.forms import (
     AdminPasswordChangeForm,
     ResetPasswordForm,
     ResetPasswordVerifyForm,
-    CallbackConfirmForm
+    CallbackVerifyForm,
+    SMSVerifyForm
 )
 from users.models import Profile, RequestPersonalArea, User
 from users.utils import test_user_turnes
@@ -40,29 +41,40 @@ def register(request):
         form = RegisterNumberForm(request.POST)
         if form.is_valid():
             phone = form.cleaned_data.get('phone')
-            user_exist = Profile.objects.filter(phone=phone).first()
-            if user_exist and user_exist.user.is_active:
+            user_exist = User.objects.filter(mobile_phone=phone).first()
+            print(phone, user_exist)
+            if user_exist and user_exist.is_active:
                 id_mess = UserExistMessage.get_solo().page.id
-                url = reverse('success', kwargs={'redirect_url':'login',
-                                                 'id_mess':id_mess})
+                url = reverse('success', kwargs={
+                    'redirect_url': 'login',
+                    'id_mess': id_mess
+                })
                 return HttpResponseRedirect(url)
             elif user_exist and user_exist.user.is_active == False:
-                url = reverse('sms', kwargs={'phone': phone})
+                url = reverse('sms', kwargs={
+                    # 'phone': phone
+                    'phone': '380950968326'
+                })
                 return HttpResponseRedirect(url)
             else:
-                user = Profile()
-                us = User(username=phone)
-                us.is_active = False
-                us.save()
-                user.user = us
-                user.phone = phone
-                user.save()
-                url = reverse('sms', kwargs={'phone':phone})
-                return HttpResponseRedirect(url)
-        else:
-            status_message = _('Неправильный номер')
-            url = reverse('callback', kwargs={'status_message':status_message})
-            return HttpResponseRedirect(url)
+                user = User.objects.create(
+                    mobile_phone=phone,
+                    is_active=False
+                )
+                # url = reverse('sms', kwargs={
+                #     # 'phone': phone
+                #     'phone': '380950968326'
+                # })
+                # return HttpResponseRedirect(url)
+                return sms(
+                    request,
+                    "+380950968326",
+                    reverse('callback_verify')
+                )
+        # else:
+        #     status_message = _('invalid phone')
+        #     url = reverse('callback', kwargs={'status_message':status_message})
+        #     return HttpResponseRedirect(url)
 
 
 def set_password(request):
@@ -312,6 +324,20 @@ def message_read(request):
         return JsonResponse(result)
 
 
+class SMSVerifyView(FormView):
+    form_class = SMSVerifyForm
+    success_url = reverse_lazy('main')
+    template_name = 'sms-verify.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        phone = self.request.session.get('phone', '')
+        kwargs.update({
+            'phone': phone,
+        })
+        return kwargs
+
+
 class RequestPersonalAreaView(CreateView):
     model = RequestPersonalArea
     form_class = RequestPersonalAreaForm
@@ -326,11 +352,11 @@ class ResetPasswordView(FormView):
 
     def form_valid(self, form):
         """If the form is valid, redirect to the supplied URL."""
-        self.request.session['phone'] = form.person_phone  # "+380950968326"
+        # self.request.session['phone'] = form.person_phone  # "+380950968326"
         # print("form_valid", form.person_phone)
 
         # sms(self.request, "+380950968326", reverse('reset-password-verify'))
-        sms(self.request, form.person_phone, reverse('reset-password-verify'))
+        # sms(self.request, form.person_phone, reverse('reset-password-verify'))
 
         # url = reverse(
         #     "sms",
@@ -340,23 +366,12 @@ class ResetPasswordView(FormView):
         #     }
         # )
         # return HttpResponseRedirect(url)
-        return HttpResponseRedirect(self.get_success_url())
+        return sms(self.request, "+380950968326", reverse('reset-password-verify'))
 
 
-class ResetPasswordVerifyView(FormView):
+class ResetPasswordVerifyView(SMSVerifyView):
     form_class = ResetPasswordVerifyForm
     success_url = reverse_lazy('reset-password-confirm')
-    template_name = 'reset_password_verify.html'
-
-    def get_form_kwargs(self):
-        """Return the keyword arguments for instantiating the form."""
-        kwargs = super().get_form_kwargs()
-        phone = self.request.session.get('phone', '')
-        print("get_form_kwargs", phone)
-        kwargs.update({
-            'phone': phone,
-        })
-        return kwargs
 
 
 class ResetPasswordConfirmView(FormView):
@@ -391,26 +406,16 @@ class ResetPasswordConfirmView(FormView):
         return super().form_valid(form)
 
 
-class CallbackConfirmView(FormView):
-    form_class = CallbackConfirmForm
+class CallbackVerifyView(SMSVerifyView):
+    form_class = CallbackVerifyForm
     success_url = reverse_lazy('callback_success')
-    template_name = 'form-callback-confirm.html'
 
     def get_form_kwargs(self):
-        """Return the keyword arguments for instantiating the form."""
         kwargs = super().get_form_kwargs()
-        phone = self.request.session.get('phone', '')
         bid_id = self.request.session.get('bid_id', '')
-        print("get_form_kwargs", phone)
         bid = Bid.objects.filter(id=int(bid_id))
         if bid:
-            print("BID", bid_id, bid[0])
             kwargs.update({
-                'phone': phone,
                 'bid': bid[0]
-            })
-        else:
-            kwargs.update({
-                'phone': phone,
             })
         return kwargs
