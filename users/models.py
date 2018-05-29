@@ -56,6 +56,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Стандартный пароль из sms был изменен",
         default=False
     )
+    ready_for_turnes = models.BooleanField(
+        "Анкета полностью заполнена",
+        default=False
+    )
 
     objects = UserManager()
 
@@ -158,3 +162,331 @@ class RequestPersonalArea(models.Model):
         )
 
         super(RequestPersonalArea, self).save(*args, **kwargs)
+
+
+class Questionnaire(models.Model):
+    EMPTY_CHOICES = (('', ''),)
+    user = models.OneToOneField(
+        User,
+        verbose_name=_('Пользователь'),
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    # ----- step 1 fields -----
+    last_name = models.CharField(
+        _("Прізвище"),
+        max_length=128,
+        # blank=True
+    )
+    first_name = models.CharField(
+        _("Ім'я"),
+        max_length=128,
+        # blank=True
+    )
+    middle_name = models.CharField(
+        _("По батькові"),
+        max_length=128,
+        # blank=True
+    )
+    birthday_date = models.DateField(
+        _("Дата народження"),
+        # blank=True,
+        # null=True
+    )
+    mobile_phone = models.CharField(
+        _("Контактний телефон"),
+        max_length=30,
+        validators=[mobile_phone_number, ],
+        # blank=True
+    )
+    email = models.EmailField(
+        _("Email адрес"),
+        # blank=True
+    )
+    SEX_CHOICES = (
+        ('male', 'Чоловік'),
+        ('female', 'Жінка')
+    )
+    sex = models.CharField(
+        "Стать",
+        choices=SEX_CHOICES,
+        max_length=10,
+        blank=True
+    )
+    education = models.TextField(
+        "Освіта",
+        choices=EMPTY_CHOICES,
+        blank=True
+    )
+    marital_status = models.TextField(
+        "Сімейний стан",
+        choices=EMPTY_CHOICES,
+        blank=True
+    )
+    has_criminal_record = models.BooleanField(
+        "Наявність судимості",
+        default=False
+    )
+    itn = models.CharField(
+        _("Індивідуальний податковий номер (ІПН)"),
+        max_length=10,
+        # blank=True
+    )
+    passport_code = models.CharField(
+        _("Серія та номер паспорта / Номер ID-картки"),
+        max_length=9,
+        # blank=True
+    )
+    passport_date = models.DateField(
+        _("Дата видачі паспорта"),
+        # blank=True,
+        # null=True
+    )
+    passport_outdate = models.DateField(
+        _("Дійсний до (для ID карти)"),
+        blank=True,
+        null=True
+    )
+    passport_authority = models.CharField(
+        _("Орган, що видав"),
+        max_length=128,
+        # blank=True
+    )
+    registration_country = models.TextField(
+        _("Країна"),
+        blank=True
+    )
+    registration_state = models.TextField(
+        _("Область (Регіон)"),
+        # blank=True
+    )
+    registration_district = models.TextField(
+        _("Район"),
+        blank=True
+    )
+    registration_city = models.TextField(
+        _("Місто (СМТ, село)"),
+        # blank=True
+    )
+    registration_street = models.TextField(
+        _("Вулиця (проспект, бульвар тощо)"),
+        # blank=True
+    )
+    registration_building = models.TextField(
+        _("№ Будинку"),
+        # blank=True
+    )
+    registration_flat = models.TextField(
+        _("№ Квартири"),
+        # blank=True
+    )
+    registration_index = models.TextField(
+        _("Поштовий індекс"),
+        blank=True
+    )
+    residence_country = models.TextField(
+        _("Країна"),
+        blank=True
+    )
+    residence_state = models.TextField(
+        _("Область (Регіон)"),
+        blank=True
+    )
+    residence_district = models.TextField(
+        _("Район"),
+        blank=True
+    )
+    residence_city = models.TextField(
+        _("Місто (СМТ, село)"),
+        blank=True
+    )
+    residence_street = models.TextField(
+        _("Вулиця (проспект, бульвар тощо)"),
+        blank=True
+    )
+    residence_building = models.TextField(
+        _("№ Будинку"),
+        blank=True
+    )
+    residence_flat = models.TextField(
+        _("№ Квартири"),
+        blank=True
+    )
+    residence_index = models.TextField(
+        _("Поштовий індекс"),
+        blank=True
+    )
+    # ----- end step 1 fields -----
+
+    # ----- step 2 fields -----
+    EMPLOYMENT_TYPE_CHOICES = (
+        ('', 'Виберіть вид'),
+        ('individual', 'Фізична особа'),
+        ('entrepreneur', 'Фізична особа - підприємець (ФОП)'),
+    )
+    employment_type = models.TextField(
+        "Вид зайнятості",
+        choices=EMPLOYMENT_TYPE_CHOICES,
+        blank=True
+    )
+    company_name = models.TextField(
+        "Назва компанії",
+        blank=True
+    )
+    edrpou_code = models.TextField(
+        "ЄДРПОУ",
+        blank=True
+    )
+    position = models.TextField(
+        "Посада",
+        blank=True
+    )
+    position_type = models.TextField(
+        "Вид персоналу",
+        choices=EMPTY_CHOICES,
+        blank=True
+    )
+    service_type = models.TextField(
+        "Сфера діяльності",
+        choices=EMPTY_CHOICES,
+        blank=True
+    )
+    company_experience = models.TextField(
+        "Стаж роботи в компанії",
+        blank=True
+    )
+    overall_experience = models.TextField(
+        "Загальний трудовий стаж",
+        blank=True
+    )
+    company_address = models.TextField(
+        "Фактична адреса місця праці",
+        blank=True
+    )
+    company_phone = models.TextField(
+        "Контактний номер компанії",
+        blank=True
+    )
+    labor_relations = models.TextField(
+        "Трудові правовідносини",
+        choices=EMPTY_CHOICES,
+        blank=True
+    )
+    # ----- end step 2 fields -----
+
+    # ----- step 3 fields -----
+    bound_person_names = models.TextField(
+        "ПІБ",
+        blank=True
+    )
+    bound_person_itn = models.TextField(
+        "Індивідуальний податковий номер (ІПН)",
+        blank=True
+    )
+    bound_person_relationship = models.TextField(
+        "Ступінь відносин",
+        choices=EMPTY_CHOICES,
+        blank=True
+    )
+    bound_person_job = models.TextField(
+        "Робота (Назва компанії, Адреса, Телефон тощо)",
+        blank=True
+    )
+    bound_person_phone = models.TextField(
+        "Контактний номер телефону",
+        blank=True
+    )
+    bound_person_address = models.TextField(
+        "Адреса фактичного проживання",
+        blank=True
+    )
+    # ----- end step 3 fields -----
+    # ----- step 4 fields -----
+    salary = models.TextField(
+        "Заробітна плата",
+        blank=True
+    )
+    partner_salary = models.TextField(
+        "Заробітна плата чоловіка/дружини",
+        blank=True
+    )
+    bonuses = models.TextField(
+        "Бонуси та премії",
+        blank=True
+    )
+    social_benefits = models.TextField(
+        "Соціальні пільги",
+        blank=True
+    )
+    pension = models.TextField(
+        "Пенсія",
+        blank=True
+    )
+    partner_pension = models.TextField(
+        "Пенсія чоловіка/дружини",
+        blank=True
+    )
+    other_income = models.TextField(
+        "Інший дохід",
+        blank=True
+    )
+    overall_income = models.TextField(
+        "Загальний дохід",
+        blank=True
+    )
+    month_outgoing = models.TextField(
+        "Щомісячні витрати",
+        blank=True
+    )
+    month_loan_payments_outgoing = models.TextField(
+        "Щомісячні платежі по кредитам",
+        blank=True
+    )
+    other_outgoing = models.TextField(
+        "Інші витрати",
+        blank=True
+    )
+    dwelling_type = models.TextField(
+        "Тип житла",
+        blank=True
+    )
+    vehicle_count = models.IntegerField(
+        "Кількість автомобілів",
+        default=0
+    )
+    vehicle_description = models.TextField(
+        "Опис авто (марка, модель тощо)",
+        blank=True
+    )
+    # ----- end step 4 fields -----
+
+    class Meta:
+        verbose_name = _('Анкета')
+        verbose_name_plural = _('Анкеты')
+
+    def __str__(self):
+        return self.user.mobile_phone or "Questionnaire"
+
+
+class RegistrationCountry(models.Model):
+    name = models.CharField(
+        "Название",
+        max_length=128
+    )
+    value = models.CharField(
+        "Значение",
+        max_length=128
+    )
+    order = models.PositiveIntegerField(
+        "Порядок",
+        default=0
+    )
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = _('Страна (для анкеты)')
+        verbose_name_plural = _('Страны (для анкеты)')
+
+    def __str__(self):
+        return self.name

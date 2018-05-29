@@ -2,7 +2,13 @@
 
 {% load static %}
 
+{% load i18n %}
+
 {% block title %}Questionnaire{% endblock %}
+
+{% block extrastyles %}
+<link rel="stylesheet" href="{% static 'dist/css/datepicker.min.css' %}">
+{% endblock %}
 
 {% block content %}
 		<section class="s-question">
@@ -15,222 +21,222 @@
 
 				<h2 class="s-title s-title--mid">Заявка на видачу кредиту</h2>
 				
-				<form action="#" class="questionnaire">
+				<form action="{% url 'questionnaire-step1' %}" class="questionnaire" id="questionnaire-form" method="POST">
+					{% csrf_token %}
 					<fieldset class="questionnaire__step">
 						<h3 class="questionnaire__step-title">Персональні (Ідентифікаційні) дані клієнта</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-1"></span>
 						</div>
 
+						<!-- Персональні дані -->
 						<fieldset class="questionnaire__field">
+							<h4 class="questionnaire__caption">Персональні дані</h4>
+
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="surname">Прізвище</label>
-								<input id="surname" placeholder="Прізвище" class="questionnaire__input" type="text" >
+								<label class="questionnaire__label" for="surname">{{ form_step1.last_name.label }}</label>
+								{{ form_step1.last_name }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="name" class="questionnaire__label" for="">Ім'я</label>
-								<input id="name" placeholder="Ім'я" class="questionnaire__input" type="text" >
+								<label for="name" class="questionnaire__label" for="">{{ form_step1.first_name.label }}</label>
+								{{ form_step1.first_name }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="middle-name" class="questionnaire__label" for="">Побатькові</label>
-								<input id="middle-name" placeholder="Ім'я" class="questionnaire__input" type="text" >
+								<label for="middle-name" class="questionnaire__label" for="">{{ form_step1.middle_name.label }}</label>
+								{{ form_step1.middle_name }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Дата народження</label>
-
-								<select class="b-select b-select--days">
-								</select>
-
-								<select class="b-select">
-									<option value="Січень">Січень</option>
-									<option value="Лютий">Лютий</option>
-									<option value="Березень">Березень</option>
-									<option value="Квітень">Квітень</option>
-									<option value="Травень">Травень</option>
-									<option value="Червень">Червень</option>
-									<option value="Липень">Липень</option>
-									<option value="Серпень">Серпень</option>
-									<option value="Вересень">Вересень</option>
-									<option value="Жовтень">Жовтень</option>
-									<option value="Листопад">Листопад</option>
-									<option value="Грудень">Грудень</option>
-								</select>
-
-								<select class="b-select b-select--years">
-								</select>
+								<label class="questionnaire__label">{{ form_step1.birthday_date.label }}</label>
+								{{ form_step1.birthday_date }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Громадянство</label>
+								<label class="questionnaire__label" for="contact-phone">{{ form_step1.sex.label }}</label>
+								{{ form_step1.sex }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="contact-phone">{{ form_step1.education.label }}</label>
+								{{ form_step1.education }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="contact-phone">{{ form_step1.marital_status.label }}</label>
+								{{ form_step1.marital_status }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="contact-phone">{{ form_step1.has_criminal_record.label }}</label>
 								<div class="questionnaire__multiple">
 									<div class="b-checkbox">
-										<input value="off" name="switchCitizen" id="country" type="radio">
-										<label for="country">Україна</label>	
+										<input value="on" name="has_criminal_record" id="criminal-on" type="radio"><label for="criminal-on">{% trans 'Є' %}</label>
 									</div>
 									<div class="b-checkbox">
-										<input value="on" name="switchCitizen" id="another-country" type="radio" checked>
-										<label for="another-country">інше громадаянство</label>
+										<input value="off" name="has_criminal_record" id="criminal-off" type="radio" checked>
+										<label for="criminal-off">{% trans 'Немає' %}</label>
 									</div>
-									<select id="citizen" class="b-select">
-										<option selected disabled hidden>Виберіть ваше громадянство</option>
-										<option value="Россия">Россия</option>
-										<option value="Беларусь">Беларусь</option>
-										<option value="Польша">Польша</option>
-										<option value="Молдавия">Молдавия</option>
-									</select>
 								</div>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="ind-code">ІПРПП</label>
-								<input class="questionnaire__input" id="ind-code" type="tel" placeholder="Ідентифікаційний код" >
+								<label class="questionnaire__label" for="contact-phone">{{ form_step1.mobile_phone.label }}</label>
+								{{ form_step1.mobile_phone }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="contact-phone">Контактний телефон</label>
-								<span class="questionnaire__input-telholder">+380</span>
-								<input id="contact-phone" class="questionnaire__input questionnaire__input--phone" type="tel" placeholder="Введіть ваші дані" >
+								<label class="questionnaire__label" for="contact-mail">{{ form_step1.email.label }}</label>
+								{{ form_step1.email }}
+							</div>
+						</fieldset>
+
+						<!-- Документи -->
+						<fieldset class="questionnaire__field">
+							<h4 class="questionnaire__caption">Документи</h4>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="ind-code">{{ form_step1.itn.label }}</label>
+								{{ form_step1.itn }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="contact-mail">E-mail</label>
-								<input id="contact-mail" class="questionnaire__input" type="email" placeholder="Введіть ваші дані">
+								<label class="questionnaire__label" for="ind-code">{{ form_step1.passport_code.label }}</label>
+								{{ form_step1.passport_code }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Адреса реєстрації</label>
+								<label class="questionnaire__label">{{ form_step1.passport_date.label }}</label>
+								{{ form_step1.passport_date }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">{{ form_step1.passport_outdate.label }}</label>
+								{{ form_step1.passport_outdate }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="passport-region">{{ form_step1.passport_authority.label }}</label>
+								{{ form_step1.passport_authority }}
+							</div>
+						</fieldset>
+
+						<!-- Адреса реєстрації -->
+						<fieldset class="questionnaire__field">
+							<h4 class="questionnaire__caption">Адреса реєстрації</h4>
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">Країна</label>
 								<div class="questionnaire__multiple">
 									<div class="b-checkbox">
-										<input value="off" name="switchRegistration" id="country-1" type="radio"><label for="country-1">Україна</label>
+										<input value="off" name="switchRegistration" id="country" type="radio"><label for="country">Україна</label>
 									</div>
 									<div class="b-checkbox">
-										<input value="on" name="switchRegistration" id="another-country-1" type="radio" checked>
-										<label for="another-country-1">інше громадаянство</label>
+										<input value="on" name="switchRegistration" id="another-country" type="radio" checked>
+										<label for="another-country">інша країна</label>
 									</div>
-									<select id="selectRegistration" class="b-select">
-										<option selected disabled hidden>Виберіть місце реєстрації</option>
-										<option value="Украина">Украина</option>
-										<option value="Россия">Россия</option>
-										<option value="Беларусь">Беларусь</option>
-										<option value="Польша">Польша</option>
-										<option value="Молдавия">Молдавия</option>
-									</select>
+									{{ form_step1.registration_county_switch }}
 								</div>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="region">Регіон</label>
-								<input id="region" class="questionnaire__input" placeholder="Введіть ваші дані" type="text" >
+								<label class="questionnaire__label" for="region">{{ form_step1.registration_state.label }}</label>
+								{{ form_step1.registration_state }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="district">Район</label>
-								<input id="district" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+								<label class="questionnaire__label" for="district">{{ form_step1.registration_district.label }}</label>
+								{{ form_step1.registration_district }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="town">Місто(село, селище)</label>
-								<input id="town" class="questionnaire__input" placeholder="Введіть ваші дані" type="text" >
+								<label class="questionnaire__label" for="town">{{ form_step1.registration_city.label }}</label>
+								{{ form_step1.registration_city }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="house">№ Будівлі(корпусу)</label>
-								<input id="house" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+								<label class="questionnaire__label" for="street">{{ form_step1.registration_street.label }}</label>
+								{{ form_step1.registration_street }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="flat">№ Квартири</label>
-								<input id="flat" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+								<label class="questionnaire__label" for="house">{{ form_step1.registration_building.label }}</label>
+								{{ form_step1.registration_building }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="flat">{{ form_step1.registration_flat.label }}</label>
+								{{ form_step1.registration_flat }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="post-index">{{ form_step1.registration_index.label }}</label>
+								{{ form_step1.registration_index }}
 							</div>
 
 							<div class="b-checkbox">
-								<input data-disable="field-adress" id="the-same" type="checkbox">
+								<input data-disable="field-adress" id="the-same" type="checkbox" name="the-same">
 								<label for="the-same">Адреса місця проживання(перебування) співпадає з місцем реєстрації</label>
 							</div>
 						</fieldset>
 
+						<!-- Адреса місця проживання -->
 						<fieldset data-field="field-adress" class="questionnaire__field">
 							<h4 class="questionnaire__caption">Адреса місця проживання (перебування у т.ч. тимчасового)</h4>
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="region-1">Регіон</label>
-								<input id="region-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+								<label class="questionnaire__label">Країна</label>
+								<div class="questionnaire__multiple">
+									<div class="b-checkbox">
+										<input value="off" name="switchResidence" id="country-1" type="radio"><label for="country-1">Україна</label>
+									</div>
+									<div class="b-checkbox">
+										<input value="on" name="switchResidence" id="another-country-1" type="radio" checked>
+										<label for="another-country-1">інша країна</label>
+									</div>
+									{{ form_step1.residence_county_switch }}
+								</div>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="district-1">Район</label>
-								<input id="district-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+								<label class="questionnaire__label" for="region-1">{{ form_step1.residence_state.label }}</label>
+								{{ form_step1.residence_state }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="town-1">Місто(село, селище)</label>
-								<input id="town-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+								<label class="questionnaire__label" for="district-1">{{ form_step1.residence_district.label }}</label>
+								{{ form_step1.residence_district }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="house-1">№ Будівлі(корпусу)</label>
-								<input id="house-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
+								<label class="questionnaire__label" for="town-1">{{ form_step1.residence_city.label }}</label>
+								{{ form_step1.residence_city }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="street-1">{{ form_step1.residence_street.label }}</label>
+								{{ form_step1.residence_street }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="house-1">{{ form_step1.residence_building.label }}</label>
+								{{ form_step1.residence_building }}
 							</div>
 
 							<div>
-								<label class="questionnaire__label" for="flat-1">№ Квартири</label>
-								<input id="flat-1" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
-							</div>
-						</fieldset>
-						
-						<fieldset class="questionnaire__field">
-							<h4 class="questionnaire__caption">Документ, що посвідчує особу</h4>
-
-							<div class="questionnaire__multiple questionnaire__multiple--flexs">
-								<div class="questionnaire__item ">
-									<label class="questionnaire__label" for="serial">Серія</label>
-									<input id="serial" type="text" class="questionnaire__input questionnaire__input--serial" maxlength="2" placeholder="XX">
-								</div>
-
-								<div class="questionnaire__item questionnaire__item">
-									<label class="questionnaire__label" for="serial-num">Номер</label>
-									<input class="questionnaire__input questionnaire__input--serial-numb" id="serial-num" type="tel" maxlength="8" placeholder="XXXXXXXX"> 
-								</div>
+								<label class="questionnaire__label" for="flat-1">{{ form_step1.residence_flat.label }}</label>
+								{{ form_step1.residence_flat }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Дата видачі</label>
-
-								<select name="passport-day" class="b-select b-select--days">
-								</select>
-
-								<select name="passport-month" class="b-select">
-									<option value="Січень">Січень</option>
-									<option value="Лютий">Лютий</option>
-									<option value="Березень">Березень</option>
-									<option value="Квітень">Квітень</option>
-									<option value="Травень">Травень</option>
-									<option value="Червень">Червень</option>
-									<option value="Липень">Липень</option>
-									<option value="Серпень">Серпень</option>
-									<option value="Вересень">Вересень</option>
-									<option value="Жовтень">Жовтень</option>
-									<option value="Листопад">Листопад</option>
-									<option value="Грудень">Грудень</option>
-								</select>
-
-								<select name="passport-year" class="b-select b-select--years">
-								</select>
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="passport-region">Орган видачі</label>
-								<input id="passport-region" class="questionnaire__input" placeholder="Введіть ваші дані" type="text">
-							</div>
-
-							<div class="b-checkbox">
-								<input id="personal-agree-1" type="checkbox">
-								<label for="personal-agree-1" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
+								<label class="questionnaire__label" for="post-index-1">{{ form_step1.residence_index.label }}</label>
+								{{ form_step1.residence_index }}
 							</div>
 						</fieldset>
-						
+
+						<div class="b-checkbox agree-checkbox">
+							<input id="personal-agree" type="checkbox" name="personal-agree" required>
+							<label for="personal-agree" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
+						</div>
 						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
 					</fieldset>
 
@@ -241,80 +247,61 @@
 						</div>
 
 						<fieldset class="questionnaire__field">
-							<label class="questionnaire__label">Зайнятість</label>
-
-							<select class="b-select b-select--stretch">
-								<option selected disabled hidden>Фізична особа - підприємець - зазначається з одночасним над...</option>
-								<option value="ФОП">ФОП</option>
-							</select>
+							<label class="questionnaire__label">{{ form_step2.employment_type.label }}</label>
+							{{ form_step2.employment_type }}
 						</fieldset>
 
 						<fieldset class="questionnaire__field">
 							<h4 class="questionnaire__caption">Для осіб, які займаються незалежною професійною діяльністю або є особами-підприємцями</h4>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Дата державної реєстрації</label>
-
-								<select name="passport-day" class="b-select b-select--days">
-								</select>
-
-								<select name="passport-month" class="b-select">
-									<option value="Січень">Січень</option>
-									<option value="Лютий">Лютий</option>
-									<option value="Березень">Березень</option>
-									<option value="Квітень">Квітень</option>
-									<option value="Травень">Травень</option>
-									<option value="Червень">Червень</option>
-									<option value="Липень">Липень</option>
-									<option value="Серпень">Серпень</option>
-									<option value="Вересень">Вересень</option>
-									<option value="Жовтень">Жовтень</option>
-									<option value="Листопад">Листопад</option>
-									<option value="Грудень">Грудень</option>
-								</select>
-
-								<select name="passport-year" class="b-select b-select--years">
-								</select>
+								<label class="questionnaire__label">{{ form_step2.company_name.label }}</label>
+								{{ form_step2.company_name }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="gover-reg-place" class="questionnaire__label">Орган держовної реєстрації</label>
-								<input id="gover-reg-place" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+								<label class="questionnaire__label">{{ form_step2.edrpou_code.label }}</label>
+								{{ form_step2.edrpou_code }}
 							</div>
 
 							<div class="questionnaire__item">
-								<select class="b-select">
-									<option selected disabled hidden>Види діяльності</option>
-									<option value="ФОП">ФОП</option>
-								</select>
+								<label class="questionnaire__label">{{ form_step2.position.label }}</label>
+								{{ form_step2.position }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="gover-doc" class="questionnaire__label">Документ, що підтверджує державну реєстрацію</label>
-								<input id="gover-doc" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+								<label class="questionnaire__label">{{ form_step2.position_type.label }}</label>
+								{{ form_step2.position_type }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="client-work" class="questionnaire__label">Місце роботи клієнта/посада/сфера діяльності</label>
-								<input id="client-work" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+								<label class="questionnaire__label">{{ form_step2.service_type.label }}</label>
+								{{ form_step2.service_type }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Джерело походження коштів</label>
-
-								<select class="b-select">
-									<option value="Від підприємницької діяльності">Від підприємницької діяльності</option>
-									<option value="Не від підприємницької діяльності">Не від підприємницької діяльності</option>
-								</select>
+								<label class="questionnaire__label">{{ form_step2.company_experience.label }}</label>
+								{{ form_step2.company_experience }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Наявність майна</label>
+								<label class="questionnaire__label">{{ form_step2.overall_experience.label }}</label>
+								{{ form_step2.overall_experience }}
+							</div>
 
-								<select class="b-select">
-									<option value="квартира">Квартира</option>
-									<option value="автомобіль">автомобіль</option>
-								</select>
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">{{ form_step2.company_address.label }}</label>
+								{{ form_step2.company_address }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">{{ form_step2.company_phone.label }}</label>
+								{{ form_step2.company_phone }}
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label">{{ form_step2.labor_relations.label }}</label>
+								{{ form_step2.labor_relations }}
 							</div>
 
 							<div class="b-checkbox">
@@ -327,98 +314,41 @@
 					</fieldset>
 					
 					<fieldset class="questionnaire__step">
-						<h3 class="questionnaire__step-title">Основні параметри кредиту</h3>
+						<h3 class="questionnaire__step-title">Дані довіреної особи</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-3"></span>
 						</div>
 
 						<fieldset class="questionnaire__field">
 							<div class="questionnaire__item">
-								<label for="quest-credit" class="questionnaire__label">Загальна сума з урахуванням відсотків</label>
-								<input id="quest-credit" type="tel" class="questionnaire__input" placeholder="Введіть ваші дані">
+								<label for="quest-credit" class="questionnaire__label">{{ form_step3.bound_person_names.label }}</label>
+								{{ form_step3.bound_person_names }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="quest-prod" class="questionnaire__label">Продукт</label>
-								<input id="quest-prod" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
+								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_itn.label }}</label>
+								{{ form_step3.bound_person_itn }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Срок кредиту</label>
-
-								<select name="cred-term" class="b-select">
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-									<option value="5">5</option>
-									<option value="6">6</option>
-									<option value="7">7</option>
-									<option value="8">8</option>
-									<option value="9">9</option>
-									<option value="10">10</option>
-									<option value="11">11</option>
-								</select>
-
-								<span class="b-select-label">місяців</span>
-
-								<select name="cred-term" class="b-select">
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</select>
-
-								<span class="b-select-label">тижнів</span>
+								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_relationship.label }}</label>
+								{{ form_step3.bound_person_relationship }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="quest-sum" class="questionnaire__label">Сума внеску</label>
-								<input id="quest-sum" type="tel" class="questionnaire__input" placeholder="Введіть ваші дані">
-								<span class="questionnaire__item-notification">*сума внеску містить тіло та відсотки по кредиту</span>
+								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_job.label }}</label>
+								{{ form_step3.bound_person_job }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Дата першого внеску</label>
-								<select class="b-select b-select--days">
-									<option selected disabled hidden>дд</option>
-								</select>
-
-								<select class="b-select">
-									<option selected disabled hidden>мм</option>
-									<option value="Січень">Січень</option>
-									<option value="Лютий">Лютий</option>
-									<option value="Березень">Березень</option>
-									<option value="Квітень">Квітень</option>
-									<option value="Травень">Травень</option>
-									<option value="Червень">Червень</option>
-									<option value="Липень">Липень</option>
-									<option value="Серпень">Серпень</option>
-									<option value="Вересень">Вересень</option>
-									<option value="Жовтень">Жовтень</option>
-									<option value="Листопад">Листопад</option>
-									<option value="Грудень">Грудень</option>
-								</select>
-
-								<select class="b-select">
-									<option value="2018">2018</option>
-									<option value="2019">2019</option>
-									<option value="2020">2020</option>
-								</select>
+								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_phone.label }}</label>
+								{{ form_step3.bound_person_phone }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Періодичність оплати</label>
-
-								<div class="questionnaire__multiple questionnaire__multiple--flexs">
-									<div class="b-checkbox questionnaire__multiple-item">
-										<input value="off" name="switchPeriod" id="everyMonth" type="radio">
-										<label for="everyMonth">Щомісяця</label>	
-									</div>
-									<div class="b-checkbox">
-										<input value="on" name="switchPeriod" id="everyWeek" type="radio" checked>
-										<label for="everyWeek" checked>Щотижня</label>
-									</div>
-								</div>
+								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_address.label }}</label>
+								{{ form_step3.bound_person_address }}
+								<span class="questionnaire__item-notification">*обов'язкове поле</span>
 							</div>
 
 							<div class="b-checkbox">
@@ -431,7 +361,7 @@
 					</fieldset>
 
 					<fieldset class="questionnaire__step">
-						<h3 class="questionnaire__step-title">Доходи/витрати</h3>
+						<h3 class="questionnaire__step-title">Доходи, витрати та майно</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-4"></span>
 						</div>
@@ -440,127 +370,82 @@
 							<h4 class="questionnaire__caption">Доходи</h4>
 
 							<div class="questionnaire__item">
-								<label for="payment-1" class="questionnaire__label">Зарплата</label>
-								<input id="payment-1" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="payment-1" class="questionnaire__label">{{ form_step4.salary.label }}</label>
+								{{ form_step4.salary }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-2" class="questionnaire__label">Зарплата дружини/чоловіка</label>
-								<input id="payment-2" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="payment-2" class="questionnaire__label">{{ form_step4.partner_salary.label }}</label>
+								{{ form_step4.partner_salary }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-2" class="questionnaire__label">Бонуси і премії</label>
-								<input id="payment-2" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="payment-2" class="questionnaire__label">{{ form_step4.bonuses.label }}</label>
+								{{ form_step4.bonuses }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-3" class="questionnaire__label">Соціальні пільги</label>
-								<input id="payment-3" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="payment-3" class="questionnaire__label">{{ form_step4.social_benefits.label }}</label>
+								{{ form_step4.social_benefits }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-4" class="questionnaire__label">Дохід ві оренди</label>
-								<input id="payment-4" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="payment-4" class="questionnaire__label">{{ form_step4.pension.label }}</label>
+								{{ form_step4.pension }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-5" class="questionnaire__label">ЦПД</label>
-								<input id="payment-5" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="payment-5" class="questionnaire__label">{{ form_step4.partner_pension.label }}</label>
+								{{ form_step4.partner_pension }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-6" class="questionnaire__label">Пенсія</label>
-								<input id="payment-6" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="payment-6" class="questionnaire__label">{{ form_step4.other_income.label }}</label>
+								{{ form_step4.other_income }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-7" class="questionnaire__label">Пенсія чоловіка/дружини</label>
-								<input id="payment-7" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="payment-7" class="questionnaire__label">{{ form_step4.overall_income.label }}</label>
+								{{ form_step4.overall_income }}
 							</div>
 
-							<div class="questionnaire__item">
-								<label for="payment-8" class="questionnaire__label">Інші</label>
-								<input id="payment-8" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="payment-total" class="questionnaire__label">ЗАГАЛЬНИЙ ДОХІД</label>
-								<input id="payment-total" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
 						</fieldset>
 
 						<fieldset class="questionnaire__field">
 							<h4 class="questionnaire__caption">Витрати</h4>
 
 							<div class="questionnaire__item">
-								<label for="expend-1" class="questionnaire__label">Продукти і одяг</label>
-								<input id="expend-1" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="expend-1" class="questionnaire__label">{{ form_step4.month_outgoing.label }}</label>
+								{{ form_step4.month_outgoing }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="expend-2" class="questionnaire__label">Діти</label>
-								<input id="expend-2" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="expend-2" class="questionnaire__label">{{ form_step4.month_loan_payments_outgoing.label }}</label>
+								{{ form_step4.month_loan_payments_outgoing }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="expend-2" class="questionnaire__label">Електроенергія</label>
-								<input id="expend-2" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="expend-2" class="questionnaire__label">{{ form_step4.other_outgoing.label }}</label>
+								{{ form_step4.other_outgoing }}
+							</div>
+						</fieldset>
+
+						<fieldset class="questionnaire__field">
+							<h4 class="questionnaire__caption">Майно</h4>
+
+							<div class="questionnaire__item">
+								<label for="expend-1" class="questionnaire__label">{{ form_step4.dwelling_type.label }}</label>
+								{{ form_step4.dwelling_type }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="expend-3" class="questionnaire__label">Соціальні пільги</label>
-								<input id="expend-3" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="expend-2" class="questionnaire__label">{{ form_step4.vehicle_count.label }}</label>
+								{{ form_step4.vehicle_count }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="expend-4" class="questionnaire__label">Опалення</label>
-								<input id="expend-4" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-5" class="questionnaire__label">Інтернет і ТБ</label>
-								<input id="expend-5" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-6" class="questionnaire__label">Телефон</label>
-								<input id="expend-6" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-7" class="questionnaire__label">Оренда</label>
-								<input id="expend-7" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-8" class="questionnaire__label">Транспорт</label>
-								<input id="expend-8" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-9" class="questionnaire__label">Напої, сигарети, розваги</label>
-								<input id="expend-9" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-10" class="questionnaire__label">Фінансові зобов'язання перед банком</label>
-								<input id="expend-10" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-sum" class="questionnaire__label">Сума</label>
-								<input id="expend-sum" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-total" class="questionnaire__label">ЗАГАЛЬНІ ВИТРАТИ</label>
-								<input id="expend-total" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="expend-part" class="questionnaire__label">Частковий дохід за місяць</label>
-								<input id="expend-part" placeholder="XXX XXX XX" class="questionnaire__input questionnaire__input--payment" type="tel" >
+								<label for="expend-2" class="questionnaire__label">{{ form_step4.vehicle_description.label }}</label>
+								{{ form_step4.vehicle_description }}
 							</div>
 
 							<div class="b-checkbox">
@@ -572,7 +457,7 @@
 						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
 					</fieldset>
 
-					<fieldset class="questionnaire__step">
+					<!--<fieldset class="questionnaire__step">
 						<h3 class="questionnaire__step-title">Інформація про належність особи до публічних діячів</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-5"></span>
@@ -853,7 +738,7 @@
 						</fieldset>
 
 						<button class="b-btn-primary b-btn-primary--main" type="submit">Зберегти</button>
-					</fieldset>
+					</fieldset>-->
 				</form>
 			</div>
 		</div>
@@ -866,4 +751,22 @@
 
 {% block footer %}{% endblock %}
 
-{% block extra %}{% endblock %}
+{% block extrascrypts %}
+	<script src="{% static 'dist/libs/datepicker.min.js' %}"></script>
+	<script>
+		var today = new Date();
+		$('#id_birthday_date').datepicker({
+			maxDate: new Date(today.getFullYear()-18, today.getMonth(), today.getDate()),
+			minDate: new Date(1900,0,1),
+			dateFormat: 'yyyy-mm-dd'
+		});
+		$('#id_passport_date').datepicker({
+			maxDate: today,
+			minDate: new Date(1900,0,1),
+			dateFormat: 'yyyy-mm-dd'
+		});
+		$('#id_passport_outdate').datepicker({
+			dateFormat: 'yyyy-mm-dd'
+		});
+	</script>
+{% endblock extrascrypts %}

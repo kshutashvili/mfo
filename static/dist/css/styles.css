@@ -3456,7 +3456,11 @@ fieldset {
     padding: 1rem 2rem;
     border-radius: 10px;
     background-color: #f9f9f9;
-    border: none; }
+    border: 1px solid transparent; }
+    .questionnaire__input:focus {
+      border: 1px solid #FCC504;
+      outline: none;
+    }
     .questionnaire__input[disabled] {
       background-color: #fafafa; }
       .questionnaire__input[disabled]::-webkit-input-placeholder {

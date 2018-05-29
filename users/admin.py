@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
-from users.models import Profile, RequestPersonalArea, User
+from users.models import (
+    Profile, RequestPersonalArea, User,
+    Questionnaire, RegistrationCountry
+)
 
 
 class ProfileInline(admin.StackedInline):
@@ -24,3 +27,13 @@ class RequestPersonalAreaAdmin(admin.ModelAdmin):
     list_display = ('name', 'contract_num', 'mobile_phone_number')
     search_fields = ('name', 'mobile_phone_number')
     list_filter = ('contract_num', )
+
+
+@admin.register(Questionnaire)
+class QuestionnaireAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(RegistrationCountry)
+class RegistrationCountryAdmin(admin.ModelAdmin):
+    pass

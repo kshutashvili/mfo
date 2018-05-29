@@ -29,7 +29,7 @@ from token_confirm.token import account_activation_token
 api = AuthyApiClient(auth_token)
 
 
-def sms(request, phone, url=None):
+def sms(request, phone, url=None, user=None):
     """
         reset=True mean that sms sending using for Password reset function
     """
@@ -37,6 +37,10 @@ def sms(request, phone, url=None):
     # set phone number in session
     # this phone will be used for verification code
     request.session['phone'] = phone
+
+    if user:
+        print("user ID", user.id)
+        request.session['user_id'] = user.id
 
     # send SMS to phone number
     api.phones.verification_start(phone, '+380', via='sms')

@@ -38,7 +38,10 @@ from users.views import (
     ResetPasswordView,
     ResetPasswordVerifyView,
     ResetPasswordConfirmView,
-    CallbackVerifyView
+    CallbackVerifyView,
+    RegisterVerifyView,
+    QuestionnaireView,
+    questionnaire_step1
 )
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
                                     city24_terminal_view, TurnesView)
@@ -54,7 +57,7 @@ urlpatterns = i18n_patterns(
     path('kak-poluchit-kredit/<str:status_message>/', content.CallbackView.as_view(), name='callback'),
 
     path('request-callback/', content.request_callback, name='request_callback'),
-    path('callback-confirm/', CallbackVerifyView.as_view(), name='callback_verify'),
+    path('callback-verify/', CallbackVerifyView.as_view(), name='callback_verify'),
     path('callback-success/', content.CallbackSuccessView.as_view(), name='callback_success'),
     path('save_credit_request/', content.save_credit_request, name='save_credit_request'),
 
@@ -63,12 +66,15 @@ urlpatterns = i18n_patterns(
 
     path('translate/<str:lang_code>/', content.translate, name='translate'),
     path('job/', job.job, name='job'),
-    path('order/', TemplateView.as_view(template_name='questionnaire.html'), name='order'),
+    path('questionnaire/', QuestionnaireView.as_view(), name='questionnaire'),
+    path('questionnaire-step1/', questionnaire_step1, name='questionnaire-step1'),
 
     path('login/', user_login, name='login'),
-    path('register/', register, name='register'),
     # path('login/<str:status_message>/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
+
+    path('register/', register, name='register'),
+    path('register-verify/', RegisterVerifyView.as_view(), name='register_verify'),
 
     path('password/', FirstChangePassword.as_view(), name='set_password'),
     path('sms/<str:phone>/', sms.sms, name='sms'),

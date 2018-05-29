@@ -608,3 +608,34 @@ def get_person_id_and_tel(contract_num):
             return ""
     else:
         return ""
+
+
+def get_dropdown_data(dropdown_id):
+    exfin_connection = MySQLdb.connect(
+        host="10.10.100.27",                # host of MySQL database
+        user="root",                        # user's username
+        passwd="Orraveza(99)",              # your password
+        db="mbank",                         # name of the database
+        charset="utf8"
+    )
+
+    # create CURSOR and set UTF8 params
+    exfin_cursor = exfin_connection.cursor()
+    exfin_cursor.execute('SET NAMES utf8;')
+    exfin_cursor.execute('SET CHARACTER SET utf8;')
+    exfin_cursor.execute('SET character_set_connection=utf8;')
+
+    exfin_cursor.execute(
+        """
+            SELECT
+                *
+            FROM
+                mbank.tdropdown_details
+            WHERE dropdown = {0};
+        """.format(dropdown_id)
+    )
+    dropdown_data = exfin_cursor.fetchall()
+    if dropdown_data:
+        return dropdown_data
+    else:
+        return (('', ''),)

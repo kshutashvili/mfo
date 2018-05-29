@@ -7,6 +7,7 @@ window.onload = function() {
 	profileAlter();
 	messageRead();
 	creditFormSubmit();
+	enableCountryRequired();
 
 	(function($) {
 		var params = window.location.search.replace('?','').split('&')
@@ -392,8 +393,8 @@ window.onload = function() {
 	styleSelect($('.b-select--days'), 'numb' , 1, 31);
 	styleSelect($('.b-select--years'), 'year' , 1920, 2000);
 
-	$('input[name=switchCitizen]').on('click', function(e) {
-		disableSelect($(this), $('#citizen'));
+	$('input[name=switchResidence]').on('click', function(e) {
+		disableSelect($(this), $('#residence'));
 	});
 
 	$('input[name=switchRegistration]').on('click', function(e) {
@@ -408,10 +409,14 @@ window.onload = function() {
 
 		if(this.checked) {
 			inputs.attr('disabled', true);
-			nextField.fadeOut(400); 
+			nextField.fadeOut(400);
+			$('#residence').attr('required', false);
 		} else { 
 			inputs.attr('disabled', false); 
 			nextField.fadeIn(400);
+			if ($('#another-country-1').val() === 'on'){
+				$('#residence').attr('required', true);
+			}
 		}
 	});
 
@@ -425,8 +430,57 @@ window.onload = function() {
 		}
 	});
 
-	$('.questionnaire .b-btn-primary').not('[type=submit]').on('click', function(e) {
+	// $('.questionnaire .b-btn-primary').not('[type=submit]').on('click', function(e) {
+	$('.questionnaire .b-btn-primary').on('click', function(e) {
 		e.preventDefault();
+		// e.stopPropagation();
+
+		// var $inputs = $(this).parent().find('input');
+		// console.log($inputs);
+		// var data = {};
+		// Array.from($inputs).forEach(function(item, i){
+		// 	// console.log(item.name);
+		// 	// console.log(item.value);
+		// 	// console.log(i);
+		// 	console.log($("#"+item.id).parent());
+		// 	$("#"+item.id).removeClass('error');
+		// 	$("#"+item.id).parent().find('.error-text').remove();
+		// 	console.log(item.checkValidity(), item.name);
+		// 	data[item.name] = item.value;
+		// });
+		// console.log(data);
+		// var out = $(this);
+		// $.ajax({
+		// 	url: $('#questionnaire-form').attr('action'),
+		// 	// url: '/ru/questionnaire-step1/',
+		// 	type: 'post',
+		// 	data: data,
+		// 	dataType: 'json',
+
+		// 	success: function(response){
+		// 		console.log(response);
+		// 		if (response["result"] == "ok"){
+		// 			var currentStep = out.parent();
+		// 			var nextStep = out.parent().next('.questionnaire__step');
+		// 			currentStep.fadeOut(400, function() {
+		// 				nextStep.fadeIn(400);
+		// 			});
+		// 		}
+		// 		if (response["errors"]){
+		// 			for (var error in response["errors"]){
+		// 				// console.log(response["errors"][error]);
+		// 				var $elem = $("#id_" + error);
+		// 				// console.log($elem);
+		// 				$elem.addClass("error-border");
+		// 				$elem.parent().append(
+		// 					"<div class='error-text'>" + response["errors"][error] + "</div>"
+		// 				)
+		// 			}
+		// 			$("#id_" + Object.keys(response["errors"])[0]).focus();
+		// 		}
+		// 	}
+		// }); 
+
 		var currentStep = $(this).parent();
 		var nextStep = $(this).parent().next('.questionnaire__step');
 
@@ -554,8 +608,10 @@ function initMap() {
 function disableSelect(context, select) {
 	if(context.val() === 'on') {
 		select.attr('disabled', false);
+		select.attr('required', true);
 	} else {
 		select.attr('disabled', true);
+		select.attr('required', false);
 	}
 }
 
@@ -1019,4 +1075,9 @@ function getTarget(obj) {
   if (targ.nodeType == 3) // defeat Safari bug
   	targ = targ.parentNode;
   return targ;
+}
+
+function enableCountryRequired() {
+	$('#selectRegistration').attr('required', 'true');
+	$('#residence').attr('required', 'true');
 }

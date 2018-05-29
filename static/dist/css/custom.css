@@ -20,3 +20,29 @@
 .f-form__footer{
     padding: 1.5rem 0;
 }
+.questionnaire {
+    position: relative;
+    width: 46.5812%;
+    margin: 0 auto 30px auto;
+}
+.agree-checkbox {
+    margin: 10px auto;
+    position: relative;
+}
+.agree-checkbox input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: initial;
+}
+.error-border, .error-border:focus{
+    border: 1px solid rgba(255, 0, 0, 0.8);
+}
+.error-text{
+    color: rgba(255, 0, 0, 0.8);
+    margin-top: 1rem;
+}
+.wrap-checkbox{
+    padding: 0 10px;
+}

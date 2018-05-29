@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import (
     HttpResponseRedirect, JsonResponse,
-    HttpResponseBadRequest
+    HttpResponseBadRequest, HttpResponse
 )
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse, reverse_lazy
@@ -11,7 +11,8 @@ from django.contrib.auth import (
 from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from django.views.generic import CreateView
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, TemplateView
 from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
 
@@ -30,8 +31,14 @@ from users.forms import (
     ResetPasswordForm,
     ResetPasswordVerifyForm,
     CallbackVerifyForm,
-    SMSVerifyForm
+    SMSVerifyForm,
+    RegisterVerifyForm,
+    RegisterPersonalStep1Form,
+    RegisterPersonalStep2Form,
+    RegisterPersonalStep3Form,
+    RegisterPersonalStep4Form
 )
+from users.helpers import make_user_password
 from users.models import Profile, RequestPersonalArea, User
 from users.utils import test_user_turnes
 
@@ -41,35 +48,33 @@ def register(request):
         form = RegisterNumberForm(request.POST)
         if form.is_valid():
             phone = form.cleaned_data.get('phone')
-            user_exist = User.objects.filter(mobile_phone=phone).first()
-            print(phone, user_exist)
-            if user_exist and user_exist.is_active:
+            user = User.objects.filter(mobile_phone=phone).first()
+            print(phone, user)
+            if user and user.is_active:
                 id_mess = UserExistMessage.get_solo().page.id
                 url = reverse('success', kwargs={
                     'redirect_url': 'login',
                     'id_mess': id_mess
                 })
                 return HttpResponseRedirect(url)
-            elif user_exist and user_exist.user.is_active == False:
-                url = reverse('sms', kwargs={
-                    # 'phone': phone
-                    'phone': '380950968326'
-                })
-                return HttpResponseRedirect(url)
-            else:
-                user = User.objects.create(
-                    mobile_phone=phone,
-                    is_active=False
-                )
-                # url = reverse('sms', kwargs={
-                #     # 'phone': phone
-                #     'phone': '380950968326'
-                # })
-                # return HttpResponseRedirect(url)
+            elif user and user.ready_for_turnes == False:
+                print("Not active")
                 return sms(
                     request,
                     "+380950968326",
-                    reverse('callback_verify')
+                    reverse('register_verify')
+                )
+            else:
+                user = User.objects.create(
+                    mobile_phone=phone,
+                    ready_for_turnes=False
+                )
+                print("No user")
+                return sms(
+                    request,
+                    "+380950968326",
+                    reverse('register_verify'),
+                    user
                 )
         # else:
         #     status_message = _('invalid phone')
@@ -157,6 +162,8 @@ def user_login(request, status_message=None):
                 # checking if user changed password which received from SMS
                 if user.changed_default_password:
                     return HttpResponseRedirect(reverse('profile'))
+                elif not user.ready_for_turnes:
+                    return HttpResponseRedirect(reverse('questionnaire'))
                 else:
                     # if no, redirects to change password page
                     return HttpResponseRedirect(reverse('set_password'))
@@ -419,3 +426,88 @@ class CallbackVerifyView(SMSVerifyView):
                 'bid': bid[0]
             })
         return kwargs
+
+
+class RegisterVerifyView(SMSVerifyView):
+    form_class = RegisterVerifyForm
+    success_url = reverse_lazy('questionnaire')
+    user = None
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     user_id = self.request.session.pop('user_id', '')
+    #     if not user_id:
+    #         kwargs.update({
+    #             'user': self.user
+    #         })
+    #         return kwargs
+    #     print("RegisterVerifyView user_id", user_id)
+    #     self.user = User.objects.filter(id=int(user_id))[0]
+    #     if self.user:
+    #         print("RegisterVerifyView user", self.user)
+    #         kwargs.update({
+    #             'user': self.user
+    #         })
+    #     return kwargs
+
+    def form_valid(self, form):
+        user_id = self.request.session.pop('user_id', '')
+        mobile_phone = form.phone
+        print('form_valid mobile_phone', mobile_phone)
+        if not user_id:
+            return HttpResponseRedirect(reverse('login'))
+
+        user = User.objects.filter(id=int(user_id))[0]
+        print('form_valid user', user)
+
+        if user:
+            password = make_user_password(user)
+            auth_user = authenticate(mobile_phone=user.mobile_phone, password=password)
+            print("auth_user 1", auth_user)
+            if auth_user is not None:
+                print("auth_user 2", auth_user)
+                login(self.request, auth_user)
+                return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse('login'))
+
+
+class QuestionnaireView(TemplateView):
+    template_name = 'questionnaire.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionnaireView, self).get_context_data(*kwargs)
+        context['form_step1'] = RegisterPersonalStep1Form()
+        context['form_step2'] = RegisterPersonalStep2Form()
+        context['form_step3'] = RegisterPersonalStep3Form()
+        context['form_step4'] = RegisterPersonalStep4Form()
+        return context
+
+
+@csrf_exempt
+def questionnaire_step1(request):
+    if request.method == 'POST':
+        print(request.POST)
+        form = RegisterPersonalStep1Form(data=request.POST)
+        if form.is_valid():
+            print('ok')
+            return JsonResponse(
+                {
+                    'result': 'ok',
+                    'errors': None
+                },
+                safe=False
+            )
+        else:
+            for err in form.errors:
+                print(err)
+        return JsonResponse(
+            {
+                'result': 'bad',
+                'errors': form.errors
+            },
+            safe=False
+        )
