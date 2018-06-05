@@ -142,7 +142,7 @@ class BlogItem(models.Model):
         return ' '.join([self.title, str(self.date)])
 
     def save(self):
-        super(BlogItem, self).save()        
+        super(BlogItem, self).save()
         if not self.image:
             return
         image = Image.open(self.image)
@@ -173,6 +173,7 @@ FAQ_CATEGORY_ICON_CHOICES = (('general','Общие вопросы'),
                              ('credit','Кредитный договор'),
                              ('personal','Личный кабинет'),
                              ('credit_manipulation','Как погасить / увеличить кредит'))
+
 
 class FaqCategory(models.Model):
     name = models.CharField(_('Название'),

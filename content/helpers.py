@@ -106,3 +106,21 @@ def clear_contact_phone(contact_phone):
     ).replace(
         "_", ""
     )
+
+
+def check_blacklist(itn=None, mobile_phone=None,
+                    passseria=None, passnumber=None):
+    saleshub_URI = "http://127.0.0.1:8001/api/v1/blacklist/"
+    data = {
+        "itn": itn,
+        "mobile_phone": mobile_phone,
+        "passseria": passseria,
+        "passnumber": passnumber,
+    }
+
+    r = requests.post(
+        saleshub_URI,
+        data=data
+    )
+
+    return r.json()

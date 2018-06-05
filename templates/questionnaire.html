@@ -4,7 +4,7 @@
 
 {% load i18n %}
 
-{% block title %}Questionnaire{% endblock %}
+{% block title %}{% trans "Анкета" %}{% endblock %}
 
 {% block extrastyles %}
 <link rel="stylesheet" href="{% static 'dist/css/datepicker.min.css' %}">
@@ -14,63 +14,71 @@
 		<section class="s-question">
 			<div class="wrapper">
 				<nav class="b-top-nav">
-					<a class="b-top-nav__item active">Главная</a>
-					<a href="#!" class="b-top-nav__item">Заявка на кредит</a>
+					<a class="b-top-nav__item active">{% trans 'Главная' %}</a>
+					<a href="#!" class="b-top-nav__item">{% trans 'Заявка на кредит' %}</a>
 				</nav>
 
 
-				<h2 class="s-title s-title--mid">Заявка на видачу кредиту</h2>
+				<h2 class="s-title s-title--mid">{% trans 'Заявка на видачу кредиту' %}</h2>
 				
-				<form action="{% url 'questionnaire-step1' %}" class="questionnaire" id="questionnaire-form" method="POST">
+				{# <form action="{% url 'questionnaire-step1' %}" class="questionnaire" id="questionnaire-form" method="POST"> #}
+				<form action="{% url 'save-questionnaire' %}" class="questionnaire" id="questionnaire-form" method="POST">
 					{% csrf_token %}
+					<!-- step 1 -->
 					<fieldset class="questionnaire__step">
-						<h3 class="questionnaire__step-title">Персональні (Ідентифікаційні) дані клієнта</h3>
+						<h3 class="questionnaire__step-title">{% trans 'Особисті дані клієнта' %}</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-1"></span>
 						</div>
 
 						<!-- Персональні дані -->
 						<fieldset class="questionnaire__field">
-							<h4 class="questionnaire__caption">Персональні дані</h4>
+							<h4 class="questionnaire__caption">{% trans 'Персональні дані' %}</h4>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="surname">{{ form_step1.last_name.label }}</label>
-								{{ form_step1.last_name }}
+								<label class="questionnaire__label" for="id_last_name">{{ form.last_name.label }}</label>
+								{{ form.last_name }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="name" class="questionnaire__label" for="">{{ form_step1.first_name.label }}</label>
-								{{ form_step1.first_name }}
+								<label class="questionnaire__label" for="id_first_name">{{ form.first_name.label }}</label>
+								{{ form.first_name }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="middle-name" class="questionnaire__label" for="">{{ form_step1.middle_name.label }}</label>
-								{{ form_step1.middle_name }}
+								<label class="questionnaire__label" for="id_middle_name">{{ form.middle_name.label }}</label>
+								{{ form.middle_name }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step1.birthday_date.label }}</label>
-								{{ form_step1.birthday_date }}
+								<label class="questionnaire__label" for="id_birthday_date">{{ form.birthday_date.label }}</label>
+								{{ form.birthday_date }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="contact-phone">{{ form_step1.sex.label }}</label>
-								{{ form_step1.sex }}
+								<label class="questionnaire__label" for="id_sex">{{ form.sex.label }}</label>
+								{{ form.sex }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="contact-phone">{{ form_step1.education.label }}</label>
-								{{ form_step1.education }}
+								<label class="questionnaire__label" for="id_education">{{ form.education.label }}</label>
+								{{ form.education }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="contact-phone">{{ form_step1.marital_status.label }}</label>
-								{{ form_step1.marital_status }}
+								<label class="questionnaire__label" for="id_marital_status">{{ form.marital_status.label }}</label>
+								{{ form.marital_status }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="contact-phone">{{ form_step1.has_criminal_record.label }}</label>
 								<div class="questionnaire__multiple">
+								<label class="questionnaire__label multiple-check-label" for="criminal-off">{{ form.has_criminal_record.label }}</label>
 									<div class="b-checkbox">
 										<input value="on" name="has_criminal_record" id="criminal-on" type="radio"><label for="criminal-on">{% trans 'Є' %}</label>
 									</div>
@@ -82,663 +90,485 @@
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="contact-phone">{{ form_step1.mobile_phone.label }}</label>
-								{{ form_step1.mobile_phone }}
+								<label class="questionnaire__label" for="id_mobile_phone">{{ form.mobile_phone.label }}</label>
+								{{ form.mobile_phone }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="contact-mail">{{ form_step1.email.label }}</label>
-								{{ form_step1.email }}
+								<label class="questionnaire__label" for="id_email">{{ form.email.label }}</label>
+								{{ form.email }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 						</fieldset>
 
 						<!-- Документи -->
 						<fieldset class="questionnaire__field">
-							<h4 class="questionnaire__caption">Документи</h4>
+							<h4 class="questionnaire__caption">{% trans 'Документи' %}</h4>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="ind-code">{{ form_step1.itn.label }}</label>
-								{{ form_step1.itn }}
+								<label class="questionnaire__label" for="id_itn">{{ form.itn.label }}</label>
+								{{ form.itn }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="ind-code">{{ form_step1.passport_code.label }}</label>
-								{{ form_step1.passport_code }}
+								<label class="questionnaire__label" for="id_passport_code">{{ form.passport_code.label }}</label>
+								{{ form.passport_code }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step1.passport_date.label }}</label>
-								{{ form_step1.passport_date }}
+								<label class="questionnaire__label" for="id_passport_date">{{ form.passport_date.label }}</label>
+								{{ form.passport_date }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step1.passport_outdate.label }}</label>
-								{{ form_step1.passport_outdate }}
+								<label class="questionnaire__label" for="id_passport_outdate">{{ form.passport_outdate.label }}</label>
+								{{ form.passport_outdate }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="passport-region">{{ form_step1.passport_authority.label }}</label>
-								{{ form_step1.passport_authority }}
+								<label class="questionnaire__label" for="id_passport_authority">{{ form.passport_authority.label }}</label>
+								{{ form.passport_authority }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 						</fieldset>
 
 						<!-- Адреса реєстрації -->
 						<fieldset class="questionnaire__field">
-							<h4 class="questionnaire__caption">Адреса реєстрації</h4>
+							<h4 class="questionnaire__caption">{% trans 'Адреса реєстрації' %}</h4>
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Країна</label>
+								<label class="questionnaire__label">{% trans 'Країна' %}</label>
 								<div class="questionnaire__multiple">
 									<div class="b-checkbox">
-										<input value="off" name="switchRegistration" id="country" type="radio"><label for="country">Україна</label>
+										<input value="off" name="switchRegistration" id="country" type="radio">
+										<label for="country">{% trans 'Україна' %}</label>
 									</div>
 									<div class="b-checkbox">
 										<input value="on" name="switchRegistration" id="another-country" type="radio" checked>
-										<label for="another-country">інша країна</label>
+											<label for="another-country">{% trans 'інша країна' %}</label>
 									</div>
-									{{ form_step1.registration_county_switch }}
+									{{ form.registration_county_switch }}
 								</div>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="region">{{ form_step1.registration_state.label }}</label>
-								{{ form_step1.registration_state }}
+								<label class="questionnaire__label" for="id_registration_state">{{ form.registration_state.label }}</label>
+								{{ form.registration_state }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="district">{{ form_step1.registration_district.label }}</label>
-								{{ form_step1.registration_district }}
+								<label class="questionnaire__label" for="id_registration_district">{{ form.registration_district.label }}</label>
+								{{ form.registration_district }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="town">{{ form_step1.registration_city.label }}</label>
-								{{ form_step1.registration_city }}
+								<label class="questionnaire__label" for="id_registration_city">{{ form.registration_city.label }}</label>
+								{{ form.registration_city }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="street">{{ form_step1.registration_street.label }}</label>
-								{{ form_step1.registration_street }}
+								<label class="questionnaire__label" for="id_registration_street">{{ form.registration_street.label }}</label>
+								{{ form.registration_street }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="house">{{ form_step1.registration_building.label }}</label>
-								{{ form_step1.registration_building }}
+								<label class="questionnaire__label" for="id_registration_building">{{ form.registration_building.label }}</label>
+								{{ form.registration_building }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="flat">{{ form_step1.registration_flat.label }}</label>
-								{{ form_step1.registration_flat }}
+								<label class="questionnaire__label" for="id_registration_flat">{{ form.registration_flat.label }}</label>
+								{{ form.registration_flat }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="post-index">{{ form_step1.registration_index.label }}</label>
-								{{ form_step1.registration_index }}
+								<label class="questionnaire__label" for="id_registration_index">{{ form.registration_index.label }}</label>
+								{{ form.registration_index }}
 							</div>
 
 							<div class="b-checkbox">
 								<input data-disable="field-adress" id="the-same" type="checkbox" name="the-same">
-								<label for="the-same">Адреса місця проживання(перебування) співпадає з місцем реєстрації</label>
+								<label for="the-same">{% trans 'Адреса місця проживання(перебування) співпадає з місцем реєстрації' %}</label>
 							</div>
 						</fieldset>
 
 						<!-- Адреса місця проживання -->
 						<fieldset data-field="field-adress" class="questionnaire__field">
-							<h4 class="questionnaire__caption">Адреса місця проживання (перебування у т.ч. тимчасового)</h4>
+							<h4 class="questionnaire__caption">{% trans 'Адреса місця проживання (перебування у т.ч. тимчасового)' %}</h4>
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Країна</label>
+								<label class="questionnaire__label">{% trans 'Країна' %}</label>
 								<div class="questionnaire__multiple">
 									<div class="b-checkbox">
-										<input value="off" name="switchResidence" id="country-1" type="radio"><label for="country-1">Україна</label>
+										<input value="off" name="switchResidence" id="country-1" type="radio"><label for="country-1">{% trans 'Україна' %}</label>
 									</div>
 									<div class="b-checkbox">
 										<input value="on" name="switchResidence" id="another-country-1" type="radio" checked>
-										<label for="another-country-1">інша країна</label>
+										<label for="another-country-1">{% trans 'інша країна' %}</label>
 									</div>
-									{{ form_step1.residence_county_switch }}
+									{{ form.residence_county_switch }}
 								</div>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="region-1">{{ form_step1.residence_state.label }}</label>
-								{{ form_step1.residence_state }}
+								<label class="questionnaire__label" for="id_residence_state">{{ form.residence_state.label }}</label>
+								{{ form.residence_state }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="district-1">{{ form_step1.residence_district.label }}</label>
-								{{ form_step1.residence_district }}
+								<label class="questionnaire__label" for="id_residence_district">{{ form.residence_district.label }}</label>
+								{{ form.residence_district }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="town-1">{{ form_step1.residence_city.label }}</label>
-								{{ form_step1.residence_city }}
+								<label class="questionnaire__label" for="id_residence_city">{{ form.residence_city.label }}</label>
+								{{ form.residence_city }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="street-1">{{ form_step1.residence_street.label }}</label>
-								{{ form_step1.residence_street }}
+								<label class="questionnaire__label" for="id_residence_street">{{ form.residence_street.label }}</label>
+								{{ form.residence_street }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="house-1">{{ form_step1.residence_building.label }}</label>
-								{{ form_step1.residence_building }}
+								<label class="questionnaire__label" for="id_residence_building">{{ form.residence_building.label }}</label>
+								{{ form.residence_building }}
 							</div>
 
 							<div>
-								<label class="questionnaire__label" for="flat-1">{{ form_step1.residence_flat.label }}</label>
-								{{ form_step1.residence_flat }}
+								<label class="questionnaire__label" for="id_residence_flat">{{ form.residence_flat.label }}</label>
+								{{ form.residence_flat }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label" for="post-index-1">{{ form_step1.residence_index.label }}</label>
-								{{ form_step1.residence_index }}
+								<label class="questionnaire__label" for="id_residence_index">{{ form.residence_index.label }}</label>
+								{{ form.residence_index }}
 							</div>
 						</fieldset>
 
-						<div class="b-checkbox agree-checkbox">
+						<!--<div class="b-checkbox agree-checkbox">
 							<input id="personal-agree" type="checkbox" name="personal-agree" required>
 							<label for="personal-agree" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
-						</div>
-						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+						</div>-->
+						<input type="hidden" value="1" name="step">
+						<button class="b-btn-primary b-btn-primary--main next-btn">{% trans 'Продовжити' %}</button>
 					</fieldset>
-
+					<!-- end step 1 -->
+					<!-- step 2 -->
 					<fieldset class="questionnaire__step">
-						<h3 class="questionnaire__step-title">Зайнятість</h3>
+						<h3 class="questionnaire__step-title">{% trans 'Зайнятість' %}</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-2"></span>
 						</div>
 
 						<fieldset class="questionnaire__field">
-							<label class="questionnaire__label">{{ form_step2.employment_type.label }}</label>
-							{{ form_step2.employment_type }}
+							<label class="questionnaire__label" for="id_employment_type">{{ form.employment_type.label }}</label>
+							{{ form.employment_type }}
 						</fieldset>
 
-						<fieldset class="questionnaire__field">
-							<h4 class="questionnaire__caption">Для осіб, які займаються незалежною професійною діяльністю або є особами-підприємцями</h4>
+						<fieldset class="questionnaire__field type-block" id="individual">
+							<h4 class="questionnaire__caption">{% trans 'Для осіб, які не займаються незалежною професійною діяльністю' %}</h4>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.company_name.label }}</label>
-								{{ form_step2.company_name }}
+								<label class="questionnaire__label" for="id_company_name">{{ form.company_name.label }}</label>
+								{{ form.company_name }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.edrpou_code.label }}</label>
-								{{ form_step2.edrpou_code }}
+								<label class="questionnaire__label" for="id_edrpou_code">{{ form.edrpou_code.label }}</label>
+								{{ form.edrpou_code }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.position.label }}</label>
-								{{ form_step2.position }}
+								<label class="questionnaire__label" for="id_position">{{ form.position.label }}</label>
+								{{ form.position }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.position_type.label }}</label>
-								{{ form_step2.position_type }}
+								<label class="questionnaire__label" for="id_position_type">{{ form.position_type.label }}</label>
+								{{ form.position_type }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.service_type.label }}</label>
-								{{ form_step2.service_type }}
+								<label class="questionnaire__label" for="id_service_type">{{ form.service_type.label }}</label>
+								{{ form.service_type }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.company_experience.label }}</label>
-								{{ form_step2.company_experience }}
+								<label class="questionnaire__label" for="id_company_experience">{{ form.company_experience.label }}</label>
+								{{ form.company_experience }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.overall_experience.label }}</label>
-								{{ form_step2.overall_experience }}
+								<label class="questionnaire__label" for="id_overall_experience">{{ form.overall_experience.label }}</label>
+								{{ form.overall_experience }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.company_address.label }}</label>
-								{{ form_step2.company_address }}
+								<label class="questionnaire__label" for="id_company_address">{{ form.company_address.label }}</label>
+								{{ form.company_address }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.company_phone.label }}</label>
-								{{ form_step2.company_phone }}
+								<label class="questionnaire__label" for="id_company_phone">{{ form.company_phone.label }}</label>
+								{{ form.company_phone }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">{{ form_step2.labor_relations.label }}</label>
-								{{ form_step2.labor_relations }}
+								<label class="questionnaire__label" for="id_labor_relations">{{ form.labor_relations.label }}</label>
+								{{ form.labor_relations }}
 							</div>
 
-							<div class="b-checkbox">
+						</fieldset>
+
+						<fieldset class="questionnaire__field type-block" id="entrepreneur">
+							<h4 class="questionnaire__caption">{% trans 'Для осіб, які займаються незалежною професійною діяльністю або є особами-підприємцями (ФОП)' %}</h4>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="id_state_registration_date">{{ form.state_registration_date.label }}</label>
+								{{ form.state_registration_date }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="id_state_registration_authority">{{ form.state_registration_authority.label }}</label>
+								{{ form.state_registration_authority }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="id_activity_type">{{ form.activity_type.label }}</label>
+								{{ form.activity_type }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="id_confirmed_document">{{ form.confirmed_document.label }}</label>
+								{{ form.confirmed_document }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
+							</div>
+
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" for="id_employ_count">{{ form.employ_count.label }}</label>
+								{{ form.employ_count }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
+							</div>
+
+							<!--<div class="b-checkbox">
 								<input id="personal-agree-2" type="checkbox">
 								<label for="personal-agree-2" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
-							</div>
+							</div>-->
 						</fieldset>
-
-						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+						<input type="hidden" value="2" name="step">
+						<button class="b-btn-primary b-btn-primary--main next-btn">{% trans 'Продовжити' %}</button>
+						<button class="b-btn-primary b-btn-primary--main prev-btn">{% trans 'Назад' %}</button>
 					</fieldset>
-					
+					<!-- end step 2 -->
+					<!-- step 3 -->
 					<fieldset class="questionnaire__step">
-						<h3 class="questionnaire__step-title">Дані довіреної особи</h3>
+						<h3 class="questionnaire__step-title">{% trans 'Дані довіреної особи' %}</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-3"></span>
 						</div>
 
 						<fieldset class="questionnaire__field">
 							<div class="questionnaire__item">
-								<label for="quest-credit" class="questionnaire__label">{{ form_step3.bound_person_names.label }}</label>
-								{{ form_step3.bound_person_names }}
+								<label for="quest-credit" class="questionnaire__label" for="id_bound_person_names">{{ form.bound_person_names.label }}</label>
+								{{ form.bound_person_names }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_itn.label }}</label>
-								{{ form_step3.bound_person_itn }}
+								<label for="quest-prod" class="questionnaire__label" for="id_bound_person_itn">{{ form.bound_person_itn.label }}</label>
+								{{ form.bound_person_itn }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_relationship.label }}</label>
-								{{ form_step3.bound_person_relationship }}
+								<label for="quest-prod" class="questionnaire__label" for="id_bound_person_relationship">{{ form.bound_person_relationship.label }}</label>
+								{{ form.bound_person_relationship }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_job.label }}</label>
-								{{ form_step3.bound_person_job }}
+								<label for="quest-prod" class="questionnaire__label" for="id_bound_person_job">{{ form.bound_person_job.label }}</label>
+								{{ form.bound_person_job }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_phone.label }}</label>
-								{{ form_step3.bound_person_phone }}
+								<label for="quest-prod" class="questionnaire__label" for="id_bound_person_phone">{{ form.bound_person_phone.label }}</label>
+								{{ form.bound_person_phone }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="quest-prod" class="questionnaire__label">{{ form_step3.bound_person_address.label }}</label>
-								{{ form_step3.bound_person_address }}
-								<span class="questionnaire__item-notification">*обов'язкове поле</span>
+								<label for="quest-prod" class="questionnaire__label" for="id_bound_person_address">{{ form.bound_person_address.label }}</label>
+								{{ form.bound_person_address }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
-							<div class="b-checkbox">
+							<!--<div class="b-checkbox">
 								<input id="personal-agree-3" type="checkbox">
 								<label for="personal-agree-3" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
-							</div>
+							</div>-->
 						</fieldset>
-
-						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+						<input type="hidden" value="3" name="step">
+						<button class="b-btn-primary b-btn-primary--main next-btn">{% trans 'Продовжити' %}</button>
+						<button class="b-btn-primary b-btn-primary--main prev-btn">{% trans 'Назад' %}</button>
 					</fieldset>
-
+					<!-- end step 3 -->
+					<!-- step 4 -->
 					<fieldset class="questionnaire__step">
-						<h3 class="questionnaire__step-title">Доходи, витрати та майно</h3>
+						<h3 class="questionnaire__step-title">{% trans 'Доходи, витрати та майно' %}</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-4"></span>
 						</div>
 
 						<fieldset class="questionnaire__field">
-							<h4 class="questionnaire__caption">Доходи</h4>
+							<h4 class="questionnaire__caption">{% trans 'Доходи' %}</h4>
 
 							<div class="questionnaire__item">
-								<label for="payment-1" class="questionnaire__label">{{ form_step4.salary.label }}</label>
-								{{ form_step4.salary }}
+								<label class="questionnaire__label" for="id_salary">{{ form.salary.label }}</label>
+								{{ form.salary }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-2" class="questionnaire__label">{{ form_step4.partner_salary.label }}</label>
-								{{ form_step4.partner_salary }}
+								<label class="questionnaire__label" for="id_partner_salary">{{ form.partner_salary.label }}</label>
+								{{ form.partner_salary }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-2" class="questionnaire__label">{{ form_step4.bonuses.label }}</label>
-								{{ form_step4.bonuses }}
+								<label class="questionnaire__label" for="id_bonuses">{{ form.bonuses.label }}</label>
+								{{ form.bonuses }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-3" class="questionnaire__label">{{ form_step4.social_benefits.label }}</label>
-								{{ form_step4.social_benefits }}
+								<label class="questionnaire__label" for="id_social_benefits">{{ form.social_benefits.label }}</label>
+								{{ form.social_benefits }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-4" class="questionnaire__label">{{ form_step4.pension.label }}</label>
-								{{ form_step4.pension }}
+								<label class="questionnaire__label" for="id_pension">{{ form.pension.label }}</label>
+								{{ form.pension }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-5" class="questionnaire__label">{{ form_step4.partner_pension.label }}</label>
-								{{ form_step4.partner_pension }}
+								<label class="questionnaire__label" for="id_partner_pension">{{ form.partner_pension.label }}</label>
+								{{ form.partner_pension }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-6" class="questionnaire__label">{{ form_step4.other_income.label }}</label>
-								{{ form_step4.other_income }}
+								<label class="questionnaire__label" for="id_other_income">{{ form.other_income.label }}</label>
+								{{ form.other_income }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="payment-7" class="questionnaire__label">{{ form_step4.overall_income.label }}</label>
-								{{ form_step4.overall_income }}
+								<label class="questionnaire__label" for="id_overall_income">{{ form.overall_income.label }}</label>
+								{{ form.overall_income }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 						</fieldset>
 
 						<fieldset class="questionnaire__field">
-							<h4 class="questionnaire__caption">Витрати</h4>
+							<h4 class="questionnaire__caption">{% trans 'Витрати' %}</h4>
 
 							<div class="questionnaire__item">
-								<label for="expend-1" class="questionnaire__label">{{ form_step4.month_outgoing.label }}</label>
-								{{ form_step4.month_outgoing }}
+								<label for="id_month_outgoing" class="questionnaire__label">{{ form.month_outgoing.label }}</label>
+								{{ form.month_outgoing }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="expend-2" class="questionnaire__label">{{ form_step4.month_loan_payments_outgoing.label }}</label>
-								{{ form_step4.month_loan_payments_outgoing }}
+								<label for="id_month_loan_payments_outgoing" class="questionnaire__label">{{ form.month_loan_payments_outgoing.label }}</label>
+								{{ form.month_loan_payments_outgoing }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="expend-2" class="questionnaire__label">{{ form_step4.other_outgoing.label }}</label>
-								{{ form_step4.other_outgoing }}
+								<label for="id_other_outgoing" class="questionnaire__label">{{ form.other_outgoing.label }}</label>
+								{{ form.other_outgoing }}
 							</div>
 						</fieldset>
 
 						<fieldset class="questionnaire__field">
-							<h4 class="questionnaire__caption">Майно</h4>
+							<h4 class="questionnaire__caption">{% trans 'Майно' %}</h4>
 
 							<div class="questionnaire__item">
-								<label for="expend-1" class="questionnaire__label">{{ form_step4.dwelling_type.label }}</label>
-								{{ form_step4.dwelling_type }}
+								<label for="id_dwelling_type" class="questionnaire__label">{{ form.dwelling_type.label }}</label>
+								{{ form.dwelling_type }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="expend-2" class="questionnaire__label">{{ form_step4.vehicle_count.label }}</label>
-								{{ form_step4.vehicle_count }}
+								<label for="id_vehicle_count" class="questionnaire__label">{{ form.vehicle_count.label }}</label>
+								{{ form.vehicle_count }}
 							</div>
 
 							<div class="questionnaire__item">
-								<label for="expend-2" class="questionnaire__label">{{ form_step4.vehicle_description.label }}</label>
-								{{ form_step4.vehicle_description }}
+								<label for="id_vehicle_description" class="questionnaire__label">{{ form.vehicle_description.label }}</label>
+								{{ form.vehicle_description }}
 							</div>
 
-							<div class="b-checkbox">
+							<!--<div class="b-checkbox">
 								<input id="personal-agree-4" type="checkbox">
 								<label for="personal-agree-4" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
-							</div>
+							</div>-->
 						</fieldset>
-
-						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
+						<input type="hidden" value="4" name="step">
+						<button class="b-btn-primary b-btn-primary--main next-btn">{% trans 'Продовжити' %}</button>
+						<button class="b-btn-primary b-btn-primary--main prev-btn">{% trans 'Назад' %}</button>
 					</fieldset>
-
-					<!--<fieldset class="questionnaire__step">
-						<h3 class="questionnaire__step-title">Інформація про належність особи до публічних діячів</h3>
+					<!-- end step 4 -->
+					<!-- step 5 -->
+					<fieldset class="questionnaire__step">
+						<h3 class="questionnaire__step-title">{% trans 'Інформація про кредит' %}</h3>
 						<div class="questionnaire-progress">
 							<span class="questionnaire-progress__line step-5"></span>
 						</div>
 
 						<fieldset class="questionnaire__field">
-							<label class="questionnaire__label">Інформація про надежність особи до національних або іноземних публічних діячів, до близьких чи повёязаних з ними осіб<b>*</b>:</label>
-
-							<div class="questionnaire__item"> 
-								<div class="questionnaire__multiple questionnaire__multiple--flexs">
-									<div class="b-checkbox questionnaire__multiple-item">
-										<input value="off" name="switchDeal" id="deal-no" type="radio">
-										<label for="deal-no">Ні</label>	
-									</div>
-
-									<div class="b-checkbox">
-										<input value="on" name="switchDeal" id="deal-yes" type="radio" checked>
-										<label for="deal-yes" checked>Так</label>
-									</div>
-								</div>
-							</div>
-
-							<fieldset id="hideDeal" class="questionnaire__field">
-								<div class="questionnaire__item">
-									<label for="deal-1" class="questionnaire__label">Посада на період виконання функцій для публ. осіб</label>
-									<input id="deal-1" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
-								</div>
-
-								<div class="questionnaire__item">
-									<label for="deal-2" class="questionnaire__label">Для близьких до публічних осіб - повідомте ПІП особи, до відношенню якої ви є близькою людиною</label>
-									<input id="deal-2" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
-								</div>
-
-								<div class="questionnaire__item">
-									<label for="deal-3" class="questionnaire__label">Для зв,язаних з публічною особою - повідомте ПІП особи, до відношенню якої ви є близькою людиною</label>
-									<input id="deal-3" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
-								</div>
-
-								<div class="questionnaire__item">
-									<div class="b-checkbox">
-										<input id="personal-agree-5" type="checkbox">
-										<label for="personal-agree-5" >Я погоджуюсь з правилами про персональну обробку моїх даних</label>
-									</div>
-								</div>
-							</fieldset>
-						</fieldset>		
-						<button class="b-btn-primary b-btn-primary--main">Продовжити</button>
-					</fieldset>
-
-					<fieldset class="questionnaire__step">
-						<h3 class="questionnaire__step-title">Дані підприємця</h3>
-						<div class="questionnaire-progress">
-							<span class="questionnaire-progress__line step-6"></span>
-						</div>
-
-						<fieldset class="questionnaire__field">	
-							
-							<ol class="questionnaire__list">
-								<li class="questionnaire__list-item">
-									<span class="questionnaire__list-caption">Галузь</span>
-									<div class="questionnaire__item">
-										<select class="b-select b-select--stretch">
-											<option value="Видавнича справа">Видавнича справа</option>
-											<option value="Видавнича справа">Видавнича справа</option>
-											<option value="Видавнича справа">Видавнича справа</option>
-										</select>
-									</div>
-
-									<div class="questionnaire__item">
-										<label for="" class="questionnaire__label" for="business-1">Кількість працівників</label>
-										<input id="business-1" type="text" class="questionnaire__input" placeholder="X X X X">
-									</div>
-								</li>
-
-								<li class="questionnaire__list-item">
-									<span class="questionnaire__list-caption">Трудові правовідносини  клієнта</span>
-									<div class="questionnaire__item">
-										<select class="b-select b-select--stretch">
-											<option value="Працює без договору">Працює без договору</option>
-											<option value="Працює без договору">Працює без договору</option>
-											<option value="Працює без договору">Працює без договору</option>
-										</select>
-									</div>
-								</li>
-
-								<li class="questionnaire__list-item">
-									<span class="questionnaire__list-caption">Категорія посади</span>
-									<div class="questionnaire__item">
-										<select class="b-select b-select--stretch">
-											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
-											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
-											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
-										</select>
-									</div>
-
-									<div class="questionnaire__item">
-										<label for="" class="questionnaire__label" for="business-1">Форма власності</label>
-										<select class="b-select b-select--stretch">
-											<option value="Спільне підприємство">Спільне підприємство</option>
-											<option value="Спільне підприємство">Спільне підприємство</option>
-											<option value="Спільне підприємство">Спільне підприємство</option>
-										</select>
-									</div>
-								</li>
-
-								<li class="questionnaire__list-item">
-									<span class="questionnaire__list-caption">Спеціальність</span>
-									<div class="questionnaire__item">
-										<select class="b-select b-select--stretch">
-											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
-											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
-											<option value="Кервіник вищої ланки">Кервіник вищої ланки</option>
-										</select>
-									</div>
-								</li>
-
-								<li class="questionnaire__list-item">
-									<span class="questionnaire__list-caption">Освіта клієнта</span>
-									<div class="questionnaire__item">
-										<select class="b-select b-select--stretch">
-											<option value="Вища освіта">Вища освіта</option>
-											<option value="Базова середня осіта">Базова середня осіта</option>
-											<option value="2 та більше вищих">2 та більше вищих</option>
-										</select>
-									</div>
-								</li>
-							</ol>
-							
 							<div class="questionnaire__item">
-								<label class="questionnaire__label">Підтвердження місця роботи шляхом</label>
-								<div class="questionnaire__multiple">
-									<div class="b-checkbox">
-										<input value="off" name="switchWorkPlace" id="work-place-1" type="radio">
-										<label for="work-place-1">Перевірка службового телефону</label>	
-									</div>
-									<div class="b-checkbox">
-										<input value="on" name="switchWorkPlace" id="work-place-2" type="radio" checked>
-										<label for="work-place-2">Відвідування місця роботи</label>
-									</div>
-								</div>
+								<label class="questionnaire__label" id="id_credit_sum">{{ form.credit_sum.label }}</label>
+								{{ form.credit_sum }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
 							</div>
 
-							<div class="questionnaire__item questionnaire__item--column">
-								<label class="questionnaire__label">Надані документи</label>
+							<div class="questionnaire__item">
+								<label class="questionnaire__label" id="id_credit_term">{{ form.credit_term.label }}</label>
+								{{ form.credit_term }}
+								<span class="questionnaire__item-notification">*{% trans "обов'язкове поле" %}</span>
+							</div>
+
+							<div class="questionnaire__multiple">
+								<label class="questionnaire__label multiple-check-label" for="">{{ form.credit_period.label }}</label>
 								<div class="b-checkbox">
-									<input data-disable="field-adress" id="doc-1" type="checkbox">
-									<label for="doc-1">01 - Копія паспорта</label>
+									<input value="month" name="credit_period" id="period-month" type="radio"><label for="period-month">{% trans 'Місяць' %}</label>
 								</div>
-
 								<div class="b-checkbox">
-									<input data-disable="field-adress" id="doc-2" type="checkbox">
-									<label for="doc-2">02 - копія трудового договору</label>
+									<input value="week" name="credit_period" id="period-week" type="radio" checked>
+									<label for="period-week">{% trans 'Тиждень' %}</label>
 								</div>
-
-								<div class="b-checkbox">
-									<input data-disable="field-adress" id="doc-3" type="checkbox">
-									<label for="doc-3">03 - копія додаткової угоди</label>
-								</div>
-
-								<div class="b-checkbox">
-									<input data-disable="field-adress" id="doc-4" type="checkbox">
-									<label for="doc-4">04 - річний фінансовий звіт</label>
-								</div>
-
-								<div class="b-checkbox">
-									<input data-disable="field-adress" id="doc-5" type="checkbox">
-									<label for="doc-5">01 - Копія паспорта</label>
-								</div>
-
-								<div class="b-checkbox">
-									<input data-disable="field-adress" id="doc-6" type="checkbox">
-									<label for="doc-6">02 - копія трудового договору</label>
-								</div>
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label">Підтвердження місця роботи шляхом</label>
-								<div class="questionnaire__multiple questionnaire__multiple--flexs">
-									<div class="b-checkbox questionnaire__multiple-item">
-										<input name="switchCreditkind" id="credit-kind-1" type="radio">
-										<label for="credit-kind-1">Перший</label>	
-									</div>
-									<div class="b-checkbox questionnaire__multiple-item">
-										<input value="on" name="switchCreditkind" id="credit-kind-2" type="radio" checked>
-										<label for="credit-kind-2">Повторний</label>
-									</div>
-									<div class="b-checkbox">
-										<input value="on" name="switchCreditkind" id="credit-kind-3" type="radio" checked>
-										<label for="credit-kind-3">Рефінанс</label>
-									</div>
-								</div>
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label">Про Компанію дізнався</label>
-								<select class="b-select b-select--stretch">
-									<option value="Листівка">Листівка</option>
-									<option value="Сайт">Сайт</option>
-									<option value="Знайомі">Знайомі</option>
-								</select>
-							</div>
-
-							<div class="questionnaire__item">
-								<label for="word-pass" class="questionnaire__label">Про Компанію дізнався</label>
-								<input id="word-pass" type="text" class="questionnaire__input" placeholder="Введіть ваші дані">
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label">Автомобілі</label>
-								<select class="b-select b-select--stretch">
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</select>
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label">Житло</label>
-								<select class="b-select b-select--stretch">
-									<option value="Власне">Власне</option>
-									<option value="Не власне">Не власне</option>
-								</select>
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label">Сімейний стан</label>
-								<select class="b-select b-select--stretch">
-									<option value="Одружений(а)">Одружений(а)</option>
-									<option value="Не одружений(а)">Не одружений(а)</option>
-								</select>
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label">Оцінка КК</label>
-								<div class="questionnaire__multiple questionnaire__multiple--flexs">
-									<div class="b-checkbox questionnaire__multiple-item">
-										<input value="yes" name="switchScore1" id="yes-score-1" type="radio">
-										<label for="yes-score-1">Так</label>	
-									</div>
-									<div class="b-checkbox">
-										<input value="no" name="switchScore1" id="no-score-1" type="radio">
-										<label for="no-score-1">Ні</label>	
-									</div>
-								</div>
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label">Оцінка РМ</label>
-								<div class="questionnaire__multiple questionnaire__multiple--flexs">
-									<div class="b-checkbox questionnaire__multiple-item">
-										<input value="yes" name="switchScore2" id="yes-score-2" type="radio">
-										<label for="yes-score-2">Так</label>	
-									</div>
-									<div class="b-checkbox">
-										<input value="no" name="switchScore2" id="no-score-2" type="radio">
-										<label for="no-score-2">Ні</label>	
-									</div>
-								</div>
-							</div>
-
-							<div class="questionnaire__item">
-								<label class="questionnaire__label">Оцінка МК</label>
-								<div class="questionnaire__multiple questionnaire__multiple--flexs">
-									<div class="b-checkbox questionnaire__multiple-item">
-										<input value="yes" name="switchScore3" id="yes-score-3" type="radio">
-										<label for="yes-score-3">Так</label>	
-									</div>
-									<div class="b-checkbox">
-										<input value="no" name="switchScore3" id="no-score-3" type="radio">
-										<label for="no-score-3">Ні</label>	
-									</div>
-								</div>
-							</div>
-
-							<div class="questionnaire__item">
-								<input id="total-score" type="text" class="questionnaire__input" placeholder="Дані оцінки">
 							</div>
 						</fieldset>
-
-						<button class="b-btn-primary b-btn-primary--main" type="submit">Зберегти</button>
-					</fieldset>-->
+						<input type="hidden" value="5" name="step">
+						<button class="b-btn-primary b-btn-primary--main next-btn">{% trans 'Зберегти' %}</button>
+						<button class="b-btn-primary b-btn-primary--main prev-btn">{% trans 'Назад' %}</button>
+					</fieldset>
 				</form>
 			</div>
 		</div>
@@ -766,6 +596,9 @@
 			dateFormat: 'yyyy-mm-dd'
 		});
 		$('#id_passport_outdate').datepicker({
+			dateFormat: 'yyyy-mm-dd'
+		});
+		$('#id_state_registration_date').datepicker({
 			dateFormat: 'yyyy-mm-dd'
 		});
 	</script>

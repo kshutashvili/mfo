@@ -46,3 +46,20 @@
 .wrap-checkbox{
     padding: 0 10px;
 }
+.type-block{
+    display: none;
+}
+.next-btn{
+    margin: 1em auto;
+}
+.prev-btn{
+    margin: 1em auto;
+    background-image: none;
+    background-color: #ccc;
+}
+.multiple-check-label{
+    margin-bottom: 0;
+}
+textarea.questionnaire__input{
+    resize: none;
+}

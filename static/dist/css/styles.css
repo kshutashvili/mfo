@@ -3356,7 +3356,8 @@ fieldset {
       top: 0;
       left: 0;
       display: inline-block;
-      width: 16.66%;
+      /*width: 16.66%;*/
+      width: 20%;
       height: 100%;
       background-color: #FCC504; }
       .questionnaire-progress__line:before {
@@ -3404,7 +3405,8 @@ fieldset {
   .questionnaire__field {
     padding: 0; }
     .questionnaire__field:last-of-type {
-      margin-bottom: 5rem; }
+      /*margin-bottom: 5rem;*/
+    }
   .questionnaire__caption {
     position: relative;
     margin: 3rem 0;

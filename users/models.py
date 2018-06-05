@@ -170,6 +170,7 @@ class Questionnaire(models.Model):
         User,
         verbose_name=_('Пользователь'),
         on_delete=models.CASCADE,
+        related_name='anketa',
         blank=True,
         null=True
     )
@@ -177,32 +178,32 @@ class Questionnaire(models.Model):
     last_name = models.CharField(
         _("Прізвище"),
         max_length=128,
-        # blank=True
+        blank=True
     )
     first_name = models.CharField(
         _("Ім'я"),
         max_length=128,
-        # blank=True
+        blank=True
     )
     middle_name = models.CharField(
         _("По батькові"),
         max_length=128,
-        # blank=True
+        blank=True
     )
     birthday_date = models.DateField(
         _("Дата народження"),
-        # blank=True,
-        # null=True
+        blank=True,
+        null=True
     )
     mobile_phone = models.CharField(
         _("Контактний телефон"),
         max_length=30,
         validators=[mobile_phone_number, ],
-        # blank=True
+        blank=True
     )
     email = models.EmailField(
         _("Email адрес"),
-        # blank=True
+        blank=True
     )
     SEX_CHOICES = (
         ('male', 'Чоловік'),
@@ -216,12 +217,12 @@ class Questionnaire(models.Model):
     )
     education = models.TextField(
         "Освіта",
-        choices=EMPTY_CHOICES,
+        # choices=EMPTY_CHOICES,
         blank=True
     )
     marital_status = models.TextField(
         "Сімейний стан",
-        choices=EMPTY_CHOICES,
+        # choices=EMPTY_CHOICES,
         blank=True
     )
     has_criminal_record = models.BooleanField(
@@ -231,17 +232,17 @@ class Questionnaire(models.Model):
     itn = models.CharField(
         _("Індивідуальний податковий номер (ІПН)"),
         max_length=10,
-        # blank=True
+        blank=True
     )
     passport_code = models.CharField(
         _("Серія та номер паспорта / Номер ID-картки"),
         max_length=9,
-        # blank=True
+        blank=True
     )
     passport_date = models.DateField(
         _("Дата видачі паспорта"),
-        # blank=True,
-        # null=True
+        blank=True,
+        null=True
     )
     passport_outdate = models.DateField(
         _("Дійсний до (для ID карти)"),
@@ -251,7 +252,7 @@ class Questionnaire(models.Model):
     passport_authority = models.CharField(
         _("Орган, що видав"),
         max_length=128,
-        # blank=True
+        blank=True
     )
     registration_country = models.TextField(
         _("Країна"),
@@ -259,7 +260,7 @@ class Questionnaire(models.Model):
     )
     registration_state = models.TextField(
         _("Область (Регіон)"),
-        # blank=True
+        blank=True
     )
     registration_district = models.TextField(
         _("Район"),
@@ -267,19 +268,19 @@ class Questionnaire(models.Model):
     )
     registration_city = models.TextField(
         _("Місто (СМТ, село)"),
-        # blank=True
+        blank=True
     )
     registration_street = models.TextField(
         _("Вулиця (проспект, бульвар тощо)"),
-        # blank=True
+        blank=True
     )
     registration_building = models.TextField(
         _("№ Будинку"),
-        # blank=True
+        blank=True
     )
     registration_flat = models.TextField(
         _("№ Квартири"),
-        # blank=True
+        blank=True
     )
     registration_index = models.TextField(
         _("Поштовий індекс"),
@@ -344,12 +345,12 @@ class Questionnaire(models.Model):
     )
     position_type = models.TextField(
         "Вид персоналу",
-        choices=EMPTY_CHOICES,
+        # choices=EMPTY_CHOICES,
         blank=True
     )
     service_type = models.TextField(
         "Сфера діяльності",
-        choices=EMPTY_CHOICES,
+        # choices=EMPTY_CHOICES,
         blank=True
     )
     company_experience = models.TextField(
@@ -370,8 +371,36 @@ class Questionnaire(models.Model):
     )
     labor_relations = models.TextField(
         "Трудові правовідносини",
-        choices=EMPTY_CHOICES,
+        # choices=EMPTY_CHOICES,
         blank=True
+    )
+    # ФОП
+    state_registration_date = models.TextField(
+        "Дата державної реєстрації",
+        blank=True
+    )
+    state_registration_authority = models.TextField(
+        "Орган державної реєстрації",
+        blank=True
+    )
+    activity_type = models.TextField(
+        "Вид діяльності (КВЕД)",
+        blank=True
+    )
+    confirmed_document = models.TextField(
+        "Документ, що підтверджує державну реєстрацію",
+        blank=True
+    )
+    EMPLOY_COUNT_CHOICES = (
+        ('1-2', '1-2'),
+        ('3-5', '3-5'),
+        ('6-10', '6-10'),
+        ('11', 'більше 10'),
+    )
+    employ_count = models.TextField(
+        "Кількість співробітників",
+        blank=True,
+        choices=EMPLOY_COUNT_CHOICES
     )
     # ----- end step 2 fields -----
 
@@ -386,7 +415,7 @@ class Questionnaire(models.Model):
     )
     bound_person_relationship = models.TextField(
         "Ступінь відносин",
-        choices=EMPTY_CHOICES,
+        # choices=EMPTY_CHOICES,
         blank=True
     )
     bound_person_job = models.TextField(
@@ -460,13 +489,31 @@ class Questionnaire(models.Model):
         blank=True
     )
     # ----- end step 4 fields -----
+    # ----- start step 5 fields -----
+    credit_sum = models.TextField(
+        "Сума кредиту",
+        blank=True
+    )
+    credit_term = models.TextField(
+        "Термін кредиту",
+        blank=True
+    )
+    credit_period = models.TextField(
+        "Періодичність оплати",
+        blank=True
+    )
+    # ----- end step 5 fields -----
+    blacklist = models.BooleanField(
+        "В черном списке",
+        default=False
+    )
 
     class Meta:
         verbose_name = _('Анкета')
         verbose_name_plural = _('Анкеты')
 
     def __str__(self):
-        return self.user.mobile_phone or "Questionnaire"
+        return "Questionnaire"
 
 
 class RegistrationCountry(models.Model):

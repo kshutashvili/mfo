@@ -41,7 +41,8 @@ from users.views import (
     CallbackVerifyView,
     RegisterVerifyView,
     QuestionnaireView,
-    questionnaire_step1
+    questionnaire_step1,
+    SaveQuestionnaireStepView
 )
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
                                     city24_terminal_view, TurnesView)
@@ -68,6 +69,7 @@ urlpatterns = i18n_patterns(
     path('job/', job.job, name='job'),
     path('questionnaire/', QuestionnaireView.as_view(), name='questionnaire'),
     path('questionnaire-step1/', questionnaire_step1, name='questionnaire-step1'),
+    path('questionnaire-steps/', SaveQuestionnaireStepView.as_view(), name='save-questionnaire'),
 
     path('login/', user_login, name='login'),
     # path('login/<str:status_message>/', user_login, name='login'),

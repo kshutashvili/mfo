@@ -1,3 +1,6 @@
+from pprint import pprint
+from datetime import datetime
+
 from django.shortcuts import render
 from django.http import (
     HttpResponseRedirect, JsonResponse,
@@ -12,15 +15,17 @@ from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, View
 from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
 
 from bids.models import Bid
 from communication.forms import WriteCommentForm, WriteQuestionForm
-from communication.models import UserExistMessage, UserQuestion
+from communication.models import (
+    UserExistMessage, UserQuestion, CallbackSuccessForm
+)
 from communication.views.sms import sms
-from content.helpers import clear_contact_phone
+from content.helpers import clear_contact_phone, check_blacklist
 from payments.forms import PayForm
 from users.forms import (
     SetPasswordForm,
@@ -36,10 +41,14 @@ from users.forms import (
     RegisterPersonalStep1Form,
     RegisterPersonalStep2Form,
     RegisterPersonalStep3Form,
-    RegisterPersonalStep4Form
+    RegisterPersonalStep4Form,
+    RegisterPersonalStep5Form,
+    RegisterPersonalForm
 )
 from users.helpers import make_user_password
-from users.models import Profile, RequestPersonalArea, User
+from users.models import (
+    Profile, RequestPersonalArea, User, Questionnaire
+)
 from users.utils import test_user_turnes
 
 
@@ -50,7 +59,7 @@ def register(request):
             phone = form.cleaned_data.get('phone')
             user = User.objects.filter(mobile_phone=phone).first()
             print(phone, user)
-            if user and user.is_active:
+            if user and user.ready_for_turnes:
                 id_mess = UserExistMessage.get_solo().page.id
                 url = reverse('success', kwargs={
                     'redirect_url': 'login',
@@ -433,23 +442,6 @@ class RegisterVerifyView(SMSVerifyView):
     success_url = reverse_lazy('questionnaire')
     user = None
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     user_id = self.request.session.pop('user_id', '')
-    #     if not user_id:
-    #         kwargs.update({
-    #             'user': self.user
-    #         })
-    #         return kwargs
-    #     print("RegisterVerifyView user_id", user_id)
-    #     self.user = User.objects.filter(id=int(user_id))[0]
-    #     if self.user:
-    #         print("RegisterVerifyView user", self.user)
-    #         kwargs.update({
-    #             'user': self.user
-    #         })
-    #     return kwargs
-
     def form_valid(self, form):
         user_id = self.request.session.pop('user_id', '')
         mobile_phone = form.phone
@@ -484,16 +476,29 @@ class QuestionnaireView(TemplateView):
         context['form_step2'] = RegisterPersonalStep2Form()
         context['form_step3'] = RegisterPersonalStep3Form()
         context['form_step4'] = RegisterPersonalStep4Form()
+        context['form_step5'] = RegisterPersonalStep5Form()
+        anketa_exists = Questionnaire.objects.filter(
+            user=self.request.user
+        ).exists()
+        if anketa_exists:
+            anketa_object = Questionnaire.objects.filter(
+                user=self.request.user
+            ).values()[0]
+            context['form'] = RegisterPersonalForm(initial=anketa_object)
+        else:
+            context['form'] = RegisterPersonalForm()
         return context
 
 
 @csrf_exempt
 def questionnaire_step1(request):
     if request.method == 'POST':
-        print(request.POST)
+        print("step", request.POST.get('step'))
         form = RegisterPersonalStep1Form(data=request.POST)
         if form.is_valid():
             print('ok')
+            step_obj = form.save()
+            step_obj.user = request.user
             return JsonResponse(
                 {
                     'result': 'ok',
@@ -502,12 +507,141 @@ def questionnaire_step1(request):
                 safe=False
             )
         else:
+            print(form.errors)
             for err in form.errors:
                 print(err)
         return JsonResponse(
             {
                 'result': 'bad',
                 'errors': form.errors
+            },
+            safe=False
+        )
+
+
+class SaveQuestionnaireStepView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        print("args", self.request.POST)
+        # print("step", self.request.POST.get("step"))
+        # step = self.request.POST.get('step')
+        anketa_exists = Questionnaire.objects.filter(
+            user=self.request.user
+        ).exists()
+
+        if not anketa_exists:
+            if self.request.user.is_authenticated:
+                form = RegisterPersonalForm(data=self.request.POST)
+                if form.is_valid():
+                    anketa = form.save(commit=False)
+                    anketa.user = self.request.user
+                    anketa.save()
+                else:
+                    return JsonResponse(
+                        {
+                            'result': 'bad0',
+                            'errors': form.errors
+                        },
+                        safe=False
+                    )
+            else:
+                return JsonResponse(
+                    {
+                        'result': 'bad1',
+                        'errors': form.errors
+                    },
+                    safe=False
+                )
+        else:
+            # data_dict = dict(self.request.POST)
+            data_dict = self.request.POST.dict()
+            if 'switchResidence' in data_dict:
+                data_dict.pop('switchResidence')
+            if 'the-same' in data_dict:
+                data_dict.pop('the-same')
+            if 'step' in data_dict:
+                data_dict.pop('step')
+            if 'registration_county_switch' in data_dict:
+                data_dict.pop('registration_county_switch')
+            if 'residence_county_switch' in data_dict:
+                data_dict.pop('residence_county_switch')
+            if 'switchRegistration' in data_dict:
+                data_dict.pop('switchRegistration')
+            if 'birthday_date' in data_dict:
+                if data_dict['birthday_date']:
+                    data_dict['birthday_date'] = datetime.strptime(data_dict.get('birthday_date'), '%Y-%m-%d')
+                else:
+                    data_dict['birthday_date'] = datetime.strptime('9999-01-01', '%Y-%m-%d')
+            if 'passport_date' in data_dict:
+                if data_dict['passport_date']:
+                    data_dict['passport_date'] = datetime.strptime(data_dict.get('passport_date'), '%Y-%m-%d')
+                else:
+                    data_dict['passport_date'] = datetime.strptime('9999-01-01', '%Y-%m-%d')
+            if 'passport_outdate' in data_dict:
+                if data_dict['passport_outdate']:
+                    data_dict['passport_outdate'] = datetime.strptime(data_dict.get('passport_outdate'), '%Y-%m-%d')
+                else:
+                    data_dict['passport_outdate'] = datetime.strptime('9999-01-01', '%Y-%m-%d')
+            if 'has_criminal_record' in data_dict:
+                if data_dict['has_criminal_record'] == 'off':
+                    data_dict['has_criminal_record'] = False
+                else:
+                    data_dict['has_criminal_record'] = True
+            pprint(data_dict)
+            anketa_qs = Questionnaire.objects.filter(
+                user=self.request.user
+            ).update(
+                **data_dict
+            )
+
+            if int(self.request.POST["step"]) == 5:
+                # id_mess = CallbackSuccessForm.get_solo().success.id
+                # url = reverse('success', kwargs={
+                #     'redirect_url': 'profile',
+                #     'id_mess': id_mess
+                # })
+                print("step 5")
+                resp = check_blacklist(
+                    itn=self.request.user.anketa.itn,
+                    mobile_phone=self.request.user.anketa.mobile_phone,
+                    passseria=self.request.user.anketa.passport_code[:2] if self.request.user.anketa.passport_code else 'АА',
+                    passnumber=self.request.user.anketa.passport_code[1:] if self.request.user.anketa.passport_code else 000000,
+                )
+                print("resp", resp)
+                if 'in_blacklist' in resp:
+                    if resp['in_blacklist']:
+                        user = User.objects.filter(
+                            id=self.request.user.id
+                        )[0]
+                        anketa_qs = Questionnaire.objects.filter(
+                            user=user
+                        ).update(
+                            blacklist=True
+                        )
+                        user.active = False
+                        user.save()
+                    else:
+                        user = User.objects.filter(
+                            id=self.request.user.id
+                        )[0]
+                        user.ready_for_turnes = True
+                        user.save()
+                return JsonResponse(
+                    {
+                        'result': 'ok',
+                        'errors': None,
+                        'url': reverse('profile')
+                    },
+                    safe=False
+                )
+        print("kwargs", kwargs)
+        return JsonResponse(
+            {
+                'result': 'ok',
+                'errors': None
             },
             safe=False
         )

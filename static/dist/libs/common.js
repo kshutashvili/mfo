@@ -431,14 +431,18 @@ window.onload = function() {
 	});
 
 	// $('.questionnaire .b-btn-primary').not('[type=submit]').on('click', function(e) {
-	$('.questionnaire .b-btn-primary').on('click', function(e) {
+	// $('.questionnaire .b-btn-primary').on('click', function(e) {
+	$('.next-btn').on('click', function(e) {
 		e.preventDefault();
 		// e.stopPropagation();
 
-		// var $inputs = $(this).parent().find('input');
+		var $inputs = $(this).parent().find('input');
 		// console.log($inputs);
-		// var data = {};
-		// Array.from($inputs).forEach(function(item, i){
+		var data = {};
+
+		var $selects = $(this).parent().find('select');
+		console.log($selects);
+		Array.from($inputs).forEach(function(item, i){
 		// 	// console.log(item.name);
 		// 	// console.log(item.value);
 		// 	// console.log(i);
@@ -446,19 +450,27 @@ window.onload = function() {
 		// 	$("#"+item.id).removeClass('error');
 		// 	$("#"+item.id).parent().find('.error-text').remove();
 		// 	console.log(item.checkValidity(), item.name);
-		// 	data[item.name] = item.value;
-		// });
-		// console.log(data);
-		// var out = $(this);
-		// $.ajax({
-		// 	url: $('#questionnaire-form').attr('action'),
-		// 	// url: '/ru/questionnaire-step1/',
-		// 	type: 'post',
-		// 	data: data,
-		// 	dataType: 'json',
+			data[item.name] = item.value;
+		});
+		Array.from($selects).forEach(function(item, i){
+			data[item.name] = item.value;
+		})
+		console.log(data);
+		var out = $(this);
+		$.ajax({
+			url: $('#questionnaire-form').attr('action'),
+			// url: '/ru/questionnaire-step1/',
+			type: 'post',
+			data: data,
+			// data: JSON.stringify($('#questionnaire-form').serialize()),
+			dataType: 'json',
 
-		// 	success: function(response){
-		// 		console.log(response);
+			success: function(response){
+				console.log(response);
+				if ('url' in response){
+					console.log('uurl '+ response.url)
+					window.location.assign(response.url)
+				}
 		// 		if (response["result"] == "ok"){
 		// 			var currentStep = out.parent();
 		// 			var nextStep = out.parent().next('.questionnaire__step');
@@ -478,15 +490,34 @@ window.onload = function() {
 		// 			}
 		// 			$("#id_" + Object.keys(response["errors"])[0]).focus();
 		// 		}
-		// 	}
-		// }); 
+			}
+		}); 
 
 		var currentStep = $(this).parent();
 		var nextStep = $(this).parent().next('.questionnaire__step');
 
 		currentStep.fadeOut(400, function() {
 			nextStep.fadeIn(400);
-		})
+		});
+
+		$('body,html').animate({ scrollTop: 0 }, 1000);
+	});
+
+	$('.prev-btn').on('click', function(e){
+		e.preventDefault();
+		var current = $(this).parent();
+		var prevStep = $(this).parent().prev('.questionnaire__step');
+
+		current.fadeOut(400, function() {
+			prevStep.fadeIn(400);
+		});
+
+		// $('body,html').animate({ scrollTop: 0 }, 1000);
+	})
+
+	$('#employment_type').change(function(){
+		$('.type-block').hide();
+		$('#' + $(this).val()).show();
 	});
 
 	/*Mobile features*/
