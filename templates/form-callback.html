@@ -55,7 +55,8 @@
 				</div>
 
 				<button class="b-btn-primary b-btn-primary--light" type="submit">{% trans 'Получить решение' %}</button>
-
+				<p class="bankid-text">{% trans 'Войти с помощью BankID' %}</p>
+				<a href="{% url 'bankid:auth' %}" class="bankid-img"><img src="{% static 'dist/img/bankid.png' %}" alt=""></a>
 				<a href="{% url 'login' %}" class="already-link">{% trans 'Уже есть аккаунт Экспресс финанс?' %} <b>{% trans 'Войти' %}</b></a>
 			</form>
 		</div>

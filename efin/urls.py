@@ -120,6 +120,7 @@ urlpatterns = i18n_patterns(
 
     path('<str:page_url>/', content.pages, name='static_pages'),
 
+    path('bankid/', include('bankid.urls', namespace='bankid')),
 )
 
 urlpatterns += [

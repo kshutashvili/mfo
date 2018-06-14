@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'token_confirm',
     'payment_gateways',
     'payments',
+    'bankid',
     # 3-rd
     'ckeditor',
     'solo',
@@ -208,6 +209,10 @@ PROVIDER_4BILL_POINT = 94
 PROVIDER_4BILL_SERVICE = 2
 PROVIDER_4BILL_API_KEY = 'ytb23Bda8fhUX@omw7'
 
+
+# BankID credentials
+BANKID_CLIENT_ID = 'b0f1d8f4-9775-49b4-b82f-807fbacc385a'
+BANKID_SECRET = 'N2Y2ZGQ0YjgtYTAyNC00MTkyLTgyZDMtZDNhZjMxM2E5MjQw'
 
 try:
     from .local_settings import *
