@@ -27,7 +27,7 @@ from users.models import User
 from users.helpers import make_user_password
 from .models import ScanDocument
 from .utils import (
-    decrypt_data, load_scans, local_save, server_header
+    decrypt_data, local_save
 )
 
 # Create your views here.
@@ -260,8 +260,6 @@ def bankid_getdata(request):
 
     decrypted = decrypt_data(r.json())
 
-    # load_scans(decrypted['customer']['scans'], headers)
-
     # check if user with this mobile_phone exists
     user_exists = User.objects.filter(
         mobile_phone=clear_contact_phone(
@@ -300,6 +298,9 @@ def bankid_getdata(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def document_view(request, scan_id):
+    """
+    Preview document's scan
+    """
     scan = ScanDocument.objects.get(id=scan_id)
     response = HttpResponse()
     response.content = scan.file.read()
