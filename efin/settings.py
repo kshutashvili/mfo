@@ -186,6 +186,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
 PROTECTED_MEDIA_URL = '/protected/'
 PROTECTED_MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'protected')
 PROTECTED_MEDIA_LOCATION_PREFIX = '/internal'
+PROTECTED_MEDIA_SERVER = 'nginx'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'

@@ -143,8 +143,10 @@ if settings.DEBUG:
 else:
     urlpatterns += [
         re_path(
-            r'^{}/(?P<path>.*)$'.format(settings.PROTECTED_MEDIA_URL),
-            protected_view
+            r"^(?P<path>.*)$", protected_view, {
+                "server": settings.PROTECTED_MEDIA_SERVER,
+                "as_download": settings.PROTECTED_MEDIA_AS_DOWNLOADS
+            }
         )
     ]
 

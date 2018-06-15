@@ -1,6 +1,7 @@
 from django.db import models
 
 from .fields import ProtectedFileField
+# from .storages import ProtectedFileSystemStorage
 
 # Create your models here.
 
@@ -186,6 +187,7 @@ class ScanDocument(models.Model):
     file = ProtectedFileField(
         verbose_name='Файл скана',
         upload_to="scans/",
+        # storage=ProtectedFileSystemStorage,
         blank=True,
         null=True
     )

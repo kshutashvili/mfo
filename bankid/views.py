@@ -2,6 +2,8 @@ import os
 import hashlib
 from pprint import pprint
 import json
+import mimetypes
+from os.path import basename
 
 import requests
 
@@ -18,12 +20,13 @@ from django.contrib.auth import (
     authenticate, login, logout, update_session_auth_hash
 )
 from django.contrib.auth.decorators import login_required
+from django.views.static import serve
 
 from content.helpers import clear_contact_phone
 from users.models import User
 from users.helpers import make_user_password
 from .utils import (
-    decrypt_data, load_scans, local_save
+    decrypt_data, load_scans, local_save, server_header
 )
 
 # Create your views here.
@@ -295,12 +298,25 @@ def bankid_getdata(request):
 
 
 @login_required
-def protected_view(request, path):
-    """
-    Redirect the request to the path used by nginx for protected media.
-    """
-    response = HttpResponse()
-    response['X-Accel-Redirect'] = os.path.join(
-        settings.PROTECTED_MEDIA_LOCATION_PREFIX, path
-    )
+def protected_view(request, path, server="django", as_download=False):
+    if server != "django":
+        mimetype, encoding = mimetypes.guess_type(path)
+        response = HttpResponse()
+        response["Content-Type"] = mimetype
+        if encoding:
+            response["Content-Encoding"] = encoding
+
+        if as_download:
+            response["Content-Disposition"] = "attachment; filename={}".format(
+                basename(path))
+
+        response[server_header(server)] = os.path.join(
+            settings.PROTECTED_MEDIA_LOCATION_PREFIX, path
+        ).encode("utf8")
+    else:
+        response = serve(
+            request, path, document_root=settings.PROTECTED_MEDIA_ROOT,
+            show_indexes=False
+        )
+
     return response

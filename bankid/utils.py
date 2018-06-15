@@ -199,3 +199,14 @@ def local_save(decrypted_data, user):
         )
     # save to Questionnaire model. bound it with recent created user
     Questionnaire.objects.create(user=user, **anketa_data)
+
+
+DEFAULT_X_SENDFILE_HEADER = "X-Sendfile"
+
+_SERVER_HEADER_MAP = {
+    "nginx": "X-Accel-Redirect",
+}
+
+
+def server_header(server):
+    return _SERVER_HEADER_MAP.get(server, DEFAULT_X_SENDFILE_HEADER)
