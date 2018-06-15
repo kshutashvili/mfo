@@ -46,7 +46,7 @@ from users.views import (
 )
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
                                     city24_terminal_view, TurnesView)
-from bankid.views import protected_view
+from bankid.views import document_view
 
 
 urlpatterns = i18n_patterns(
@@ -128,6 +128,8 @@ urlpatterns += [
     path('payment/pb/', pb_terminal_view, name='pb_terminal'),
     path('payment/easypay/', easypay_terminal_view, name='easypay_terminal'),
     path('payment/city24/', city24_terminal_view, name='city24_terminal'),
+
+    path('protected/<int:scan_id>/', document_view, name='protect'),
 ]
 
 if settings.DEBUG:
@@ -135,22 +137,6 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
-
-if settings.DEBUG:
-    # protected media
-    urlpatterns += static(
-        settings.PROTECTED_MEDIA_URL,
-        document_root=settings.PROTECTED_MEDIA_ROOT
-    )
-else:
-    urlpatterns += [
-        re_path(
-            r"^(?P<path>.*)$", protected_view, {
-                "server": settings.PROTECTED_MEDIA_SERVER,
-                "as_download": settings.PROTECTED_MEDIA_AS_DOWNLOADS
-            }
-        )
-    ]
 
 
 if 'rosetta' in settings.INSTALLED_APPS:

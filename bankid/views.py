@@ -19,12 +19,13 @@ from django.urls import reverse_lazy
 from django.contrib.auth import (
     authenticate, login, logout, update_session_auth_hash
 )
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.views.static import serve
 
 from content.helpers import clear_contact_phone
 from users.models import User
 from users.helpers import make_user_password
+from .models import ScanDocument
 from .utils import (
     decrypt_data, load_scans, local_save, server_header
 )
@@ -297,38 +298,13 @@ def bankid_getdata(request):
     return HttpResponseRedirect(reverse_lazy('main'))
 
 
-# @login_required
-# def protected_view(request, path, server="django", as_download=False):
-#     if server != "django":
-#         mimetype, encoding = mimetypes.guess_type(path)
-#         response = HttpResponse()
-#         response["Content-Type"] = mimetype
-#         if encoding:
-#             response["Content-Encoding"] = encoding
-
-#         if as_download:
-#             response["Content-Disposition"] = "attachment; filename={}".format(
-#                 basename(path))
-
-#         response[server_header(server)] = os.path.join(
-#             settings.PROTECTED_MEDIA_LOCATION_PREFIX, path
-#         ).encode("utf8")
-#     else:
-#         response = serve(
-#             request, path, document_root=settings.PROTECTED_MEDIA_ROOT,
-#             show_indexes=False
-#         )
-
-#     return response
-
-
-@login_required
-def protected_view(request, path):
-    """
-    Redirect the request to the path used by nginx for protected media.
-    """
+@user_passes_test(lambda u: u.is_superuser)
+def document_view(request, scan_id):
+    scan = ScanDocument.objects.get(id=scan_id)
     response = HttpResponse()
-    response["X-Accel-Redirect"] = os.path.join(
-        settings.PROTECTED_MEDIA_LOCATION_PREFIX, path
+    response.content = scan.file.read()
+    response["Content-Type"] = "application/pdf"
+    response["Content-Disposition"] = "inline; filename={0}".format(
+        scan.file.name
     )
     return response

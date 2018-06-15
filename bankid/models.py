@@ -178,6 +178,10 @@ class Address(models.Model):
         return str(self.id)
 
 
+def get_user_image_folder(instance, filename):
+    return "scans/inn%s/%s" % (instance.customer.inn, filename)
+
+
 class ScanDocument(models.Model):
     customer = models.ForeignKey(
         Customer,
@@ -186,8 +190,7 @@ class ScanDocument(models.Model):
     )
     file = ProtectedFileField(
         verbose_name='Файл скана',
-        upload_to="scans/",
-        # storage=ProtectedFileSystemStorage,
+        upload_to=get_user_image_folder,
         blank=True,
         null=True
     )
