@@ -141,10 +141,12 @@ if settings.DEBUG:
         document_root=settings.PROTECTED_MEDIA_ROOT
     )
 else:
-    urlpatterns += re_path(
-        r'^{}/(?P<path>.*)$'.format(settings.PROTECTED_MEDIA_URL),
-        protected_view
-    )
+    urlpatterns += [
+        re_path(
+            r'^{}/(?P<path>.*)$'.format(settings.PROTECTED_MEDIA_URL),
+            protected_view
+        )
+    ]
 
 
 if 'rosetta' in settings.INSTALLED_APPS:
