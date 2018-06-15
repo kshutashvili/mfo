@@ -297,26 +297,38 @@ def bankid_getdata(request):
     return HttpResponseRedirect(reverse_lazy('main'))
 
 
+# @login_required
+# def protected_view(request, path, server="django", as_download=False):
+#     if server != "django":
+#         mimetype, encoding = mimetypes.guess_type(path)
+#         response = HttpResponse()
+#         response["Content-Type"] = mimetype
+#         if encoding:
+#             response["Content-Encoding"] = encoding
+
+#         if as_download:
+#             response["Content-Disposition"] = "attachment; filename={}".format(
+#                 basename(path))
+
+#         response[server_header(server)] = os.path.join(
+#             settings.PROTECTED_MEDIA_LOCATION_PREFIX, path
+#         ).encode("utf8")
+#     else:
+#         response = serve(
+#             request, path, document_root=settings.PROTECTED_MEDIA_ROOT,
+#             show_indexes=False
+#         )
+
+#     return response
+
+
 @login_required
-def protected_view(request, path, server="django", as_download=False):
-    if server != "django":
-        mimetype, encoding = mimetypes.guess_type(path)
-        response = HttpResponse()
-        response["Content-Type"] = mimetype
-        if encoding:
-            response["Content-Encoding"] = encoding
-
-        if as_download:
-            response["Content-Disposition"] = "attachment; filename={}".format(
-                basename(path))
-
-        response[server_header(server)] = os.path.join(
-            settings.PROTECTED_MEDIA_LOCATION_PREFIX, path
-        ).encode("utf8")
-    else:
-        response = serve(
-            request, path, document_root=settings.PROTECTED_MEDIA_ROOT,
-            show_indexes=False
-        )
-
+def protected_view(request, path):
+    """
+    Redirect the request to the path used by nginx for protected media.
+    """
+    response = HttpResponse()
+    response["X-Accel-Redirect"] = os.path.join(
+        settings.PROTECTED_MEDIA_LOCATION_PREFIX, path
+    )
     return response
