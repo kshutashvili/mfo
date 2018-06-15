@@ -283,7 +283,7 @@ def bankid_getdata(request):
     # save decrypted data to models:
     # Customer, Document, Address, ScanDocument
     # and copy this data to Questionnaire model
-    local_save(decrypted, user)
+    local_save(decrypted, user, headers)
 
     if auth_user is not None:
         login(request, auth_user)

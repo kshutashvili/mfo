@@ -129,7 +129,7 @@ urlpatterns += [
     path('payment/easypay/', easypay_terminal_view, name='easypay_terminal'),
     path('payment/city24/', city24_terminal_view, name='city24_terminal'),
 
-    path('protected/<int:scan_id>/', document_view, name='protect'),
+    path('protected/<int:scan_id>/', document_view, name='protected_media'),
 ]
 
 if settings.DEBUG:

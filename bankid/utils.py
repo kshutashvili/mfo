@@ -2,12 +2,15 @@ import base64
 import re
 from pprint import pprint
 from datetime import datetime
+from io import BytesIO
 
 from Crypto import Random
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.Hash import SHA
 from Crypto.PublicKey import RSA
 import requests
+
+from django.core import files
 
 from users.models import Questionnaire
 from .models import Customer, Document, Address, ScanDocument
@@ -120,7 +123,7 @@ def load_scans(scans_list, headers):
             f.write(response.content)
 
 
-def local_save(decrypted_data, user):
+def local_save(decrypted_data, user, headers):
     documents = decrypted_data['customer']['documents']
     del decrypted_data['customer']['documents']
     addresses = decrypted_data['customer']['addresses']
@@ -193,10 +196,24 @@ def local_save(decrypted_data, user):
             })
 
     for scan in scans:
-        ScanDocument.objects.create(
+        scan_obj = ScanDocument.objects.create(
             customer=customer,
             **scan
         )
+
+        response = requests.get(
+            url=scan['link'],
+            headers=headers,
+            stream=True
+        )
+        fp = BytesIO()
+        fp.write(response.content)
+        file_name = "{0}.{1}".format(
+            scan['type'],
+            scan['extension']
+        )
+
+        scan_obj.file.save(file_name, files.File(fp))
     # save to Questionnaire model. bound it with recent created user
     Questionnaire.objects.create(user=user, **anketa_data)
 

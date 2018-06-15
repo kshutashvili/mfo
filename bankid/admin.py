@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django import forms
 
 from .models import *
+from .widgets import AdminFileWidget
 
 # Register your models here.
 
@@ -42,6 +44,16 @@ class AddressAdmin(admin.ModelAdmin):
     )
 
 
+class SecureFileAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SecureFileAdminForm, self).__init__(*args, **kwargs)
+        self.fields['file'].widget = AdminFileWidget()
+
+    class Meta:
+        model = ScanDocument
+        fields = '__all__'
+
+
 @admin.register(ScanDocument)
 class ScanDocumentAdmin(admin.ModelAdmin):
     def get_customer_last_name(self, obj):
@@ -54,3 +66,4 @@ class ScanDocumentAdmin(admin.ModelAdmin):
         'id', 'extension', 'type', 'get_customer_last_name',
         'get_customer_first_name'
     )
+    form = SecureFileAdminForm

@@ -1,7 +1,6 @@
 from django.db import models
 
 from .fields import ProtectedFileField
-# from .storages import ProtectedFileSystemStorage
 
 # Create your models here.
 
