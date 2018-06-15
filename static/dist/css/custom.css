@@ -70,4 +70,6 @@ textarea.questionnaire__input{
 }
 .bankid-img{
     margin-bottom: 1em;
+    opacity: .4;
+    pointer-events: none;
 }
