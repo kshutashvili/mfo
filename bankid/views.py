@@ -1,3 +1,4 @@
+import os
 import hashlib
 from pprint import pprint
 import json
@@ -16,6 +17,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import (
     authenticate, login, logout, update_session_auth_hash
 )
+from django.contrib.auth.decorators import login_required
 
 from content.helpers import clear_contact_phone
 from users.models import User
@@ -290,3 +292,15 @@ def bankid_getdata(request):
     #     safe=False
     # )
     return HttpResponseRedirect(reverse_lazy('main'))
+
+
+@login_required
+def protected_view(request, path):
+    """
+    Redirect the request to the path used by nginx for protected media.
+    """
+    response = HttpResponse()
+    response['X-Accel-Redirect'] = os.path.join(
+        settings.PROTECTED_MEDIA_LOCATION_PREFIX, path
+    )
+    return response

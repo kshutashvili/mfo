@@ -183,6 +183,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
+PROTECTED_MEDIA_URL = '/protected/'
+PROTECTED_MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'protected')
+PROTECTED_MEDIA_LOCATION_PREFIX = '/internal'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
