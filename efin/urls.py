@@ -135,6 +135,8 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
+
+if settings.DEBUG:
     # protected media
     urlpatterns += static(
         settings.PROTECTED_MEDIA_URL,
