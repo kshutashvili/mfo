@@ -14,8 +14,8 @@
     margin: -2rem 0 2rem 0;
 }
 .f-callback-right {
-    /*opacity: .3;*/
-    /*pointer-events: none;*/
+    opacity: .3;
+    pointer-events: none;
 }
 .f-form__footer{
     padding: 1.5rem 0;
