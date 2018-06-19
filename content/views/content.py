@@ -220,9 +220,13 @@ class CallbackView(TemplateView):
 
 def save_credit_request(request):
     if request.method == 'POST':
+        try:
+            credit_sum = int(request.POST.get('credit_sum', 0))
+        except ValueError:
+            credit_sum = 0
         # create new Bid
         new_bid = Bid.objects.create(
-            credit_sum=request.POST.get('credit_sum', 0),
+            credit_sum=credit_sum,
             termin=request.POST.get('termin'),
             termin_type=request.POST.get('term_type'),
             city=request.POST.get('city')

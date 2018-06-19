@@ -14,8 +14,15 @@ def success_message(request, id_mess, redirect_url=None):
             redirect = redirect.split('/')[-2]
             if redirect == 'resume':
                 redirect = reverse('job').split('/')[-2]
+            else:
+                redirect = None
     else:
         redirect = redirect_url
-    return render(request, 'form-success.html', {'success':success,
-                                                 'previous_page':redirect})
-
+    return render(
+        request,
+        'form-success.html',
+        {
+            'success': success,
+            'previous_page': redirect
+        }
+    )
