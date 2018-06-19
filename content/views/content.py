@@ -243,6 +243,8 @@ def save_credit_request(request):
                                  'bid_id':new_bid.id})
         else:
             return HttpResponseRedirect(redirect_to=request.POST.get('callback'))
+    else:
+        return HttpResponseBadRequest()
 
 
 def request_callback(request):
