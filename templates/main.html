@@ -282,18 +282,10 @@
 			</div>
 
 			<div class="b-section-message">
-			{% for obj in main.credit_take.get_queryset %}
-				{% if forloop.first %}
-				<div class="b-section-message__item {% if forloop.first %}active{% endif %}">
-					<h3 class="b-section-message__item-title">
-						{{ obj.title }}
-					</h3>
-					<p class="b-section-message__item-content">
-						{{ obj.text }}
-					</p>
+				<div class="b-section-message__item active" style="border-radius: 0;">
+					<a href="https://moneyveo.ua/?utm_source=exfin&utm_medium=cpa&utm_campaign=exfin" target="_blank"><img src="{% static 'dist/img/moneyveo500x500.jpg' %}" alt=""></a>
 				</div>
-				{% endif %}
-			{% endfor %}
+
 				<div class="b-section-message__item active" style="border-radius: 0;">
 					<a href="https://ikapusta.com.ua/?utm_source=expressfinance&utm_medium=banner" target="_blank"><img src="{% static 'dist/img/kapusta 500х500.png' %}" alt=""></a>
 				</div>
