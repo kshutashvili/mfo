@@ -19,6 +19,16 @@ class Bid(models.Model):
     termin_type = models.CharField("Тип срока (неделя/месяц)",
                                    max_length=32,
                                    default="неделя")
+    wm_id = models.CharField(
+        "Linkprofit wm_id",
+        max_length=64,
+        blank=True
+    )
+    any_param = models.CharField(
+        "Linkprofit any_param",
+        max_length=128,
+        blank=True
+    )
     created_dt = models.DateTimeField("Дата создания",
                                       auto_now_add=True)
     updated_dt = models.DateTimeField("Дата изменения",

@@ -75,14 +75,26 @@ def get_city_name(request):
 def process_bid(bid):
     # send new Bid to Saleshub site
 
+    partner_dict = {
+        "website": {
+            "partner_name": "website",
+            "key": "46de62b4db97e9f855129f9f5edcd595",
+        },
+        "linkprofit": {
+            "partner_name": "linkprofit",
+            "key": "a47867d776f2fdbab60d9b7d0c7862c5"
+        }
+    }
+    partner = "linkprofit" if bid.wm_id and bid.any_param else "website"
+
     saleshub_URI = "https://saleshub.co.ua/api/v1/leads/"
     data = {
-        "partner_name": "website",
+        "partner_name": partner_dict[partner]["partner_name"],
         "contact_phone": bid.contact_phone,
         "city": bid.city,
         "first_name": bid.name,
         "credit_sum": bid.credit_sum,
-        "key": "46de62b4db97e9f855129f9f5edcd595",
+        "key": partner_dict[partner]["key"],
         "site_bid_id": bid.id
     }
 

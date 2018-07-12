@@ -44,6 +44,9 @@ def pages(request, page_url):
 
 
 def main(request):
+    any_param = request.GET.get('any_param', '')
+    wm_id = request.GET.get('wm_id', '')
+
     city = get_city_name(request)
     main = MainPageStatic.get_solo()
     nets = SocialNetUnderHeader.objects.all()
@@ -59,10 +62,12 @@ def main(request):
             if length > 0:
                 column_list[i] += 1
                 length -= 1
-    return render(request, 'main.html', {'main':main,
-                                         'departments':departments,
-                                         'nets':nets,
-                                         'column_list':column_list,
+    return render(request, 'main.html', {'main': main,
+                                         'departments': departments,
+                                         'nets': nets,
+                                         'wm_id': wm_id,
+                                         'any_param': any_param,
+                                         'column_list': column_list,
                                          'user_city': city if city else 'Другой город'})
 
 
@@ -229,7 +234,9 @@ def save_credit_request(request):
             credit_sum=credit_sum,
             termin=request.POST.get('termin'),
             termin_type=request.POST.get('term_type'),
-            city=request.POST.get('city')
+            city=request.POST.get('city'),
+            wm_id=request.POST.get('wm_id', ''),
+            any_param=request.POST.get('any_param', '')
         )
         new_bid.save()
 

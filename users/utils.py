@@ -571,7 +571,7 @@ def get_person_id_and_tel(contract_num):
     )
     person_data = exfin_cursor.fetchall()
 
-    if person_data[0]:
+    if person_data:
         exfin_cursor.execute(
             """
                 SELECT

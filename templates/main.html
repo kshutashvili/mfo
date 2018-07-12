@@ -102,6 +102,8 @@
 							
 							<input type="hidden" value="{% url 'callback' %}" name="callback">
 							<input type="hidden" value="{{ user_city }}" name="city">
+							<input type="hidden" value="{{ any_param }}" name="any_param">
+							<input type="hidden" value="{{ wm_id }}" name="wm_id">
 							<input type="hidden" value="{% if obj.credit_rate.term_type %}{% trans 'месяцев' %}{% else %}{% trans 'недель' %}{% endif %}" name="term_type">
 							{% csrf_token %}
 							<button type="submit" class="b-btn-primary b-btn-primary--main">
