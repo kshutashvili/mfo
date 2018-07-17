@@ -45,7 +45,14 @@ def pages(request, page_url):
 
 def main(request):
     any_param = request.GET.get('any_param', '')
+
+    if 'any_param' not in request.session:
+        request.session['any_param'] = any_param
+
     wm_id = request.GET.get('wm_id', '')
+
+    if 'wm_id' not in request.session:
+        request.session['wm_id'] = wm_id
 
     city = get_city_name(request)
     main = MainPageStatic.get_solo()
@@ -62,13 +69,19 @@ def main(request):
             if length > 0:
                 column_list[i] += 1
                 length -= 1
-    return render(request, 'main.html', {'main': main,
-                                         'departments': departments,
-                                         'nets': nets,
-                                         'wm_id': wm_id,
-                                         'any_param': any_param,
-                                         'column_list': column_list,
-                                         'user_city': city if city else 'Другой город'})
+    return render(
+        request,
+        'main.html',
+        {
+            'main': main,
+            'departments': departments,
+            'nets': nets,
+            'wm_id': wm_id,
+            'any_param': any_param,
+            'column_list': column_list,
+            'user_city': city if city else 'Другой город'
+        }
+    )
 
 
 def index(request):
@@ -208,9 +221,9 @@ class CallbackView(TemplateView):
 
         bid_id = None
         # get bid's ID form session which set in save_credit_request function
-        if self.request.session.has_key('bid_id'):
-           bid_id = self.request.session.get('bid_id')
-           del self.request.session['bid_id']
+        if 'bid_id' in self.request.session:
+            bid_id = self.request.session.get('bid_id')
+            del self.request.session['bid_id']
 
         context['bid_id'] = bid_id
 
@@ -229,14 +242,23 @@ def save_credit_request(request):
             credit_sum = int(request.POST.get('credit_sum', 0))
         except ValueError:
             credit_sum = 0
+
+        wm_id = ''
+        if 'wm_id' in request.session:
+            wm_id = request.session['wm_id']
+
+        any_param = ''
+        if 'any_param' in request.session:
+            any_param = request.session['any_param']
+
         # create new Bid
         new_bid = Bid.objects.create(
             credit_sum=credit_sum,
             termin=request.POST.get('termin'),
             termin_type=request.POST.get('term_type'),
             city=request.POST.get('city'),
-            wm_id=request.POST.get('wm_id', ''),
-            any_param=request.POST.get('any_param', '')
+            wm_id=wm_id,
+            any_param=any_param
         )
         new_bid.save()
 
@@ -246,10 +268,14 @@ def save_credit_request(request):
 
         # for ajax query from index.html shoudn't redirect
         if request.POST.get('no_redirect', False):
-            return JsonResponse({'status':'200',
-                                 'bid_id':new_bid.id})
+            return JsonResponse({
+                'status': '200',
+                'bid_id': new_bid.id
+            })
         else:
-            return HttpResponseRedirect(redirect_to=request.POST.get('callback'))
+            return HttpResponseRedirect(
+                redirect_to=request.POST.get('callback')
+            )
     else:
         return HttpResponseBadRequest()
 
@@ -259,6 +285,16 @@ def request_callback(request):
         bid_id = request.POST.get("bid_id", None)
         contact_phone = request.POST.get("contact_phone")
         clean_phone = clear_contact_phone(contact_phone)
+
+        wm_id = ''
+        if 'wm_id' in request.session:
+            wm_id = request.session['wm_id']
+            del request.session['wm_id']
+
+        any_param = ''
+        if 'any_param' in request.session:
+            any_param = request.session['any_param']
+            del request.session['any_param']
 
         if bid_id:
             # if Bid has been created in save_credit_request function
@@ -273,7 +309,9 @@ def request_callback(request):
                 new_bid = Bid.objects.create(
                     city=request.POST.get('city'),
                     name=request.POST.get("client_name"),
-                    contact_phone=clean_phone
+                    contact_phone=clean_phone,
+                    wm_id=wm_id,
+                    any_param=any_param
                 )
                 new_bid.save()
                 process_bid(new_bid)
@@ -282,7 +320,9 @@ def request_callback(request):
             new_bid = Bid.objects.create(
                 city=request.POST.get('city'),
                 name=request.POST.get("client_name"),
-                contact_phone=clean_phone
+                contact_phone=clean_phone,
+                wm_id=wm_id,
+                any_param=any_param
             )
             new_bid.save()
             process_bid(new_bid)
