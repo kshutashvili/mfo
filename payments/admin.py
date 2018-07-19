@@ -7,7 +7,7 @@ from .models import Payment, KeyFor4billAPI
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('account_id', 'service_id', 'amount', 'status', 'is_paid')
 
 
 @admin.register(KeyFor4billAPI)
