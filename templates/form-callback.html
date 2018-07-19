@@ -32,6 +32,10 @@
 				<input type="hidden" value="{{ bid_id|default:"" }}" name="bid_id">
 				<input type="hidden" value="{{ city }}" name="city">
 				<button class="b-btn-primary b-btn-primary--main hidding" id="submit-callback" type="submit">{% trans 'Заказать звонок' %}</button>
+
+				<div class="f-callback__info2">
+					<p class="f-callback__info2-text">{% trans "ТОВ «МІКРОКРЕДИТНИЙ ЦЕНТР БМ» використовує загальноприйняті стандарти технологічного та операційного захисту інформації та персональних даних від втрати, неправильного використання, зміни або знищення. ТОВ «МІКРОКРЕДИТНИЙ ЦЕНТР БМ» не здійснює передачу персональних даних третім особам, крім випадків, коли така передача є вимогою законодавства, на прохання суб'єкта персональних даних або в інших випадках передбачним законом «Про захист персональних даних»" %} </p>
+				</div>
 			</form>
 
 			<form action="{% url 'register' %}" method="post" class="f-callback-right">
