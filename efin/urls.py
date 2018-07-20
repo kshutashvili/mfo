@@ -123,7 +123,7 @@ urlpatterns = i18n_patterns(
 
     path('bankid/', include('bankid.urls', namespace='bankid')),
 
-    # path('tele/', include('telegrambot.urls', namespace='telegrambot')),
+    path('tele/', include('telegrambot.urls', namespace='telegrambot')),
 )
 
 urlpatterns += [
