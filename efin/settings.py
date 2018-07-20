@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'payment_gateways',
     'payments',
     'bankid',
-    'telegrambot',
     # 3-rd
     'ckeditor',
     'solo',
