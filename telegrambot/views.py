@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 
 
 bot = telepot.Bot('684168816:AAHSrBnlrRRnVayoU-VH91FA233fKrD-cdQ')
-bot.setWebhook('https://expressfinance.com.ua/tele/text/')
+bot.setWebhook('https://expressfinance.com.ua/tele/text/', certificate=open('/etc/ssl/expressfinance_com_ua.crt', 'r'))
 
 
 def test_bot(request):
@@ -20,6 +20,5 @@ def test_bot(request):
     # MessageLoop(bot, handle).run_as_thread()
 
     bot.sendMessage('87982276', 'Привіт')
-    bot.sendMessage('87982276', request.body.decode('UTF8'))
 
     return JsonResponse({}, status=200)
