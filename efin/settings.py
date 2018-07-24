@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'payment_gateways',
     'payments',
     'bankid',
-    'telegrambot',
     # 3-rd
     'ckeditor',
     'solo',
@@ -225,7 +224,7 @@ RAVEN_CONFIG = {
     'dsn': 'https://37c01da58b9341bf88fa4b234044539f:1e3f3fa719e043058763110f38433784@sentry.io/1227127',
 }
 
-# try:
-#     from .local_settings import *
-# except ImportError:
-#     pass
+try:
+    from .local_settings import *
+except ImportError:
+    pass
