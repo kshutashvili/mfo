@@ -56,7 +56,7 @@ def linkprofit_check(modeladmin, request, queryset):
         data=json.dumps(data_for_sending)
     )
 
-    bids = r.json()
+    bids = json.loads(r.text())
 
     # for j in json.loads(r.json()):
     #     print(j, "\n")
@@ -219,6 +219,77 @@ def linkprofit_check(modeladmin, request, queryset):
 linkprofit_check.short_description = 'Send to check'
 
 
+def save_as_excel(modeladmin, request, queryset):
+    bid_model = queryset.model
+
+    # get verbose name of Model's fields
+    fields_verbose_names_list = [
+        field.name for field in bid_model._meta.get_fields()
+    ]
+
+    # get names of Model's fields
+    fields_names_list = [field.name for field in bid_model._meta.get_fields()]
+
+    # response settings
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="bids.xls"'
+
+    # Excel file settings
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Broker and Turnes')
+
+    # first row to write
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    # write column names in row_num row
+    for col_num in range(len(fields_verbose_names_list)):
+        ws.write(
+            row_num,
+            col_num,
+            fields_verbose_names_list[col_num],
+            font_style
+        )
+
+    # set default styles
+    font_style = xlwt.XFStyle()
+
+    # get list of queryset values
+    rows = queryset.values_list(
+        *fields_names_list
+    )
+
+    # write all rows
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+
+            # formatting datetime objects
+            if col_num == 9 or col_num == 10:
+                ws.write(
+                    row_num,
+                    col_num,
+                    row[col_num].strftime("%Y-%m-%d %H:%M:%S"),
+                    font_style
+                )
+            # else just write values
+            else:
+                ws.write(
+                    row_num,
+                    col_num,
+                    row[col_num],
+                    font_style
+                )
+
+    # save file and return file to browser
+    wb.save(response)
+    return response
+
+
+save_as_excel.short_description = 'Save as Excel'
+
+
 @admin.register(Bid)
 class BidAdmin(admin.ModelAdmin):
     list_display = (
@@ -233,4 +304,4 @@ class BidAdmin(admin.ModelAdmin):
         ('created_dt', DateRangeFilter),
         WmIDListFilter
     )
-    actions = [linkprofit_check, ]
+    actions = [linkprofit_check, save_as_excel]
