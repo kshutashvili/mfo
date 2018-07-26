@@ -62,7 +62,8 @@ INSTALLED_APPS = [
     'modeltranslation',
     'django_twilio',
     'rosetta',
-    'raven.contrib.django.raven_compat'
+    'raven.contrib.django.raven_compat',
+    'rangefilter',
 ]
 
 MIDDLEWARE = [
