@@ -50,16 +50,19 @@ def linkprofit_check(modeladmin, request, queryset):
                 "updated_dt": q.updated_dt.strftime("%Y-%m-%d"),
             }
         )
+
+    request_headers = {
+        "Content-Type": "application/json"
+    }
+
     endpoint = "https://saleshub.co.ua/api/v1/linkprofit/"
     r = requests.post(
         endpoint,
-        data=json.dumps(data_for_sending)
+        data=json.dumps(data_for_sending),
+        headers=request_headers
     )
 
     bids = json.loads(r.text())
-
-    # for j in json.loads(r.json()):
-    #     print(j, "\n")
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="linkprofit.xls"'
@@ -73,142 +76,28 @@ def linkprofit_check(modeladmin, request, queryset):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
+    fields = [
+        "id", "contact_phone", "city",
+        "name", "credit_sum", "termin",
+        "termin_type", "wm_id", "any_param",
+        "created_dt", "status"]
     # write column names in row_num row
-    ws.write(
-        row_num,
-        0,
-        "id",
-        font_style
-    )
-    ws.write(
-        row_num,
-        1,
-        "contact_phone",
-        font_style
-    )
-    ws.write(
-        row_num,
-        2,
-        "city",
-        font_style
-    )
-    ws.write(
-        row_num,
-        3,
-        "name",
-        font_style
-    )
-    ws.write(
-        row_num,
-        4,
-        "credit_sum",
-        font_style
-    )
-    ws.write(
-        row_num,
-        5,
-        "termin",
-        font_style
-    )
-    ws.write(
-        row_num,
-        6,
-        "termin_type",
-        font_style
-    )
-    ws.write(
-        row_num,
-        7,
-        "wm_id",
-        font_style
-    )
-    ws.write(
-        row_num,
-        8,
-        "any_param",
-        font_style
-    )
-    ws.write(
-        row_num,
-        9,
-        "created_dt",
-        font_style
-    )
-    ws.write(
-        row_num,
-        10,
-        "status",
-        font_style
-    )
+    for col, field in enumerate(fields):
+        ws.write(
+            row_num,
+            col,
+            field,
+            font_style
+        )
 
     font_style = xlwt.XFStyle()
 
-    for bid in bids:
+    for col, bid in enumerate(bids):
         row_num += 1
         ws.write(
             row_num,
-            0,
-            bid["id"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            1,
-            bid["contact_phone"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            2,
-            bid["city"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            3,
-            bid["name"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            4,
-            bid["credit_sum"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            5,
-            bid["termin"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            6,
-            bid["termin_type"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            7,
-            bid["wm_id"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            8,
-            bid["any_param"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            9,
-            bid["created_dt"],
-            font_style
-        )
-        ws.write(
-            row_num,
-            10,
-            bid["status"],
+            col,
+            bid[fields[col]],
             font_style
         )
 
