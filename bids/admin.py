@@ -50,7 +50,7 @@ def linkprofit_check(modeladmin, request, queryset):
                 "updated_dt": q.updated_dt.strftime("%Y-%m-%d"),
             }
         )
-    endpoint = "http://localhost:8001/api/v1/linkprofit/"
+    endpoint = "http://saleshub.co.ua/api/v1/linkprofit/"
     r = requests.post(
         endpoint,
         data=json.dumps(data_for_sending)
