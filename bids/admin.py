@@ -56,7 +56,7 @@ def linkprofit_check(modeladmin, request, queryset):
         data=json.dumps(data_for_sending)
     )
 
-    bids = json.loads(r.json())
+    bids = r.json()
 
     # for j in json.loads(r.json()):
     #     print(j, "\n")
