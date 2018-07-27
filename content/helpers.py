@@ -83,9 +83,23 @@ def process_bid(bid):
         "linkprofit": {
             "partner_name": "linkprofit",
             "key": "a47867d776f2fdbab60d9b7d0c7862c5"
+        },
+        "salesdoubler": {
+            "partner_name": "salesdoubler",
+            "key": "acbf4b4fb0556f9095b7a4fec43e97c9"
+        },
+        "doaffiliate": {
+            "partner_name": "doaffiliate",
+            "key": "d76d942bd38e59615d65a1c3f3b618e0"
         }
     }
-    partner = "linkprofit" if bid.wm_id and bid.any_param else "website"
+    partner = "website"
+    if bid.wm_id and bid.any_param:
+        partner = "linkprofit"
+    if bid.aff_sub and bid.aff_id:
+        partner = "salesdoubler"
+    if bid.v:
+        partner = "doaffiliate"
 
     saleshub_URI = "https://saleshub.co.ua/api/v1/leads/"
     data = {

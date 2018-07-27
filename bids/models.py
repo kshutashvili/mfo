@@ -29,6 +29,21 @@ class Bid(models.Model):
         max_length=128,
         blank=True
     )
+    aff_sub = models.CharField(
+        "Salesdoubler aff_sub",
+        max_length=64,
+        blank=True
+    )
+    aff_id = models.CharField(
+        "Salesdoubler aff_id",
+        max_length=64,
+        blank=True
+    )
+    v = models.CharField(
+        "Doaffilate v",
+        max_length=64,
+        blank=True
+    )
     created_dt = models.DateTimeField("Дата создания",
                                       auto_now_add=True)
     updated_dt = models.DateTimeField("Дата изменения",

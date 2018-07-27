@@ -44,15 +44,26 @@ def pages(request, page_url):
 
 
 def main(request):
+    # linkprofit parameters
     any_param = request.GET.get('any_param', '')
-
-    if 'any_param' not in request.session:
+    if any_param:
         request.session['any_param'] = any_param
-
     wm_id = request.GET.get('wm_id', '')
-
-    if 'wm_id' not in request.session:
+    if wm_id:
         request.session['wm_id'] = wm_id
+
+    # salesdoubler parameters
+    aff_sub = request.GET.get('aff_sub', '')
+    if aff_sub:
+        request.session['aff_sub'] = aff_sub
+    aff_id = request.GET.get('aff_id', '')
+    if aff_id:
+        request.session['aff_id'] = aff_id
+
+    # doaffilate parameters (w/o utm_source, utm_medium and utm_campaign)
+    v = request.GET.get('v', '')
+    if v:
+        request.session['v'] = v
 
     city = get_city_name(request)
     main = MainPageStatic.get_solo()
@@ -76,8 +87,11 @@ def main(request):
             'main': main,
             'departments': departments,
             'nets': nets,
-            'wm_id': wm_id,
-            'any_param': any_param,
+            'wm_id': wm_id,             # linkprofit
+            'any_param': any_param,     # linkprofit
+            'aff_sub': aff_sub,         # salesdoubler
+            'aff_id': aff_id,           # salesdoubler
+            'v': v,                     # doaffilate
             'column_list': column_list,
             'user_city': city if city else 'Другой город'
         }
@@ -243,13 +257,26 @@ def save_credit_request(request):
         except ValueError:
             credit_sum = 0
 
+        # linkprofit parameters
         wm_id = ''
         if 'wm_id' in request.session:
             wm_id = request.session['wm_id']
-
         any_param = ''
         if 'any_param' in request.session:
             any_param = request.session['any_param']
+
+        # salesdoubler parameters
+        aff_sub = ''
+        if 'aff_sub' in request.session:
+            aff_sub = request.session['aff_sub']
+        aff_id = ''
+        if 'aff_id' in request.session:
+            aff_id = request.session['aff_id']
+
+        # doaffilate parameters (w/o utm_source, utm_medium and utm_campaign)
+        v = ''
+        if 'v' in request.session:
+            v = request.session['v']
 
         # create new Bid
         new_bid = Bid.objects.create(
@@ -258,7 +285,10 @@ def save_credit_request(request):
             termin_type=request.POST.get('term_type'),
             city=request.POST.get('city'),
             wm_id=wm_id,
-            any_param=any_param
+            any_param=any_param,
+            aff_sub=aff_sub,
+            aff_id=aff_id,
+            v=v
         )
         new_bid.save()
 
@@ -286,15 +316,31 @@ def request_callback(request):
         contact_phone = request.POST.get("contact_phone")
         clean_phone = clear_contact_phone(contact_phone)
 
+        # linkprofit parameters
         wm_id = ''
         if 'wm_id' in request.session:
             wm_id = request.session['wm_id']
             del request.session['wm_id']
-
         any_param = ''
         if 'any_param' in request.session:
             any_param = request.session['any_param']
             del request.session['any_param']
+
+        # salesdoubler parameters
+        aff_sub = ''
+        if 'aff_sub' in request.session:
+            aff_sub = request.session['aff_sub']
+            del request.session['aff_sub']
+        aff_id = ''
+        if 'aff_id' in request.session:
+            aff_id = request.session['aff_id']
+            del request.session['aff_id']
+
+        # doaffilate parameters (w/o utm_source, utm_medium and utm_campaign)
+        v = ''
+        if 'v' in request.session:
+            v = request.session['v']
+            del request.session['v']
 
         if bid_id:
             # if Bid has been created in save_credit_request function
@@ -311,7 +357,10 @@ def request_callback(request):
                     name=request.POST.get("client_name"),
                     contact_phone=clean_phone,
                     wm_id=wm_id,
-                    any_param=any_param
+                    any_param=any_param,
+                    aff_sub=aff_sub,
+                    aff_id=aff_id,
+                    v=v
                 )
                 new_bid.save()
                 process_bid(new_bid)
@@ -322,7 +371,10 @@ def request_callback(request):
                 name=request.POST.get("client_name"),
                 contact_phone=clean_phone,
                 wm_id=wm_id,
-                any_param=any_param
+                any_param=any_param,
+                aff_sub=aff_sub,
+                aff_id=aff_id,
+                v=v
             )
             new_bid.save()
             process_bid(new_bid)
