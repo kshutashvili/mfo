@@ -54,7 +54,7 @@ window.onload = function() {
 					});
 				}
 				else if(localStorage.getItem('lp_aff_sub') != null){
-					$.post( 'https://rdr.salesdoubler.com.ua/in/postback/2212/' + localStorage.getItem('lp_aff_sub') + '?trans_id=' +  $('input[name=bid_id]', $(this)).val() + '&token=ZXhwcmVzc2ZpbmFuY2UuY29tLnVhQHNhbGVzZG91Ymxlci5jb20udWE', function( data ) {
+					$.get( 'https://rdr.salesdoubler.com.ua/in/postback/2212/' + localStorage.getItem('lp_aff_sub') + '?trans_id=' +  $('input[name=bid_id]', $(this)).val() + '&token=ZXhwcmVzc2ZpbmFuY2UuY29tLnVhQHNhbGVzZG91Ymxlci5jb20udWE', function( data ) {
 						console.dir(data);
 					});
 				}
