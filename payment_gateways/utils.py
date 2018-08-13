@@ -1,4 +1,5 @@
 import xmltodict
+import MySQLdb
 
 from payment_gateways import constants
 
@@ -90,3 +91,26 @@ def process_easypay_request(request):
 
     is_valid = True
     return is_valid, action, action_data
+
+
+def create_database_connection(host, user, password, db, port=3306):
+    """
+        Create database connection.
+        Return connection and Cursor
+    """
+    database_connection = MySQLdb.connect(
+        host=host,              # host of MySQL database
+        user=user,              # user's username
+        passwd=password,        # your password
+        db=db,                  # name of the database
+        port=port,
+        charset="utf8"
+    )
+
+    # create CURSOR and set UTF8 params
+    cursor = database_connection.cursor()
+    cursor.execute('SET NAMES utf8;')
+    cursor.execute('SET CHARACTER SET utf8;')
+    cursor.execute('SET character_set_connection=utf8;')
+
+    return database_connection, cursor

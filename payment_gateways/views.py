@@ -1,4 +1,5 @@
 from decimal import Decimal
+from datetime import date
 
 import MySQLdb
 
@@ -13,9 +14,14 @@ from django.utils.formats import number_format
 from django.views.generic.base import TemplateView
 
 from payment_gateways.utils import process_pb_request, process_easypay_request
-from payment_gateways.models import (Tcredits, Tpersons, Tcash,
-                                     EasypayPayment, City24Payment)
+from payment_gateways.models import (
+    Tcredits, Tpersons, Tcash,
+    EasypayPayment, City24Payment,
+    PrivatbankPayment
+)
 from payment_gateways import constants
+from payment_gateways.utils import create_database_connection
+from payment_gateways.helpers import search_credit, save_payment
 
 
 @csrf_exempt
@@ -32,73 +38,114 @@ def pb_terminal_view(request):
         contract_num = data['Unit']['@value']
 
         try:
-            credit = Tcredits.objects.get(contract_num=contract_num)
-            client_qs = Tpersons.objects.filter(id=credit.client_id)
-
-            if client_qs:
-                client = client_qs[0]
-                client_fio = "{0} {1}. {2}.".format(
-                    client.name3,
-                    client.name[0].upper(),
-                    client.name2[0].upper(),
-                )
-            else:
-                resp = render(
-                    request,
-                    "payment_gateways/pb_response_search_error.xml",
-                    {"error_msg": "Клиент не найден"},
-                    content_type="application/xml"
-                )
-
+            conn, cursor = create_database_connection(
+                host=settings.TURNES_HOST,
+                user=settings.TURNES_USER,
+                password=settings.TURNES_PASSWORD,
+                db=settings.TURNES_DATABASE
+            )
+        except Exception:
             resp = render(
                 request,
-                "payment_gateways/pb_response_search_success.xml",
-                {
-                    "contract_num": contract_num,
-                    "service_code": settings.PB_SERVICE_CODE,
-                    "vnoska": number_format(
-                        value=credit.vnoska,
-                        use_l10n=False),
-                    "client_fio": client_fio
-                },
+                "payment_gateways/pb_response_pay_error.xml",
+                {"error_msg": "Ошибка при поиске"},
                 content_type="application/xml"
             )
-        except Tcredits.DoesNotExist:
+            return resp
+
+        credit = search_credit(
+            cursor=cursor,
+            contract_num=contract_num
+        )
+
+        conn.close()
+
+        try:
+            credit_row = credit[0]
+        except Exception:
+            # Render error if credit_row is empty
+            # (Credit with particular contract number not found)
             resp = render(
                 request,
                 "payment_gateways/pb_response_search_error.xml",
-                {"error_msg": "Договор не найден"},
+                {"error_msg": "Клиент не найден"},
                 content_type="application/xml"
             )
-        except Tcredits.MultipleObjectsReturned:
-            resp = render(
-                request,
-                "payment_gateways/pb_response_search_error.xml",
-                {"error_msg": "Ошибка при поиске договора"},
-                content_type="application/xml"
-            )
+            return resp
+
+        resp = render(
+            request,
+            "payment_gateways/pb_response_search_success.xml",
+            {
+                "contract_num": contract_num,
+                "service_code": settings.PB_SERVICE_CODE,
+                "vnoska": number_format(
+                    value=credit_row[3],
+                    use_l10n=False
+                ),
+                "client_fio": credit_row[2]
+            },
+            content_type="application/xml"
+        )
+        return resp
 
     elif action == "Pay":
         data = xml_data['Transfer']['Data']
         pb_code = data['@id']
         contract_num = data['PayerInfo']['@billIdentifier']
-        note = data['PayerInfo']['Fio']
+        name = data['PayerInfo']['Fio']
         total_sum = Decimal(data['TotalSum'])
-        # create_time = data['CreateTime']
+        create_time = data['CreateTime']
+        confirm_time = data['ConfirmTime']
+
+        try:
+            conn, cursor = create_database_connection(
+                host=settings.TURNES_HOST,
+                user=settings.TURNES_USER,
+                password=settings.TURNES_PASSWORD,
+                db=settings.TURNES_DATABASE
+            )
+        except Exception:
+            resp = render(
+                request,
+                "payment_gateways/pb_response_pay_error.xml",
+                {"error_msg": "Ошибка при оплате"},
+                content_type="application/xml"
+            )
+            return resp
+
+        credit = search_credit(
+            cursor=cursor,
+            contract_num=contract_num
+        )
+        try:
+            ipn = credit[0][5]
+        except Exception:
+            resp = render(
+                request,
+                "payment_gateways/pb_response_pay_error.xml",
+                {"error_msg": "Ошибка при оплате"},
+                content_type="application/xml"
+            )
+            return resp
+
+        data = {
+            "No": pb_code,
+            "DogNo": contract_num,
+            "IPN": ipn,
+            "dt": date.today(),
+            "sm": total_sum,
+            "status": 0,
+            "ibank": 284
+        }
+        data["F"], data["I"], data["O"] = name.split(" ")
 
         try:
             with transaction.atomic():
-                cash = Tcash.objects.create(
-                    sum=total_sum,
-                    note=note,
-                    type='in',
-                    service_code=pb_code
-                )
-                resp = render(
-                    request,
-                    "payment_gateways/pb_response_pay_success.xml",
-                    {"cash_id": cash.id},
-                    content_type="application/xml"
+                lastrowid = save_payment(
+                    conn=conn,
+                    cursor=cursor,
+                    data=data
                 )
         except Exception:
             resp = render(
@@ -107,6 +154,24 @@ def pb_terminal_view(request):
                 {"error_msg": "Ошибка при оплате"},
                 content_type="application/xml"
             )
+            return resp
+
+        payment = PrivatbankPayment.objects.create(
+            transaction_id=pb_code,
+            inrazpredelenie_id=lastrowid,
+            contract_num=contract_num,
+            client_name=name,
+            amount=total_sum,
+            created_dt=create_time,
+            confirm_dt=confirm_time
+        )
+        resp = render(
+            request,
+            "payment_gateways/pb_response_pay_success.xml",
+            {"cash_id": payment.id},
+            content_type="application/xml"
+        )
+
     else:
         resp = HttpResponse()
 
@@ -189,7 +254,9 @@ def easypay_terminal_view(request):
             ctx = {
                 'status_code': 0,
                 'status_detail': 'Платеж создан',
-                'date_time': timezone.now().strftime(settings.EASYPAY_DATE_FORMAT),
+                'date_time': timezone.now().strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                ),
                 'signature': '',
                 'payment_id': str(payment.id)
             }
@@ -198,7 +265,9 @@ def easypay_terminal_view(request):
             ctx = {
                 'status_code': -1,
                 'status_detail': 'Ошибка при создании платежа',
-                'date_time': timezone.now().strftime(settings.EASYPAY_DATE_FORMAT),
+                'date_time': timezone.now().strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                ),
                 'signature': '',
                 'payment_id': ''
             }

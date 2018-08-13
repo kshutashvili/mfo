@@ -166,3 +166,48 @@ class City24Payment(models.Model):
 
     def __str__(self):
         return str(self.order_id)
+
+
+class PrivatbankPayment(models.Model):
+    transaction_id = models.CharField(
+        "ID транзакции (ПБ)",
+        max_length=128
+    )
+    inrazpredelenie_id = models.CharField(
+        "ID in_razpredelenie",
+        max_length=128
+    )
+    client_name = models.CharField(
+        "ФИО клиента",
+        max_length=255
+    )
+    contract_num = models.CharField(
+        "Номер договора",
+        max_length=128
+    )
+    amount = models.DecimalField(
+        "Cумма платежа",
+        max_digits=10,
+        decimal_places=2
+    )
+    created_dt = models.DateTimeField(
+        "Дата создания транзакции",
+        blank=True,
+        null=True
+    )
+    confirm_dt = models.DateTimeField(
+        "Дата подтверждения транзакции",
+        blank=True,
+        null=True
+    )
+    save_dt = models.DateTimeField(
+        "Дата сохранения",
+        auto_now_add=True
+    )
+
+    class Meta:
+        verbose_name = "Транзакция PrivatBank"
+        verbose_name_plural = "Транзакции PrivatBank"
+
+    def __str__(self):
+        return self.transaction_id

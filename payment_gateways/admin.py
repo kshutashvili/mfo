@@ -26,3 +26,13 @@ class EasypayPaymentAdmin(admin.ModelAdmin):
 @admin.register(City24Payment)
 class City24PaymentAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(PrivatbankPayment)
+class PrivatbankPaymentAdmin(admin.ModelAdmin):
+    list_display = (
+        'transaction_id',
+        'inrazpredelenie_id',
+        'amount',
+        'save_dt'
+    )
