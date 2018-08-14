@@ -433,8 +433,7 @@ def easypay_terminal_view(request):
                     settings.EASYPAY_DATE_FORMAT
                 )
 
-        except Exception as e:
-            print(e)
+        except Exception:
             ctx['status_code'] = -1
             ctx['status_detail'] = 'Платеж не найден'
 
@@ -608,33 +607,3 @@ def city24_terminal_view(request):
         resp = HttpResponse()
 
     return resp
-
-
-class TurnesView(TemplateView):
-    template_name = "test_turnes.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(TurnesView, self).get_context_data()
-        exfin_connection = MySQLdb.connect(
-            host="10.10.100.27",                # host of MySQL database
-            # host="77.88.239.48",                # host of MySQL database
-            user="root",                        # user's username
-            passwd="Orraveza(99)",              # your password
-            db="mbank",                         # name of the database
-            charset="utf8"
-        )
-
-        # create CURSOR and set UTF8 params
-        exfin_cursor = exfin_connection.cursor()
-        exfin_cursor.execute('SET NAMES utf8;')
-        exfin_cursor.execute('SET CHARACTER SET utf8;')
-        exfin_cursor.execute('SET character_set_connection=utf8;')
-
-        exfin_cursor.execute(
-            """
-                SELECT city 
-                FROM mbank.tobjects;
-            """
-        )
-        context["rows"] = exfin_cursor.fetchall()
-        return context

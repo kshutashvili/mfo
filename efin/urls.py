@@ -45,7 +45,7 @@ from users.views import (
     SaveQuestionnaireStepView
 )
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
-                                    city24_terminal_view, TurnesView)
+                                    city24_terminal_view)
 from bankid.views import document_view
 
 
@@ -104,8 +104,6 @@ urlpatterns = i18n_patterns(
 
     path('message/<int:id_mess>/', success_message.success_message, name='success'),
     path('message/<int:id_mess>/<str:redirect_url>/', success_message.success_message, name='success'),
-
-    path('test_turnes1/', TurnesView.as_view(), name="test_turnes"),
 
     path('ajax/departments_generate/<str:dep_id>/', content.departments_generate, name='departments_generate'),
     path('ajax/slider_filler/', content.slider_filler, name='slider_generate'),
