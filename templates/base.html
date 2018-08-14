@@ -74,8 +74,7 @@
 			</button>
 
 			<a href="{% url 'main' %}" class="b-logo">
-				<svg><use xlink:href="{% static 'sprite.svg' %}#svg-logo">
-				</svg>
+				<img src="{% static 'dist/img/logo-menu.png' %}" alt="">
 			</a>
 
 			<div class="s-header__phone">
@@ -201,8 +200,7 @@
 			
 			<div class="s-footer-base">
 				<a href="#" class="b-logo">
-					<svg><use href="{% static 'sprite.svg' %}#svg-logo">
-					</svg>
+					<img src="{% static 'dist/img/logo-menu.png' %}" alt="">
 				</a>
 					{% get_current_language as LC %}
 					{% if '/ru/' in request.path %}
