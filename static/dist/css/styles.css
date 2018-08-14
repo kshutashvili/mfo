@@ -853,7 +853,7 @@ fieldset {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
-    padding: 2rem 0;
+    padding: .5rem 0;
     -webkit-transition: max-height .4s;
     -o-transition: max-height .4s;
     transition: max-height .4s;
