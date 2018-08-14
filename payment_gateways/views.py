@@ -190,48 +190,71 @@ def easypay_terminal_view(request):
     if action == constants.EASYPAY_CHECK:
         template = 'payment_gateways/easypay/response_1_check_success.xml'
         contract_num = action_data['Account']
-        if contract_num:
-            try:
-                credit = Tcredits.objects.get(
-                    contract_num=int(contract_num)
-                )
-                client_qs = Tpersons.objects.filter(id=credit.client_id)
-                if client_qs:
-                    client = client_qs[0]
-                    client_fio = "{0} {1}. {2}.".format(
-                        client.name3,
-                        client.name[0].upper(),
-                        client.name2[0].upper(),
-                    )
-                    ctx = {
-                        'status_code': 0,
-                        'status_detail': 'Платеж разрешен',
-                        'date_time': timezone.now().strftime(
-                            settings.EASYPAY_DATE_FORMAT
-                        ),
-                        'signature': '',
-                        'account_params': {
-                            'Contract': str(contract_num),
-                            'Fio': client_fio,
-                            'Sum': str(credit.vnoska),
-                        }
-                    }
-                    return render(
-                        request,
-                        template,
-                        ctx,
-                        content_type='application/xml'
-                    )
-            except Exception as e:
-                print('Error: ', e)
+
+        try:
+            conn, cursor = create_database_connection(
+                host=settings.TURNES_HOST,
+                user=settings.TURNES_USER,
+                password=settings.TURNES_PASSWORD,
+                db=settings.TURNES_DATABASE
+            )
+        except Exception as e:
+            ctx = {
+                'status_code': -1,
+                'status_detail': 'Ошибка при поиске',
+                'date_time': timezone.now().strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                ),
+                'signature': '',
+                'account_params': {}
+            }
+            return render(
+                request,
+                template,
+                ctx,
+                content_type='application/xml'
+            )
+
+        credit = search_credit(
+            cursor=cursor,
+            contract_num=contract_num
+        )
+
+        conn.close()
+
+        try:
+            credit_row = credit[0]
+        except Exception:
+            # Render error if credit_row is empty
+            # (Credit with particular contract number not found)
+            ctx = {
+                'status_code': -1,
+                'status_detail': 'Договор не найден',
+                'date_time': timezone.now().strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                ),
+                'signature': '',
+                'account_params': {}
+            }
+            return render(
+                request,
+                template,
+                ctx,
+                content_type='application/xml'
+            )
+
         ctx = {
-            'status_code': -1,
-            'status_detail': 'Договор не найден',
+            'status_code': 0,
+            'status_detail': 'Платеж разрешен',
             'date_time': timezone.now().strftime(
                 settings.EASYPAY_DATE_FORMAT
             ),
             'signature': '',
-            'account_params': {}
+            'account_params': {
+                'Contract': str(contract_num),
+                'Fio': credit_row[2],
+                'Sum': str(credit_row[3]),
+            }
         }
         return render(
             request,
@@ -243,25 +266,13 @@ def easypay_terminal_view(request):
     elif action == constants.EASYPAY_PAYMENT:
         template = 'payment_gateways/easypay/response_2_payment_success.xml'
         try:
-            with transaction.atomic():
-                payment = EasypayPayment.objects.create(
-                    service_id=action_data['ServiceId'],
-                    order_id=action_data['OrderId'],
-                    account=action_data['Account'],
-                    amount=action_data['Amount'],
-                )
-
-            ctx = {
-                'status_code': 0,
-                'status_detail': 'Платеж создан',
-                'date_time': timezone.now().strftime(
-                    settings.EASYPAY_DATE_FORMAT
-                ),
-                'signature': '',
-                'payment_id': str(payment.id)
-            }
-        except Exception as e:
-            print(e)
+            payment = EasypayPayment.objects.create(
+                service_id=action_data['ServiceId'],
+                order_id=action_data['OrderId'],
+                account=action_data['Account'],
+                amount=action_data['Amount'],
+            )
+        except Exception:
             ctx = {
                 'status_code': -1,
                 'status_detail': 'Ошибка при создании платежа',
@@ -271,9 +282,27 @@ def easypay_terminal_view(request):
                 'signature': '',
                 'payment_id': ''
             }
+            return render(
+                request,
+                template,
+                ctx,
+                content_type='application/xml'
+            )
+
+        ctx = {
+            'status_code': 0,
+            'status_detail': 'Платеж создан',
+            'date_time': timezone.now().strftime(
+                settings.EASYPAY_DATE_FORMAT
+            ),
+            'signature': '',
+            'payment_id': str(payment.id)
+        }
+
         return render(request, template, ctx, content_type='application/xml')
 
     elif action == constants.EASYPAY_CONFIRM:
+        # defaults
         template = 'payment_gateways/easypay/response_3_payment_confirm_success.xml'
         ctx = {
             'status_code': 0,
@@ -283,31 +312,104 @@ def easypay_terminal_view(request):
             'order_date': ''
         }
 
+        # get payment object, created on previous
+        # constants.EASYPAY_PAYMENT step
         try:
-            with transaction.atomic():
-                payment = EasypayPayment.objects.select_for_update().get(
-                    id=action_data['PaymentId']
-                )
-                payment.confirmed = True
-                payment.confirmed_dt = timezone.now()
-                payment.save()
-                ctx['order_date'] = payment.confirmed_dt.strftime(
-                    settings.EASYPAY_DATE_FORMAT
-                )
-
-                cash = Tcash.objects.create(
-                    sum=payment.amount,
-                    note='easypay',
-                    type='in',
-                    service_code=payment.order_id
-                )
-
-        except Exception as e:
-            print(e)
+            payment = EasypayPayment.objects.get(
+                id=action_data['PaymentId']
+            )
+        except Exception:
             ctx['status_code'] = -1
             ctx['status_detail'] = 'Платеж не найден'
+            return render(
+                request,
+                template,
+                ctx,
+                content_type='application/xml'
+            )
 
-        return render(request, template, ctx, content_type='application/xml')
+        # create turnes connection
+        try:
+            conn, cursor = create_database_connection(
+                host=settings.TURNES_HOST,
+                user=settings.TURNES_USER,
+                password=settings.TURNES_PASSWORD,
+                db=settings.TURNES_DATABASE
+            )
+        except Exception:
+            ctx['status_code'] = -1
+            ctx['status_detail'] = 'Ошибка при оплате'
+            return render(
+                request,
+                template,
+                ctx,
+                content_type='application/xml'
+            )
+
+        # get credit object from Turnes
+        credit = search_credit(
+            cursor=cursor,
+            contract_num=payment.account
+        )
+
+        try:
+            ipn = credit[0][5]
+        except Exception:
+            ctx['status_code'] = -1
+            ctx['status_detail'] = 'Ошибка при оплате'
+            return render(
+                request,
+                template,
+                ctx,
+                content_type='application/xml'
+            )
+
+        data = {
+            "No": payment.order_id,
+            "DogNo": payment.account,
+            "IPN": ipn,
+            "dt": date.today(),
+            "sm": payment.amount,
+            "status": 0,
+            "ibank": 100
+        }
+        data["F"], data["I"], data["O"] = credit[0][2].split(" ")
+
+        # save payment to Turnes in_razpredelenie table
+        try:
+            with transaction.atomic():
+                lastrowid = save_payment(
+                    conn=conn,
+                    cursor=cursor,
+                    data=data
+                )
+        except Exception:
+            ctx['status_code'] = -1
+            ctx['status_detail'] = 'Ошибка при оплате'
+            return render(
+                request,
+                template,
+                ctx,
+                content_type='application/xml'
+            )
+
+        conn.close()
+
+        # save payment confirmation to site's DB
+        payment.confirmed = True
+        payment.confirmed_dt = timezone.now()
+        payment.inrazpredelenie_id = lastrowid
+        payment.save()
+
+        ctx['order_date'] = payment.confirmed_dt.strftime(
+            settings.EASYPAY_DATE_FORMAT
+        )
+        return render(
+            request,
+            template,
+            ctx,
+            content_type='application/xml'
+        )
 
     elif action == constants.EASYPAY_CANCEL:
         template = 'payment_gateways/easypay/response_4_payment_cancel_success.xml'

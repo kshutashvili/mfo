@@ -98,6 +98,11 @@ class EasypayPayment(models.Model):
         max_digits=10,
         decimal_places=2
     )
+    inrazpredelenie_id = models.CharField(
+        "ID in_razpredelenie",
+        max_length=128,
+        blank=True
+    )
     confirmed = models.BooleanField(
         "Подтвержден?",
         default=False

@@ -226,9 +226,9 @@ PROVIDER_4BILL_API_KEY = 'ytb23Bda8fhUX@omw7'
 BANKID_CLIENT_ID = 'b0f1d8f4-9775-49b4-b82f-807fbacc385a'
 BANKID_SECRET = 'N2Y2ZGQ0YjgtYTAyNC00MTkyLTgyZDMtZDNhZjMxM2E5MjQw'
 
-RAVEN_CONFIG = {
-    'dsn': 'https://37c01da58b9341bf88fa4b234044539f:1e3f3fa719e043058763110f38433784@sentry.io/1227127',
-}
+# RAVEN_CONFIG = {
+#     'dsn': 'https://37c01da58b9341bf88fa4b234044539f:1e3f3fa719e043058763110f38433784@sentry.io/1227127',
+# }
 
 try:
     from efin.local_settings import *
