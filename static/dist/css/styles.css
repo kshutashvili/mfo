@@ -884,8 +884,8 @@ fieldset {
 .b-logo {
   margin-right: 2.5641%; }
   .b-logo img {
-    width: 9.2rem;
-    height: 4.8rem; }
+    width: 12.2rem;
+    height: 6.4rem; }
 
 .b-nav {
   display: -webkit-box;
@@ -5257,7 +5257,7 @@ fieldset {
   .s-footer__social {
     display: block; }
   .s-header .wrapper {
-    max-height: 7rem;
+    max-height: 8.5rem;
     padding: 1rem 0;
     ovarflow: hidden; }
   .s-header__phone {
