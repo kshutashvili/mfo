@@ -231,6 +231,6 @@ RAVEN_CONFIG = {
 }
 
 try:
-    from .local_settings import *
+    from efin.local_settings import *
 except ImportError:
     pass
