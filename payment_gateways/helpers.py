@@ -1,3 +1,8 @@
+import re
+from datetime import date
+
+from django.conf import settings
+
 from payment_gateways.utils import create_database_connection
 
 
@@ -72,3 +77,50 @@ def save_payment(conn, cursor, data):
 
     conn.commit()  # submit inserting
     return cursor.lastrowid
+
+
+def run_payments_distribution(pay_date=None):
+    """
+        Execute RunRazpredelenie function
+        in Turnes DB. Distribute payment by pay_date
+        or today date.
+    """
+
+    try:
+        conn, cursor = create_database_connection(
+            host=settings.TURNES_HOST,
+            user=settings.TURNES_USER,
+            password=settings.TURNES_PASSWORD,
+            db=settings.TURNES_DATABASE
+        )
+    except Exception:
+        return None
+
+    if pay_date:
+        # check required format ('1999-01-31')
+        regex = re.match(r"^([0-9]{4}-[0-9]{2}-[0-9]{2})$", pay_date)
+        if regex:
+            q = cursor.execute(
+                """
+                select mbank.RunRazpredelenie('{0}');
+                """.format(pay_date)
+            )
+        else:
+            conn.close()
+            raise Exception("Invalid date format. Must be 'YYYY-MM-DD'")
+    else:
+        q = cursor.execute(
+            """
+            select mbank.RunRazpredelenie('{0}');
+            """.format(
+                date.today().strftime('%Y-%m-%d')
+            )
+        )
+
+        conn.close()
+
+        # q = cursor.execute(
+        #     """
+        #     select mbank.RunRazpredelenie('');
+        #     """
+        # )
