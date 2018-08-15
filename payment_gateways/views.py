@@ -48,7 +48,7 @@ def pb_terminal_view(request):
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при поиске"},
+                {"error_msg": "Ошибка при поиске. Обратитесь в контакт-центр по тел. 0800211112"},
                 content_type="application/xml"
             )
             return resp
@@ -68,7 +68,7 @@ def pb_terminal_view(request):
             resp = render(
                 request,
                 "payment_gateways/pb_response_search_error.xml",
-                {"error_msg": "Клиент не найден"},
+                {"error_msg": "Договор не найден. Обратитесь в контакт-центр по тел. 0800211112"},
                 content_type="application/xml"
             )
             return resp
@@ -109,7 +109,7 @@ def pb_terminal_view(request):
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при оплате"},
+                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
                 content_type="application/xml"
             )
             return resp
@@ -124,7 +124,7 @@ def pb_terminal_view(request):
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при оплате"},
+                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
                 content_type="application/xml"
             )
             return resp
@@ -151,7 +151,7 @@ def pb_terminal_view(request):
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при оплате"},
+                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
                 content_type="application/xml"
             )
             return resp
