@@ -22,7 +22,7 @@ class City24PaymentAdmin(admin.ModelAdmin):
 class PrivatbankPaymentAdmin(admin.ModelAdmin):
     list_display = (
         'transaction_id',
-        'inrazpredelenie_id',
+        'contract_num',
         'amount',
         'save_dt'
     )
