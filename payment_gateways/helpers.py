@@ -53,25 +53,26 @@ def save_payment(conn, cursor, data):
     Save payment in in_razpredelenie table
     in DB Turnes.
     """
-    try:
-        cursor.execute(
-            """
-                INSERT INTO
-                in_razpredelenie (
-                    No, DogNo, IPN, F, I, O,
-                    dt, sm, status, ibank
-                )
-                VALUES (
-                    %s, %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s
-                );
-            """, (
-                data["No"], data["DogNo"], data["IPN"],
-                data["F"], data["I"], data["O"],
-                data["dt"], data["sm"], data["status"],
-                data["ibank"]
-            )
+    query = """
+        INSERT INTO
+        in_razpredelenie (
+            No, DogNo, IPN, F, I, O,
+            dt, sm, status, ibank
         )
+        VALUES (
+            {0}, '{1}', '{2}',
+            '{3}', '{4}', '{5}',
+            '{6}', {7}, {8},
+            {9}
+        );
+    """.format(
+        data["No"], data["DogNo"], data["IPN"],
+        data["F"], data["I"], data["O"],
+        data["dt"], data["sm"], data["status"],
+        data["ibank"]
+    )
+    try:
+        cursor.execute(query)
     except Exception as e:
         raise e
 

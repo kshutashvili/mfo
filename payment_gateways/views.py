@@ -147,7 +147,7 @@ def pb_terminal_view(request):
                     cursor=cursor,
                     data=data
                 )
-        except Exception:
+        except Exception as e:
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",
