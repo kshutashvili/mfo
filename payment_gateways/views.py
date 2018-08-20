@@ -133,12 +133,12 @@ def pb_terminal_view(request):
             "No": pb_code,
             "DogNo": contract_num,
             "IPN": ipn,
+            "F": name,
             "dt": date.today(),
             "sm": total_sum,
             "status": 0,
             "ibank": 284
         }
-        data["F"], data["I"], data["O"] = name.split(" ")
 
         try:
             with transaction.atomic():
