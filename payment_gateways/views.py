@@ -184,13 +184,12 @@ def pb_terminal_view(request):
             data["O"] = ''
 
         try:
-            # with transaction.atomic():
-            #     lastrowid = save_payment(
-            #         conn=conn,
-            #         cursor=cursor,
-            #         data=data
-            #     )
-            lastrowid = 1
+            with transaction.atomic():
+                lastrowid = save_payment(
+                    conn=conn,
+                    cursor=cursor,
+                    data=data
+                )
         except Exception as e:
             telegram_notification(
                 err=e,
