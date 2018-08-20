@@ -21,7 +21,10 @@ from payment_gateways.models import (
 )
 from payment_gateways import constants
 from payment_gateways.utils import create_database_connection
-from payment_gateways.helpers import search_credit, save_payment
+from payment_gateways.helpers import (
+    search_credit, save_payment,
+    telegram_notification
+)
 
 
 @csrf_exempt
@@ -44,7 +47,11 @@ def pb_terminal_view(request):
                 password=settings.TURNES_PASSWORD,
                 db=settings.TURNES_DATABASE
             )
-        except Exception:
+        except Exception as e:
+            telegram_notification(
+                err=e,
+                message='Проблема с подключением к Турнесу'
+            )
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",
@@ -62,7 +69,13 @@ def pb_terminal_view(request):
 
         try:
             credit_row = credit[0]
-        except Exception:
+        except Exception as e:
+            telegram_notification(
+                err=e,
+                message='Неправильно введен номер договора, №{0}'.format(
+                    contract_num
+                )
+            )
             # Render error if credit_row is empty
             # (Credit with particular contract number not found)
             resp = render(
@@ -105,7 +118,11 @@ def pb_terminal_view(request):
                 password=settings.TURNES_PASSWORD,
                 db=settings.TURNES_DATABASE
             )
-        except Exception:
+        except Exception as e:
+            telegram_notification(
+                err=e,
+                message='Проблема с подключением к Турнесу'
+            )
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",
@@ -120,7 +137,13 @@ def pb_terminal_view(request):
         )
         try:
             ipn = credit[0][5]
-        except Exception:
+        except Exception as e:
+            telegram_notification(
+                err=e,
+                message='Проблема с поиском кредита при оплате, дог.{0}'.format(
+                    contract_num
+                )
+            )
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",
@@ -133,21 +156,46 @@ def pb_terminal_view(request):
             "No": pb_code,
             "DogNo": contract_num,
             "IPN": ipn,
-            "F": name,
             "dt": date.today(),
             "sm": total_sum,
             "status": 0,
             "ibank": 284
         }
 
+        names = name.split(" ")
+
         try:
-            with transaction.atomic():
-                lastrowid = save_payment(
-                    conn=conn,
-                    cursor=cursor,
-                    data=data
-                )
+            data["F"] = names[0]
         except Exception as e:
+            telegram_notification(
+                err=e,
+                message='Неполное ФИО'
+            )
+            data["F"] = name
+
+        try:
+            data["I"] = names[1]
+        except Exception:
+            data["I"] = ''
+
+        try:
+            data["O"] = names[2]
+        except Exception:
+            data["O"] = ''
+
+        try:
+            # with transaction.atomic():
+            #     lastrowid = save_payment(
+            #         conn=conn,
+            #         cursor=cursor,
+            #         data=data
+            #     )
+            lastrowid = 1
+        except Exception as e:
+            telegram_notification(
+                err=e,
+                message='Проблема с сохранением транзакции в Турнес'
+            )
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_error.xml",

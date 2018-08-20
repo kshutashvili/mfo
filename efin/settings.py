@@ -230,6 +230,11 @@ RAVEN_CONFIG = {
     'dsn': 'https://37c01da58b9341bf88fa4b234044539f:1e3f3fa719e043058763110f38433784@sentry.io/1227127',
 }
 
+# telegram
+# test group
+TEST_API_KEY = '580592832:AAFV-gWcD4HL6F-FljmrASDyK-O-9hcHgLc'
+TEST_GROUP_ID = '-266220155'
+
 try:
     from efin.local_settings import *
 except ImportError:

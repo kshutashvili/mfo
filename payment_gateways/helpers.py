@@ -1,6 +1,8 @@
 import re
 from datetime import date
 
+import telepot
+
 from django.conf import settings
 
 from payment_gateways.utils import create_database_connection
@@ -125,3 +127,25 @@ def run_payments_distribution(pay_date=None):
         #     select mbank.RunRazpredelenie('');
         #     """
         # )
+
+
+def telegram_notification(err='', message=''):
+    """
+        Send fail messages to telegram group
+    """
+    # success \U00002705
+    # fail \U0000274C
+    try:
+        # try authenticate bot
+        test_bot = telepot.Bot(settings.TEST_API_KEY)
+    except Exception:
+        # if connection is not established, do nothing
+        return
+
+    test_bot.sendMessage(
+        settings.TEST_GROUP_ID,
+        "\U0000274C{0}\n{1}".format(
+            err,
+            message
+        )
+    )
