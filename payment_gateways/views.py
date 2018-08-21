@@ -159,7 +159,7 @@ def pb_terminal_view(request):
             "dt": date.today(),
             "sm": total_sum,
             "status": 0,
-            "ibank": 284
+            "ibank": '26509056200284'
         }
 
         names = name.split(" ")
