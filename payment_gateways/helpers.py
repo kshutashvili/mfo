@@ -19,6 +19,7 @@ def search_credit(cursor, contract_num):
     3 - Credit vnoska
     4 - Credit status (must be 5)
     5 - Client IPN
+    6 - Client Dolg (body + fine + prc)
     """
     try:
         cursor.execute(
@@ -26,15 +27,17 @@ def search_credit(cursor, contract_num):
                 SELECT
                     tc.id,
                     tc.client_id,
-                    concat(tp.name3, ' ', tp.name, ' ', tp.name2),
+                    GETPERSONNAMES(tc.client_id),
                     tc.vnoska,
                     ts.status,
-                    tc.egn
+                    tc.egn,
+                    dwh.GetDolgBody(tc.id, date(now()))+
+                    dwh.GetDolgFine(tc.id, date(now()))+
+                    dwh.GetDolgPrc(tc.id, date(now()))
                 FROM
                     mbank.tcredits tc
                 join mbank.tstatuses ts on ts.credit_id = tc.id
                                        and ts.is_last = 1
-                join mbank.tpersons tp on tp.id = tc.client_id
                 WHERE tc.contract_num = {0}
                   and ts.status = 5;
             """.format(contract_num)

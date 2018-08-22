@@ -90,7 +90,7 @@ def pb_terminal_view(request):
                 "contract_num": contract_num,
                 "service_code": settings.PB_SERVICE_CODE,
                 "vnoska": number_format(
-                    value=credit_row[3],
+                    value=credit_row[6] if credit_row[6] > 0 else 0,
                     use_l10n=False
                 ),
                 "client_fio": credit_row[2]
