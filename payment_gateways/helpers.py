@@ -61,7 +61,7 @@ def save_payment(conn, cursor, data):
             No, DogNo, IPN, F, I, O, dt, sm, status, ibank
         )
         VALUES (
-            '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', {7}, {8}, '{9}'
+            "{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", {7}, {8}, "{9}"
         );
     """.format(
         data["No"], data["DogNo"], data["IPN"],
