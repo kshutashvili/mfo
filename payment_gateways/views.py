@@ -110,6 +110,10 @@ def pb_terminal_view(request):
 
         p = PrivatbankPayment.objects.filter(transaction_id=pb_code)
         if p:
+            telegram_notification(
+                err='',
+                message='Дубль платежа {0}'.format(pb_code)
+            )
             resp = render(
                 request,
                 "payment_gateways/pb_response_pay_success.xml",
@@ -200,7 +204,7 @@ def pb_terminal_view(request):
         except Exception as e:
             telegram_notification(
                 err=e,
-                message='Проблема с сохранением транзакции в Турнес'
+                message='Проблема с сохранением транзакции в Турнес. {0}'.format(str(data))
             )
             resp = render(
                 request,
