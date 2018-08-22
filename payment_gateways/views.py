@@ -1,8 +1,6 @@
 from decimal import Decimal
 from datetime import date
 
-import MySQLdb
-
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -11,7 +9,6 @@ from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
 from django.utils.formats import number_format
-from django.views.generic.base import TemplateView
 
 from payment_gateways.utils import process_pb_request, process_easypay_request
 from payment_gateways.models import (
@@ -110,6 +107,16 @@ def pb_terminal_view(request):
         total_sum = Decimal(data['TotalSum'])
         create_time = data['CreateTime']
         confirm_time = data['ConfirmTime']
+
+        p = PrivatbankPayment.objects.filter(transaction_id=pb_code)
+        if p:
+            resp = render(
+                request,
+                "payment_gateways/pb_response_pay_success.xml",
+                {"cash_id": p[0].id},
+                content_type="application/xml"
+            )
+            return resp
 
         try:
             conn, cursor = create_database_connection(

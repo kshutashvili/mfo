@@ -37,6 +37,7 @@ raven==6.9.0
 requests==2.18.4
 simplejson==3.6.5
 six==1.11.0
+SQLAlchemy==1.2.11
 telepot==12.6
 twilio==6.11.0
 urllib3==1.22

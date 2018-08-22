@@ -176,7 +176,8 @@ class City24Payment(models.Model):
 class PrivatbankPayment(models.Model):
     transaction_id = models.CharField(
         "ID транзакции (ПБ)",
-        max_length=128
+        max_length=128,
+        unique=True
     )
     inrazpredelenie_id = models.CharField(
         "ID in_razpredelenie",
