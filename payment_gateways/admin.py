@@ -26,3 +26,4 @@ class PrivatbankPaymentAdmin(admin.ModelAdmin):
         'amount',
         'save_dt'
     )
+    date_hierarchy = 'save_dt'
