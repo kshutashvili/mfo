@@ -27,3 +27,4 @@ class PrivatbankPaymentAdmin(admin.ModelAdmin):
         'save_dt'
     )
     date_hierarchy = 'save_dt'
+    list_per_page = 200
