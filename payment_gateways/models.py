@@ -93,6 +93,11 @@ class EasypayPayment(models.Model):
         "Идентификатор пользователя (№ договора)",
         max_length=128
     )
+    client_name = models.CharField(
+        "ФИО клиента",
+        max_length=255,
+        blank=True
+    )
     amount = models.DecimalField(
         "Cумма платежа",
         max_digits=10,
@@ -108,7 +113,7 @@ class EasypayPayment(models.Model):
         default=False
     )
     confirmed_dt = models.DateTimeField(
-        "Дата заказа",
+        "Дата подтверждения",
         blank=True,
         null=True
     )
@@ -117,9 +122,13 @@ class EasypayPayment(models.Model):
         default=False
     )
     cancel_dt = models.DateTimeField(
-        "Дата отмены заказа",
+        "Дата отмены",
         blank=True,
         null=True
+    )
+    save_dt = models.DateTimeField(
+        "Дата сохранения",
+        auto_now_add=True
     )
 
     class Meta:
@@ -132,26 +141,36 @@ class EasypayPayment(models.Model):
 
 class City24Payment(models.Model):
     service_id = models.IntegerField(
-        "Номер EF в системе City24"
+        "Номер EF в системе Банк 'Фамільний'"
     )
     order_id = models.BigIntegerField(
-        "Уникальный идентификатор транзакции City24"
+        "Уникальный идентификатор транзакции Банк 'Фамільний'"
     )
     account = models.CharField(
         "Идентификатор пользователя (№ договора)",
         max_length=128
+    )
+    client_name = models.CharField(
+        "ФИО клиента",
+        max_length=255,
+        blank=True
     )
     amount = models.DecimalField(
         "Cумма платежа",
         max_digits=10,
         decimal_places=2
     )
+    inrazpredelenie_id = models.CharField(
+        "ID in_razpredelenie",
+        max_length=128,
+        blank=True
+    )
     confirmed = models.BooleanField(
         "Подтвержден?",
         default=False
     )
     confirmed_dt = models.DateTimeField(
-        "Дата заказа",
+        "Дата подтверждения",
         blank=True,
         null=True
     )
@@ -160,14 +179,18 @@ class City24Payment(models.Model):
         default=False
     )
     cancel_dt = models.DateTimeField(
-        "Дата отмены заказа",
+        "Дата отмены",
         blank=True,
         null=True
     )
+    save_dt = models.DateTimeField(
+        "Дата сохранения",
+        auto_now_add=True
+    )
 
     class Meta:
-        verbose_name = 'Транзакция City24'
-        verbose_name_plural = 'Транзакции City24'
+        verbose_name = "Транзакция Банк 'Фамільний'"
+        verbose_name_plural = "Транзакции Банк 'Фамільний'"
 
     def __str__(self):
         return str(self.order_id)

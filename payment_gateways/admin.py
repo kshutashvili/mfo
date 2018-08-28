@@ -6,16 +6,21 @@ from .models import *
 @admin.register(EasypayPayment)
 class EasypayPaymentAdmin(admin.ModelAdmin):
     list_display = (
-        'service_id',
         'order_id',
         'account',
-        'confirmed'
+        'confirmed',
+        'save_dt'
     )
 
 
 @admin.register(City24Payment)
 class City24PaymentAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        'order_id',
+        'account',
+        'confirmed',
+        'save_dt'
+    )
 
 
 @admin.register(PrivatbankPayment)
