@@ -9,7 +9,11 @@ from django.conf import settings
 from django.db import transaction
 from django.utils.formats import number_format
 
-from payment_gateways.utils import process_pb_request, process_easypay_request
+from payment_gateways.utils import (
+    process_pb_request,
+    process_easypay_request,
+    process_fam_request
+)
 from payment_gateways.models import (
     Tcredits, Tpersons, Tcash,
     EasypayPayment, City24Payment,
@@ -222,6 +226,9 @@ def pb_terminal_view(request):
             created_dt=create_time,
             confirm_dt=confirm_time
         )
+
+        conn.close()
+
         resp = render(
             request,
             "payment_gateways/pb_response_pay_success.xml",
@@ -625,13 +632,13 @@ def easypay_terminal_view(request):
 @require_POST
 def fam_terminal_view(request):
 
-    is_valid, action, action_data = process_easypay_request(request)
+    is_valid, action, action_data = process_fam_request(request)
 
     if not is_valid:
         return HttpResponseBadRequest("Операция не поддерживается")
 
     if action == constants.EASYPAY_CHECK:
-        template = 'payment_gateways/easypay/response_1_check_success.xml'
+        template = 'payment_gateways/fam/response_1_check.xml'
         contract_num = action_data['Account']
 
         try:
@@ -705,8 +712,8 @@ def fam_terminal_view(request):
             'signature': '',
             'account_params': {
                 'Contract': str(contract_num),
-                'Fio': credit_row[2],
-                'Sum': str(credit_row[3]),
+                'Name': credit_row[2],
+                'Balance': str(credit_row[3]),
             }
         }
         return render(
@@ -717,8 +724,30 @@ def fam_terminal_view(request):
         )
 
     elif action == constants.EASYPAY_PAYMENT:
-        template = 'payment_gateways/easypay/response_2_payment_success.xml'
+        template = 'payment_gateways/fam/response_2_payment.xml'
         contract_num = action_data['Account']
+
+        p = City24Payment.objects.filter(order_id=action_data['OrderId'])
+        if p:
+            telegram_notification(
+                err='',
+                message='Дубль платежа {0}'.format(action_data['OrderId'])
+            )
+            ctx = {
+                'status_code': -1,
+                'status_detail': 'Ошибка при создании платежа',
+                'date_time': datetime.now().strftime(
+                    settings.EASYPAY_DATE_FORMAT
+                ),
+                'signature': '',
+                'payment_id': ''
+            }
+            return render(
+                request,
+                template,
+                ctx,
+                content_type='application/xml'
+            )
 
         try:
             conn, cursor = create_database_connection(
@@ -825,7 +854,7 @@ def fam_terminal_view(request):
 
     elif action == constants.EASYPAY_CONFIRM:
         # defaults
-        template = 'payment_gateways/easypay/response_3_payment_confirm_success.xml'
+        template = 'payment_gateways/fam/response_3_payment_confirm.xml'
         ctx = {
             'status_code': 0,
             'status_detail': 'Платеж успешно проведен',
@@ -970,7 +999,7 @@ def fam_terminal_view(request):
         )
 
     elif action == constants.EASYPAY_CANCEL:
-        template = 'payment_gateways/easypay/response_4_payment_cancel_success.xml'
+        template = 'payment_gateways/fam/response_4_payment_cancel.xml'
         ctx = {
             'status_code': 0,
             'status_detail': 'Платеж успешно отменен',

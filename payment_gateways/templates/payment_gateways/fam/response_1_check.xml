@@ -1,0 +1,11 @@
+<Response>
+    <StatusCode>{{ status_code }}</StatusCode>
+    <StatusDetail>{{ status_detail }}</StatusDetail>
+    <DateTime>{{ date_time }}</DateTime>
+    <Sign>{{ signature }}</Sign>
+    <AccountInfo>
+        {% for param, value in account_params.items %}
+            <{{ param }}>{{ value }}</{{ param }}>
+        {% endfor %}
+    </AccountInfo>
+</Response>
