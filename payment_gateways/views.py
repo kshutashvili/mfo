@@ -227,6 +227,28 @@ def pb_terminal_view(request):
             confirm_dt=confirm_time
         )
 
+        try:
+            with transaction.atomic():
+                query = """
+                    SELECT mbank.RunRazpredelenieOnlineNew("{0}");
+                """.format(
+                    date.today()
+                )
+                cursor.execute(query)
+                conn.commit()
+        except Exception as e:
+            telegram_notification(
+                err=e,
+                message='Проблема с разнесением платежа'
+            )
+            resp = render(
+                request,
+                "payment_gateways/pb_response_pay_error.xml",
+                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
+                content_type="application/xml"
+            )
+            return resp
+
         conn.close()
 
         resp = render(
