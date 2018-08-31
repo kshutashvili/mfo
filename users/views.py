@@ -66,7 +66,7 @@ def register(request):
                     'id_mess': id_mess
                 })
                 return HttpResponseRedirect(url)
-            elif user and user.ready_for_turnes == False:
+            elif user and user.ready_for_turnes is False:
                 print("Not active")
                 return sms(
                     request,
@@ -85,10 +85,8 @@ def register(request):
                     reverse('register_verify'),
                     user
                 )
-        # else:
-        #     status_message = _('invalid phone')
-        #     url = reverse('callback', kwargs={'status_message':status_message})
-        #     return HttpResponseRedirect(url)
+    else:
+        return HttpResponseRedirect(reverse('main'))
 
 
 def set_password(request):
@@ -171,8 +169,8 @@ def user_login(request, status_message=None):
                 # checking if user changed password which received from SMS
                 if user.changed_default_password:
                     return HttpResponseRedirect(reverse('profile'))
-                elif not user.ready_for_turnes:
-                    return HttpResponseRedirect(reverse('questionnaire'))
+                # elif not user.ready_for_turnes:
+                #     return HttpResponseRedirect(reverse('questionnaire'))
                 else:
                     # if no, redirects to change password page
                     return HttpResponseRedirect(reverse('set_password'))
@@ -358,7 +356,18 @@ class RequestPersonalAreaView(CreateView):
     model = RequestPersonalArea
     form_class = RequestPersonalAreaForm
     template_name = 'request-personal-area.html'
-    success_url = '/'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        if self.object.turnes_person_id:
+            url = reverse('login')
+        else:
+            url = reverse('success', kwargs={
+                'redirect_url': 'request-personal-area',
+                'id_mess': 5
+            })
+        return HttpResponseRedirect(url)
 
 
 class ResetPasswordView(FormView):
@@ -404,12 +413,20 @@ class ResetPasswordConfirmView(FormView):
         print("ResetPasswordConfirmView", phone)
         if phone:
             phone = phone.split("+")[1]
-        kwargs['user'] = User.objects.get(mobile_phone=phone)
+        try:
+            kwargs['user'] = User.objects.get(mobile_phone=phone)
+        except Exception:
+            kwargs['user'] = None
         print("USERR", kwargs['user'])
         return kwargs
 
     def form_valid(self, form):
-        form.save()
+        # if User object is None, return invalid form
+        try:
+            form.save()
+        except AttributeError:
+            return super().form_invalid(form)
+
         # Updating the password logs out all other sessions for the user
         # except the current one.
         update_session_auth_hash(self.request, form.user)
@@ -429,7 +446,12 @@ class CallbackVerifyView(SMSVerifyView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         bid_id = self.request.session.get('bid_id', '')
-        bid = Bid.objects.filter(id=int(bid_id))
+
+        try:
+            bid = Bid.objects.filter(id=int(bid_id))
+        except Exception:
+            return {}
+
         if bid:
             kwargs.update({
                 'bid': bid[0]

@@ -498,7 +498,7 @@ def get_person_id(contract_num, phone):
     exfin_cursor.execute('SET NAMES utf8;')
     exfin_cursor.execute('SET CHARACTER SET utf8;')
     exfin_cursor.execute('SET character_set_connection=utf8;')
-
+    print("get_person_id", contract_num, phone)
     exfin_cursor.execute(
         """
             SELECT
@@ -506,18 +506,20 @@ def get_person_id(contract_num, phone):
                 tc.client_id,
                 ts.status as last_status,
                 ts.dt_created,
-                tp.tel_mob_num
+                CONCAT(td.name, tp.tel_mob_num)
+
             FROM
                 mbank.tcredits tc
-            join mbank.tstatuses ts on ts.credit_id = tc.id
+            join mbank.tstatuses ts on ts.credit_id = tc.id and ts.is_last = 1
             join mbank.tpersons tp on tp.id = tc.client_id
+            join mbank.tdropdown_details td on td.id = tp.tel_mob_kod
             WHERE tc.contract_num =  {0}
             ORDER BY ts.dt_created DESC
             LIMIT 1;
         """.format(contract_num)
     )
     person_id = exfin_cursor.fetchall()
-
+    print(person_id)
     try:
         """
             if credit status == 5 return client's ID

@@ -1,9 +1,7 @@
 from twilio.rest import Client
 
 from django.utils.crypto import get_random_string
-
-from users.models import RequestPersonalArea, User
-from content.helpers import clear_contact_phone
+from django.conf import settings
 
 
 def make_user_password(user_obj):
@@ -30,3 +28,18 @@ def make_user_password(user_obj):
     )
     print("new_user_password", new_user_password)
     return new_user_password
+
+
+def send_password(to, password):
+    client = Client(
+        settings.TWILIO_ACCOUNT_SID,
+        settings.TWILIO_AUTH_TOKEN
+    )
+    message = client.messages.create(
+        body="Ваш пароль на сайте exf.in.ua: {0}".format(password),
+        from_=settings.TWILIO_PHONE_NUMBER,
+        # to="+{0}".format(to)
+        to="+380631280489"
+    )
+    if message.sid:
+        return message.sid

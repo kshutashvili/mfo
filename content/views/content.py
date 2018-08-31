@@ -5,7 +5,7 @@ from wsgiref.util import FileWrapper
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import (HttpResponse, HttpResponseRedirect, JsonResponse,
-                         HttpResponseBadRequest)
+                         HttpResponseBadRequest, HttpResponseNotAllowed)
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import urlencode, force_escape
 from django.utils.safestring import mark_safe
@@ -307,7 +307,7 @@ def save_credit_request(request):
                 redirect_to=request.POST.get('callback')
             )
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseRedirect(reverse('main'))
 
 
 def request_callback(request):
@@ -390,7 +390,7 @@ def request_callback(request):
         })
         return HttpResponseRedirect(url)
 
-    return HttpResponseBadRequest()
+    return HttpResponseNotAllowed(['POST'])
 
 
 class CallbackSuccessView(TemplateView):
@@ -433,7 +433,7 @@ def question_add(request):
         else:
             return HttpResponseBadRequest()
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseNotAllowed(['POST'])
 
 
 def question_generate(request):

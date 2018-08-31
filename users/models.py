@@ -1,9 +1,14 @@
+from twilio.rest import Client
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.utils.crypto import get_random_string
+from django.conf import settings
 
 from users.utils import get_person_id
+from users.helpers import send_password
 from users.validators import mobile_phone_number
 from users.managers import UserManager
 from content.helpers import clear_contact_phone
@@ -130,12 +135,20 @@ class RequestPersonalArea(models.Model):
     mobile_phone_number = models.CharField(
         "Номер телефона",
         max_length=32,
-        validators=[mobile_phone_number, ],
-        unique=True
+        validators=[mobile_phone_number, ]
     )
     turnes_person_id = models.CharField(
         "ID клиента в БД Turnes",
         max_length=32,
+        blank=True
+    )
+    has_account = models.BooleanField(
+        "Создан аккаунт",
+        default=False
+    )
+    message_sid = models.CharField(
+        "Twillio message SID",
+        max_length=64,
         blank=True
     )
 
@@ -147,21 +160,46 @@ class RequestPersonalArea(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        # search request object with particular
-        found_object = RequestPersonalArea.objects.filter(
-            contract_num=self.contract_num
-        ).exists()
+        # search previous Requests with current contract_num
+        if RequestPersonalArea.objects.filter(contract_num=self.contract_num).exists():
+            qs = RequestPersonalArea.objects.filter(contract_num=self.contract_num)
+            self.has_account = qs[0].has_account
+            qs.delete()
 
-        if found_object:
-            return
-
-        print("CLEARING PHONE", clear_contact_phone(self.mobile_phone_number))
+        # get Turnes ID for current contract_num
         self.turnes_person_id = get_person_id(
             contract_num=self.contract_num,
             phone=clear_contact_phone(self.mobile_phone_number)
         )
+        if self.turnes_person_id and not self.has_account:
+            self.create_user_after_request()
+            self.has_account = True
 
         super(RequestPersonalArea, self).save(*args, **kwargs)
+
+    def create_user_after_request(self, *args, **kwargs):
+        try:
+            new_user = User.objects.create(
+                first_name=self.name,
+                mobile_phone=clear_contact_phone(self.mobile_phone_number),
+                turnes_person_id=self.turnes_person_id
+            )
+        except Exception:
+            return False
+        new_user_password = get_random_string(length=8)
+        new_user.set_password(new_user_password)
+        new_user.save()
+
+        # m_sid = send_password(
+        #     to=clear_contact_phone(self.mobile_phone_number),
+        #     password=new_user_password
+        # )
+        m_sid = send_password(
+            to="+380631280489",
+            password=new_user_password
+        )
+        if m_sid:
+            self.message_sid = m_sid
 
 
 class Questionnaire(models.Model):
