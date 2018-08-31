@@ -49,7 +49,7 @@ from users.helpers import make_user_password
 from users.models import (
     Profile, RequestPersonalArea, User, Questionnaire
 )
-from users.utils import test_user_turnes
+from users.utils import test_user_turnes, get_turnes_profile
 
 
 def register(request):
@@ -213,7 +213,7 @@ def user_logout(request):
 
 def profile(request, active=None):
     if request.method == 'GET':
-        turnes_profile = test_user_turnes(
+        turnes_profile = get_turnes_profile(
             turnes_id=request.user.turnes_person_id
         )
         pay_form = PayForm()
