@@ -102,3 +102,33 @@ class KeyFor4billAPI(SingletonModel):
 
     class Meta:
         verbose_name = 'Key для 4bill API'
+
+
+class PaymentPrivat(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='privat_lk_pays',
+        on_delete=models.CASCADE
+    )
+    tpp_id = models.BigIntegerField(
+        "ID записи в таблице tpp БД turnes",
+        blank=True,
+        null=True
+    )
+    contract_num = models.CharField(
+        "Номер договора",
+        max_length=32
+    )
+    amount = models.DecimalField(
+        "Сумма платежа",
+        max_digits=10,
+        decimal_places=2
+    )
+    created_dt = models.DateTimeField(
+        "Дата создания",
+        auto_now_add=True
+    )
+    updated_dt = models.DateTimeField(
+        "Дата последнего обновления",
+        auto_now=True
+    )

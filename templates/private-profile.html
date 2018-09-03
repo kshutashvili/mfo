@@ -198,9 +198,9 @@
                         {% endfor %}
                         {% endfor %}
 
-                        <h3 class="s-title">{% trans "Состояние кредита" %}</h3>
+                        <h3 class="s-title">{% trans "Ожидаемые вноски" %}</h3>
                         {% for credit in turnes_profile.credits %}
-                        {% for tpp in credit.tpp %}
+                        {% for tpp in credit.tpp_unpaid %}
                         <div class="application">
                             <div class="application__info">
                                 <p class="application__person">{{ turnes_profile.names }}</p>
@@ -239,6 +239,50 @@
                         </div>
                         {% endfor %}
                         {% endfor %}
+
+
+                        <h3 class="s-title">{% trans "Ожидаемые вноски" %}</h3>
+                        {% for credit in turnes_profile.credits %}
+                        {% for tpp in credit.tpp_paid %}
+                        <div class="application">
+                            <div class="application__info">
+                                <p class="application__person">{{ turnes_profile.names }}</p>
+                                <p class="application__goal">{% trans "Сумма" %}: {{ credit.sum }} грн.</p>
+                                <p class="application__sum">{% trans "№ договора" %}: <b>{{ credit.contract_num }}</b></p>
+                                <p class="application__termin">{% trans "Дата договора" %}: <b> {{ credit.contract_date }}</b></p>
+                            </div>
+                            <div class="application__block">
+                                <h3 class="application__block-title">{% trans "Сума внеску" %}</h3>
+                                <div class="application__block-sum application__block-sum--secondary">
+                                    {{ tpp.vnoska|floatformat:"2" }}
+                                </div>
+                                <form action="{% url 'payments:create' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="contract_num" id="id_contract_num" value="{{ credit.contract_num }}">
+
+                                    <input type="hidden" name="pay_amount" id="id_pay_amount" value="{{ tpp.rest_sum|unlocalize }}">
+
+                                    <input type="hidden" name="tpp_id" id="id_tpp_id" value="{{ tpp.id }}">
+                                    {% if tpp.ispaid %}
+                                        <button type="submit" class="b-btn-app" disabled>{% trans "Оплачено" %}</a>
+                                    {% else %}
+                                        <button type="submit" class="b-btn-app">{% trans "Оплатить" %}</a>
+                                    {% endif %}
+                                </form>
+                            </div>
+                            <div class="application__block">
+                                <h3 class="application__block-title">{% trans "Осталось оплатить" %}</h3>
+                                <div class="application__block-sum application__block-sum--secondary">{% if tpp.ispaid %}0{% else %}{{ tpp.rest_sum|floatformat:"2" }}{% endif %}</div>
+                                <div class="application__block-termin">до {{ tpp.date|date:"d.m.Y" }}<i></i>
+                                </div>
+                            </div>
+                            <div class="application__block">
+                                <a href="#!" class="b-btn-app">{% trans "Погасить кредит" %}</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+
                         <button class="b-btn-unactive">{% trans "Архив" %}</button>
                     </div>
 

@@ -890,11 +890,9 @@ def get_turnes_profile(turnes_id):
         )
         credit_tpp = exfin_cursor.fetchall()
 
-        tpp_data_list = []
-        pay_sums = []
-        dolg_sums = []
-        rest_sums = []
-        tpp_pay_sums = []
+        tpp_paid_list = []
+        tpp_unpaid_list = []
+
         credit_today_dolgs = []
         exfin_cursor.execute(
             """
@@ -921,28 +919,41 @@ def get_turnes_profile(turnes_id):
         )
 
         for i, tpp in enumerate(credit_tpp):
-
-            tpp_data_list.append(
-                {
-                    "id": tpp[0],
-                    "date": tpp[3],
-                    "ispaid": tpp[4],
-                    "rest_sum": float(tpp[2]) - float(tpp[6]),
-                    "vnoska": float(tpp[2])
-                }
-            )
+            if tpp[4] == 1:
+                tpp_paid_list.append(
+                    {
+                        "id": tpp[0],
+                        "date": tpp[3],
+                        "ispaid": tpp[4],
+                        "rest_sum": float(tpp[2]) - float(tpp[6]),
+                        "vnoska": float(tpp[2])
+                    }
+                )
+            else:
+                tpp_unpaid_list.append(
+                    {
+                        "id": tpp[0],
+                        "date": tpp[3],
+                        "ispaid": tpp[4],
+                        "rest_sum": float(tpp[2]) - float(tpp[6]),
+                        "vnoska": float(tpp[2])
+                    }
+                )
 
         credits.append(
             {
                 "sum": credit[2],
                 "contract_date": credit[4].strftime("%d.%m.%Y"),
                 "contract_num": credit[5],
-                "tpp": tpp_data_list,
+                "tpp_unpaid": tpp_unpaid_list,
+                "tpp_paid": tpp_paid_list,
                 "dolg": credit_today_dolgs
             }
         )
-    pprint(credits)
-
+    # filtered_tpp = []
+    # for credit in credits:
+    #     filtered_tpp.append(credit["tpp"])
+    # pprint(filtered_tpp)
     return {
         "names": " ".join([
             person_data[12],

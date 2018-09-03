@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Payment
+from .models import Payment, PaymentPrivat
 
 
 class PayForm(forms.Form):
@@ -31,5 +31,15 @@ class PaymentForm(forms.ModelForm):
             'amount',
             'description',
             'status',
+            'tpp_id'
+        )
+
+
+class PaymentPrivatForm(forms.ModelForm):
+    class Meta:
+        model = PaymentPrivat
+        fields = (
+            'amount',
+            'contract_num',
             'tpp_id'
         )

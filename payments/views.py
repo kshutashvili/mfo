@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from .forms import PayForm, PaymentForm
+from .forms import PayForm, PaymentForm, PaymentPrivatForm
 from .models import Payment
 from .utils import get_client_ip, Provider4billAPI
 
@@ -143,3 +143,35 @@ def callback_payment(request, payment_id):
                 payment.status = Payment.PENDING
                 payment.save()
     return HttpResponse()
+
+
+def create_privat_payment(request):
+    if request.method == 'POST':
+        pay_form = PayForm(request.POST)
+        if pay_form.is_valid():
+            payment_form = PaymentPrivatForm(data={
+                'amount': pay_form.cleaned_data["pay_amount"],
+                'contract_num': pay_form.cleaned_data["contract_num"],
+                'tpp_id': pay_form.cleaned_data["tpp_id"]
+            })
+            if payment_form.is_valid():
+                # setting current user as payer
+                payment_obj = payment_form.save(commit=False)
+                payment_obj.user = request.user
+                payment_obj.save()
+
+                pay_url = settings.PRIVAT_PAYMENT_URL + pay_form.cleaned_data["contract_num"]
+
+                return HttpResponseRedirect(
+                    pay_url
+                )
+            else:
+                return HttpResponseRedirect(
+                    reverse("profile")
+                )
+        else:
+            return HttpResponseRedirect(
+                reverse("profile")
+            )
+    else:
+        return HttpResponseBadRequest()
