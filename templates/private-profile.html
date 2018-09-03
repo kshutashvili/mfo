@@ -178,7 +178,7 @@
                                     {% csrf_token %}
                                     <input type="hidden" name="contract_num" id="id_contract_num" value="{{ credit.contract_num }}">
                                     <input type="hidden" name="pay_amount" id="id_pay_amount" value="{{ dolg.dolg_sum|unlocalize }}">
-                                    <input type="hidden" name="tpp_id" id="id_tpp_id" value="{{ tpp.id }}">
+                                    <input type="hidden" name="tpp_id" id="id_tpp_id" value="0">
                                     {% if dolg.dolg_sum > 0 %}
                                         <button type="submit" class="b-btn-app">{% trans "Оплатить" %}</a>
                                     {% endif %}
