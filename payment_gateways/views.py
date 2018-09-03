@@ -1,5 +1,5 @@
 from decimal import Decimal
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -110,10 +110,11 @@ def pb_terminal_view(request):
         total_sum = Decimal(data['TotalSum'])
         create_time = data['CreateTime']
         confirm_time = data['ConfirmTime']
-        telegram_notification(
-            err='',
-            message=create_time
-        )
+
+        date_for_turnes = date.today()
+        if datetime.now().hour >= 22:
+            date_for_turnes = date_for_turnes + timedelta(days=1)
+
         p = PrivatbankPayment.objects.filter(transaction_id=pb_code)
         if p:
             telegram_notification(
@@ -173,7 +174,7 @@ def pb_terminal_view(request):
             "No": pb_code,
             "DogNo": contract_num,
             "IPN": ipn,
-            "dt": date.today(),
+            "dt": date_for_turnes,
             "sm": total_sum,
             "status": 0,
             "ibank": '26509056200284'
@@ -201,12 +202,13 @@ def pb_terminal_view(request):
             data["O"] = ''
 
         try:
-            with transaction.atomic():
-                lastrowid = save_payment(
-                    conn=conn,
-                    cursor=cursor,
-                    data=data
-                )
+            # with transaction.atomic():
+            #     lastrowid = save_payment(
+            #         conn=conn,
+            #         cursor=cursor,
+            #         data=data
+            #     )
+            lastrowid = 1
         except Exception as e:
             telegram_notification(
                 err=e,
