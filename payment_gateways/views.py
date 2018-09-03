@@ -179,7 +179,10 @@ def pb_terminal_view(request):
             "status": 0,
             "ibank": '26509056200284'
         }
-
+        telegram_notification(
+            err='',
+            message='{0}'.format(data)
+        )
         names = name.split(" ")
 
         try:
