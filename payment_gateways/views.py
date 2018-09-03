@@ -110,7 +110,10 @@ def pb_terminal_view(request):
         total_sum = Decimal(data['TotalSum'])
         create_time = data['CreateTime']
         confirm_time = data['ConfirmTime']
-
+        telegram_notification(
+            err='',
+            message=create_time
+        )
         p = PrivatbankPayment.objects.filter(transaction_id=pb_code)
         if p:
             telegram_notification(
