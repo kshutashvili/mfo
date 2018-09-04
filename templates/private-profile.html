@@ -21,8 +21,8 @@
                 <nav class="s-head__nav s-head__nav--primary">
                     <div class="s-head__nav-more">{% trans "Больше информации" %}</div>
                     
-                    <button data-btn="program" class="s-head__nav-btn">{% trans "Программа лояльности" %}</button>
-                    <button data-btn="application" class="s-head__nav-btn">{% trans "Мои заявки" %}</button>
+                    <button data-btn="program" class="s-head__nav-btn disable">{% trans "Программа лояльности" %}</button>
+                    <button data-btn="application" class="s-head__nav-btn disable">{% trans "Мои заявки" %}</button>
                     <button data-btn="condition" class="s-head__nav-btn">{% trans "Состояние кредита" %}</button>
                     <button data-btn="profile" class="s-head__nav-btn {% if not active %}active{% endif %}">{% trans "Профиль" %}</button>
                     <button data-btn="message" class="s-head__nav-btn {% if active and active == 'mess' %}active{% endif %}">{% trans "Сообщения" %} {% if count_not_read_questions != 0 %}<span data-count="{{ count_not_read_questions }}" class="message-numb">+{{ count_not_read_questions }}</span>{% endif %}</button>
@@ -79,7 +79,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="profile__container">
+                        <div class="profile__container disable">
                             <h4 class="profile__title">{% trans 'Двухфакторная авторизация' %}</h4>
                             <form action="{% url 'alter_profile' %}" class="profile_data" data-field="authy" method="post">
                             {% csrf_token %}
@@ -89,7 +89,7 @@
                                 </label>
                             </form>
                         </div>
-                        <div class="profile__container">
+                        <div class="profile__container disable">
                             <h4 class="profile__title">{% trans 'Документы' %}</h4>
                             <div class="profile__docs">
                                 <div class="profile__doc profile__doc--default">
@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <p class="s-profile__info">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus minima corrupti labore aliquid est pariatur nesciunt. Iste atque nemo ipsa, a, eos illum totam quasi suscipit beatae nulla ducimus sed.
+
                     </p>
                 </div>
 
@@ -185,13 +185,13 @@
 
                                 </form>
                             </div>
-                            <div class="application__block">
+                            <div class="application__block base-line">
                                 <h3 class="application__block-title">{% trans "До полного погашения" %}</h3>
                                 <div class="application__block-sum application__block-sum--secondary">{{ dolg.credit_full_sum|floatformat:"2" }}</div>
                                 <div class="application__block-termin"><i></i>
                                 </div>
                             </div>
-                            <div class="application__block">
+                            <div class="application__block disable">
                                 <a href="#!" class="b-btn-app">{% trans "Погасить кредит" %}</a>
                             </div>
                         </div>
@@ -227,13 +227,13 @@
                                     {% endif %}
                                 </form>
                             </div>
-                            <div class="application__block">
+                            <div class="application__block base-line">
                                 <h3 class="application__block-title">{% trans "Осталось оплатить" %}</h3>
                                 <div class="application__block-sum application__block-sum--secondary">{% if tpp.ispaid %}0{% else %}{{ tpp.rest_sum|floatformat:"2" }}{% endif %}</div>
                                 <div class="application__block-termin">до {{ tpp.date|date:"d.m.Y" }}<i></i>
                                 </div>
                             </div>
-                            <div class="application__block">
+                            <div class="application__block disable">
                                 <a href="#!" class="b-btn-app">{% trans "Погасить кредит" %}</a>
                             </div>
                         </div>
@@ -241,7 +241,7 @@
                         {% endfor %}
 
 
-                        <h3 class="s-title">{% trans "Ожидаемые вноски" %}</h3>
+                        {% if credit.tpp_paid %}<h3 class="s-title">{% trans "Оплачено" %}</h3>{% endif %}
                         {% for credit in turnes_profile.credits %}
                         {% for tpp in credit.tpp_paid %}
                         <div class="application">
@@ -270,13 +270,13 @@
                                     {% endif %}
                                 </form>
                             </div>
-                            <div class="application__block">
+                            <div class="application__block base-line">
                                 <h3 class="application__block-title">{% trans "Осталось оплатить" %}</h3>
                                 <div class="application__block-sum application__block-sum--secondary">{% if tpp.ispaid %}0{% else %}{{ tpp.rest_sum|floatformat:"2" }}{% endif %}</div>
                                 <div class="application__block-termin">до {{ tpp.date|date:"d.m.Y" }}<i></i>
                                 </div>
                             </div>
-                            <div class="application__block">
+                            <div class="application__block disable">
                                 <a href="#!" class="b-btn-app">{% trans "Погасить кредит" %}</a>
                             </div>
                         </div>
@@ -287,7 +287,7 @@
                     </div>
 
                     <p class="s-profile__info">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus minima corrupti labore aliquid est pariatur nesciunt. Iste atque nemo ipsa, a, eos illum totam quasi suscipit beatae nulla ducimus sed.
+
                     </p>
                 </div>
 

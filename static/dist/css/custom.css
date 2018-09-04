@@ -89,3 +89,11 @@ textarea.questionnaire__input{
   .f-callback__info2--secondary {
     margin-bottom: 6rem;
     color: #fff; }
+
+.disable{
+    opacity: .3;
+    pointer-events: none;
+}
+.base-line{
+    justify-content: flex-start;
+}

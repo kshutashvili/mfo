@@ -4226,9 +4226,7 @@ fieldset {
     border-radius: 5px;
     background-color: #E4E4E4;
     font-size: 1.2rem;
-    font-weight: bold;
-    opacity: .3;
-    pointer-events: none; }
+    font-weight: bold; }
     .b-btn-login .icon {
       position: absolute;
       top: 50%;
@@ -4842,8 +4840,7 @@ fieldset {
   display: none;
   font-size: 2rem;
   color: #FCC504;
-  opacity: .3;
-  pointer-events: none; }
+}
   .mobile-link:not(:last-child) {
     margin-right: 1.5rem;
     opacity: 1;

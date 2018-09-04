@@ -105,7 +105,7 @@
 				<a href="{% translate_url ua %}" class="b-btn b-btn--lang">{% trans "Укр" %}</a>
 			</div>
 			{% if '/my/' in request.path %}
-				<a href="{% url 'logout' %}" class="b-btn-login">{% trans "Выйти с кабинета " %}<span class="icon icon--login"></span></a>
+				<a href="{% url 'logout' %}" class="b-btn-login">{% trans "Выйти" %}<span class="icon icon--login"></span></a>
 			{% else %}
 				<a href="{% url 'profile' %}" class="b-btn-login">{% trans "Мой кабинет " %}<span class="icon icon--login"></span></a>
 			{% endif %}
