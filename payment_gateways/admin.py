@@ -11,6 +11,7 @@ class EasypayPaymentAdmin(admin.ModelAdmin):
         'confirmed',
         'save_dt'
     )
+    search_fields = ('order_id', 'account', 'client_name')
 
 
 @admin.register(City24Payment)
@@ -21,6 +22,7 @@ class City24PaymentAdmin(admin.ModelAdmin):
         'confirmed',
         'save_dt'
     )
+    search_fields = ('order_id', 'account', 'client_name')
 
 
 @admin.register(PrivatbankPayment)
@@ -31,5 +33,6 @@ class PrivatbankPaymentAdmin(admin.ModelAdmin):
         'amount',
         'save_dt'
     )
+    search_fields = ('contract_num', 'client_name')
     date_hierarchy = 'save_dt'
     list_per_page = 200
