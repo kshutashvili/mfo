@@ -185,10 +185,10 @@ class ResetPasswordForm(forms.Form):
                 mobile_phone__icontains=person_data[1][2:],
             )
         else:
-            msg = _("Пользователь с таким номером договора не зарегистрирован1")
+            msg = _("Пользователь с таким номером договора не зарегистрирован")
             raise forms.ValidationError(msg)
         if not user:
-            msg = _("Пользователь с таким номером договора не зарегистрирован2")
+            msg = _("Пользователь с таким номером договора не зарегистрирован")
             raise forms.ValidationError(msg)
         return contract_num
 
