@@ -18,7 +18,7 @@
         {{ form.mobile_phone_number }}
         {{ form.mobile_phone_number.errors }}
         {% csrf_token %}
-        <button class="b-btn-primary b-btn-primary--formed disable" type="submit">{% trans "Отправить" %}</button>
+        <button class="b-btn-primary b-btn-primary--formed" type="submit">{% trans "Отправить" %}</button>
     </div>
     <div class="f-form__footer f-form__footer--sm"></div>
     <a href="{% url 'main' %}" class="b-btn-close"></a>

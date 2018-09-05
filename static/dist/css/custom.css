@@ -13,10 +13,6 @@
     color: rgba(255, 0, 0, 0.8);
     margin: -2rem 0 2rem 0;
 }
-.f-callback-right {
-    opacity: .3;
-    pointer-events: none;
-}
 .f-form__footer{
     padding: 1.5rem 0;
 }
