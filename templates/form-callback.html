@@ -38,7 +38,7 @@
 				</div>
 			</form>
 
-			<form action="{% url 'register' %}" method="post" class="f-callback-right">
+			<form action="{% url 'register' %}" method="post" class="f-callback-right disable">
 				<h3 class="f-callback__caption">{% trans 'Сегодня одобрено' %}</h3>
 				{% csrf_token %}
 				<div class="b-total-number">
