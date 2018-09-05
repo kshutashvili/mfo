@@ -190,14 +190,14 @@ class RequestPersonalArea(models.Model):
         new_user.set_password(new_user_password)
         new_user.save()
 
-        # m_sid = send_password(
-        #     to=clear_contact_phone(self.mobile_phone_number),
-        #     password=new_user_password
-        # )
         m_sid = send_password(
-            to="+380631280489",
+            to=clear_contact_phone(self.mobile_phone_number),
             password=new_user_password
         )
+        # m_sid = send_password(
+        #     to="+380631280489",
+        #     password=new_user_password
+        # )
         if m_sid:
             self.message_sid = m_sid
 

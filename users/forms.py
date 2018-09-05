@@ -176,7 +176,6 @@ class ResetPasswordForm(forms.Form):
     def clean_contract_num(self):
         contract_num = self.cleaned_data['contract_num']
         person_data = get_person_id_and_tel(contract_num)
-        print("VALIDATNG", person_data)
         self.person_phone = person_data[1]
         if person_data:
             user = User.objects.filter(

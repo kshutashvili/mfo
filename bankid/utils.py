@@ -17,6 +17,8 @@ from .models import Customer, Document, Address, ScanDocument
 
 
 def decrypt_data(encrypted_data):
+    print("decrypt_data")
+    print(encrypted_data)
     # import private key which should use for decryption
     priv = RSA.importKey(
         open('/home/phonxis/rsa_key.pem', 'rb').read(),

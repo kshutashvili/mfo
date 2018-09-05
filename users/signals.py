@@ -18,7 +18,6 @@ def create_user_after_request(sender, instance, **kwargs):
             turnes_person_id=instance.turnes_person_id
         )
         new_user_password = get_random_string(length=8)
-        print("new_user_password", new_user_password)
         new_user.set_password(new_user_password)
         new_user.save()
 
@@ -28,9 +27,9 @@ def create_user_after_request(sender, instance, **kwargs):
         # twilio_phone = "+19132760090"
 
         # main twilio account
-        account_sid = "AC37cb13a1d11a145f195479dfc148253b"
-        auth_token = "8893689c10c3f0204f39c18d6dac4be3"
-        twilio_phone = "+19132760090"
+        # account_sid = "AC37cb13a1d11a145f195479dfc148253b"
+        # auth_token = "8893689c10c3f0204f39c18d6dac4be3"
+        # twilio_phone = "+19132760090"
 
         client = Client(
             settings.TWILIO_ACCOUNT_SID,
@@ -39,8 +38,8 @@ def create_user_after_request(sender, instance, **kwargs):
         message = client.messages.create(
             body="Ваш пароль на сайте exf.in.ua: {0}".format(new_user_password),
             from_=settings.TWILIO_PHONE_NUMBER,
-            # to="+{0}".format(clear_contact_phone(instance.mobile_phone_number))
-            to="+380631280489"
+            # to="+380631280489"
+            to="+{0}".format(clear_contact_phone(instance.mobile_phone_number))
         )
 
         # print(message.sid)

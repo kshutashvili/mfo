@@ -58,7 +58,6 @@ def register(request):
         if form.is_valid():
             phone = form.cleaned_data.get('phone')
             user = User.objects.filter(mobile_phone=phone).first()
-            print(phone, user)
             if user and user.ready_for_turnes:
                 id_mess = UserExistMessage.get_solo().page.id
                 url = reverse('success', kwargs={
@@ -67,10 +66,9 @@ def register(request):
                 })
                 return HttpResponseRedirect(url)
             elif user and user.ready_for_turnes is False:
-                print("Not active")
                 return sms(
                     request,
-                    "+380950968326",
+                    "+{0}".format(phone),
                     reverse('register_verify')
                 )
             else:
@@ -78,10 +76,9 @@ def register(request):
                     mobile_phone=phone,
                     ready_for_turnes=False
                 )
-                print("No user")
                 return sms(
                     request,
-                    "+380950968326",
+                    "+{0}".format(phone),
                     reverse('register_verify'),
                     user
                 )
@@ -195,6 +192,8 @@ def user_login(request, status_message=None):
                 }
             )
     elif request.method == 'GET':
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('profile'))
         form = LoginForm()
         return render(
             request,
@@ -377,21 +376,11 @@ class ResetPasswordView(FormView):
 
     def form_valid(self, form):
         """If the form is valid, redirect to the supplied URL."""
-        # self.request.session['phone'] = form.person_phone  # "+380950968326"
-        # print("form_valid", form.person_phone)
-
-        # sms(self.request, "+380950968326", reverse('reset-password-verify'))
-        # sms(self.request, form.person_phone, reverse('reset-password-verify'))
-
-        # url = reverse(
-        #     "sms",
-        #     kwargs={
-        #         "phone": "+380950968326",
-        #         "url": reverse('reset-password-verify')
-        #     }
-        # )
-        # return HttpResponseRedirect(url)
-        return sms(self.request, "+380950968326", reverse('reset-password-verify'))
+        return sms(
+            self.request,
+            form.person_phone,
+            reverse('reset-password-verify')
+        )
 
 
 class ResetPasswordVerifyView(SMSVerifyView):
@@ -410,14 +399,14 @@ class ResetPasswordConfirmView(FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         phone = self.request.session.get('phone', '')
-        print("ResetPasswordConfirmView", phone)
+
         if phone:
             phone = phone.split("+")[1]
         try:
             kwargs['user'] = User.objects.get(mobile_phone=phone)
         except Exception:
             kwargs['user'] = None
-        print("USERR", kwargs['user'])
+
         return kwargs
 
     def form_valid(self, form):
@@ -466,20 +455,21 @@ class RegisterVerifyView(SMSVerifyView):
 
     def form_valid(self, form):
         user_id = self.request.session.pop('user_id', '')
-        mobile_phone = form.phone
-        print('form_valid mobile_phone', mobile_phone)
+        # mobile_phone = form.phone
+
         if not user_id:
             return HttpResponseRedirect(reverse('login'))
 
         user = User.objects.filter(id=int(user_id))[0]
-        print('form_valid user', user)
 
         if user:
             password = make_user_password(user)
-            auth_user = authenticate(mobile_phone=user.mobile_phone, password=password)
-            print("auth_user 1", auth_user)
+            auth_user = authenticate(
+                mobile_phone=user.mobile_phone,
+                password=password
+            )
+
             if auth_user is not None:
-                print("auth_user 2", auth_user)
                 login(self.request, auth_user)
                 return HttpResponseRedirect(self.get_success_url())
         return HttpResponseRedirect(reverse('login'))
@@ -515,10 +505,8 @@ class QuestionnaireView(TemplateView):
 @csrf_exempt
 def questionnaire_step1(request):
     if request.method == 'POST':
-        print("step", request.POST.get('step'))
         form = RegisterPersonalStep1Form(data=request.POST)
         if form.is_valid():
-            print('ok')
             step_obj = form.save()
             step_obj.user = request.user
             return JsonResponse(
@@ -528,10 +516,6 @@ def questionnaire_step1(request):
                 },
                 safe=False
             )
-        else:
-            print(form.errors)
-            for err in form.errors:
-                print(err)
         return JsonResponse(
             {
                 'result': 'bad',
@@ -620,12 +604,6 @@ class SaveQuestionnaireStepView(View):
             )
 
             if int(self.request.POST["step"]) == 5:
-                # id_mess = CallbackSuccessForm.get_solo().success.id
-                # url = reverse('success', kwargs={
-                #     'redirect_url': 'profile',
-                #     'id_mess': id_mess
-                # })
-                print("step 5")
                 resp = check_blacklist(
                     itn=self.request.user.anketa.itn,
                     mobile_phone=self.request.user.anketa.mobile_phone,

@@ -35,6 +35,7 @@ from .utils import (
 
 class BankidView(View):
     def get(self, *args, **kwargs):
+        print(self.request.GET)
         if 'code' not in self.request.GET:
             """
                 first request to bankid
@@ -70,6 +71,7 @@ class BankidView(View):
             return HttpResponseRedirect(url)
 
         code = self.request.GET.get('code', None)
+        print(code)
         if code:
             """
                 second request to bankid
@@ -90,6 +92,7 @@ class BankidView(View):
                 settings.BANKID_SECRET,  # secret
                 code
             )
+            print(for_sha)
             url = "https://{domain}/{path}".format(
                 domain=domain,
                 path=path
@@ -104,12 +107,19 @@ class BankidView(View):
                     self.request.META['HTTP_HOST']  # domain
                 )
             }
-            r = requests.get(
-                url=url,
-                params=params
-            )
-            json_resp = r.json()
-            # pprint(json_resp)
+            print(params)
+            try:
+                r = requests.get(
+                    url=url,
+                    params=params
+                )
+            except Exception as e:
+                print(e)
+            try:
+                json_resp = r.json()
+            except Exception as e:
+                print(e)
+            pprint(r.text)
 
             if 'error' in json_resp:
                 # invalid data
@@ -154,7 +164,7 @@ def bankid_refreshtokens(request):
 def bankid_getdata(request):
     access_token = request.session.get('access_token', None)
     refresh_token = request.session.get('refresh_token', None)
-
+    print(access_token, refresh_token)
     if settings.DEBUG:
         url = "https://bankid.privatbank.ua/ResourceService/checked/data"
     else:

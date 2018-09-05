@@ -16,9 +16,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 
 # Your Account Sid and Auth Token from twilio.com/user/account
-from efin.settings import TWILIO_ACCOUNT_SID as account_sid
-from efin.settings import TWILIO_AUTH_TOKEN as auth_token
-from efin.settings import AUTHY_API_KEY as auth_token
+from efin.settings import AUTHY_TEST_API_KEY as auth_token
 from efin.settings import ADMIN_EMAIL
 
 from users.models import Profile, User
@@ -39,11 +37,11 @@ def sms(request, phone, url=None, user=None):
     request.session['phone'] = phone
 
     if user:
-        print("user ID", user.id)
         request.session['user_id'] = user.id
 
     # send SMS to phone number
     api.phones.verification_start(phone, '+380', via='sms')
+    # api.phones.verification_start("+380950968326", '+380', via='sms')
 
     if url:
         return HttpResponseRedirect(url)
@@ -54,6 +52,7 @@ def sms(request, phone, url=None, user=None):
 def sms_verify(phone, code):
     # verifying entered code
     verification = api.phones.verification_check(phone, '+380', code)
+    # verification = api.phones.verification_check("+380950968326", '+380', code)
     # return True/False result
     return verification.ok()
 
