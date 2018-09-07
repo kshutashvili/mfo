@@ -179,10 +179,7 @@ def pb_terminal_view(request):
             "status": 0,
             "ibank": '26509056200284'
         }
-        telegram_notification(
-            err='',
-            message='{0}'.format(data)
-        )
+
         names = name.split(" ")
 
         try:
@@ -548,11 +545,15 @@ def easypay_terminal_view(request):
                 content_type='application/xml'
             )
 
+        date_for_turnes = date.today()
+        if datetime.now().hour >= 22:
+            date_for_turnes = date_for_turnes + timedelta(days=1)
+
         data = {
             "No": payment.order_id,
             "DogNo": payment.account,
             "IPN": ipn,
-            "dt": date.today(),
+            "dt": date_for_turnes,
             "sm": payment.amount,
             "status": 0,
             "ibank": 284
@@ -956,11 +957,15 @@ def fam_terminal_view(request):
                 content_type='application/xml'
             )
 
+        date_for_turnes = date.today()
+        if datetime.now().hour >= 22:
+            date_for_turnes = date_for_turnes + timedelta(days=1)
+
         data = {
             "No": payment.order_id,
             "DogNo": payment.account,
             "IPN": ipn,
-            "dt": date.today(),
+            "dt": date_for_turnes,
             "sm": payment.amount,
             "status": 0,
             "ibank": 100
