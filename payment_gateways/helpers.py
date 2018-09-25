@@ -17,7 +17,7 @@ def search_credit(cursor, contract_num):
     1 - Client ID
     2 - Client names
     3 - Credit vnoska
-    4 - Credit status (must be 5)
+    4 - Credit status (must be 5 - vydacha, or 55 - skybank)
     5 - Client IPN
     6 - Client Dolg (body + fine + prc)
     """
@@ -39,7 +39,7 @@ def search_credit(cursor, contract_num):
                 join mbank.tstatuses ts on ts.credit_id = tc.id
                                        and ts.is_last = 1
                 WHERE tc.contract_num = {0}
-                  and ts.status = 5;
+                  and ts.status = 5 or ts.status = 55;
             """.format(contract_num)
         )
     except Exception:
@@ -120,12 +120,6 @@ def run_payments_distribution(pay_date=None):
         )
 
         conn.close()
-
-        # q = cursor.execute(
-        #     """
-        #     select mbank.RunRazpredelenie('');
-        #     """
-        # )
 
 
 def telegram_notification(err='', message=''):

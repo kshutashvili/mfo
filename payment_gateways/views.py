@@ -15,9 +15,10 @@ from payment_gateways.utils import (
     process_fam_request
 )
 from payment_gateways.models import (
-    Tcredits, Tpersons, Tcash,
     EasypayPayment, City24Payment,
-    PrivatbankPayment
+    PrivatbankPayment,
+    SkyEasypayPayment, SkyCity24Payment,
+    SkyPrivatbankPayment
 )
 from payment_gateways import constants
 from payment_gateways.utils import create_database_connection
@@ -221,15 +222,32 @@ def pb_terminal_view(request):
             )
             return resp
 
-        payment = PrivatbankPayment.objects.create(
-            transaction_id=pb_code,
-            inrazpredelenie_id=lastrowid,
-            contract_num=contract_num,
-            client_name=name,
-            amount=total_sum,
-            created_dt=create_time,
-            confirm_dt=confirm_time
-        )
+        if str(credit[0][4]) == '55':
+            payment = SkyPrivatbankPayment.objects.create(
+                transaction_id=pb_code,
+                inrazpredelenie_id=lastrowid,
+                contract_num=contract_num,
+                client_name=name,
+                amount=total_sum,
+                created_dt=create_time,
+                confirm_dt=confirm_time
+            )
+            telegram_notification(
+                err='',
+                message='Privat Оплата по кредиту Skyбанка. Дог.{0}.'.format(
+                    contract_num
+                )
+            )
+        else:
+            payment = PrivatbankPayment.objects.create(
+                transaction_id=pb_code,
+                inrazpredelenie_id=lastrowid,
+                contract_num=contract_num,
+                client_name=name,
+                amount=total_sum,
+                created_dt=create_time,
+                confirm_dt=confirm_time
+            )
 
         try:
             with transaction.atomic():
@@ -430,13 +448,28 @@ def easypay_terminal_view(request):
             )
 
         try:
-            payment = EasypayPayment.objects.create(
-                service_id=action_data['ServiceId'],
-                order_id=action_data['OrderId'],
-                account=action_data['Account'],
-                amount=action_data['Amount'],
-                client_name=credit_row[2]
-            )
+            if str(credit[0][4]) == '55':
+                payment = SkyEasypayPayment.objects.create(
+                    service_id=action_data['ServiceId'],
+                    order_id=action_data['OrderId'],
+                    account=action_data['Account'],
+                    amount=action_data['Amount'],
+                    client_name=credit_row[2]
+                )
+                telegram_notification(
+                    err='',
+                    message='Easy Оплата по кредиту Skyбанка. Дог.{0}.'.format(
+                        contract_num
+                    )
+                )
+            else:
+                payment = EasypayPayment.objects.create(
+                    service_id=action_data['ServiceId'],
+                    order_id=action_data['OrderId'],
+                    account=action_data['Account'],
+                    amount=action_data['Amount'],
+                    client_name=credit_row[2]
+                )
         except Exception as e:
             telegram_notification(
                 err=e,
@@ -488,18 +521,23 @@ def easypay_terminal_view(request):
                 id=action_data['PaymentId']
             )
         except Exception:
-            telegram_notification(
-                err='',
-                message='Платеж не найден на сайте (Easy)'
-            )
-            ctx['status_code'] = -1
-            ctx['status_detail'] = 'Платеж не найден'
-            return render(
-                request,
-                template,
-                ctx,
-                content_type='application/xml'
-            )
+            try:
+                payment = SkyEasypayPayment.objects.get(
+                    id=action_data['PaymentId']
+                )
+            except Exception:
+                telegram_notification(
+                    err='',
+                    message='Платеж не найден на сайте (Easy)'
+                )
+                ctx['status_code'] = -1
+                ctx['status_detail'] = 'Платеж не найден'
+                return render(
+                    request,
+                    template,
+                    ctx,
+                    content_type='application/xml'
+                )
 
         # create turnes connection
         try:
