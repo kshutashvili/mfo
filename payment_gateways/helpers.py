@@ -39,7 +39,7 @@ def search_credit(cursor, contract_num):
                 join mbank.tstatuses ts on ts.credit_id = tc.id
                                        and ts.is_last = 1
                 WHERE tc.contract_num = {0}
-                  and ts.status = 5 or ts.status = 55;
+                  and (ts.status = 5 or ts.status = 55);
             """.format(contract_num)
         )
     except Exception:
