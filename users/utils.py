@@ -846,7 +846,7 @@ def get_turnes_profile(turnes_id):
                 group by tpp_main.credit_id
             ) pays_calendar on pays_calendar.credit_id = tcr.id
 
-            join mbank.tstatuses tst on tst.credit_id = tcr.id and (tst.status = 5 or tst.status = 55) and tst.credit_id not in (
+            join mbank.tstatuses tst on tst.credit_id = tcr.id and (tst.status = 5 or tst.status = 55)  and is_last = 1 and tst.credit_id not in (
                 select tst11.credit_id from mbank.tstatuses tst11 
                 where tst11.status in (11, 111)
             )
