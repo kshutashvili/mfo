@@ -519,7 +519,7 @@ def get_person_id(contract_num, phone):
             and
             if phone contain tel_mob_num
         """
-        if person_id[0][2] in [5, '5'] and person_id[0][4] in phone:
+        if person_id[0][2] in [5, '5', 55, '55'] and person_id[0][4] in phone:
             return person_id[0][1]
         else:
             return ""
