@@ -130,6 +130,20 @@ def pb_terminal_view(request):
             )
             return resp
 
+        p2 = SkyPrivatbankPayment.objects.filter(transaction_id=pb_code)
+        if p2:
+            telegram_notification(
+                err='',
+                message='Sky Дубль платежа {0}'.format(pb_code)
+            )
+            resp = render(
+                request,
+                "payment_gateways/pb_response_pay_success.xml",
+                {"cash_id": p2[0].id},
+                content_type="application/xml"
+            )
+            return resp
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -499,7 +513,7 @@ def easypay_terminal_view(request):
                 settings.EASYPAY_DATE_FORMAT
             ),
             'signature': '',
-            'payment_id': str(payment.id)
+            'payment_id': str(payment.order_id)
         }
 
         return render(request, template, ctx, content_type='application/xml')
@@ -519,12 +533,12 @@ def easypay_terminal_view(request):
         # constants.EASYPAY_PAYMENT step
         try:
             payment = EasypayPayment.objects.get(
-                id=action_data['PaymentId']
+                order_id=action_data['PaymentId']
             )
         except Exception:
             try:
                 payment = SkyEasypayPayment.objects.get(
-                    id=action_data['PaymentId']
+                    order_id=action_data['PaymentId']
                 )
             except Exception:
                 telegram_notification(
@@ -881,13 +895,28 @@ def fam_terminal_view(request):
             )
 
         try:
-            payment = City24Payment.objects.create(
-                service_id=action_data['ServiceId'],
-                order_id=action_data['OrderId'],
-                account=action_data['Account'],
-                amount=action_data['Amount'],
-                client_name=credit_row[2]
-            )
+            if str(credit[0][4]) == '55':
+                payment = SkyCity24Payment.objects.create(
+                    service_id=action_data['ServiceId'],
+                    order_id=action_data['OrderId'],
+                    account=action_data['Account'],
+                    amount=action_data['Amount'],
+                    client_name=credit_row[2]
+                )
+                telegram_notification(
+                    err='',
+                    message='Fam Оплата по кредиту Skyбанка. Дог.{0}.'.format(
+                        contract_num
+                    )
+                )
+            else:
+                payment = City24Payment.objects.create(
+                    service_id=action_data['ServiceId'],
+                    order_id=action_data['OrderId'],
+                    account=action_data['Account'],
+                    amount=action_data['Amount'],
+                    client_name=credit_row[2]
+                )
         except Exception as e:
             telegram_notification(
                 err=e,
@@ -916,7 +945,7 @@ def fam_terminal_view(request):
                 settings.EASYPAY_DATE_FORMAT
             ),
             'signature': '',
-            'payment_id': str(payment.id)
+            'payment_id': str(payment.order_id)
         }
 
         return render(request, template, ctx, content_type='application/xml')
@@ -936,21 +965,26 @@ def fam_terminal_view(request):
         # constants.EASYPAY_PAYMENT step
         try:
             payment = City24Payment.objects.get(
-                id=action_data['PaymentId']
+                order_id=action_data['PaymentId']
             )
         except Exception:
-            telegram_notification(
-                err='',
-                message='Платеж не найден на сайте (C24)'
-            )
-            ctx['status_code'] = -1
-            ctx['status_detail'] = 'Платеж не найден'
-            return render(
-                request,
-                template,
-                ctx,
-                content_type='application/xml'
-            )
+            try:
+                payment = SkyCity24Payment.objects.get(
+                    order_id=action_data['PaymentId']
+                )
+            except Exception:
+                telegram_notification(
+                    err='',
+                    message='Платеж не найден на сайте (C24)'
+                )
+                ctx['status_code'] = -1
+                ctx['status_detail'] = 'Платеж не найден'
+                return render(
+                    request,
+                    template,
+                    ctx,
+                    content_type='application/xml'
+                )
 
         # create turnes connection
         try:
@@ -1006,7 +1040,7 @@ def fam_terminal_view(request):
             "IPN": ipn,
             "dt": date_for_turnes,
             "sm": payment.amount,
-            "status": 0,
+            "status": 55 if str(credit[0][4]) == '55' else 0,
             "ibank": 100
         }
 
