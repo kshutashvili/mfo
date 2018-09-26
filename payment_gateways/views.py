@@ -154,6 +154,7 @@ def pb_terminal_view(request):
             cursor=cursor,
             contract_num=contract_num
         )
+
         try:
             ipn = credit[0][5]
         except Exception as e:
@@ -177,7 +178,7 @@ def pb_terminal_view(request):
             "IPN": ipn,
             "dt": date_for_turnes,
             "sm": total_sum,
-            "status": 0,
+            "status": 55 if str(credit[0][4]) == '55' else 0,
             "ibank": '26509056200284'
         }
 
@@ -593,7 +594,7 @@ def easypay_terminal_view(request):
             "IPN": ipn,
             "dt": date_for_turnes,
             "sm": payment.amount,
-            "status": 0,
+            "status": 55 if str(credit[0][4]) == '55' else 0,
             "ibank": 284
         }
 
