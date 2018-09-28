@@ -4,10 +4,12 @@ from datetime import date, datetime, timedelta
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.generic import View
 from django.http.response import HttpResponseBadRequest, HttpResponse
 from django.conf import settings
 from django.db import transaction
 from django.utils.formats import number_format
+from django.utils.decorators import method_decorator
 
 from payment_gateways.utils import (
     process_pb_request,
@@ -113,7 +115,7 @@ def pb_terminal_view(request):
         confirm_time = data['ConfirmTime']
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 16:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         p = PrivatbankPayment.objects.filter(transaction_id=pb_code)
@@ -599,7 +601,7 @@ def easypay_terminal_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 16:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
@@ -1031,7 +1033,7 @@ def fam_terminal_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 16:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
@@ -1141,3 +1143,27 @@ def fam_terminal_view(request):
         resp = HttpResponse()
 
     return resp
+
+
+class PrivatPaymentView(View):
+
+    error_response_template = "payment_gateways/pb_response_pay_error.xml"
+
+    @method_decorator(csrf_exempt)
+    @method_decorator(require_POST)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def error_response(self, error='', notify_message=''):
+        telegram_notification(
+            err=error,
+            message=notify_message
+        )
+        resp = render(
+            self.request,
+            self.error_response_template,
+            {"error_msg": "Произошла ошибка. Обратитесь в контакт-центр по тел. 0800211112"},
+            content_type="application/xml"
+        )
+
+        return resp
