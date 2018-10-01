@@ -114,6 +114,7 @@ def pb_terminal_view(request):
         create_time = data['CreateTime']
         confirm_time = data['ConfirmTime']
 
+        # replace payment's date if payment processed after 22:00
         date_for_turnes = date.today()
         if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
@@ -194,7 +195,7 @@ def pb_terminal_view(request):
             "IPN": ipn,
             "dt": date_for_turnes,
             "sm": total_sum,
-            "status": 55 if str(credit[0][4]) == '55' else 0,
+            "status": 55 if str(credit[0][4]) in ('55', '555') else 0,
             "ibank": '26509056200284'
         }
 
@@ -239,7 +240,7 @@ def pb_terminal_view(request):
             )
             return resp
 
-        if str(credit[0][4]) == '55':
+        if str(credit[0][4]) == '55' or str(credit[0][4]) == '555':
             payment = SkyPrivatbankPayment.objects.create(
                 transaction_id=pb_code,
                 inrazpredelenie_id=lastrowid,
@@ -465,7 +466,7 @@ def easypay_terminal_view(request):
             )
 
         try:
-            if str(credit[0][4]) == '55':
+            if str(credit[0][4]) == '55' or str(credit[0][4]) == '555':
                 payment = SkyEasypayPayment.objects.create(
                     service_id=action_data['ServiceId'],
                     order_id=action_data['OrderId'],
@@ -610,7 +611,7 @@ def easypay_terminal_view(request):
             "IPN": ipn,
             "dt": date_for_turnes,
             "sm": payment.amount,
-            "status": 55 if str(credit[0][4]) == '55' else 0,
+            "status": 55 if str(credit[0][4]) in ('55', '555') else 0,
             "ibank": 284
         }
 
@@ -897,7 +898,7 @@ def fam_terminal_view(request):
             )
 
         try:
-            if str(credit[0][4]) == '55':
+            if str(credit[0][4]) == '55' or str(credit[0][4]) == '555':
                 payment = SkyCity24Payment.objects.create(
                     service_id=action_data['ServiceId'],
                     order_id=action_data['OrderId'],
@@ -1042,7 +1043,7 @@ def fam_terminal_view(request):
             "IPN": ipn,
             "dt": date_for_turnes,
             "sm": payment.amount,
-            "status": 55 if str(credit[0][4]) == '55' else 0,
+            "status": 55 if str(credit[0][4]) in ('55', '555') else 0,
             "ibank": 100
         }
 
