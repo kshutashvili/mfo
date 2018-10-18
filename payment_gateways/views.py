@@ -26,7 +26,8 @@ from payment_gateways import constants
 from payment_gateways.utils import create_database_connection
 from payment_gateways.helpers import (
     search_credit, save_payment,
-    telegram_notification
+    telegram_notification,
+    telegram_notification_sky
 )
 
 
@@ -135,9 +136,9 @@ def pb_terminal_view(request):
 
         p2 = SkyPrivatbankPayment.objects.filter(transaction_id=pb_code)
         if p2:
-            telegram_notification(
-                err='',
-                message='Sky Дубль платежа {0}'.format(pb_code)
+            telegram_notification_sky(
+                err='Дубль',
+                message='Дубль платежа {0}'.format(pb_code)
             )
             resp = render(
                 request,
@@ -250,10 +251,11 @@ def pb_terminal_view(request):
                 created_dt=create_time,
                 confirm_dt=confirm_time
             )
-            telegram_notification(
-                err='',
-                message='Privat Оплата по кредиту Skyбанка. Дог.{0}.'.format(
-                    contract_num
+            telegram_notification_sky(
+                message='Оплата кредита Skybank(Приватбанк)\nДог.{0}; Сумма {1}. Статус {2}'.format(
+                    contract_num,
+                    total_sum,
+                    credit[0][4]
                 )
             )
         else:
@@ -299,7 +301,7 @@ def pb_terminal_view(request):
                 cursor.execute(query)
                 conn.commit()
         except Exception as e:
-            telegram_notification(
+            telegram_notification_sky(
                 err=e,
                 message='Проблема с разнесением Sky платежа (status {0})'.format(
                     str(credit[0][4])
@@ -498,10 +500,11 @@ def easypay_terminal_view(request):
                     amount=action_data['Amount'],
                     client_name=credit_row[2]
                 )
-                telegram_notification(
-                    err='',
-                    message='Easy Оплата по кредиту Skyбанка. Дог.{0}.'.format(
-                        contract_num
+                telegram_notification_sky(
+                    message='Оплата кредита Skybank(Easy)\nДог.{0}; Сумма {1}. Статус {2}'.format(
+                        contract_num,
+                        action_data['Amount'],
+                        credit[0][4]
                     )
                 )
             else:
@@ -930,10 +933,11 @@ def fam_terminal_view(request):
                     amount=action_data['Amount'],
                     client_name=credit_row[2]
                 )
-                telegram_notification(
-                    err='',
-                    message='Fam Оплата по кредиту Skyбанка. Дог.{0}.'.format(
-                        contract_num
+                telegram_notification_sky(
+                    message='Оплата кредита Skybank(C24)\nДог.{0}; Сумма {1}. Статус {2}'.format(
+                        contract_num,
+                        action_data['Amount'],
+                        credit[0][4]
                     )
                 )
             else:

@@ -142,3 +142,35 @@ def telegram_notification(err='', message=''):
             message
         )
     )
+
+
+def telegram_notification_sky(err=None, message=''):
+    """
+        Send fail messages to telegram group
+    """
+    # success \U00002705
+    # fail \U0000274C
+
+    if err:
+        msg = "{0}Error: {1}\n{2}".format(
+            "\U0000274C",
+            err,
+            message
+        )
+    else:
+        msg = "{0}Info: {1}".format(
+            "\U00002705",
+            message
+        )
+
+    try:
+        # try authenticate bot
+        test_bot = telepot.Bot(settings.SKY_API_KEY)
+    except Exception:
+        # if connection is not established, do nothing
+        return
+
+    test_bot.sendMessage(
+        settings.SKY_GROUP_ID,
+        msg
+    )

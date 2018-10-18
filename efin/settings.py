@@ -246,6 +246,9 @@ RAVEN_CONFIG = {
 TEST_API_KEY = '580592832:AAFV-gWcD4HL6F-FljmrASDyK-O-9hcHgLc'
 TEST_GROUP_ID = '-266220155'
 
+SKY_API_KEY = '765509010:AAEohMyaEaxaMOrr0RTBhNBBwH4xSRHVPTk'
+SKY_GROUP_ID = '-256219619'
+
 try:
     from efin.local_settings import *
 except ImportError:
