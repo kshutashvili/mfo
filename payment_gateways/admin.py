@@ -75,3 +75,27 @@ class SkyPrivatbankPaymentAdmin(admin.ModelAdmin):
     search_fields = ('contract_num', 'client_name')
     date_hierarchy = 'save_dt'
     list_per_page = 200
+
+
+@admin.register(C24Payment)
+class C24PaymentAdmin(admin.ModelAdmin):
+    list_display = (
+        'order_id',
+        'account',
+        'amount',
+        'confirmed',
+        'save_dt'
+    )
+    search_fields = ('order_id', 'account', 'client_name')
+
+
+@admin.register(SkyC24Payment)
+class SkyC24PaymentAdmin(admin.ModelAdmin):
+    list_display = (
+        'order_id',
+        'account',
+        'amount',
+        'confirmed',
+        'save_dt'
+    )
+    search_fields = ('order_id', 'account', 'client_name')

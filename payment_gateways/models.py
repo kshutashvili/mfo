@@ -139,6 +139,7 @@ class EasypayPayment(models.Model):
         return str(self.order_id)
 
 
+# Familniy bank
 class City24Payment(models.Model):
     service_id = models.IntegerField(
         "Номер EF в системе Банк 'Фамільний'"
@@ -299,6 +300,7 @@ class SkyEasypayPayment(models.Model):
         return str(self.order_id)
 
 
+# Familniy bank
 class SkyCity24Payment(models.Model):
     service_id = models.IntegerField(
         "Номер EF в системе Банк 'Фамільний'"
@@ -400,3 +402,119 @@ class SkyPrivatbankPayment(models.Model):
 
     def __str__(self):
         return self.transaction_id
+
+
+# City24
+class C24Payment(models.Model):
+    service_id = models.IntegerField(
+        "Номер EF в системе"
+    )
+    order_id = models.BigIntegerField(
+        "Уникальный идентификатор транзакции"
+    )
+    account = models.CharField(
+        "Идентификатор пользователя (№ договора)",
+        max_length=128
+    )
+    client_name = models.CharField(
+        "ФИО клиента",
+        max_length=255,
+        blank=True
+    )
+    amount = models.DecimalField(
+        "Cумма платежа",
+        max_digits=10,
+        decimal_places=2
+    )
+    inrazpredelenie_id = models.CharField(
+        "ID in_razpredelenie",
+        max_length=128,
+        blank=True
+    )
+    confirmed = models.BooleanField(
+        "Подтвержден?",
+        default=False
+    )
+    confirmed_dt = models.DateTimeField(
+        "Дата подтверждения",
+        blank=True,
+        null=True
+    )
+    canceled = models.BooleanField(
+        "Отменен?",
+        default=False
+    )
+    cancel_dt = models.DateTimeField(
+        "Дата отмены",
+        blank=True,
+        null=True
+    )
+    save_dt = models.DateTimeField(
+        "Дата сохранения",
+        auto_now_add=True
+    )
+
+    class Meta:
+        verbose_name = "Транзакция City24"
+        verbose_name_plural = "Транзакции City24"
+
+    def __str__(self):
+        return str(self.order_id)
+
+
+# City24
+class SkyC24Payment(models.Model):
+    service_id = models.IntegerField(
+        "Номер EF в системе"
+    )
+    order_id = models.BigIntegerField(
+        "Уникальный идентификатор транзакции"
+    )
+    account = models.CharField(
+        "Идентификатор пользователя (№ договора)",
+        max_length=128
+    )
+    client_name = models.CharField(
+        "ФИО клиента",
+        max_length=255,
+        blank=True
+    )
+    amount = models.DecimalField(
+        "Cумма платежа",
+        max_digits=10,
+        decimal_places=2
+    )
+    inrazpredelenie_id = models.CharField(
+        "ID in_razpredelenie",
+        max_length=128,
+        blank=True
+    )
+    confirmed = models.BooleanField(
+        "Подтвержден?",
+        default=False
+    )
+    confirmed_dt = models.DateTimeField(
+        "Дата подтверждения",
+        blank=True,
+        null=True
+    )
+    canceled = models.BooleanField(
+        "Отменен?",
+        default=False
+    )
+    cancel_dt = models.DateTimeField(
+        "Дата отмены",
+        blank=True,
+        null=True
+    )
+    save_dt = models.DateTimeField(
+        "Дата сохранения",
+        auto_now_add=True
+    )
+
+    class Meta:
+        verbose_name = "Sky Транзакция City24"
+        verbose_name_plural = "Sky Транзакции City24"
+
+    def __str__(self):
+        return str(self.order_id)
