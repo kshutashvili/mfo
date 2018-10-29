@@ -116,9 +116,9 @@ def pb_terminal_view(request):
         create_time = data['CreateTime']
         confirm_time = data['ConfirmTime']
 
-        # replace payment's date if payment processed after 22:00
+        # replace payment's date if payment processed after 16:00
         date_for_turnes = date.today()
-        if datetime.now().hour >= 22:
+        if datetime.now().hour >= 16:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         p = PrivatbankPayment.objects.filter(transaction_id=pb_code)
@@ -654,7 +654,7 @@ def easypay_terminal_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 22:
+        if datetime.now().hour >= 16:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
@@ -1094,7 +1094,7 @@ def fam_terminal_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 22:
+        if datetime.now().hour >= 16:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
@@ -1534,7 +1534,7 @@ def city_terminal_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 22:
+        if datetime.now().hour >= 16:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
