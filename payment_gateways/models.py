@@ -560,8 +560,8 @@ class PortmonePrivatPayment(models.Model):
     )
 
     class Meta:
-        verbose_name = "Транзакция Portmone (тип Privat)"
-        verbose_name_plural = "Транзакции Portmone (тип Privat)"
+        verbose_name = "Транзакция Sky (тип Portmone-Privat)"
+        verbose_name_plural = "Транзакции Sky (тип Portmone-Privat)"
 
     def __str__(self):
         return self.transaction_id
@@ -618,8 +618,8 @@ class PortmoneEasypayPayment(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Транзакция Portmone (тип Easypay)'
-        verbose_name_plural = 'Транзакции Portmone (тип Easypay)'
+        verbose_name = 'Транзакция Sky (тип Portmone-Easypay)'
+        verbose_name_plural = 'Транзакции Sky (тип Portmone-Easypay)'
 
     def __str__(self):
         return str(self.order_id)
