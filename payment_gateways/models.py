@@ -518,3 +518,108 @@ class SkyC24Payment(models.Model):
 
     def __str__(self):
         return str(self.order_id)
+
+
+# Portmone (type Privat)
+class PortmonePrivatPayment(models.Model):
+    transaction_id = models.CharField(
+        "ID транзакции (ПБ)",
+        max_length=128,
+        unique=True
+    )
+    inrazpredelenie_id = models.CharField(
+        "ID in_razpredelenie",
+        max_length=128
+    )
+    client_name = models.CharField(
+        "ФИО клиента",
+        max_length=255
+    )
+    contract_num = models.CharField(
+        "Номер договора",
+        max_length=128
+    )
+    amount = models.DecimalField(
+        "Cумма платежа",
+        max_digits=10,
+        decimal_places=2
+    )
+    created_dt = models.DateTimeField(
+        "Дата создания транзакции",
+        blank=True,
+        null=True
+    )
+    confirm_dt = models.DateTimeField(
+        "Дата подтверждения транзакции",
+        blank=True,
+        null=True
+    )
+    save_dt = models.DateTimeField(
+        "Дата сохранения",
+        auto_now_add=True
+    )
+
+    class Meta:
+        verbose_name = "Транзакция Portmone (тип Privat)"
+        verbose_name_plural = "Транзакции Portmone (тип Privat)"
+
+    def __str__(self):
+        return self.transaction_id
+
+
+# Portmone (type Easypay)
+class PortmoneEasypayPayment(models.Model):
+    service_id = models.IntegerField(
+        "Сервисный номер EF"
+    )
+    order_id = models.BigIntegerField(
+        "Уникальный идентификатор транзакции"
+    )
+    account = models.CharField(
+        "Идентификатор пользователя (№ договора)",
+        max_length=128
+    )
+    client_name = models.CharField(
+        "ФИО клиента",
+        max_length=255,
+        blank=True
+    )
+    amount = models.DecimalField(
+        "Cумма платежа",
+        max_digits=10,
+        decimal_places=2
+    )
+    inrazpredelenie_id = models.CharField(
+        "ID in_razpredelenie",
+        max_length=128,
+        blank=True
+    )
+    confirmed = models.BooleanField(
+        "Подтвержден?",
+        default=False
+    )
+    confirmed_dt = models.DateTimeField(
+        "Дата подтверждения",
+        blank=True,
+        null=True
+    )
+    canceled = models.BooleanField(
+        "Отменен?",
+        default=False
+    )
+    cancel_dt = models.DateTimeField(
+        "Дата отмены",
+        blank=True,
+        null=True
+    )
+    save_dt = models.DateTimeField(
+        "Дата сохранения",
+        auto_now_add=True
+    )
+
+    class Meta:
+        verbose_name = 'Транзакция Portmone (тип Easypay)'
+        verbose_name_plural = 'Транзакции Portmone (тип Easypay)'
+
+    def __str__(self):
+        return str(self.order_id)

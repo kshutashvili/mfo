@@ -45,7 +45,8 @@ from users.views import (
     SaveQuestionnaireStepView
 )
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
-                                    fam_terminal_view, city_terminal_view)
+                                    fam_terminal_view, city_terminal_view,
+                                    portmone_ep_view, portmone_pb_view)
 from bankid.views import document_view
 
 
@@ -320,6 +321,9 @@ urlpatterns += [
     path('payment/easypay/', easypay_terminal_view, name='easypay_terminal'),
     path('payment/fam/', fam_terminal_view, name='fam_terminal'),
     path('payment/city24/', city_terminal_view, name='city_terminal'),
+
+    path('payment/portmone_ep/', portmone_ep_view, name='portmone_ep'),
+    path('payment/portmone_pb/', portmone_pb_view, name='portmone_pb'),
 
     path('protected/<int:scan_id>/', document_view, name='protected_media'),
 ]
