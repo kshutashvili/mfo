@@ -272,6 +272,13 @@ def pb_terminal_view(request):
                     credit[0][4]
                 )
             )
+            telegram_notification(
+                message='{0}\n{1}\n{2}'.format(
+                    request.META['REMOTE_ADDR'] if 'REMOTE_ADDR' in request.META.keys() else 'REMOTE_ADDR',
+                    request.META['REMOTE_HOST'] if 'REMOTE_HOST' in request.META.keys() else 'REMOTE_HOST',
+                    request.META['PATH_INFO'] if 'PATH_INFO' in request.META.keys() else 'PATH_INFO'
+                )
+            )
         else:
             payment = PrivatbankPayment.objects.create(
                 transaction_id=pb_code,
@@ -1670,6 +1677,31 @@ class PrivatPaymentView(View):
         )
 
         return resp
+
+    def _process_request(self, request):
+        pass
+
+    def _get_data(self):
+        pass
+
+    def _create_db_conn(self):
+        """
+            Create connection to MySQL database with cursor
+
+            return connection_object, cursor_object
+        """
+
+        conn, cursor = create_database_connection(
+            host=settings.TURNES_HOST,
+            user=settings.TURNES_USER,
+            password=settings.TURNES_PASSWORD,
+            db=settings.TURNES_DATABASE
+        )
+
+        return conn, cursor
+
+    def _search(self):
+        conn, cur = self._create_db_conn()
 
 
 @csrf_exempt
