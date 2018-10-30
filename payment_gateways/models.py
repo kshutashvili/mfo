@@ -132,8 +132,8 @@ class EasypayPayment(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Транзакция EasyPay'
-        verbose_name_plural = 'Транзакции EasyPay'
+        verbose_name = 'Транзакция EF (тип EasyPay)'
+        verbose_name_plural = 'Транзакции EF (тип EasyPay)'
 
     def __str__(self):
         return str(self.order_id)
@@ -190,8 +190,8 @@ class City24Payment(models.Model):
     )
 
     class Meta:
-        verbose_name = "Транзакция Банк 'Фамільний'"
-        verbose_name_plural = "Транзакции Банк 'Фамільний'"
+        verbose_name = "Транзакция EF (Тип Банк Фамільний)"
+        verbose_name_plural = "Транзакции EF (Тип Банк Фамільний)"
 
     def __str__(self):
         return str(self.order_id)
@@ -236,8 +236,8 @@ class PrivatbankPayment(models.Model):
     )
 
     class Meta:
-        verbose_name = "Транзакция PrivatBank"
-        verbose_name_plural = "Транзакции PrivatBank"
+        verbose_name = "Транзакция EF (тип PrivatBank)"
+        verbose_name_plural = "Транзакции EF (тип PrivatBank)"
 
     def __str__(self):
         return self.transaction_id
@@ -293,8 +293,8 @@ class SkyEasypayPayment(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Sky Транзакция EasyPay'
-        verbose_name_plural = 'Sky Транзакции EasyPay'
+        verbose_name = 'Транзакция Sky (Тип EasyPay)'
+        verbose_name_plural = 'Транзакции Sky (Тип EasyPay)'
 
     def __str__(self):
         return str(self.order_id)
@@ -351,8 +351,8 @@ class SkyCity24Payment(models.Model):
     )
 
     class Meta:
-        verbose_name = "Sky Транзакция Банк 'Фамільний'"
-        verbose_name_plural = "Sky Транзакции Банк 'Фамільний'"
+        verbose_name = "Транзакция Sky (Тип Банк Фамільний)"
+        verbose_name_plural = "Транзакции Sky (Тип Банк Фамільний)"
 
     def __str__(self):
         return str(self.order_id)
@@ -397,8 +397,8 @@ class SkyPrivatbankPayment(models.Model):
     )
 
     class Meta:
-        verbose_name = "Sky Транзакция PrivatBank"
-        verbose_name_plural = "Sky Транзакции PrivatBank"
+        verbose_name = "Транзакция Sky (Тип PrivatBank)"
+        verbose_name_plural = "Транзакции Sky (Тип PrivatBank)"
 
     def __str__(self):
         return self.transaction_id
@@ -455,8 +455,8 @@ class C24Payment(models.Model):
     )
 
     class Meta:
-        verbose_name = "Транзакция City24"
-        verbose_name_plural = "Транзакции City24"
+        verbose_name = "Транзакция EF (Тип City24)"
+        verbose_name_plural = "Транзакции EF (Тип City24)"
 
     def __str__(self):
         return str(self.order_id)
@@ -513,8 +513,8 @@ class SkyC24Payment(models.Model):
     )
 
     class Meta:
-        verbose_name = "Sky Транзакция City24"
-        verbose_name_plural = "Sky Транзакции City24"
+        verbose_name = "Транзакция Sky (Тип City24)"
+        verbose_name_plural = "Транзакции Sky (Тип City24)"
 
     def __str__(self):
         return str(self.order_id)
