@@ -27,7 +27,7 @@ def search_credit(cursor, contract_num):
                 SELECT
                     tc.id,
                     tc.client_id,
-                    GETPERSONNAMES(tc.client_id),
+                    CONCAT(REPLACE(tper.name3,"'", '"'), ' ', LEFT(tper.name , 1), '. ', LEFT(tper.name2 , 1), '.'),
                     tc.vnoska,
                     ts.status,
                     tc.egn,
@@ -38,6 +38,7 @@ def search_credit(cursor, contract_num):
                     mbank.tcredits tc
                 join mbank.tstatuses ts on ts.credit_id = tc.id
                                        and ts.is_last = 1
+                left join mbank.tpersons tper on tper.id = tc.client_id
                 WHERE tc.contract_num = {0}
                   and (ts.status = 5 or ts.status = 55 or ts.status = 555);
             """.format(contract_num)
@@ -72,7 +73,7 @@ def search_skycredit(cursor, contract_num):
                 SELECT
                     tc.id,
                     tc.client_id,
-                    GETPERSONNAMES(tc.client_id),
+                    CONCAT(REPLACE(tper.name3,"'", '"'), ' ', LEFT(tper.name , 1), '. ', LEFT(tper.name2 , 1), '.'),
                     tc.vnoska,
                     ts.status,
                     tc.egn,
@@ -83,6 +84,7 @@ def search_skycredit(cursor, contract_num):
                     mbank.tcredits tc
                 join mbank.tstatuses ts on ts.credit_id = tc.id
                                        and ts.is_last = 1
+                left join mbank.tpersons tper on tper.id = tc.client_id
                 WHERE tc.contract_num = {0}
                   and (ts.status = 55 or ts.status = 555);
             """.format(contract_num)
