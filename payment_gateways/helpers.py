@@ -53,6 +53,51 @@ def search_credit(cursor, contract_num):
     return None
 
 
+def search_skycredit(cursor, contract_num):
+    """
+    Return matched credit data
+
+    Positions in tuple:
+    0 - Credit ID
+    1 - Client ID
+    2 - Client names
+    3 - Credit vnoska
+    4 - Credit status (must be 5 - vydacha, or 55 - skybank)
+    5 - Client IPN
+    6 - Client Dolg (body + fine + prc)
+    """
+    try:
+        cursor.execute(
+            """
+                SELECT
+                    tc.id,
+                    tc.client_id,
+                    GETPERSONNAMES(tc.client_id),
+                    tc.vnoska,
+                    ts.status,
+                    tc.egn,
+                    dwh.GetDolgBody(tc.id, date(now()))+
+                    dwh.GetDolgFine(tc.id, date(now()))+
+                    dwh.GetDolgPrc(tc.id, date(now()))
+                FROM
+                    mbank.tcredits tc
+                join mbank.tstatuses ts on ts.credit_id = tc.id
+                                       and ts.is_last = 1
+                WHERE tc.contract_num = {0}
+                  and (ts.status = 55 or ts.status = 555);
+            """.format(contract_num)
+        )
+    except Exception:
+        return None
+
+    credit = cursor.fetchall()
+
+    if credit:
+        return credit
+
+    return None
+
+
 def save_payment(conn, cursor, data):
     """
     Save payment in in_razpredelenie table
