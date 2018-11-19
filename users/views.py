@@ -639,6 +639,7 @@ class SaveQuestionnaireStepView(View):
                         ).update(
                             blacklist=True
                         )
+                        #
                         user.active = False
                         user.save()
                         callback_fail = CallbackFailForm.get_solo()
