@@ -72,6 +72,6 @@ class ScanDocumentAdmin(admin.ModelAdmin):
 
 @admin.register(BankIDLog)
 class BankIDLogAdmin(admin.ModelAdmin):
-    list_display = ('type', 'created_dt')
+    list_display = ('type', 'subtype', 'created_dt')
     search_fields = ('type', 'message')
     list_filter = ('type', )
