@@ -129,7 +129,7 @@ class BankidView(View):
             params = {
                 "grant_type": "authorization_code",
                 "client_id": settings.BANKID_CLIENT_ID,
-                "client_secret": hashlib.sha1(for_sha.encode()).hexdigest(),
+                "client_secret": hashlib.sha512(for_sha.encode()).hexdigest(),
                 "code": code,
                 "redirect_uri": "{0}://{1}/bankid/auth".format(
                     'https' if self.request.is_secure() else 'http',  # schema
