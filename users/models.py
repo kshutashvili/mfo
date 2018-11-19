@@ -15,7 +15,7 @@ from content.helpers import clear_contact_phone
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    # auth field
+    # auth field 
     mobile_phone = models.CharField(
         _('mobile phone'),
         unique=True,

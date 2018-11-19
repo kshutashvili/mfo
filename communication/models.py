@@ -393,7 +393,6 @@ class CallbackSuccessForm(SingletonModel):
         return self.success.title
 
 
-#
 class CallbackFailForm(SingletonModel):
     success = models.ForeignKey('SuccessFormStatic',
                                 verbose_name=_('Форма успешного заказа'),
