@@ -251,6 +251,16 @@ urlpatterns = i18n_patterns(
         success_message.success_message,
         name='success'
     ),
+    path(
+        'message-fail/<int:id_mess>/',
+        success_message.fail_message,
+        name='fail'
+    ),
+    path(
+        'message-fail/<int:id_mess>/<str:redirect_url>/',
+        success_message.fail_message,
+        name='fail'
+    ),
 
     path(
         'ajax/departments_generate/<str:dep_id>/',

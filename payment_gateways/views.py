@@ -1658,13 +1658,14 @@ def city_terminal_view(request):
 class PrivatPaymentView(View):
 
     error_response_template = "payment_gateways/pb_response_pay_error.xml"
+    http_method_names = ['post', ]
 
     @method_decorator(csrf_exempt)
     @method_decorator(require_POST)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    def error_response(self, error='', notify_message=''):
+    def _error_response(self, error='', notify_message=''):
         telegram_notification(
             err=error,
             message=notify_message
@@ -1679,10 +1680,13 @@ class PrivatPaymentView(View):
         return resp
 
     def _process_request(self, request):
-        pass
+        return process_pb_request(request)
 
     def _get_data(self):
-        pass
+        try:
+            return self.xml_data["Transfer"]["Data"]
+        except Exception:
+            return None
 
     def _create_db_conn(self):
         """
@@ -1701,7 +1705,33 @@ class PrivatPaymentView(View):
         return conn, cursor
 
     def _search(self):
-        conn, cur = self._create_db_conn()
+        self.data = self._get_data()
+
+        if not self.data:
+            return self._error_response(
+                error="XML has not data",
+                notify_message=""
+            )
+
+        try:
+            conn, cur = self._create_db_conn()
+        except Exception as e:
+            pass
+
+    def post(self, request, *args, **kwargs):
+        self.is_valid, self.action, self.xml_data = self._process_request(
+            request
+        )
+
+        if not self.is_valid:
+            return HttpResponseBadRequest("Операция не поддерживается")
+
+        if self.action == "Search":
+            return self._search()
+        elif self.action == "Pay":
+            return self._pay()
+        else:
+            return HttpResponse()
 
 
 @csrf_exempt

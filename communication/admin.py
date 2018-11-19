@@ -1,3 +1,5 @@
+from solo.admin import SingletonModelAdmin
+
 from django.contrib import admin
 
 from communication import models
@@ -111,6 +113,11 @@ class QuestionConfigAdmin(admin.ModelAdmin):
 
 @admin.register(models.CallbackSuccessForm)
 class CallbackSuccessFormAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+
+
+@admin.register(models.CallbackFailForm)
+class CallbackFailFormAdmin(SingletonModelAdmin):
     list_display = ('__str__',)
 
 

@@ -26,3 +26,25 @@ def success_message(request, id_mess, redirect_url=None):
             'previous_page': redirect
         }
     )
+
+
+def fail_message(request, id_mess, redirect_url=None):
+    form = SuccessFormStatic.objects.filter(id=id_mess).first()
+    if not redirect_url:
+        redirect = request.META.get('HTTP_REFERER')
+        if redirect:
+            redirect = redirect.split('/')[-2]
+            if redirect == 'resume':
+                redirect = reverse('job').split('/')[-2]
+            else:
+                redirect = None
+    else:
+        redirect = redirect_url
+    return render(
+        request,
+        'form-fail.html',
+        {
+            'form': form,
+            'previous_page': redirect
+        }
+    )

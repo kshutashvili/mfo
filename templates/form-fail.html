@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% block title %}Form-fail{% endblock %}
+
+{% block content %}
+    <form action="#" class="f-form">
+        <h2 class="f-form__title">{{ form.title }}</h2>
+        <div class="f-form__content f-form__content--stretch">
+            <p class="f-form__content-message f-form__content-message--big">
+                <img class="f-form__content-img" src="{% static 'dist/img/svgstore/icons/guarantee2.svg' %}" alt="guarantee">
+                {{ form.text }}
+            </p>
+            <div class="f-form__content-multiple">
+                <p class="f-form__content-multiple-item">
+                    {{ form.extra_text }}
+                </p>
+                <div class="f-form__content-multiple-item f-form__counter">
+                    <div class="f-form__counter-info">{% trans 'Переход' %} :</div>
+                    <div class="f-form__counter-heart">Через <span id="timer" >10</span> секунд</div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="f-form__footer"></div>
+        {% if previous_page %}
+            <a href="{% url previous_page %}" data-url="{% url previous_page %}" class="b-btn-close"></a>
+        {% else %}
+            <a href="{% url 'main' %}" data-url="{% url 'main' %}" class="b-btn-close"></a>
+        {% endif %}
+    </form>
+{% endblock %}
+
+{% block info %}{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extrascrypts %}
+<script src="{% static 'redirect.js' %}" ></script>
+{% endblock %}

@@ -22,7 +22,7 @@ from django.utils.decorators import method_decorator
 from bids.models import Bid
 from communication.forms import WriteCommentForm, WriteQuestionForm
 from communication.models import (
-    UserExistMessage, UserQuestion, CallbackSuccessForm
+    UserExistMessage, UserQuestion, CallbackSuccessForm, CallbackFailForm
 )
 from communication.views.sms import sms
 from content.helpers import clear_contact_phone, check_blacklist
@@ -641,6 +641,19 @@ class SaveQuestionnaireStepView(View):
                         )
                         user.active = False
                         user.save()
+                        callback_fail = CallbackFailForm.get_solo()
+                        redirect_url = reverse('fail', kwargs={
+                            'id_mess': callback_fail.success.id,
+                            'redirect_url': 'main'
+                        })
+                        return JsonResponse(
+                            {
+                                'result': 'ok',
+                                'errors': None,
+                                'url': redirect_url
+                            },
+                            safe=False
+                        )
                     else:
                         user = User.objects.filter(
                             id=self.request.user.id

@@ -393,6 +393,21 @@ class CallbackSuccessForm(SingletonModel):
         return self.success.title
 
 
+class CallbackFailForm(SingletonModel):
+    success = models.ForeignKey('SuccessFormStatic',
+                                verbose_name=_('Форма успешного заказа'),
+                                on_delete=models.CASCADE,
+                                blank=True,
+                                null=True)
+
+    class Meta:
+        verbose_name = _('Форма неуспешного действия')
+        verbose_name_plural = _('Формы неуспешного действия')
+
+    def __str__(self):
+        return self.success.title
+
+
 SOCIAL_NETS_ICONS_CLASSES = (('twitter', 'Twitter'),
                              ('pinterest', 'Pinterest'),
                              ('linkedin', 'LinkedIn'),
