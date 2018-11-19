@@ -102,7 +102,8 @@ class BankidView(View):
             if settings.DEBUG:
                 domain = "bankid.privatbank.ua"  # dev domain
             else:
-                domain = "biprocessing.org.ua"  # prod domain
+                # domain = "biprocessing.org.ua"  # prod domain
+                domain = "bankid.org.ua"  # prod domain
 
             path = "DataAccessService/oauth/token"
             for_sha = "{0}{1}{2}".format(
