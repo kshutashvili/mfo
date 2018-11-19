@@ -51,10 +51,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('Designates whether the user can log into this admin site.'),
     )
 
-    turnes_person_id = models.CharField(
+    turnes_person_id = models.IntegerField(
         "ID клиента в БД Turnes",
-        max_length=32,
-        blank=True
+        blank=True,
+        null=True
     )
 
     changed_default_password = models.BooleanField(
@@ -137,10 +137,10 @@ class RequestPersonalArea(models.Model):
         max_length=32,
         validators=[mobile_phone_number, ]
     )
-    turnes_person_id = models.CharField(
+    turnes_person_id = models.IntegerField(
         "ID клиента в БД Turnes",
-        max_length=32,
-        blank=True
+        blank=True,
+        null=True
     )
     has_account = models.BooleanField(
         "Создан аккаунт",
@@ -171,9 +171,9 @@ class RequestPersonalArea(models.Model):
             contract_num=self.contract_num,
             phone=clear_contact_phone(self.mobile_phone_number)
         )
+        print("turnes_person_id", self.turnes_person_id)
         if self.turnes_person_id and not self.has_account:
-            self.create_user_after_request()
-            self.has_account = True
+            self.has_account = self.create_user_after_request()
 
         super(RequestPersonalArea, self).save(*args, **kwargs)
 
@@ -189,17 +189,24 @@ class RequestPersonalArea(models.Model):
         new_user_password = get_random_string(length=8)
         new_user.set_password(new_user_password)
         new_user.save()
+        print("new_user_password", new_user_password)
+        try:
+            m_sid = send_password(
+                to=clear_contact_phone(self.mobile_phone_number),
+                password=new_user_password
+            )
+        except Exception:
+            new_user.delete()
+            return False
 
-        m_sid = send_password(
-            to=clear_contact_phone(self.mobile_phone_number),
-            password=new_user_password
-        )
         # m_sid = send_password(
         #     to="+380631280489",
         #     password=new_user_password
         # )
         if m_sid:
             self.message_sid = m_sid
+
+        return True
 
 
 class Questionnaire(models.Model):

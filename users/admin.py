@@ -31,7 +31,7 @@ class RequestPersonalAreaAdmin(admin.ModelAdmin):
 
 @admin.register(Questionnaire)
 class QuestionnaireAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('last_name', 'mobile_phone', 'email', 'itn')
 
 
 @admin.register(RegistrationCountry)

@@ -142,7 +142,6 @@ class FirstChangePassword(FormView):
 
 def user_login(request, status_message=None):
     if request.method == 'POST':
-        form = LoginForm()
 
         data = {
             'mobile_phone': clear_contact_phone(
@@ -359,6 +358,7 @@ class RequestPersonalAreaView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
+        print("self.object", self.object.id)
         if self.object.turnes_person_id:
             url = reverse('login')
         else:
@@ -493,10 +493,16 @@ class QuestionnaireView(TemplateView):
             user=self.request.user
         ).exists()
         if anketa_exists:
-            anketa_object = Questionnaire.objects.filter(
+            anketa_values = Questionnaire.objects.filter(
                 user=self.request.user
             ).values()[0]
-            context['form'] = RegisterPersonalForm(initial=anketa_object)
+            if anketa_values['birthday_date']:
+                anketa_values['birthday_date'] = datetime.strftime(anketa_values.get('birthday_date'), '%Y-%m-%d')
+            if anketa_values['passport_date']:
+                anketa_values['passport_date'] = datetime.strftime(anketa_values.get('passport_date'), '%Y-%m-%d')
+            if anketa_values['passport_outdate']:
+                anketa_values['passport_outdate'] = datetime.strftime(anketa_values.get('passport_outdate'), '%Y-%m-%d')
+            context['form'] = RegisterPersonalForm(initial=anketa_values)
         else:
             context['form'] = RegisterPersonalForm()
         return context
@@ -531,9 +537,6 @@ class SaveQuestionnaireStepView(View):
         return super().dispatch(*args, **kwargs)
 
     def post(self, *args, **kwargs):
-        print("args", self.request.POST)
-        # print("step", self.request.POST.get("step"))
-        # step = self.request.POST.get('step')
         anketa_exists = Questionnaire.objects.filter(
             user=self.request.user
         ).exists()
@@ -545,6 +548,13 @@ class SaveQuestionnaireStepView(View):
                     anketa = form.save(commit=False)
                     anketa.user = self.request.user
                     anketa.save()
+                    return JsonResponse(
+                        {
+                            'result': 'ok',
+                            'errors': None
+                        },
+                        safe=False
+                    )
                 else:
                     return JsonResponse(
                         {
@@ -562,7 +572,6 @@ class SaveQuestionnaireStepView(View):
                     safe=False
                 )
         else:
-            # data_dict = dict(self.request.POST)
             data_dict = self.request.POST.dict()
             if 'switchResidence' in data_dict:
                 data_dict.pop('switchResidence')
@@ -578,19 +587,28 @@ class SaveQuestionnaireStepView(View):
                 data_dict.pop('switchRegistration')
             if 'birthday_date' in data_dict:
                 if data_dict['birthday_date']:
-                    data_dict['birthday_date'] = datetime.strptime(data_dict.get('birthday_date'), '%Y-%m-%d')
+                    data_dict['birthday_date'] = datetime.strptime(
+                        data_dict.get('birthday_date', None),
+                        '%Y-%m-%d'
+                    )
                 else:
-                    data_dict['birthday_date'] = datetime.strptime('9999-01-01', '%Y-%m-%d')
+                    data_dict['birthday_date'] = None
             if 'passport_date' in data_dict:
                 if data_dict['passport_date']:
-                    data_dict['passport_date'] = datetime.strptime(data_dict.get('passport_date'), '%Y-%m-%d')
+                    data_dict['passport_date'] = datetime.strptime(
+                        data_dict.get('passport_date', None),
+                        '%Y-%m-%d'
+                    )
                 else:
-                    data_dict['passport_date'] = datetime.strptime('9999-01-01', '%Y-%m-%d')
+                    data_dict['passport_date'] = None
             if 'passport_outdate' in data_dict:
                 if data_dict['passport_outdate']:
-                    data_dict['passport_outdate'] = datetime.strptime(data_dict.get('passport_outdate'), '%Y-%m-%d')
+                    data_dict['passport_outdate'] = datetime.strptime(
+                        data_dict.get('passport_outdate', None),
+                        '%Y-%m-%d'
+                    )
                 else:
-                    data_dict['passport_outdate'] = datetime.strptime('9999-01-01', '%Y-%m-%d')
+                    data_dict['passport_outdate'] = None
             if 'has_criminal_record' in data_dict:
                 if data_dict['has_criminal_record'] == 'off':
                     data_dict['has_criminal_record'] = False

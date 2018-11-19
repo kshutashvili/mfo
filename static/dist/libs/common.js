@@ -9,6 +9,7 @@ window.onload = function() {
 	creditFormSubmit();
 	enableCountryRequired();
 
+	/* Callbacks to partners after submit Request form */
 	(function($) {
 		var params = window.location.search.replace('?','').split('&')
 		.reduce(
@@ -430,66 +431,84 @@ window.onload = function() {
 		}
 	});
 
-	// $('.questionnaire .b-btn-primary').not('[type=submit]').on('click', function(e) {
-	// $('.questionnaire .b-btn-primary').on('click', function(e) {
 	$('.next-btn').on('click', function(e) {
 		e.preventDefault();
-		// e.stopPropagation();
 
+		// Inputs inside questionnaire__step
 		var $inputs = $(this).parent().find('input');
-		// console.log($inputs);
-		var data = {};
-
+		// Selects inside questionnaire__step
 		var $selects = $(this).parent().find('select');
-		console.log($selects);
+
+		var data = {};  // Object with data values: {'fieldName': 'fieldValue'}
+		var validity = {};  // Object with validation decision: {'fieldName': true or false}
+
+		// Clear fields with errors
+		var errorFields = $('.error')
+		for (var i = 0; i < errorFields.length; i++) {
+			$(errorFields[i]).removeClass('error')
+		}
+
 		Array.from($inputs).forEach(function(item, i){
-		// 	// console.log(item.name);
-		// 	// console.log(item.value);
-		// 	// console.log(i);
-		// 	console.log($("#"+item.id).parent());
-		// 	$("#"+item.id).removeClass('error');
-		// 	$("#"+item.id).parent().find('.error-text').remove();
-		// 	console.log(item.checkValidity(), item.name);
-			data[item.name] = item.value;
+			// Check questionnaire__field is visible
+			if ($(item).parent().is(':visible')) {
+				data[item.name] = item.value;
+				validity[item.name] = item.checkValidity();
+			}
 		});
+
 		Array.from($selects).forEach(function(item, i){
-			data[item.name] = item.value;
+			// Check questionnaire__field is visible
+			if ($(item).parent().is(':visible')) {
+				data[item.name] = item.value;
+				validity[item.name] = item.checkValidity();
+			}
 		})
-		console.log(data);
+
+		// Check if form has errors
+		var hasError = false;
+		for (key in validity) {
+			if (!validity[key]) {
+				hasError = true
+				$('#id_'+key).addClass('error')  // Input fields
+				$('#'+key).addClass('error')  // Select fields
+			}
+		}
+
+		// Form has error; show firls field with error
+		if (hasError) {
+			var firstErrorKey = $('.error')[0]
+			$('body,html').animate(
+				{ scrollTop: $(firstErrorKey).position().top },
+				1000
+			);
+			return
+		}
+
 		var out = $(this);
 		$.ajax({
 			url: $('#questionnaire-form').attr('action'),
-			// url: '/ru/questionnaire-step1/',
 			type: 'post',
 			data: data,
-			// data: JSON.stringify($('#questionnaire-form').serialize()),
 			dataType: 'json',
 
 			success: function(response){
-				console.log(response);
+				// Redirect to spicified URL
 				if ('url' in response){
-					console.log('uurl '+ response.url)
 					window.location.assign(response.url)
 				}
-		// 		if (response["result"] == "ok"){
-		// 			var currentStep = out.parent();
-		// 			var nextStep = out.parent().next('.questionnaire__step');
-		// 			currentStep.fadeOut(400, function() {
-		// 				nextStep.fadeIn(400);
-		// 			});
-		// 		}
-		// 		if (response["errors"]){
-		// 			for (var error in response["errors"]){
-		// 				// console.log(response["errors"][error]);
-		// 				var $elem = $("#id_" + error);
-		// 				// console.log($elem);
-		// 				$elem.addClass("error-border");
-		// 				$elem.parent().append(
-		// 					"<div class='error-text'>" + response["errors"][error] + "</div>"
-		// 				)
-		// 			}
-		// 			$("#id_" + Object.keys(response["errors"])[0]).focus();
-		// 		}
+
+				if (response["errors"]){
+					for (var error in response["errors"]){
+						console.log("errors", response["errors"][error]);
+						var $elem = $("#id_" + error);
+						// console.log($elem);
+						$elem.addClass("error");
+						$elem.parent().append(
+							"<div class='error-text'>" + response["errors"][error] + "</div>"
+						)
+					}
+					$("#id_" + Object.keys(response["errors"])[0]).focus();
+				}
 			}
 		}); 
 
@@ -497,7 +516,12 @@ window.onload = function() {
 		var nextStep = $(this).parent().next('.questionnaire__step');
 
 		currentStep.fadeOut(400, function() {
+			currentStep.removeClass("curr");
 			nextStep.fadeIn(400);
+			nextStep.addClass("curr");
+			if (nextStep.find('input[name="step"]').val() == '2') {
+				showStep2Fields();
+			}
 		});
 
 		$('body,html').animate({ scrollTop: 0 }, 1000);
@@ -509,7 +533,12 @@ window.onload = function() {
 		var prevStep = $(this).parent().prev('.questionnaire__step');
 
 		current.fadeOut(400, function() {
+			current.removeClass("curr");
 			prevStep.fadeIn(400);
+			current.addClass("curr");
+			if (prevStep.find('input[name="step"]').val() == '2') {
+				showStep2Fields();
+			}
 		});
 
 		// $('body,html').animate({ scrollTop: 0 }, 1000);
@@ -1111,4 +1140,19 @@ function getTarget(obj) {
 function enableCountryRequired() {
 	$('#selectRegistration').attr('required', 'true');
 	$('#residence').attr('required', 'true');
+}
+
+function showStep2Fields(){
+	$('.type-block').hide();
+	// var currStep = $('fieldset.questionnaire__step.curr > input[name="step"]');
+	// if (currStep[0].value == '2'){
+		var empType = $('#employment_type').val()
+		if (empType) {
+			$('#' + empType).show();
+		}
+	// }
+	console.log("req", $('input[required=true]'))
+	$.each($('input[required=true]'), function(sKey, sValue){
+	    console.log(sValue);
+	});
 }

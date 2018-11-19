@@ -226,6 +226,7 @@ class RegisterPersonalForm(forms.ModelForm):
     )
     residence_county_switch = forms.ChoiceField(
         choices=(('', ''),),
+        required=False
     )
 
     class Meta:
@@ -277,66 +278,79 @@ class RegisterPersonalForm(forms.ModelForm):
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Прізвище'),
+                    'required': True
                 }
             ),
             'first_name': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _("Ім'я"),
+                    'required': True
                 }
             ),
             'middle_name': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('По батькові'),
+                    'required': True
                 }
             ),
             'birthday_date': forms.DateInput(
                 attrs={
                     'class': 'questionnaire__input date',
                     'placeholder': _('Дата народження'),
+                    'autocomplete': 'off',
+                    'required': True
                 }
             ),
             'mobile_phone': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input phone-mask',
                     'placeholder': _('+38 (0__) ___ __ __'),
+                    'required': True
                 }
             ),
             'email': forms.EmailInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('example@mail.com'),
+                    'required': True
                 }
             ),
             'itn': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('XXXXXXXXXX'),
+                    'required': True
                 }
             ),
             'passport_code': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('AA XXXXXX / XXXXXXXXX'),
+                    'required': True
                 }
             ),
             'passport_date': forms.DateInput(
                 attrs={
                     'class': 'questionnaire__input date',
                     'placeholder': _('Дата видачі паспорту / ID-карти'),
+                    'autocomplete': 'off',
+                    'required': True
                 }
             ),
             'passport_outdate': forms.DateInput(
                 attrs={
                     'class': 'questionnaire__input date',
-                    'placeholder': _('Дата закінчення терміну дії ID-карти')
+                    'placeholder': _('Дата закінчення терміну дії ID-карти'),
+                    'autocomplete': 'off'
                 }
             ),
             'passport_authority': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Ким виданий паспорт / ID-карта'),
+                    'required': True
                 }
             ),
             'registration_country': forms.TextInput(
@@ -347,30 +361,35 @@ class RegisterPersonalForm(forms.ModelForm):
             'registration_state': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
             'registration_district': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Район'),
+                    'required': True
                 }
             ),
             'registration_city': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Назва населеного пункту'),
+                    'required': True
                 }
             ),
             'registration_street': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Назва вулиці'),
+                    'required': True
                 }
             ),
             'registration_building': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Номер будинку'),
+                    'required': True
                 }
             ),
             'registration_flat': forms.TextInput(
@@ -383,6 +402,7 @@ class RegisterPersonalForm(forms.ModelForm):
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('XXXXX'),
+                    'required': True
                 }
             ),
             'residence_country': forms.TextInput(
@@ -434,140 +454,164 @@ class RegisterPersonalForm(forms.ModelForm):
             'education': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
             'marital_status': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
             'company_name': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Назва компанії'),
+                    'required': True
                 }
             ),
             'edrpou_code': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Код ЄДРПОУ'),
+                    'required': True
                 }
             ),
             'position': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Посада'),
+                    'required': True
                 }
             ),
             'position_type': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
             'service_type': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
             'company_experience': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Стаж роботи в компанії'),
+                    'required': True
                 }
             ),
             'overall_experience': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Загальний трудовий стаж'),
+                    'required': True
                 }
             ),
             'company_address': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Фактична адреса місця праці'),
+                    'required': True
                 }
             ),
             'company_phone': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Контактний номер компанії'),
+                    'required': True
                 }
             ),
             'labor_relations': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Трудові правовідносини'),
+                    'required': True
                 }
             ),
             'state_registration_date': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
-                    'placeholder': _('Дата державної реєстрації')
+                    'placeholder': _('Дата державної реєстрації'),
+                    'required': True
                 }
             ),
             'state_registration_authority': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
-                    'placeholder': _('Орган державної реєстрації')
+                    'placeholder': _('Орган державної реєстрації'),
+                    'required': True
                 }
             ),
             'activity_type': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
-                    'placeholder': _('Вид діяльності (КВЕД)')
+                    'placeholder': _('Вид діяльності (КВЕД)'),
+                    'required': True
                 }
             ),
             'confirmed_document': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
-                    'placeholder': _('Серія та номер')
+                    'placeholder': _('Серія та номер'),
+                    'required': True
                 }
             ),
             'employ_count': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
-                    'placeholder': _('Кількість співробітників')
+                    'placeholder': _('Кількість співробітників'),
+                    'required': True
                 }
             ),
             'bound_person_names': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('ПІБ'),
+                    'required': True
                 }
             ),
             'bound_person_itn': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Індивідуальний податковий номер (ІПН)'),
+                    'required': True
                 }
             ),
             'bound_person_relationship': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
             'bound_person_job': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Дані про роботу'),
+                    'required': True
                 }
             ),
             'bound_person_phone': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Контактний номер телефону'),
+                    'required': True
                 }
             ),
             'bound_person_address': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Адреса фактичного проживання'),
+                    'required': True
                 }
             ),
             'salary': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Заробітна плата, грн'),
+                    'required': True
                 }
             ),
             'partner_salary': forms.TextInput(
@@ -610,12 +654,14 @@ class RegisterPersonalForm(forms.ModelForm):
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Загальний дохід, грн'),
+                    'required': True
                 }
             ),
             'month_outgoing': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Щомісячні витрати, грн'),
+                    'required': True
                 }
             ),
             'month_loan_payments_outgoing': forms.TextInput(
@@ -651,12 +697,14 @@ class RegisterPersonalForm(forms.ModelForm):
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Сума кредиту'),
+                    'required': True
                 }
             ),
             'credit_term': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Термін кредиту (кількість тижнів/місяців)'),
+                    'required': True
                 }
             ),
         }
@@ -691,21 +739,24 @@ class RegisterPersonalForm(forms.ModelForm):
 
         self.fields['sex'].widget.attrs.update({
             'class': 'b-select',
-            'id': 'sex'
+            'id': 'sex',
+            'required': True
         })
 
         self.fields['education'].widget.choices = [
             (dropdown[0], dropdown[1]) for dropdown in get_dropdown_data(5)
         ]
         self.fields['education'].widget.choices.insert(
-            0, ('', _('Освіта'))
+            # 0, ('', _('Освіта'))
+            0, ('', _('---'))
         )
 
         self.fields['marital_status'].widget.choices = [
             (dropdown[0], dropdown[1]) for dropdown in get_dropdown_data(4)
         ]
         self.fields['marital_status'].widget.choices.insert(
-            0, ('', _('Сімейний стан'))
+            # 0, ('', _('Сімейний стан'))
+            0, ('', _('---'))
         )
 
         state_dopdown = get_dropdown_data(2)
@@ -713,53 +764,61 @@ class RegisterPersonalForm(forms.ModelForm):
             (dropdown[0], dropdown[1]) for dropdown in state_dopdown
         ]
         self.fields['registration_state'].widget.choices.insert(
-            0, ('', _('Область'))
+            # 0, ('', _('Область'))
+            0, ('', _('---'))
         )
         self.fields['residence_state'].widget.choices = [
             (dropdown[0], dropdown[1]) for dropdown in state_dopdown
         ]
         self.fields['residence_state'].widget.choices.insert(
-            0, ('', _('Область'))
+            # 0, ('', _('Область'))
+            0, ('', _('---'))
         )
 
         self.fields['employment_type'].widget.attrs.update({
             'class': 'b-select',
-            'id': 'employment_type'
+            'id': 'employment_type',
+            'required': True
         })
 
         self.fields['position_type'].widget.choices = [
             (dropdown[0], dropdown[1]) for dropdown in get_dropdown_data(20)
         ]
         self.fields['position_type'].widget.choices.insert(
-            0, ('', _('Вид персоналу'))
+            # 0, ('', _('Вид персоналу'))
+            0, ('', _('---'))
         )
 
         self.fields['service_type'].widget.choices = [
             (dropdown[0], dropdown[1]) for dropdown in get_dropdown_data(6)
         ]
         self.fields['service_type'].widget.choices.insert(
-            0, ('', _('Сфера діяльності'))
+            # 0, ('', _('Сфера діяльності'))
+            0, ('', _('---'))
         )
 
         self.fields['labor_relations'].widget.choices = [
             (dropdown[0], dropdown[1]) for dropdown in get_dropdown_data(7)
         ]
         self.fields['labor_relations'].widget.choices.insert(
-            0, ('', _('Трудові правовідносини'))
+            # 0, ('', _('Трудові правовідносини'))
+            0, ('', _('---'))
         )
 
         self.fields['bound_person_relationship'].widget.choices = [
             (dropdown[0], dropdown[1]) for dropdown in get_dropdown_data(12)
         ]
         self.fields['bound_person_relationship'].widget.choices.insert(
-            0, ('', _('Ступінь відносин'))
+            # 0, ('', _('Ступінь відносин'))
+            0, ('', _('---'))
         )
 
         self.fields['dwelling_type'].widget.choices = [
             (dropdown[0], dropdown[1]) for dropdown in get_dropdown_data(10)
         ]
         self.fields['dwelling_type'].widget.choices.insert(
-            0, ('', _('Тип житла'))
+            # 0, ('', _('Тип житла'))
+            0, ('', _('---'))
         )
 
 
@@ -769,6 +828,7 @@ class RegisterPersonalStep1Form(forms.ModelForm):
     )
     residence_county_switch = forms.ChoiceField(
         choices=(('', ''),),
+        required=False
     )
 
     class Meta:
@@ -833,18 +893,21 @@ class RegisterPersonalStep1Form(forms.ModelForm):
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('XXXXXXXXXX'),
+                    'required': True
                 }
             ),
             'passport_code': forms.TextInput(
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('AA XXXXXX / XXXXXXXXX'),
+                    'required': True
                 }
             ),
             'passport_date': forms.DateInput(
                 attrs={
                     'class': 'questionnaire__input date',
                     'placeholder': _('Дата видачі паспорту / ID-карти'),
+                    'required': True
                 }
             ),
             'passport_outdate': forms.DateInput(
@@ -857,6 +920,7 @@ class RegisterPersonalStep1Form(forms.ModelForm):
                 attrs={
                     'class': 'questionnaire__input',
                     'placeholder': _('Ким виданий паспорт / ID-карта'),
+                    'required': True
                 }
             ),
             'registration_country': forms.TextInput(
@@ -867,6 +931,7 @@ class RegisterPersonalStep1Form(forms.ModelForm):
             'registration_state': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
             'registration_district': forms.TextInput(
@@ -954,11 +1019,13 @@ class RegisterPersonalStep1Form(forms.ModelForm):
             'education': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
             'marital_status': forms.Select(
                 attrs={
                     'class': 'questionnaire__input',
+                    'required': True
                 }
             ),
         }
@@ -993,7 +1060,8 @@ class RegisterPersonalStep1Form(forms.ModelForm):
 
         self.fields['sex'].widget.attrs.update({
             'class': 'b-select',
-            'id': 'sex'
+            'id': 'sex',
+            'required': True
         })
 
         self.fields['education'].widget.choices = [
