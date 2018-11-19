@@ -694,7 +694,10 @@ def get_turnes_profile(turnes_id):
             WHERE id = {0};
         """.format(int(turnes_id))  # 144580
     )
-    person_data = exfin_cursor.fetchall()[0]
+    try:
+        person_data = exfin_cursor.fetchall()[0]
+    except Exception:
+        return None
 
     """
         SQL Query from table mbank.fvalues
