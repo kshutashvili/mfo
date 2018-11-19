@@ -10,7 +10,8 @@ from .widgets import AdminFileWidget
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'last_name', 'first_name', 'inn', 'resident'
+        'id', 'last_name', 'first_name', 'inn', 'resident',
+        'created_dt'
     )
 
 
@@ -24,7 +25,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
     list_display = (
         'id', 'type', 'get_customer_last_name',
-        'get_customer_first_name'
+        'get_customer_first_name', 'created_dt'
     )
     get_customer_last_name.short_description = "Фамилия"
     get_customer_first_name.short_description = "Имя"
@@ -40,7 +41,7 @@ class AddressAdmin(admin.ModelAdmin):
 
     list_display = (
         'id', 'country', 'type', 'get_customer_last_name',
-        'get_customer_first_name'
+        'get_customer_first_name', 'created_dt'
     )
 
 
@@ -64,6 +65,13 @@ class ScanDocumentAdmin(admin.ModelAdmin):
 
     list_display = (
         'id', 'extension', 'type', 'get_customer_last_name',
-        'get_customer_first_name'
+        'get_customer_first_name', 'created_dt'
     )
     form = SecureFileAdminForm
+
+
+@admin.register(BankIDLog)
+class BankIDLogAdmin(admin.ModelAdmin):
+    list_display = ('type', 'created_dt')
+    search_fields = ('type', 'message')
+    list_filter = ('type', )

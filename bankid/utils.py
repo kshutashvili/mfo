@@ -11,19 +11,34 @@ from Crypto.PublicKey import RSA
 import requests
 
 from django.core import files
+from django.conf import settings
 
 from users.models import Questionnaire
-from .models import Customer, Document, Address, ScanDocument
+from .models import (
+    Customer, Document, Address, ScanDocument,
+    BankIDLog
+)
 
 
 def decrypt_data(encrypted_data):
-    print("decrypt_data")
-    print(encrypted_data)
-    # import private key which should use for decryption
-    priv = RSA.importKey(
-        open('/home/phonxis/rsa_key.pem', 'rb').read(),
-        passphrase='4602161'
+    # print("decrypt_data")
+    # print(encrypted_data)
+    BankIDLog.objects.create(
+        type='DecryptData',
+        subtype="encrypted_data",
+        message=encrypted_data
     )
+    # import private key which should use for decryption
+    if settings.DEBUG:
+        priv = RSA.importKey(
+            open('/home/phonxis/rsa_key.pem', 'rb').read(),
+            passphrase='4602161'
+        )
+    else:
+        priv = RSA.importKey(
+            open('/var/sites/e-fin/key_for_bankid/rsa_key.pem', 'rb').read(),
+            passphrase='4602161'
+        )
     cipher = PKCS1_v1_5.new(priv)
     dsize = SHA.digest_size
     sentinel = Random.new().read(15 + dsize)
@@ -106,7 +121,12 @@ def decrypt_data(encrypted_data):
                 base64_decoded,
                 sentinel
             ).decode('utf-8')
-
+    # print("decrypted_data", decrypted_data)
+    BankIDLog.objects.create(
+        type='DecryptData',
+        subtype="decrypted_data",
+        message=decrypted_data
+    )
     return decrypted_data
 
 
@@ -135,6 +155,11 @@ def local_save(decrypted_data, user, headers):
 
     customer = Customer.objects.create(
         **decrypted_data['customer']
+    )
+    BankIDLog.objects.create(
+        type='DecryptData',
+        subtype="decrypted_data",
+        message=decrypted_data
     )
     # collect data for Questionnaire
     anketa_data = {

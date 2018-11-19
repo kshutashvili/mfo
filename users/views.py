@@ -480,10 +480,13 @@ class QuestionnaireView(TemplateView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
+        if self.request.user.ready_for_turnes:
+            return HttpResponseRedirect(reverse('profile'))
         return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(QuestionnaireView, self).get_context_data(*kwargs)
+
         context['form_step1'] = RegisterPersonalStep1Form()
         context['form_step2'] = RegisterPersonalStep2Form()
         context['form_step3'] = RegisterPersonalStep3Form()
@@ -641,6 +644,7 @@ class SaveQuestionnaireStepView(View):
                         )
                         #
                         user.active = False
+                        user.ready_for_turnes = False
                         user.save()
                         callback_fail = CallbackFailForm.get_solo()
                         redirect_url = reverse('fail', kwargs={

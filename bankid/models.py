@@ -68,6 +68,14 @@ class Customer(models.Model):
         'Последняя дата модификации данных',
         blank=True
     )
+    created_dt = models.DateTimeField(
+        'Дата создания',
+        auto_now_add=True
+    )
+    updated_dt = models.DateTimeField(
+        'Дата обновления',
+        auto_now=True
+    )
 
     class Meta:
         verbose_name = "Клиенты (BankID)"
@@ -115,6 +123,14 @@ class Document(models.Model):
     date_modification = models.TextField(
         'Последняя дата модификации данных',
         blank=True
+    )
+    created_dt = models.DateTimeField(
+        'Дата создания',
+        auto_now_add=True
+    )
+    updated_dt = models.DateTimeField(
+        'Дата обновления',
+        auto_now=True
     )
 
     class Meta:
@@ -168,6 +184,14 @@ class Address(models.Model):
         'Последняя дата модификации данных',
         blank=True
     )
+    created_dt = models.DateTimeField(
+        'Дата создания',
+        auto_now_add=True
+    )
+    updated_dt = models.DateTimeField(
+        'Дата обновления',
+        auto_now=True
+    )
 
     class Meta:
         verbose_name = "Адреса (BankID)"
@@ -218,10 +242,49 @@ class ScanDocument(models.Model):
         'Последняя дата модификации данных',
         blank=True
     )
+    created_dt = models.DateTimeField(
+        'Дата создания',
+        auto_now_add=True
+    )
+    updated_dt = models.DateTimeField(
+        'Дата обновления',
+        auto_now=True
+    )
 
     class Meta:
         verbose_name = "Сканы (BankID)"
         verbose_name_plural = "Скан (BankID)"
+
+    def __str__(self):
+        return str(self.id)
+
+
+class BankIDLog(models.Model):
+    type = models.CharField(
+        "Тип",
+        max_length=256
+    )
+    subtype = models.CharField(
+        "Подтип",
+        max_length=128,
+        blank=True
+    )
+    message = models.TextField(
+        "Данные",
+        blank=True
+    )
+    created_dt = models.DateTimeField(
+        "Дата создания",
+        auto_now_add=True
+    )
+    updated_dt = models.DateTimeField(
+        "Дата обновления",
+        auto_now=True
+    )
+
+    class Meta:
+        verbose_name = "Логи (BankID)"
+        verbose_name_plural = "Логи (BankID)"
 
     def __str__(self):
         return str(self.id)

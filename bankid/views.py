@@ -25,7 +25,7 @@ from django.views.static import serve
 from content.helpers import clear_contact_phone
 from users.models import User
 from users.helpers import make_user_password
-from .models import ScanDocument
+from .models import ScanDocument, BankIDLog
 from .utils import (
     decrypt_data, local_save
 )
@@ -35,7 +35,13 @@ from .utils import (
 
 class BankidView(View):
     def get(self, *args, **kwargs):
-        print(self.request.GET)
+        # print(self.request.GET)
+
+        BankIDLog.objects.create(
+            type='BankIDView',
+            subtype="GET",
+            message=self.request.GET
+        )
         if 'code' not in self.request.GET:
             """
                 first request to bankid
@@ -68,10 +74,22 @@ class BankidView(View):
                 query=query
             )
 
+            BankIDLog.objects.create(
+                type='BankIDView',
+                subtype="URL",
+                message=url
+            )
+
             return HttpResponseRedirect(url)
 
         code = self.request.GET.get('code', None)
-        print(code)
+        # print("code", code)
+
+        BankIDLog.objects.create(
+            type='BankIDView',
+            subtype="Code",
+            message=code
+        )
         if code:
             """
                 second request to bankid
@@ -92,10 +110,21 @@ class BankidView(View):
                 settings.BANKID_SECRET,  # secret
                 code
             )
-            print(for_sha)
+            # print("for_sha", for_sha)
+
+            BankIDLog.objects.create(
+                type='BankIDView',
+                subtype="for SHA",
+                message=for_sha
+            )
             url = "https://{domain}/{path}".format(
                 domain=domain,
                 path=path
+            )
+            BankIDLog.objects.create(
+                type='BankIDView',
+                subtype="URL",
+                message=url
             )
             params = {
                 "grant_type": "authorization_code",
@@ -107,25 +136,44 @@ class BankidView(View):
                     self.request.META['HTTP_HOST']  # domain
                 )
             }
-            print(params)
+            # print("params", params)
+
+            BankIDLog.objects.create(
+                type='Request',
+                subtype="PARAMS",
+                message=params
+            )
             try:
                 r = requests.get(
                     url=url,
                     params=params
                 )
             except Exception as e:
-                print(e)
+                BankIDLog.objects.create(
+                    type='Request',
+                    subtype="Request Error",
+                    message=e
+                )
             try:
                 json_resp = r.json()
             except Exception as e:
-                print(e)
-            pprint(r.text)
+                BankIDLog.objects.create(
+                    type='BankIDGetData',
+                    subtype="json_resp Error",
+                    message=e
+                )
+            # print("r.text", r.text)
+
+            BankIDLog.objects.create(
+                type='BankIDGetData',
+                subtype="response text",
+                message=r.text
+            )
 
             if 'error' in json_resp:
                 # invalid data
                 return HttpResponseRedirect('/')
 
-            # print(json_resp['access_token'], json_resp['refresh_token'])
             # set tokens into session
             self.request.session['access_token'] = json_resp['access_token']
             self.request.session['refresh_token'] = json_resp['refresh_token']
@@ -164,7 +212,17 @@ def bankid_refreshtokens(request):
 def bankid_getdata(request):
     access_token = request.session.get('access_token', None)
     refresh_token = request.session.get('refresh_token', None)
-    print(access_token, refresh_token)
+    BankIDLog.objects.create(
+        type='BankIDGetData',
+        subtype="access_token",
+        message=access_token
+    )
+    BankIDLog.objects.create(
+        type='BankIDGetData',
+        subtype="refresh_token",
+        message=refresh_token
+    )
+    print("access_token", access_token, "refresh_token", refresh_token)
     if settings.DEBUG:
         url = "https://bankid.privatbank.ua/ResourceService/checked/data"
     else:
@@ -262,13 +320,40 @@ def bankid_getdata(request):
         ]
     }
 
+    BankIDLog.objects.create(
+        type='BankIDGetData',
+        subtype="request headers",
+        message=headers
+    )
+    BankIDLog.objects.create(
+        type='BankIDGetData',
+        subtype="request data",
+        message=json.dumps(data)
+    )
+    BankIDLog.objects.create(
+        type='BankIDGetData',
+        subtype="request URL",
+        message=url
+    )
+
     r = requests.post(
         url=url,
         headers=headers,
         data=json.dumps(data)
     )
 
+    BankIDLog.objects.create(
+        type='BankIDGetData',
+        subtype="response",
+        message=r.json()
+    )
+
     decrypted = decrypt_data(r.json())
+    BankIDLog.objects.create(
+        type='BankIDGetData',
+        subtype="decrypted",
+        message=decrypted
+    )
 
     # check if user with this mobile_phone exists
     user_exists = User.objects.filter(
@@ -297,12 +382,6 @@ def bankid_getdata(request):
         login(request, auth_user)
         return HttpResponseRedirect(reverse_lazy('questionnaire'))
 
-    # return JsonResponse(
-    #     json.dumps(
-    #         decrypted
-    #     ),
-    #     safe=False
-    # )
     return HttpResponseRedirect(reverse_lazy('main'))
 
 
