@@ -157,7 +157,13 @@ def check_blacklist(itn=None, mobile_phone=None,
 
 
 def get_application_count():
-    print("date", str(date.today()), date.today())
+    """
+        Function selects a count of last statuses for today
+        and display it like the count of successful applications.
+
+        If SQL query is successful, returns a number.
+        If an error occurs, returns None.
+    """
     try:
         conn, cursor = create_database_connection(
             host=settings.TURNES_HOST,
@@ -174,10 +180,10 @@ def get_application_count():
         WHERE date(dt_created) = '{0}'
           AND is_last = 1;
     """.format(str(date.today()))
+
     cursor.execute(query)
     data = cursor.fetchall()
 
-    print("data", data)
     if data:
         return data[0][0]
     else:
