@@ -1,9 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
+
+from users.two_factor import OTPAdminSite
 from users.models import (
     Profile, RequestPersonalArea, User,
     Questionnaire, RegistrationCountry
 )
+
+
+# Add 2FA authentication to the admin site
+admin.site.__class__ = OTPAdminSite
 
 
 class ProfileInline(admin.StackedInline):
