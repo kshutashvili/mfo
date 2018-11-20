@@ -10,7 +10,7 @@ from users.models import (
 
 
 # Add 2FA authentication to the admin site
-admin.site.__class__ = OTPAdminSite
+# admin.site.__class__ = OTPAdminSite
 
 
 class ProfileInline(admin.StackedInline):
