@@ -80,12 +80,12 @@
 			<div class="s-header__phone">
 			{% if hot_line_phone|is_phone_active %}
 				<span>{% trans "Телефон горячей линии" %}</span>
-				<a href="tel:+{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }}</a>
+				<a href="tel:{{ hot_line_phone.number|cut:' ' }}">{{ hot_line_phone.number }}</a>
 			{% endif %}
 			</div>
 			
 			<div class="mobile-icons">
-				<a href="#" class="mobile-link">
+				<a href="{% if hot_line_phone|is_phone_active %}tel:{{ hot_line_phone.number|cut:' ' }}{% else %}#{% endif %}" class="mobile-link">
 					<i class="fas fa-phone"></i>
 				</a>
 
