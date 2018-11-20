@@ -38,11 +38,11 @@
 				</div>
 			</form>
 
-			<form action="{% url 'register' %}" method="post" class="f-callback-right disable">
+			<form action="{% url 'register' %}" method="post" class="f-callback-right"> <!-- disable-->
 				<h3 class="f-callback__caption">{% trans 'Сегодня одобрено' %}</h3>
 				{% csrf_token %}
 				<div class="b-total-number">
-					<span class="b-total-number__count">3495</span>
+					<span class="b-total-number__count">{{ application_count|default:"58"}}</span>
 					<span class="b-total-number__caption">{% trans 'Заявок' %}</span>
 				</div>
 

@@ -66,8 +66,8 @@ textarea.questionnaire__input{
 }
 .bankid-img{
     margin-bottom: 1em;
-    opacity: .4;
-    pointer-events: none;
+    /*opacity: .4;*/
+    /*pointer-events: none;*/
 }
 
 .f-callback__info2 {

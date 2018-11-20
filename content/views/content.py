@@ -23,7 +23,12 @@ from communication.models import Response, QuestionComment, UserQuestion,\
 from communication.forms import WriteCommentForm, WriteQuestionForm
 from department.models import Department
 from efin.settings import GOOGLE_MAPS_API_KEY, BASE_DIR
-from content.helpers import get_city_name, process_bid, clear_contact_phone
+from content.helpers import (
+    get_city_name,
+    process_bid,
+    clear_contact_phone,
+    get_application_count
+)
 from bids.models import Bid
 from users.forms import RegisterNumberForm
 from users.models import Profile
@@ -240,7 +245,7 @@ class CallbackView(TemplateView):
             del self.request.session['bid_id']
 
         context['bid_id'] = bid_id
-
+        context['application_count'] = get_application_count()
         city = get_city_name(self.request)
         context['city'] = city or "Другой город"
         context['form'] = RegisterNumberForm()

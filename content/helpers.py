@@ -1,7 +1,11 @@
+from datetime import date
+
 import requests
 
 from django.contrib.gis.geoip2 import GeoIP2
 from django.conf import settings
+
+from payment_gateways.utils import create_database_connection
 
 
 def get_client_ip(request):
@@ -150,3 +154,31 @@ def check_blacklist(itn=None, mobile_phone=None,
     )
 
     return r.json()
+
+
+def get_application_count():
+    print("date", str(date.today()), date.today())
+    try:
+        conn, cursor = create_database_connection(
+            host=settings.TURNES_HOST,
+            user=settings.TURNES_USER,
+            password=settings.TURNES_PASSWORD,
+            db=settings.TURNES_DATABASE
+        )
+    except Exception:
+        return None
+
+    query = """
+        SELECT count(1)
+        FROM mbank.tstatuses
+        WHERE date(dt_created) = '{0}'
+          AND is_last = 1;
+    """.format(str(date.today()))
+    cursor.execute(query)
+    data = cursor.fetchall()
+
+    print("data", data)
+    if data:
+        return data[0][0]
+    else:
+        return None
