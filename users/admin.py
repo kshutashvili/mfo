@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
+from django.utils.translation import gettext, gettext_lazy as _
 
 from users.two_factor import OTPAdminSite
 from users.models import (
@@ -18,7 +19,7 @@ class ProfileInline(admin.StackedInline):
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(auth_admin.UserAdmin):
     list_display = (
         "mobile_phone",
         "email",
@@ -26,6 +27,18 @@ class UserAdmin(admin.ModelAdmin):
         "is_superuser"
     )
     search_fields = ("turnes_person_id", )
+    ordering = ('mobile_phone', )
+    exclude = ('date_joined', )
+    fieldsets = (
+        (None, {'fields': ('mobile_phone', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                       'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login', )}),
+        (_('Important fields'), {'fields': ('turnes_person_id',
+                                            'changed_default_password',
+                                            'ready_for_turnes')}),
+    )
 
 
 @admin.register(RequestPersonalArea)
