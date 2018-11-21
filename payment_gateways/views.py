@@ -120,7 +120,7 @@ def pb_terminal_view(request):
 
         # replace payment's date if payment processed after 22:00
         date_for_turnes = date.today()
-        if datetime.now().hour >= 15:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         p = PrivatbankPayment.objects.filter(transaction_id=pb_code)
@@ -663,7 +663,7 @@ def easypay_terminal_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 15:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
@@ -1103,7 +1103,7 @@ def fam_terminal_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 15:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
@@ -1543,7 +1543,7 @@ def city_terminal_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 15:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
@@ -2051,7 +2051,7 @@ def portmone_ep_view(request):
             )
 
         date_for_turnes = date.today()
-        if datetime.now().hour >= 15:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         data = {
@@ -2249,7 +2249,7 @@ def portmone_pb_view(request):
 
         # replace payment's date if payment processed after 22:00
         date_for_turnes = date.today()
-        if datetime.now().hour >= 15:
+        if datetime.now().hour >= 22:
             date_for_turnes = date_for_turnes + timedelta(days=1)
 
         p = PortmonePrivatPayment.objects.filter(transaction_id=pb_code)
