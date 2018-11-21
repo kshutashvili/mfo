@@ -1,9 +1,5 @@
-import os
 import hashlib
-from pprint import pprint
 import json
-import mimetypes
-from os.path import basename
 
 import requests
 
@@ -20,7 +16,6 @@ from django.contrib.auth import (
     authenticate, login, logout, update_session_auth_hash
 )
 from django.contrib.auth.decorators import user_passes_test
-from django.views.static import serve
 
 from content.helpers import clear_contact_phone
 from users.models import User
@@ -30,34 +25,56 @@ from .utils import (
     decrypt_data, local_save
 )
 
-# Create your views here.
-
 
 class BankidView(View):
     def get(self, *args, **kwargs):
-        # print(self.request.GET)
+        """
+            The first request (GET) to a bankid
+            will return a response that contains
+            'code' value which  will be used in
+            a second request from this view.
+            After getting a response, browser redirects
+            to this view second time.
 
+            Example of first request URL:
+            https://bankid.org.ua/DataAccessService/das/authorize?
+                response_type=code&
+                client_id=b0f1d8f4-9775-49b4-b82f-807fbacc385a&
+                redirect_uri=https://expressfinance.com.ua/bankid/auth
+
+
+            The second request (GET/POST) to bankid
+            will return a response that
+            contains 'access_token' and 'refresh_token' values
+            which will be used for requesting data.
+            After getting a response, browser redirects
+            to the 'bankid:getdata' URL
+
+            Example of second request URL:
+            https://bankid.org.ua/DataAccessService/oauth/token
+            params:
+            {
+             'redirect_uri': 'https://expressfinance.com.ua/bankid/auth',
+             'client_id': 'b0f1d8f4-9775-49b4-b82f-807fbacc385a',
+             'client_secret': '8e6c439b90ae96ea5e2d7cbc882846eb1c86cb4040...',
+             'code': 'opWX7B45588',
+             'grant_type': 'authorization_code'
+            }
+        """
         BankIDLog.objects.create(
             type='BankIDView',
             subtype="GET",
             message=self.request.GET
         )
-        if 'code' not in self.request.GET:
-            """
-                first request to bankid
-                response contain 'access_token'
-                and 'refresh_token' values
-                which will be used for requesting data
 
-                after getting response, browser redirects
-                to this view second time
-            """
+        if 'code' not in self.request.GET:
+            # First request
 
             # different domains for Dev and Prod
             if settings.DEBUG:
-                domain = "bankid.privatbank.ua"  # dev domain
+                domain = "bankid.privatbank.ua"     # dev domain
             else:
-                domain = "bankid.org.ua"  # prod domain
+                domain = "bankid.org.ua"            # prod domain
 
             path = "DataAccessService/das/authorize"
             query = "response_type={type}&client_id={id}&redirect_uri={uri}".format(
@@ -83,35 +100,26 @@ class BankidView(View):
             return HttpResponseRedirect(url)
 
         code = self.request.GET.get('code', None)
-        # print("code", code)
 
         BankIDLog.objects.create(
             type='BankIDView',
             subtype="Code",
             message=code
         )
-        if code:
-            """
-                second request to bankid
-                response contain 'code' value
-                which will be used in next requests
 
-                after getting response, browser redirects
-                to the 'bankid:getdata' URL
-            """
+        if code:
+            # Second request
             if settings.DEBUG:
-                domain = "bankid.privatbank.ua"  # dev domain
+                domain = "bankid.privatbank.ua"     # dev domain
             else:
-                # domain = "biprocessing.org.ua"  # prod domain
-                domain = "bankid.org.ua"  # prod domain
+                domain = "bankid.org.ua"            # prod domain
 
             path = "DataAccessService/oauth/token"
             for_sha = "{0}{1}{2}".format(
-                settings.BANKID_CLIENT_ID,  # client_id
-                settings.BANKID_SECRET,  # secret
+                settings.BANKID_CLIENT_ID,          # client_id
+                settings.BANKID_SECRET,             # secret
                 code
             )
-            # print("for_sha", for_sha)
 
             BankIDLog.objects.create(
                 type='BankIDView',
@@ -137,7 +145,6 @@ class BankidView(View):
                     self.request.META['HTTP_HOST']  # domain
                 )
             }
-            # print("params", params)
 
             BankIDLog.objects.create(
                 type='Request',
@@ -163,7 +170,6 @@ class BankidView(View):
                     subtype="json_resp Error",
                     message=e
                 )
-            # print("r.text", r.text)
 
             BankIDLog.objects.create(
                 type='BankIDGetData',
@@ -180,6 +186,9 @@ class BankidView(View):
             self.request.session['refresh_token'] = json_resp['refresh_token']
 
             return HttpResponseRedirect(reverse('bankid:getdata'))
+        else:
+            # GET request with code=None
+            return HttpResponseBadRequest()
 
 
 def bankid_refreshtokens(request):
@@ -188,7 +197,10 @@ def bankid_refreshtokens(request):
     if not refresh_token:
         return HttpResponseRedirect('/')
 
-    domain = "bankid.privatbank.ua"
+    if settings.DEBUG:
+        domain = "bankid.privatbank.ua"     # dev domain
+    else:
+        domain = "bankid.org.ua"            # prod domain
     path = "DataAccessService/oauth/token"
     for_sha = "{0}{1}{2}".format(
         settings.BANKID_CLIENT_ID,
@@ -198,7 +210,7 @@ def bankid_refreshtokens(request):
     query = "grant_type={type}&client_id={id}&client_secret={secret}&refresh_token={refresh_token}".format(
         type='refresh_token',
         id=settings.BANKID_CLIENT_ID,
-        secret=hashlib.sha1(for_sha.encode()).hexdigest(),
+        secret=hashlib.sha512(for_sha.encode()).hexdigest(),
         refresh_token=refresh_token
     )
     url = "https://{domain}/{path}?{query}".format(
@@ -211,8 +223,12 @@ def bankid_refreshtokens(request):
 
 
 def bankid_getdata(request):
-    access_token = request.session.get('access_token', None)
-    refresh_token = request.session.get('refresh_token', None)
+    """
+        Function gets encoded data from BankID,
+        decode it and save into models
+    """
+    access_token = request.session.get('access_token', None)  # pop
+    refresh_token = request.session.get('refresh_token', None)  # pop
     BankIDLog.objects.create(
         type='BankIDGetData',
         subtype="access_token",
@@ -223,7 +239,7 @@ def bankid_getdata(request):
         subtype="refresh_token",
         message=refresh_token
     )
-    print("access_token", access_token, "refresh_token", refresh_token)
+
     if settings.DEBUG:
         url = "https://bankid.privatbank.ua/ResourceService/checked/data"
     else:
@@ -238,7 +254,7 @@ def bankid_getdata(request):
         "Accept": "application/json"
     }
 
-    # describe which data will be requested
+    # Describe which data will be requested
     data = {
         "type": "physical",
         "fields": [
@@ -356,7 +372,7 @@ def bankid_getdata(request):
         message=decrypted
     )
 
-    # check if user with this mobile_phone exists
+    # Check if user with this mobile_phone exists
     user_exists = User.objects.filter(
         mobile_phone=clear_contact_phone(
             decrypted["customer"]["phone"]
@@ -369,12 +385,12 @@ def bankid_getdata(request):
         mobile_phone=clear_contact_phone(decrypted["customer"]["phone"]),
         ready_for_turnes=False
     )
-    # set user password, send SMS with it
+    # Set user password, send SMS with it
     password = make_user_password(user)
-    # authenticate user
+    # Authenticate user
     auth_user = authenticate(mobile_phone=user.mobile_phone, password=password)
 
-    # save decrypted data to models:
+    # Save decrypted data to models:
     # Customer, Document, Address, ScanDocument
     # and copy this data to Questionnaire model
     local_save(decrypted, user, headers)
@@ -389,7 +405,8 @@ def bankid_getdata(request):
 @user_passes_test(lambda u: u.is_superuser)
 def document_view(request, scan_id):
     """
-    Preview document's scan
+    Preview document's scan;
+    only for superusers
     """
     scan = ScanDocument.objects.get(id=scan_id)
     response = HttpResponse()

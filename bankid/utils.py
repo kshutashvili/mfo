@@ -161,7 +161,7 @@ def local_save(decrypted_data, user, headers):
         subtype="decrypted_data",
         message=decrypted_data
     )
-    # collect data for Questionnaire
+    # Collect data for Questionnaire
     anketa_data = {
         'last_name': customer.last_name,
         'first_name': customer.first_name,
@@ -181,7 +181,7 @@ def local_save(decrypted_data, user, headers):
             customer=customer,
             **doc
         )
-        # only save passport data to Questionnaire
+        # Save passport data to Questionnaire
         if doc_obj.type == 'passport':
             anketa_data.update({
                 'passport_code': doc_obj.series + doc_obj.number,
@@ -201,7 +201,7 @@ def local_save(decrypted_data, user, headers):
             customer=customer,
             **address
         )
-        # save factual address to Questionnaire's
+        # Save factual address to Questionnaire's
         # residence and registration
         if addr_obj.type == 'factual':
             anketa_data.update({
@@ -241,5 +241,5 @@ def local_save(decrypted_data, user, headers):
         )
 
         scan_obj.file.save(file_name, files.File(fp))
-    # save to Questionnaire model. bound it with recent created user
+    # Save to Questionnaire model. Bound it with recent created user
     Questionnaire.objects.create(user=user, **anketa_data)
