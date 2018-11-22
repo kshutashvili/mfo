@@ -365,7 +365,17 @@ def bankid_getdata(request):
         message=r.json()
     )
 
-    decrypted = decrypt_data(r.json())
+    response_json = r.json()
+    if 'customer' in response_json.keys():
+        decrypted = decrypt_data(response_json)
+    else:
+        BankIDLog.objects.create(
+            type='BankIDGetData',
+            subtype="error",
+            message="response not contain 'customer' key"
+        )
+        return HttpResponseRedirect(reverse_lazy('main'))
+
     BankIDLog.objects.create(
         type='BankIDGetData',
         subtype="decrypted",
