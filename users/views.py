@@ -49,7 +49,10 @@ from users.helpers import make_user_password
 from users.models import (
     Profile, RequestPersonalArea, User, Questionnaire
 )
-from users.utils import test_user_turnes, get_turnes_profile
+from users.utils import (
+    test_user_turnes, get_turnes_profile,
+    save_anketa_turnes
+)
 
 
 def register(request):
@@ -358,7 +361,7 @@ class RequestPersonalAreaView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        print("self.object", self.object.id)
+
         if self.object.turnes_person_id:
             url = reverse('login')
         else:
@@ -617,7 +620,7 @@ class SaveQuestionnaireStepView(View):
                     data_dict['has_criminal_record'] = False
                 else:
                     data_dict['has_criminal_record'] = True
-            pprint(data_dict)
+
             anketa_qs = Questionnaire.objects.filter(
                 user=self.request.user
             ).update(
@@ -627,11 +630,11 @@ class SaveQuestionnaireStepView(View):
             if int(self.request.POST["step"]) == 5:
                 resp = check_blacklist(
                     itn=self.request.user.anketa.itn,
-                    mobile_phone=self.request.user.anketa.mobile_phone,
+                    mobile_phone=clear_contact_phone(self.request.user.anketa.mobile_phone),
                     passseria=self.request.user.anketa.passport_code[:2] if self.request.user.anketa.passport_code else 'АА',
-                    passnumber=self.request.user.anketa.passport_code[1:] if self.request.user.anketa.passport_code else 000000,
+                    passnumber=self.request.user.anketa.passport_code[2:] if self.request.user.anketa.passport_code else 000000,
                 )
-                print("resp", resp)
+
                 if 'in_blacklist' in resp:
                     if resp['in_blacklist']:
                         user = User.objects.filter(
@@ -665,6 +668,9 @@ class SaveQuestionnaireStepView(View):
                         )[0]
                         user.ready_for_turnes = True
                         user.save()
+
+                save_anketa_turnes(anketa=self.request.user.anketa)
+
                 return JsonResponse(
                     {
                         'result': 'ok',
@@ -673,7 +679,7 @@ class SaveQuestionnaireStepView(View):
                     },
                     safe=False
                 )
-        print("kwargs", kwargs)
+
         return JsonResponse(
             {
                 'result': 'ok',

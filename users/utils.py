@@ -1,10 +1,15 @@
 from pprint import pprint
 from datetime import datetime
 from decimal import Decimal
+import json
 
 import MySQLdb
 
 from payments.models import Payment
+from payment_gateways.utils import create_database_connection
+from payment_gateways.helpers import telegram_notification
+
+from content.helpers import clear_contact_phone
 
 
 def test_user_turnes(turnes_id):
@@ -981,3 +986,127 @@ def get_turnes_profile(turnes_id):
         ]),
         "credits": credits
     }
+
+
+def dict_to_str(dict_obj):
+    result_str = '{'
+    q = ['"{key}": "{value}"'.format(key=key, value=dict_obj[key]) for key in dict_obj.keys()]
+    result_str += ','.join(q)
+    result_str += '}'
+    print("result_str", result_str)
+    return result_str
+
+
+def make_data_for_turnes(anketa):
+
+    # AA000111 or 1020304050
+    if anketa.passport_code.isdigit():
+        pass_seria = ''
+        pass_number = anketa.passport_code
+    else:
+        pass_seria = anketa.passport_code[:2]
+        pass_number = anketa.passport_code[2:].strip()
+
+    person_dict = {
+        "familia": anketa.last_name,
+        "imia": anketa.first_name,
+        "otchest": anketa.middle_name,
+        "idnomer": anketa.itn,
+        "email": anketa.email,
+        "paspnum": pass_number,
+        "paspkemvid": anketa.passport_authority,
+        "paspdatvid": anketa.passport_date.strftime('%Y-%m-%d'),
+        "semstat": anketa.marital_status,
+        "obraz": anketa.education,
+        "child_no": 0,
+        "doh_sum": anketa.salary,
+        "tel": anketa.user.mobile_phone[5:],  # 380951118326 -> 1118326
+        "tel_code": anketa.user.mobile_phone[2:5],  # 380951118326 -> 095
+
+        "adrf_oblast": anketa.registration_state,
+        "adrf_rayon": anketa.registration_district,
+        "adrf_gorod": anketa.registration_city,
+        "adrf_ulica": anketa.registration_street,
+        "adrf_dom": anketa.registration_building,
+        "adrf_kvartira": anketa.registration_flat,
+
+        "adrr_oblast": anketa.residence_state,
+        "adrr_gorod": anketa.residence_city,
+        "adrr_ulica": anketa.residence_street,
+        "adrr_dom": anketa.residence_building,
+        "adrr_kvartira": anketa.residence_flat,
+
+        "rab_firma": anketa.company_name,
+        "rab_galuz": anketa.service_type,
+        "rab_pos": anketa.position_type,
+        "rab_rel": anketa.labor_relations,
+        "rab_staj": anketa.company_experience,
+
+        "adrf_postind": anketa.registration_index,
+        "rodils": anketa.birthday_date.strftime('%Y-%m-%d'),
+        "pol": 1 if anketa.sex == 'female' else 2,
+        "paspser": pass_seria,
+    }
+    credit_dict = {
+        "credit_sum": "5555"
+    }
+    return dict_to_str(person_dict), dict_to_str(credit_dict)
+
+
+def save_anketa_turnes(anketa):
+    conn, cur = create_database_connection(
+        host="10.10.100.27",
+        user="root",
+        password="Orraveza(99)",
+        db="mbank"
+    )
+
+    tperson_data, tcredit_data = make_data_for_turnes(anketa)
+
+    # Save tperson_data, tcredit_data into mbank.efin_import
+    query = """
+        select mbank.ins_efin(
+            '{0}',
+            '{1}',
+            '{2}');
+    """.format(
+        anketa.id,
+        tperson_data,
+        tcredit_data
+    )
+
+    res = cur.execute(query)
+
+    if int(res) == 1:
+        try:
+            import_id = cur.fetchall()[0][0]  # Get ID which returned by query
+        except Exception as e:
+            telegram_notification(
+                err=e,
+                message='mbank.ins_efin query not return value'
+            )
+            raise Exception(e)
+
+        conn.commit()  # Save changes in DB
+    else:
+        telegram_notification(
+            err='Query mbank.ins_efin FAILED',
+            message='ID анкеты {0}'.format(anketa.id)
+        )
+        raise Exception('Query mbank.ins_efin FAILED')
+
+    # Save data into tcredits, tpersons, fvalues and tstatuses
+    query = """
+        select mbank.proc_efin({0})
+    """.format(import_id)
+
+    res = cur.execute(query)
+
+    proc = cur.fetchall()
+
+    if proc:
+        telegram_notification(
+            message='Анкета сохранена в турнесе {0}'.format(proc)
+        )
+
+    conn.commit()
