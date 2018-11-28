@@ -1048,7 +1048,7 @@ def make_data_for_turnes(anketa):
         "paspser": pass_seria,
     }
     credit_dict = {
-        "credit_sum": "5555"
+        "credit_sum": anketa.credit_sum
     }
     return dict_to_str(person_dict), dict_to_str(credit_dict)
 
