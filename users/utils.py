@@ -996,6 +996,31 @@ def dict_to_str(dict_obj):
     return result_str
 
 
+def make_comment_kk(anketa):
+    # {"attribute": "text for comment_kk"}
+    fields = {
+        "bound_person_phone": "Телефон довіреної особи: ",
+        "bound_person_address": "Адреса довіреної особи: ",
+        "company_address": "Адреса компанії: ",
+        "company_phone": "Телефон компанії: ",
+        "partner_salary": "Дохід чоловіка/Дружини: ",
+        "month_outgoing": "Щомісячні витрати: ",
+        "month_loan_payments_outgoing": "Платежі по кредитам: ",
+        "other_outgoing": "Інші витрати: ",
+        "vehicle_count": "К-сть атомобілів: ",
+        "vehicle_description": "Опис автомобіля: ",
+    }
+    comment_kk_str = ""
+    for key in fields.keys():
+        value = getattr(anketa, key)
+        if value:
+            comment_kk_str += "{0}{1}\n".format(
+                fields[key],
+                value
+            )
+    return comment_kk_str
+
+
 def make_data_for_turnes(anketa):
 
     # AA000111 or 1020304050
@@ -1032,7 +1057,7 @@ def make_data_for_turnes(anketa):
         "adrr_oblast": anketa.residence_state,
         "adrr_gorod": anketa.residence_city.replace("'", "").replace('"', ""),
         "adrr_ulica": anketa.residence_street.replace("'", "").replace('"', ""),
-        "adrr_dom": anketa.residence_building,
+        "adrr_dom": anketa.residence_building.replace("'", "").replace('"', ""),
         "adrr_kvartira": anketa.residence_flat,
 
         "rab_firma": anketa.company_name.replace("'", "").replace('"', ""),
@@ -1045,9 +1070,21 @@ def make_data_for_turnes(anketa):
         "rodils": anketa.birthday_date.strftime('%Y-%m-%d'),
         "pol": 1 if anketa.sex == 'female' else 2,
         "paspser": pass_seria,
+        "edrpou": anketa.edrpou_code,
+        "position": anketa.position.replace("'", "").replace('"', ""),
+        "staj": anketa.overall_experience.replace("'", "").replace('"', ""),
+        "part_name": anketa.bound_person_names.replace("'", "").replace('"', ""),
+        "part_itn": anketa.bound_person_itn.replace("'", "").replace('"', ""),
+        "part_con": anketa.bound_person_relationship.replace("'", "").replace('"', ""),
+        "part_job": anketa.bound_person_job.replace("'", "").replace('"', ""),
+        "home_type": anketa.dwelling_type
     }
+    comment_kk = make_comment_kk(anketa)
     credit_dict = {
-        "credit_sum": anketa.credit_sum
+        "credit_sum": anketa.credit_sum,
+        "credit_term": anketa.credit_term,
+        "credit_period": 'w' if anketa.credit_period == 'week' else 'm',
+        "comment_kk": comment_kk
     }
     return dict_to_str(person_dict), dict_to_str(credit_dict)
 
@@ -1065,9 +1102,9 @@ def save_anketa_turnes(anketa):
     # Save tperson_data, tcredit_data into mbank.efin_import
     query = """
         select mbank.ins_efin(
-            "{0}",
-            "{1}",
-            "{2}");
+            '{0}',
+            '{1}',
+            '{2}');
     """.format(
         anketa.id,
         tperson_data,
