@@ -993,7 +993,6 @@ def dict_to_str(dict_obj):
     q = ['"{key}": "{value}"'.format(key=key, value=dict_obj[key]) for key in dict_obj.keys()]
     result_str += ','.join(q)
     result_str += '}'
-    print("result_str", result_str)
     return result_str
 
 
@@ -1008,13 +1007,13 @@ def make_data_for_turnes(anketa):
         pass_number = anketa.passport_code[2:].strip()
 
     person_dict = {
-        "familia": anketa.last_name,
-        "imia": anketa.first_name,
-        "otchest": anketa.middle_name,
+        "familia": anketa.last_name.replace("'", "\'").replace('"', "\'"),
+        "imia": anketa.first_name.replace("'", "\'").replace('"', "\'"),
+        "otchest": anketa.middle_name.replace("'", "\'").replace('"', "\'"),
         "idnomer": anketa.itn,
         "email": anketa.email,
         "paspnum": pass_number,
-        "paspkemvid": anketa.passport_authority,
+        "paspkemvid": anketa.passport_authority.replace("'", "").replace('"', ""),
         "paspdatvid": anketa.passport_date.strftime('%Y-%m-%d'),
         "semstat": anketa.marital_status,
         "obraz": anketa.education,
@@ -1025,18 +1024,18 @@ def make_data_for_turnes(anketa):
 
         "adrf_oblast": anketa.registration_state,
         "adrf_rayon": anketa.registration_district,
-        "adrf_gorod": anketa.registration_city,
-        "adrf_ulica": anketa.registration_street,
+        "adrf_gorod": anketa.registration_city.replace("'", "").replace('"', ""),
+        "adrf_ulica": anketa.registration_street.replace("'", "").replace('"', ""),
         "adrf_dom": anketa.registration_building,
         "adrf_kvartira": anketa.registration_flat,
 
         "adrr_oblast": anketa.residence_state,
-        "adrr_gorod": anketa.residence_city,
-        "adrr_ulica": anketa.residence_street,
+        "adrr_gorod": anketa.residence_city.replace("'", "").replace('"', ""),
+        "adrr_ulica": anketa.residence_street.replace("'", "").replace('"', ""),
         "adrr_dom": anketa.residence_building,
         "adrr_kvartira": anketa.residence_flat,
 
-        "rab_firma": anketa.company_name,
+        "rab_firma": anketa.company_name.replace("'", "").replace('"', ""),
         "rab_galuz": anketa.service_type,
         "rab_pos": anketa.position_type,
         "rab_rel": anketa.labor_relations,
@@ -1066,9 +1065,9 @@ def save_anketa_turnes(anketa):
     # Save tperson_data, tcredit_data into mbank.efin_import
     query = """
         select mbank.ins_efin(
-            '{0}',
-            '{1}',
-            '{2}');
+            "{0}",
+            "{1}",
+            "{2}");
     """.format(
         anketa.id,
         tperson_data,
