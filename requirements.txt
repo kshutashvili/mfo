@@ -5,6 +5,7 @@ Babel==2.5.3
 certifi==2018.1.18
 chardet==3.0.4
 Django==2.0.2
+django-admin-honeypot==1.1.0
 django-admin-ip-restrictor==1.0.0
 django-admin-rangefilter==0.3.7
 django-advanced-filters==1.0.7.1
