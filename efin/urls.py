@@ -51,7 +51,8 @@ from bankid.views import document_view
 
 
 urlpatterns = i18n_patterns(
-    path('admin/', admin.site.urls),
+    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path('turnes/', admin.site.urls),
 
     path('loan/', content.index, name='index'),
     path('', content.main, name='main'),
