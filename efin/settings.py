@@ -87,7 +87,6 @@ MIDDLEWARE = [
     'django_otp.middleware.OTPMiddleware',  # 2FA
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'admin_ip_restrictor.middleware.AdminIPRestrictorMiddleware'
 ]
 
 ROOT_URLCONF = 'efin.urls'
@@ -254,11 +253,6 @@ TEST_GROUP_ID = '-266220155'
 
 SKY_API_KEY = '765509010:AAEohMyaEaxaMOrr0RTBhNBBwH4xSRHVPTk'
 SKY_GROUP_ID = '-1001131836447'
-
-RESTRICT_ADMIN = True
-ALLOWED_ADMIN_IPS = ['127.0.0.1', '::1', '194.183.173.28']
-ALLOWED_ADMIN_IP_RANGES = ['127.0.0.0/24', '::/1']
-RESTRICTED_APP_NAMES = ['admin', ]
 
 try:
     from efin.local_settings import *
