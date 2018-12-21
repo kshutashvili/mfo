@@ -820,6 +820,7 @@ class RegisterPersonalForm(forms.ModelForm):
             # 0, ('', _('Тип житла'))
             0, ('', _('---'))
         )
+        self.fields['vehicle_count'].required = False
 
 
 class RegisterPersonalStep1Form(forms.ModelForm):

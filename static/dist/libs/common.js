@@ -499,9 +499,7 @@ window.onload = function() {
 
 				if (response["errors"]){
 					for (var error in response["errors"]){
-						console.log("errors", response["errors"][error]);
 						var $elem = $("#id_" + error);
-						// console.log($elem);
 						$elem.addClass("error");
 						$elem.parent().append(
 							"<div class='error-text'>" + response["errors"][error] + "</div>"
@@ -510,21 +508,33 @@ window.onload = function() {
 					$("#id_" + Object.keys(response["errors"])[0]).focus();
 				}
 			}
-		}); 
+		}).done(function() {
 
-		var currentStep = $(this).parent();
-		var nextStep = $(this).parent().next('.questionnaire__step');
+			var currentStep = out.parent();
+			var nextStep = out.parent().next('.questionnaire__step');
 
-		currentStep.fadeOut(400, function() {
-			currentStep.removeClass("curr");
-			nextStep.fadeIn(400);
-			nextStep.addClass("curr");
-			if (nextStep.find('input[name="step"]').val() == '2') {
-				showStep2Fields();
+			currentStep.fadeOut(400, function() {
+				currentStep.removeClass("curr");
+				nextStep.fadeIn(400);
+				nextStep.addClass("curr");
+				if (nextStep.find('input[name="step"]').val() == '2') {
+					showStep2Fields();
+				}
+			});
+
+			$('body,html').animate({ scrollTop: 0 }, 1000);
+		}).fail(function(response) {
+			if (response["responseJSON"]["errors"]){
+				for (var error in response["responseJSON"]["errors"]){
+					var $elem = $("#id_" + error);
+					$elem.addClass("error");
+					$elem.parent().append(
+						"<div class='error-text'>" + response["responseJSON"]["errors"][error] + "</div>"
+					)
+				}
+				$("#id_" + Object.keys(response["responseJSON"]["errors"])[0]).focus();
 			}
 		});
-
-		$('body,html').animate({ scrollTop: 0 }, 1000);
 	});
 
 	$('.prev-btn').on('click', function(e){

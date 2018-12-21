@@ -1,5 +1,5 @@
 from pprint import pprint
-from datetime import datetime
+from datetime import datetime, date
 
 from django.shortcuts import render
 from django.http import (
@@ -551,6 +551,7 @@ class SaveQuestionnaireStepView(View):
             if self.request.user.is_authenticated:
                 form = RegisterPersonalForm(data=self.request.POST)
                 if form.is_valid():
+
                     anketa = form.save(commit=False)
                     anketa.user = self.request.user
                     anketa.save()
@@ -562,20 +563,23 @@ class SaveQuestionnaireStepView(View):
                         safe=False
                     )
                 else:
+
                     return JsonResponse(
                         {
-                            'result': 'bad0',
+                            'result': 'error',
                             'errors': form.errors
                         },
-                        safe=False
+                        safe=False,
+                        status=400
                     )
             else:
                 return JsonResponse(
                     {
-                        'result': 'bad1',
+                        'result': 'error',
                         'errors': form.errors
                     },
-                    safe=False
+                    safe=False,
+                    status=400
                 )
         else:
             data_dict = self.request.POST.dict()
@@ -592,7 +596,7 @@ class SaveQuestionnaireStepView(View):
             if 'switchRegistration' in data_dict:
                 data_dict.pop('switchRegistration')
             if 'birthday_date' in data_dict:
-                if data_dict['birthday_date']:
+                if data_dict['birthday_date'] and self.is_valid_date(data_dict['birthday_date']):
                     data_dict['birthday_date'] = datetime.strptime(
                         data_dict.get('birthday_date', None),
                         '%Y-%m-%d'
@@ -600,7 +604,7 @@ class SaveQuestionnaireStepView(View):
                 else:
                     data_dict['birthday_date'] = None
             if 'passport_date' in data_dict:
-                if data_dict['passport_date']:
+                if data_dict['passport_date'] and self.is_valid_date(data_dict['passport_date']):
                     data_dict['passport_date'] = datetime.strptime(
                         data_dict.get('passport_date', None),
                         '%Y-%m-%d'
@@ -608,7 +612,7 @@ class SaveQuestionnaireStepView(View):
                 else:
                     data_dict['passport_date'] = None
             if 'passport_outdate' in data_dict:
-                if data_dict['passport_outdate']:
+                if data_dict['passport_outdate'] and self.is_valid_date(data_dict['passport_outdate']):
                     data_dict['passport_outdate'] = datetime.strptime(
                         data_dict.get('passport_outdate', None),
                         '%Y-%m-%d'
@@ -621,11 +625,21 @@ class SaveQuestionnaireStepView(View):
                 else:
                     data_dict['has_criminal_record'] = True
 
-            anketa_qs = Questionnaire.objects.filter(
-                user=self.request.user
-            ).update(
-                **data_dict
-            )
+            instance = Questionnaire.objects.filter(user=self.request.user)[0]
+            f = RegisterPersonalForm(data=self.request.POST, instance=instance)
+            if f.is_valid():
+
+                f.save()
+            else:
+
+                return JsonResponse(
+                    {
+                        'result': 'error',
+                        'errors': f.errors
+                    },
+                    safe=False,
+                    status=400
+                )
 
             if int(self.request.POST["step"]) == 5:
                 resp = check_blacklist(
@@ -687,3 +701,10 @@ class SaveQuestionnaireStepView(View):
             },
             safe=False
         )
+
+    def is_valid_date(self, date_param):
+        if isinstance(date_param, datetime):
+            return True
+        if isinstance(date_param, date):
+            return True
+        return False
