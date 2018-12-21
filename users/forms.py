@@ -176,7 +176,6 @@ class ResetPasswordForm(forms.Form):
     def clean_contract_num(self):
         contract_num = self.cleaned_data['contract_num']
         person_data = get_person_id_and_tel(contract_num)
-        self.person_phone = person_data[1]
         if person_data:
             user = User.objects.filter(
                 turnes_person_id=person_data[0],
@@ -186,6 +185,7 @@ class ResetPasswordForm(forms.Form):
         else:
             msg = _("Пользователь с таким номером договора не зарегистрирован")
             raise forms.ValidationError(msg)
+        self.person_phone = person_data[1]
         if not user:
             msg = _("Пользователь с таким номером договора не зарегистрирован")
             raise forms.ValidationError(msg)

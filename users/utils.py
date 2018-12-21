@@ -549,26 +549,28 @@ def get_person_id_and_tel(contract_num):
     exfin_cursor.execute('SET NAMES utf8;')
     exfin_cursor.execute('SET CHARACTER SET utf8;')
     exfin_cursor.execute('SET character_set_connection=utf8;')
-
-    exfin_cursor.execute(
-        """
-            SELECT
-                tc.id,
-                tc.client_id,
-                ts.status as last_status,
-                ts.dt_created,
-                tp.tel_mob_num,
-                tp.tel_mob_kod
-            FROM
-                mbank.tcredits tc
-            join mbank.tstatuses ts on ts.credit_id = tc.id
-            join mbank.tpersons tp on tp.id = tc.client_id
-            WHERE tc.contract_num =  {0}
-            ORDER BY ts.dt_created DESC
-            LIMIT 1;
-        """.format(contract_num)
-    )
-    person_data = exfin_cursor.fetchall()
+    if contract_num.isdigit():
+        exfin_cursor.execute(
+            """
+                SELECT
+                    tc.id,
+                    tc.client_id,
+                    ts.status as last_status,
+                    ts.dt_created,
+                    tp.tel_mob_num,
+                    tp.tel_mob_kod
+                FROM
+                    mbank.tcredits tc
+                join mbank.tstatuses ts on ts.credit_id = tc.id
+                join mbank.tpersons tp on tp.id = tc.client_id
+                WHERE tc.contract_num =  {0}
+                ORDER BY ts.dt_created DESC
+                LIMIT 1;
+            """.format(contract_num)
+        )
+        person_data = exfin_cursor.fetchall()
+    else:
+        return None
 
     if person_data:
         exfin_cursor.execute(
