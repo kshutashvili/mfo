@@ -1016,7 +1016,7 @@ def make_comment_kk(anketa):
     for key in fields.keys():
         value = getattr(anketa, key)
         if value:
-            comment_kk_str += "{0}{1}\n".format(
+            comment_kk_str += "{0}{1}\n ".format(
                 fields[key],
                 value
             )
@@ -1086,7 +1086,7 @@ def make_data_for_turnes(anketa):
         "credit_sum": anketa.credit_sum,
         "credit_term": anketa.credit_term,
         "credit_period": 'w' if anketa.credit_period == 'week' else 'm',
-        "comment_kk": comment_kk
+        "comment_kk": comment_kk.replace("'", "").replace('"', "")
     }
     return dict_to_str(person_dict), dict_to_str(credit_dict)
 
