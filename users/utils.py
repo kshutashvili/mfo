@@ -1041,7 +1041,7 @@ def make_data_for_turnes(anketa):
         "email": anketa.email,
         "paspnum": pass_number,
         "paspkemvid": anketa.passport_authority.replace("'", "").replace('"', ""),
-        "paspdatvid": anketa.passport_date.strftime('%Y-%m-%d'),
+        "paspdatvid": anketa.passport_date.strftime('%Y-%m-%d') if anketa.passport_date else '',
         "semstat": anketa.marital_status,
         "obraz": anketa.education,
         "child_no": 0,
