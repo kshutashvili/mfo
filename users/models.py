@@ -296,7 +296,7 @@ class Questionnaire(models.Model):
     )
     passport_authority = models.CharField(
         _("Орган, що видав"),
-        max_length=128,
+        max_length=255,
         blank=True
     )
     registration_country = models.TextField(
