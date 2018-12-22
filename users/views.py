@@ -641,7 +641,7 @@ class SaveQuestionnaireStepView(View):
                     status=400
                 )
 
-            if int(self.request.POST["step"]) == 5:
+            if int(self.request.POST.get("step", 0)) == 5:
                 resp = check_blacklist(
                     itn=self.request.user.anketa.itn,
                     mobile_phone=clear_contact_phone(self.request.user.anketa.mobile_phone),
