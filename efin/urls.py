@@ -21,8 +21,10 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 
-from communication.views import contacts, about, blog, faq, resume,\
-                                success_message, sms
+from communication.views import (
+    contacts, about, blog, faq, resume,
+    success_message, sms
+)
 from content.views import content
 from vacancy.views import job
 from users.views import (
