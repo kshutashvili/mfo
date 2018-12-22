@@ -57,6 +57,8 @@ from users.utils import (
 
 def register(request):
     if request.method == 'POST':
+        if not request.POST.get('phone', None):
+            return HttpResponseRedirect(reverse('callback'))
         form = RegisterNumberForm(request.POST)
         if form.is_valid():
             phone = form.cleaned_data.get('phone')
