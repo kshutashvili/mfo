@@ -795,7 +795,10 @@ def get_turnes_profile(turnes_id):
             and code = 'Street_type_reg';
         """.format(person_data[0])
     )
-    person_street_type = exfin_cursor.fetchall()[0]
+    try:
+        person_street_type = exfin_cursor.fetchall()[0]
+    except IndexError:
+        person_street_type = ['', ]
 
     """
         SQL Query from table mbank.tcredits
