@@ -1072,7 +1072,7 @@ def make_data_for_turnes(anketa):
         "rab_staj": anketa.company_experience,
 
         "adrf_postind": anketa.registration_index,
-        "rodils": anketa.birthday_date.strftime('%Y-%m-%d'),
+        "rodils": anketa.birthday_date.strftime('%Y-%m-%d') if anketa.birthday_date else '9999-01-01',
         "pol": 1 if anketa.sex == 'female' else 2,
         "paspser": pass_seria,
         "edrpou": anketa.edrpou_code,
