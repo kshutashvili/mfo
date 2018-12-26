@@ -627,13 +627,12 @@ class SaveQuestionnaireStepView(View):
                 else:
                     data_dict['has_criminal_record'] = True
 
-            instance = Questionnaire.objects.filter(user=self.request.user)[0]
-            f = RegisterPersonalForm(data=self.request.POST, instance=instance)
+            instance_qs = Questionnaire.objects.filter(user=self.request.user)
+
+            f = RegisterPersonalForm(data=data_dict, instance=instance_qs[0])
             if f.is_valid():
-
-                f.save()
+                instance_qs.update(**data_dict)
             else:
-
                 return JsonResponse(
                     {
                         'result': 'error',
