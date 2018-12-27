@@ -18,6 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, TemplateView, View
 from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
+from django.utils.dateparse import parse_date
 
 from bids.models import Bid
 from communication.forms import WriteCommentForm, WriteQuestionForm
@@ -600,7 +601,7 @@ class SaveQuestionnaireStepView(View):
             if 'birthday_date' in data_dict:
                 if data_dict['birthday_date'] and self.is_valid_date(data_dict['birthday_date']):
                     data_dict['birthday_date'] = datetime.strptime(
-                        data_dict.get('birthday_date', None),
+                        data_dict.get('birthday_date', '9999-01-01'),
                         '%Y-%m-%d'
                     )
                 else:
@@ -608,7 +609,7 @@ class SaveQuestionnaireStepView(View):
             if 'passport_date' in data_dict:
                 if data_dict['passport_date'] and self.is_valid_date(data_dict['passport_date']):
                     data_dict['passport_date'] = datetime.strptime(
-                        data_dict.get('passport_date', None),
+                        data_dict.get('passport_date', '9999-01-01'),
                         '%Y-%m-%d'
                     )
                 else:
@@ -616,7 +617,7 @@ class SaveQuestionnaireStepView(View):
             if 'passport_outdate' in data_dict:
                 if data_dict['passport_outdate'] and self.is_valid_date(data_dict['passport_outdate']):
                     data_dict['passport_outdate'] = datetime.strptime(
-                        data_dict.get('passport_outdate', None),
+                        data_dict.get('passport_outdate', '9999-01-01'),
                         '%Y-%m-%d'
                     )
                 else:
@@ -707,5 +708,7 @@ class SaveQuestionnaireStepView(View):
         if isinstance(date_param, datetime):
             return True
         if isinstance(date_param, date):
+            return True
+        if parse_date(date_param):
             return True
         return False
