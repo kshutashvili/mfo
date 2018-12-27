@@ -490,40 +490,39 @@ window.onload = function() {
 			type: 'post',
 			data: data,
 			dataType: 'json',
-
-			success: function(response){
-				// Redirect to spicified URL
-				if ('url' in response){
-					window.location.assign(response.url)
+		}).done(function(response) {
+			if (response["errors"]){
+				// Display errors
+				for (var error in response["errors"]){
+					var $elem = $("#id_" + error);
+					$elem.addClass("error");
+					$elem.parent().append(
+						"<div class='error-text'>" + response["errors"][error] + "</div>"
+					)
 				}
-
-				if (response["errors"]){
-					for (var error in response["errors"]){
-						var $elem = $("#id_" + error);
-						$elem.addClass("error");
-						$elem.parent().append(
-							"<div class='error-text'>" + response["errors"][error] + "</div>"
-						)
-					}
-					$("#id_" + Object.keys(response["errors"])[0]).focus();
-				}
+				$("#id_" + Object.keys(response["errors"])[0]).focus();
 			}
-		}).done(function() {
+			if ('url' in response){
+				// Redirect to specified URL
+				window.location.assign(response.url)
+			} else {
+				// Show next step
+				var currentStep = out.parent();
+				var nextStep = out.parent().next('.questionnaire__step');
 
-			var currentStep = out.parent();
-			var nextStep = out.parent().next('.questionnaire__step');
-
-			currentStep.fadeOut(400, function() {
-				currentStep.removeClass("curr");
-				nextStep.fadeIn(400);
-				nextStep.addClass("curr");
-				if (nextStep.find('input[name="step"]').val() == '2') {
-					showStep2Fields();
-				}
-			});
+				currentStep.fadeOut(400, function() {
+					currentStep.removeClass("curr");
+					nextStep.fadeIn(400);
+					nextStep.addClass("curr");
+					if (nextStep.find('input[name="step"]').val() == '2') {
+						showStep2Fields();
+					}
+				});
+			}
 
 			$('body,html').animate({ scrollTop: 0 }, 1000);
 		}).fail(function(response) {
+			// Display errors
 			if (response["responseJSON"]["errors"]){
 				for (var error in response["responseJSON"]["errors"]){
 					var $elem = $("#id_" + error);
@@ -535,6 +534,16 @@ window.onload = function() {
 				$("#id_" + Object.keys(response["responseJSON"]["errors"])[0]).focus();
 			}
 		});
+		if ($(this).parent().find('input[name="step"]').val() == '5'){
+			var currentStep = out.parent();
+			var nextStep = out.parent().next('.questionnaire__step');
+
+			currentStep.fadeOut(400, function() {
+				currentStep.removeClass("curr");
+				nextStep.fadeIn(400);
+				nextStep.addClass("curr");
+			});
+		}
 	});
 
 	$('.prev-btn').on('click', function(e){

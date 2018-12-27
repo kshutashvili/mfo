@@ -604,16 +604,12 @@ class SaveQuestionnaireStepView(View):
                         data_dict.get('birthday_date', '9999-01-01'),
                         '%Y-%m-%d'
                     )
-                else:
-                    data_dict['birthday_date'] = None
             if 'passport_date' in data_dict:
                 if data_dict['passport_date'] and self.is_valid_date(data_dict['passport_date']):
                     data_dict['passport_date'] = datetime.strptime(
                         data_dict.get('passport_date', '9999-01-01'),
                         '%Y-%m-%d'
                     )
-                else:
-                    data_dict['passport_date'] = None
             if 'passport_outdate' in data_dict:
                 if data_dict['passport_outdate'] and self.is_valid_date(data_dict['passport_outdate']):
                     data_dict['passport_outdate'] = datetime.strptime(
@@ -621,7 +617,7 @@ class SaveQuestionnaireStepView(View):
                         '%Y-%m-%d'
                     )
                 else:
-                    data_dict['passport_outdate'] = None
+                    data_dict['passport_outdate'] = '9999-01-01'
             if 'has_criminal_record' in data_dict:
                 if data_dict['has_criminal_record'] == 'off':
                     data_dict['has_criminal_record'] = False
@@ -631,6 +627,7 @@ class SaveQuestionnaireStepView(View):
             instance_qs = Questionnaire.objects.filter(user=self.request.user)
 
             f = RegisterPersonalForm(data=data_dict, instance=instance_qs[0])
+
             if f.is_valid():
                 instance_qs.update(**data_dict)
             else:
@@ -682,10 +679,10 @@ class SaveQuestionnaireStepView(View):
                         user = User.objects.filter(
                             id=self.request.user.id
                         )[0]
-                        user.ready_for_turnes = True
+                        # user.ready_for_turnes = True
                         user.save()
 
-                save_anketa_turnes(anketa=self.request.user.anketa)
+                # save_anketa_turnes(anketa=self.request.user.anketa)
 
                 return JsonResponse(
                     {
