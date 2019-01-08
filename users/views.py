@@ -1,5 +1,6 @@
 from pprint import pprint
 from datetime import datetime, date
+from dateutil.parser import parse
 
 from django.shortcuts import render
 from django.http import (
@@ -599,23 +600,29 @@ class SaveQuestionnaireStepView(View):
             if 'switchRegistration' in data_dict:
                 data_dict.pop('switchRegistration')
             if 'birthday_date' in data_dict:
-                if data_dict['birthday_date'] and self.is_valid_date(data_dict['birthday_date']):
-                    data_dict['birthday_date'] = datetime.strptime(
-                        data_dict.get('birthday_date', '9999-01-01'),
-                        '%Y-%m-%d'
-                    )
+                if data_dict['birthday_date']:
+                    try:
+                        data_dict['birthday_date'] = parse(
+                            data_dict.get('birthday_date', '9999-01-01')
+                        )
+                    except Exception:
+                        data_dict['birthday_date'] = parse('9999-01-01')
             if 'passport_date' in data_dict:
-                if data_dict['passport_date'] and self.is_valid_date(data_dict['passport_date']):
-                    data_dict['passport_date'] = datetime.strptime(
-                        data_dict.get('passport_date', '9999-01-01'),
-                        '%Y-%m-%d'
-                    )
+                if data_dict['passport_date']:
+                    try:
+                        data_dict['passport_date'] = parse(
+                            data_dict.get('passport_date', '9999-01-01')
+                        )
+                    except Exception:
+                        data_dict['passport_date'] = parse('9999-01-01')
             if 'passport_outdate' in data_dict:
-                if data_dict['passport_outdate'] and self.is_valid_date(data_dict['passport_outdate']):
-                    data_dict['passport_outdate'] = datetime.strptime(
-                        data_dict.get('passport_outdate', '9999-01-01'),
-                        '%Y-%m-%d'
-                    )
+                if data_dict['passport_outdate']:
+                    try:
+                        data_dict['passport_outdate'] = parse(
+                            data_dict.get('passport_outdate', '9999-01-01')
+                        )
+                    except Exception:
+                        data_dict['passport_outdate'] = parse('9999-01-01')
                 else:
                     data_dict['passport_outdate'] = '9999-01-01'
             if 'has_criminal_record' in data_dict:
@@ -627,7 +634,6 @@ class SaveQuestionnaireStepView(View):
             instance_qs = Questionnaire.objects.filter(user=self.request.user)
 
             f = RegisterPersonalForm(data=data_dict, instance=instance_qs[0])
-
             if f.is_valid():
                 instance_qs.update(**data_dict)
             else:

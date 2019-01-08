@@ -36,6 +36,7 @@ psycopg2-binary==2.7.4
 pycrypto==2.6.1
 PyJWT==1.6.1
 PySocks==1.6.8
+python-dateutil==2.7.5
 pytz==2018.3
 raven==6.9.0
 requests==2.18.4
