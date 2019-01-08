@@ -1553,7 +1553,7 @@ def city_terminal_view(request):
             "dt": date_for_turnes,
             "sm": payment.amount,
             "status": 55 if str(credit[0][4]) in ('55', '555') else 0,
-            "ibank": 100
+            "ibank": 101
         }
 
         names = credit[0][2].split(" ")
