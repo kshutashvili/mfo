@@ -688,7 +688,7 @@ class SaveQuestionnaireStepView(View):
                         # user.ready_for_turnes = True
                         user.save()
 
-                # save_anketa_turnes(anketa=self.request.user.anketa)
+                save_anketa_turnes(anketa=self.request.user.anketa)
 
                 return JsonResponse(
                     {
