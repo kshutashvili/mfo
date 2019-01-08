@@ -117,7 +117,7 @@
 				</div>
 			{% endfor %}
 			</div>
-			<a href="https://expressfinance.com.ua/blog/item26/">
+			<a href="{% url 'callback' %}">
 			<h1 class="s-main-title">
 			{% if '/ru/' in request.path %}
 				<span class="s-main-title__top">{{ main.top_block.title_ru }}</span>
