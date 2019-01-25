@@ -1401,7 +1401,7 @@ def city_terminal_view(request):
         try:
             if str(credit[0][4]) == '55' or str(credit[0][4]) == '555':
                 payment = SkyC24Payment.objects.create(
-                    service_id=action_data['ServiceId'],
+                    service_id=action_data['ServiceId'] if action_data['ServiceId'] else 95,
                     order_id=action_data['OrderId'],
                     account=action_data['Account'],
                     amount=action_data['Amount'],
@@ -1423,7 +1423,7 @@ def city_terminal_view(request):
                 )
             else:
                 payment = C24Payment.objects.create(
-                    service_id=action_data['ServiceId'],
+                    service_id=action_data['ServiceId'] if action_data['ServiceId'] else 95,
                     order_id=action_data['OrderId'],
                     account=action_data['Account'],
                     amount=action_data['Amount'],
