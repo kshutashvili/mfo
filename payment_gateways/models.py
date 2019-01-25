@@ -407,7 +407,8 @@ class SkyPrivatbankPayment(models.Model):
 # City24
 class C24Payment(models.Model):
     service_id = models.IntegerField(
-        "Номер EF в системе"
+        "Номер EF в системе",
+        default=25
     )
     order_id = models.BigIntegerField(
         "Уникальный идентификатор транзакции"
@@ -465,7 +466,8 @@ class C24Payment(models.Model):
 # City24
 class SkyC24Payment(models.Model):
     service_id = models.IntegerField(
-        "Номер EF в системе"
+        "Номер EF в системе",
+        default=25
     )
     order_id = models.BigIntegerField(
         "Уникальный идентификатор транзакции"
