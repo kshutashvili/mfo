@@ -1757,7 +1757,7 @@ def portmone_ep_view(request):
         except Exception as e:
             telegram_notification(
                 err=e,
-                message='Проблема с подключением к Турнесу (Portmone)'
+                message='Проблема с подключением к Турнесу (Portmone ep)'
             )
             ctx = {
                 'status_code': -1,
@@ -1787,7 +1787,7 @@ def portmone_ep_view(request):
         except Exception:
             telegram_notification(
                 err='',
-                message='Договор не найден - {0} (Portmone)'.format(
+                message='Договор не найден - {0} (Portmone ep)'.format(
                     contract_num
                 )
             )
@@ -1867,7 +1867,7 @@ def portmone_ep_view(request):
         except Exception as e:
             telegram_notification(
                 err=e,
-                message='Проблема с подключением к Турнесу (Portmone)'
+                message='Проблема с подключением к Турнесу (Portmone ep)'
             )
             ctx = {
                 'status_code': -1,
@@ -1897,7 +1897,7 @@ def portmone_ep_view(request):
         except Exception:
             telegram_notification(
                 err='',
-                message='Договор не найден - {0} (Portmone)'.format(
+                message='Договор не найден - {0} (Portmone ep)'.format(
                     contract_num
                 )
             )
@@ -1928,14 +1928,14 @@ def portmone_ep_view(request):
                 client_name=credit_row[2]
             )
             telegram_notification_sky(
-                message='Оплата кредита Skybank(Portmone)\nДог.{0}; Сумма {1}. Статус {2}'.format(
+                message='Оплата кредита Skybank(Portmone ep)\nДог.{0}; Сумма {1}. Статус {2}'.format(
                     contract_num,
                     action_data['Amount'],
                     credit[0][4]
                 )
             )
             telegram_notification(
-                message='Оплата кредита Skybank(Portmone)\nДог.{0}; Сумма {1}. Статус {2}'.format(
+                message='Оплата кредита Skybank(Portmone ep)\nДог.{0}; Сумма {1}. Статус {2}'.format(
                     contract_num,
                     action_data['Amount'],
                     credit[0][4]
@@ -1945,7 +1945,7 @@ def portmone_ep_view(request):
         except Exception as e:
             telegram_notification(
                 err=e,
-                message='Ошибка при создании платежа (Portmone)'
+                message='Ошибка при создании платежа (Portmone ep)'
             )
             ctx = {
                 'status_code': -1,
@@ -1995,7 +1995,7 @@ def portmone_ep_view(request):
         except Exception:
             telegram_notification(
                 err='',
-                message='Платеж не найден на сайте (Portmone)'
+                message='Платеж не найден на сайте (Portmone ep)'
             )
             ctx['status_code'] = -1
             ctx['status_detail'] = 'Платеж не найден'
@@ -2017,7 +2017,7 @@ def portmone_ep_view(request):
         except Exception as e:
             telegram_notification(
                 err=e,
-                message='Проблема с подключением к Турнесу (Portmone)'
+                message='Проблема с подключением к Турнесу (Portmone ep)'
             )
             ctx['status_code'] = -1
             ctx['status_detail'] = 'Ошибка при оплате'
@@ -2039,7 +2039,7 @@ def portmone_ep_view(request):
         except Exception as e:
             telegram_notification(
                 err=e,
-                message='Не указан ИНН (Portmone)'
+                message='Не указан ИНН (Portmone ep)'
             )
             ctx['status_code'] = -1
             ctx['status_detail'] = 'Ошибка при оплате'
@@ -2060,8 +2060,8 @@ def portmone_ep_view(request):
             "IPN": ipn,
             "dt": date_for_turnes,
             "sm": payment.amount,
-            "status": 55,
-            "ibank": 100
+            "status": 10,
+            "ibank": '156'
         }
 
         names = credit[0][2].split(" ")
@@ -2150,7 +2150,7 @@ def portmone_ep_view(request):
         except Exception:
             telegram_notification(
                 err='',
-                message='Ошибка при отмене платежа (Portmone)'
+                message='Ошибка при отмене платежа (Portmone ep)'
             )
             ctx['status_code'] = -1
             ctx['status_detail'] = 'Платеж не найден'
@@ -2208,8 +2208,9 @@ def portmone_pb_view(request):
         except Exception as e:
             telegram_notification(
                 err=e,
-                message='Неправильно введен номер договора, №{0}'.format(
-                    contract_num
+                message='Неправильно введен номер договора, №{0}.{1}'.format(
+                    contract_num,
+                    '(Portmone pb)'
                 )
             )
             # Render error if credit_row is empty
@@ -2300,8 +2301,9 @@ def portmone_pb_view(request):
         except Exception as e:
             telegram_notification(
                 err=e,
-                message='Проблема с поиском кредита при оплате, дог.{0}'.format(
-                    contract_num
+                message='Проблема с поиском кредита при оплате, дог.{0}.{1}'.format(
+                    contract_num,
+                    '(Portmone pb)'
                 )
             )
             resp = render(
@@ -2318,8 +2320,8 @@ def portmone_pb_view(request):
             "IPN": ipn,
             "dt": date_for_turnes,
             "sm": total_sum,
-            "status": 55,
-            "ibank": '26509056200284'
+            "status": 10,
+            "ibank": '155'
         }
 
         names = name.split(" ")
@@ -2373,14 +2375,14 @@ def portmone_pb_view(request):
             confirm_dt=confirm_time
         )
         telegram_notification_sky(
-            message='Оплата кредита Skybank(Приватбанк)\nДог.{0}; Сумма {1}. Статус {2}'.format(
+            message='Оплата кредита Skybank(Portmone pb)\nДог.{0}; Сумма {1}. Статус {2}'.format(
                 contract_num,
                 total_sum,
                 credit[0][4]
             )
         )
         telegram_notification(
-            message='Оплата кредита Skybank(Приватбанк)\nДог.{0}; Сумма {1}. Статус {2}'.format(
+            message='Оплата кредита Skybank(Portmone pb)\nДог.{0}; Сумма {1}. Статус {2}'.format(
                 contract_num,
                 total_sum,
                 credit[0][4]
