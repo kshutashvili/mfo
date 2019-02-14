@@ -1819,7 +1819,7 @@ def portmone_ep_view(request):
             'account_params': {
                 'Contract': str(contract_num),
                 'Name': credit_row[2],
-                'Balance': str(credit_row[3]),
+                'Balance': str(credit_row[6]) if credit_row[6] > 0 else 0,
             }
         }
         return render(
