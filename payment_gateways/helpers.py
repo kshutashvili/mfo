@@ -115,7 +115,9 @@ def save_payment(conn, cursor, data):
         );
     """.format(
         data["No"], data["DogNo"], data["IPN"],
-        data["F"].replace("''", "'"), data["I"].replace("''", "'"), data["O"].replace("''", "'"),
+        data["F"].replace("''", "'").replace('"', "'"),
+        data["I"].replace("''", "'").replace('"', "'"),
+        data["O"].replace("''", "'").replace('"', "'"),
         data["dt"], data["sm"], data["status"],
         data["ibank"]
     )
