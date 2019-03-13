@@ -48,7 +48,8 @@ from users.views import (
 )
 from payment_gateways.views import (pb_terminal_view, easypay_terminal_view,
                                     fam_terminal_view, city_terminal_view,
-                                    portmone_ep_view, portmone_pb_view)
+                                    portmone_ep_view, portmone_pb_view,
+                                    okci_pb_terminal_view, okci_ep_terminal_view)
 from bankid.views import document_view
 
 
@@ -337,6 +338,9 @@ urlpatterns += [
 
     path('payment/portmone_ep/', portmone_ep_view, name='portmone_ep'),
     path('payment/portmone_pb/', portmone_pb_view, name='portmone_pb'),
+
+    path('payment/pboxy/', okci_pb_terminal_view, name='okci_pb'),
+    path('payment/alloxy/', okci_ep_terminal_view, name='okci_ep'),
 
     path('protected/<int:scan_id>/', document_view, name='protected_media'),
 ]

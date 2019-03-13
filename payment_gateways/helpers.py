@@ -223,3 +223,52 @@ def telegram_notification_sky(err=None, message=''):
         settings.SKY_GROUP_ID,
         msg
     )
+
+
+def search_okcicredit(cursor, contract_num):
+    """
+    Return matched credit data
+
+    Positions in tuple:
+    0 - Credit ID
+    1 - Client ID
+    2 - Client names
+    3 - Credit vnoska
+    4 - Credit status (59 - okcibank)
+    5 - Client IPN
+    6 - Client Dolg (body + fine + prc)
+    """
+    try:
+        cursor.execute(
+            """
+                SELECT
+                    tc.id,
+                    tc.client_id,
+                    CONCAT(
+                        REPLACE(tper.name3,"'", '"'), ' ',
+                        LEFT(tper.name , 1), '. ',
+                        LEFT(tper.name2 , 1), '.'),
+                    tc.vnoska,
+                    ts.status,
+                    tc.egn,
+                    dwh.GetDolgBody(tc.id, date(now()))+
+                    dwh.GetDolgFine(tc.id, date(now()))+
+                    dwh.GetDolgPrc(tc.id, date(now()))
+                FROM
+                    mbank.tcredits tc
+                join mbank.tstatuses ts on ts.credit_id = tc.id
+                                       and ts.is_last = 1
+                left join mbank.tpersons tper on tper.id = tc.client_id
+                WHERE tc.contract_num = {0}
+                  and ts.status = 59;
+            """.format(contract_num)
+        )
+    except Exception:
+        return None
+
+    credit = cursor.fetchall()
+
+    if credit:
+        return credit
+
+    return None
