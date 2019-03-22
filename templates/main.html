@@ -96,7 +96,20 @@
 						<fieldset class="b-main-form__total">
 							<div class="b-main-form__total-content">
 								<p><span>{% trans "Вы берете" %}:</span><span id="credit-total-{{ obj.id }}">{{ obj.credit_rate.get_sum_min }} грн</span></p>
-								<p><span>{% trans "На срок" %}:</span> <span id="termin-total-{{ obj.id }}">{{ obj.credit_rate.term_min }} {% if obj.credit_rate.term_type %}{% trans "месяцев" %}{% else %}{% trans "недель" %}{% endif %}</span></p>
+								<p><span>{% trans "На срок" %}:</span> <span id="termin-total-{{ obj.id }}">{{ obj.credit_rate.term_min }} 
+								{% if obj.credit_rate.term_type %}
+									{% if '/ru/' in request.path %}
+										{% trans "месяца" %}
+									{% elif '/ua/' in request.path %}
+										{% trans "місяці" %}
+									{% endif %}
+								{% else %}
+									{% if '/ru/' in request.path %}
+										{% trans "недели" %}
+									{% elif '/ua/' in request.path %}
+										{% trans "тижні" %}
+									{% endif %}
+								{% endif %}</span></p>
 								<p class="b-main-form__total-cost"><span>{% trans "Платеж по кредиту" %}:</span> <span class="pay_spam" data-id="{{ obj.id }}" id="pay_spam{{ obj.id }}" >550 {% if obj.credit_rate.term_type %}{% trans "грн/месяц." %}{% else %}{% trans "грн/неделя." %}{% endif %}</span></p>
 							</div>
 							
@@ -202,8 +215,12 @@
 								<b>{% trans "от" %} {{ obj.term_min }} {% trans "до" %} {{ obj.term_max }} {% if obj.term_type %}{% trans "месяцев" %}{% else %}{% trans "недель" %}{% endif %}</b>	
 							</p>
 							<p class="s-packages-content__item-info">
-								% {% trans "ставка" %}:
-								<b>от {{ obj.rate_min }} до {{ obj.rate_max }}%</b>
+								% {% trans "ставка" %} {% if '/ru/' in request.path %}
+									{% trans "(годовых)" %}
+								{% elif '/ua/' in request.path %}
+									{% trans "(річних)" %}
+								{% endif %}:
+								<b>от {{ obj.rate_min|stringformat:"d" }} до {{ obj.rate_max|stringformat:"d" }} %</b>
 							</p>
 							<p class="s-packages-content__item-info">
 								{% trans "Платеж" %}:
@@ -233,7 +250,7 @@
 					
 					<div class="b-step__content b-step__content--special">
 						<div class="b-step__content--special-item">
-							<span>{% trans "Сумма кредите" %}</span>
+							<span>{% trans "Сумма кредита" %}</span>
 							<span>10 000</span>
 							<span>грн</span>
 						</div>
