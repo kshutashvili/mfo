@@ -292,57 +292,57 @@ def pb_terminal_view(request):
                 confirm_dt=confirm_time
             )
 
-        try:
-            with transaction.atomic():
-                query = """
-                    SELECT mbank.RunRazpredelenieOnlineNew("{0}");
-                """.format(
-                    date.today()
-                )
-                cursor.execute(query)
-                conn.commit()
-        except Exception as e:
-            telegram_notification(
-                err=e,
-                message='Проблема с разнесением платежа'
-            )
-            resp = render(
-                request,
-                "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
-                content_type="application/xml"
-            )
-            return resp
+        # try:
+        #     with transaction.atomic():
+        #         query = """
+        #             SELECT mbank.RunRazpredelenieOnlineNew("{0}");
+        #         """.format(
+        #             date.today()
+        #         )
+        #         cursor.execute(query)
+        #         conn.commit()
+        # except Exception as e:
+        #     telegram_notification(
+        #         err=e,
+        #         message='Проблема с разнесением платежа'
+        #     )
+        #     resp = render(
+        #         request,
+        #         "payment_gateways/pb_response_pay_error.xml",
+        #         {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
+        #         content_type="application/xml"
+        #     )
+        #     return resp
 
-        try:
-            with transaction.atomic():
-                query = """
-                    SELECT mbank.RunRazpredelenieSkyOnline("{0}");
-                """.format(
-                    date.today()
-                )
-                cursor.execute(query)
-                conn.commit()
-        except Exception as e:
-            telegram_notification_sky(
-                err=e,
-                message='Проблема с разнесением Sky платежа (status {0})'.format(
-                    str(credit[0][4])
-                )
-            )
-            telegram_notification(
-                err=e,
-                message='Проблема с разнесением Sky платежа (status {0})'.format(
-                    str(credit[0][4])
-                )
-            )
-            resp = render(
-                request,
-                "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
-                content_type="application/xml"
-            )
-            return resp
+        # try:
+        #     with transaction.atomic():
+        #         query = """
+        #             SELECT mbank.RunRazpredelenieSkyOnline("{0}");
+        #         """.format(
+        #             date.today()
+        #         )
+        #         cursor.execute(query)
+        #         conn.commit()
+        # except Exception as e:
+        #     telegram_notification_sky(
+        #         err=e,
+        #         message='Проблема с разнесением Sky платежа (status {0})'.format(
+        #             str(credit[0][4])
+        #         )
+        #     )
+        #     telegram_notification(
+        #         err=e,
+        #         message='Проблема с разнесением Sky платежа (status {0})'.format(
+        #             str(credit[0][4])
+        #         )
+        #     )
+        #     resp = render(
+        #         request,
+        #         "payment_gateways/pb_response_pay_error.xml",
+        #         {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
+        #         content_type="application/xml"
+        #     )
+        #     return resp
 
         conn.close()
 
@@ -2391,57 +2391,57 @@ def portmone_pb_view(request):
             )
         )
 
-        try:
-            with transaction.atomic():
-                query = """
-                    SELECT mbank.RunRazpredelenieOnlineNew("{0}");
-                """.format(
-                    date.today()
-                )
-                cursor.execute(query)
-                conn.commit()
-        except Exception as e:
-            telegram_notification(
-                err=e,
-                message='Проблема с разнесением платежа'
-            )
-            resp = render(
-                request,
-                "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
-                content_type="application/xml"
-            )
-            return resp
+        # try:
+        #     with transaction.atomic():
+        #         query = """
+        #             SELECT mbank.RunRazpredelenieOnlineNew("{0}");
+        #         """.format(
+        #             date.today()
+        #         )
+        #         cursor.execute(query)
+        #         conn.commit()
+        # except Exception as e:
+        #     telegram_notification(
+        #         err=e,
+        #         message='Проблема с разнесением платежа'
+        #     )
+        #     resp = render(
+        #         request,
+        #         "payment_gateways/pb_response_pay_error.xml",
+        #         {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
+        #         content_type="application/xml"
+        #     )
+        #     return resp
 
-        try:
-            with transaction.atomic():
-                query = """
-                    SELECT mbank.RunRazpredelenieSkyOnline("{0}");
-                """.format(
-                    date.today()
-                )
-                cursor.execute(query)
-                conn.commit()
-        except Exception as e:
-            telegram_notification_sky(
-                err=e,
-                message='Проблема с разнесением Sky платежа (status {0})'.format(
-                    str(credit[0][4])
-                )
-            )
-            telegram_notification(
-                err=e,
-                message='Проблема с разнесением Sky платежа (status {0})'.format(
-                    str(credit[0][4])
-                )
-            )
-            resp = render(
-                request,
-                "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
-                content_type="application/xml"
-            )
-            return resp
+        # try:
+        #     with transaction.atomic():
+        #         query = """
+        #             SELECT mbank.RunRazpredelenieSkyOnline("{0}");
+        #         """.format(
+        #             date.today()
+        #         )
+        #         cursor.execute(query)
+        #         conn.commit()
+        # except Exception as e:
+        #     telegram_notification_sky(
+        #         err=e,
+        #         message='Проблема с разнесением Sky платежа (status {0})'.format(
+        #             str(credit[0][4])
+        #         )
+        #     )
+        #     telegram_notification(
+        #         err=e,
+        #         message='Проблема с разнесением Sky платежа (status {0})'.format(
+        #             str(credit[0][4])
+        #         )
+        #     )
+        #     resp = render(
+        #         request,
+        #         "payment_gateways/pb_response_pay_error.xml",
+        #         {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
+        #         content_type="application/xml"
+        #     )
+        #     return resp
 
         conn.close()
 
@@ -2696,61 +2696,61 @@ def okci_pb_terminal_view(request):
                     )
         )
 
-        try:
-            with transaction.atomic():
-                query = """
-                    SELECT mbank.RunRazpredelenieOnlineNew("{0}");
-                """.format(
-                    date.today()
-                )
-                cursor.execute(query)
-                conn.commit()
-        except Exception as e:
-            telegram_notification(
-                err=e,
-                message='Проблема с разнесением платежа'
-            )
-            resp = render(
-                request,
-                "payment_gateways/pb_response_pay_error.xml",
-                {
-                    "error_msg": "Ошибка при оплате. "
-                                 "Обратитесь в контакт-центр по "
-                                 "тел. 0800211112"
-                },
-                content_type="application/xml"
-            )
-            return resp
+        # try:
+        #     with transaction.atomic():
+        #         query = """
+        #             SELECT mbank.RunRazpredelenieOnlineNew("{0}");
+        #         """.format(
+        #             date.today()
+        #         )
+        #         cursor.execute(query)
+        #         conn.commit()
+        # except Exception as e:
+        #     telegram_notification(
+        #         err=e,
+        #         message='Проблема с разнесением платежа'
+        #     )
+        #     resp = render(
+        #         request,
+        #         "payment_gateways/pb_response_pay_error.xml",
+        #         {
+        #             "error_msg": "Ошибка при оплате. "
+        #                          "Обратитесь в контакт-центр по "
+        #                          "тел. 0800211112"
+        #         },
+        #         content_type="application/xml"
+        #     )
+        #     return resp
 
-        try:
-            with transaction.atomic():
-                query = """
-                    SELECT mbank.RunRazpredelenieSkyOnline("{0}");
-                """.format(
-                    date.today()
-                )
-                cursor.execute(query)
-                conn.commit()
-        except Exception as e:
-            telegram_notification_sky(
-                err=e,
-                message='Проблема с разнесением Sky платежа (status {0})'.format(
-                    str(credit[0][4])
-                )
-            )
-            telegram_notification(
-                err=e,
-                message='Проблема с разнесением Sky платежа (status {0})'.format(
-                    str(credit[0][4])
-                )
-            )
-            resp = render(
-                request,
-                "payment_gateways/pb_response_pay_error.xml",
-                {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
-                content_type="application/xml"
-            )
-            return resp
+        # try:
+        #     with transaction.atomic():
+        #         query = """
+        #             SELECT mbank.RunRazpredelenieSkyOnline("{0}");
+        #         """.format(
+        #             date.today()
+        #         )
+        #         cursor.execute(query)
+        #         conn.commit()
+        # except Exception as e:
+        #     telegram_notification_sky(
+        #         err=e,
+        #         message='Проблема с разнесением Sky платежа (status {0})'.format(
+        #             str(credit[0][4])
+        #         )
+        #     )
+        #     telegram_notification(
+        #         err=e,
+        #         message='Проблема с разнесением Sky платежа (status {0})'.format(
+        #             str(credit[0][4])
+        #         )
+        #     )
+        #     resp = render(
+        #         request,
+        #         "payment_gateways/pb_response_pay_error.xml",
+        #         {"error_msg": "Ошибка при оплате. Обратитесь в контакт-центр по тел. 0800211112"},
+        #         content_type="application/xml"
+        #     )
+        #     return resp
 
         try:
             with transaction.atomic():
