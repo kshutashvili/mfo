@@ -16,7 +16,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 
 # Your Account Sid and Auth Token from twilio.com/user/account
-from efin.settings import AUTHY_TEST_API_KEY as auth_token
+from efin.settings import AUTHY_API_KEY as auth_token
 from efin.settings import ADMIN_EMAIL
 
 from users.models import Profile, User
