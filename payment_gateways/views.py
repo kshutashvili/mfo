@@ -49,6 +49,15 @@ def pb_terminal_view(request):
         data = xml_data['Transfer']['Data']
         contract_num = data['Unit']['@value']
 
+        telegram_notification(
+            message='Search (pb_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
+        telegram_notification(
+            message=xml_data
+        )
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -119,6 +128,15 @@ def pb_terminal_view(request):
         total_sum = Decimal(data['TotalSum'])
         create_time = data['CreateTime']
         confirm_time = data['ConfirmTime']
+
+        telegram_notification(
+            message='Pay (pb_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
+        telegram_notification(
+            message=xml_data
+        )
 
         # replace payment's date if payment processed after 22:00
         date_for_turnes = date.today()
@@ -372,6 +390,15 @@ def easypay_terminal_view(request):
         template = 'payment_gateways/easypay/response_1_check_success.xml'
         contract_num = action_data['Account']
 
+        telegram_notification(
+            message='Search (easypay_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
+        telegram_notification(
+            message=action_data
+        )
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -457,6 +484,15 @@ def easypay_terminal_view(request):
     elif action == constants.EASYPAY_PAYMENT:
         template = 'payment_gateways/easypay/response_2_payment_success.xml'
         contract_num = action_data['Account']
+
+        telegram_notification(
+            message='Pay (easypay_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
+        telegram_notification(
+            message=action_data
+        )
 
         try:
             conn, cursor = create_database_connection(
@@ -619,6 +655,15 @@ def easypay_terminal_view(request):
                     ctx,
                     content_type='application/xml'
                 )
+
+        telegram_notification(
+            message='Confirm (easypay_terminal_view) {0}'.format(
+                payment.account
+            )
+        )
+        telegram_notification(
+            message=action_data
+        )
 
         # create turnes connection
         try:
@@ -790,6 +835,12 @@ def fam_terminal_view(request):
         template = 'payment_gateways/fam/response_1_check.xml'
         contract_num = action_data['Account']
 
+        telegram_notification(
+            message='Search (fam_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -875,6 +926,12 @@ def fam_terminal_view(request):
     elif action == constants.EASYPAY_PAYMENT:
         template = 'payment_gateways/fam/response_2_payment.xml'
         contract_num = action_data['Account']
+
+        telegram_notification(
+            message='Pay (fam_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
 
         p = City24Payment.objects.filter(order_id=action_data['OrderId'])
         if p:
@@ -1060,6 +1117,12 @@ def fam_terminal_view(request):
                     content_type='application/xml'
                 )
 
+        telegram_notification(
+            message='Confirm (fam_terminal_view) {0}'.format(
+                payment.account
+            )
+        )
+
         # create turnes connection
         try:
             conn, cursor = create_database_connection(
@@ -1230,6 +1293,12 @@ def city_terminal_view(request):
         template = 'payment_gateways/fam/response_1_check.xml'
         contract_num = action_data['Account']
 
+        telegram_notification(
+            message='Search (city_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -1315,6 +1384,12 @@ def city_terminal_view(request):
     elif action == constants.EASYPAY_PAYMENT:
         template = 'payment_gateways/fam/response_2_payment.xml'
         contract_num = action_data['Account']
+
+        telegram_notification(
+            message='Pay (city_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
 
         p = C24Payment.objects.filter(order_id=action_data['OrderId'])
         if p:
@@ -1499,6 +1574,12 @@ def city_terminal_view(request):
                     ctx,
                     content_type='application/xml'
                 )
+
+        telegram_notification(
+            message='Confirm (city_terminal_view) {0}'.format(
+                payment.account
+            )
+        )
 
         # create turnes connection
         try:
@@ -1749,6 +1830,12 @@ def portmone_ep_view(request):
         template = 'payment_gateways/fam/response_1_check.xml'
         contract_num = action_data['Account']
 
+        telegram_notification(
+            message='Search (portmone_ep_view) {0}'.format(
+                contract_num
+            )
+        )
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -1834,6 +1921,12 @@ def portmone_ep_view(request):
     elif action == constants.EASYPAY_PAYMENT:
         template = 'payment_gateways/fam/response_2_payment.xml'
         contract_num = action_data['Account']
+
+        telegram_notification(
+            message='Pay (portmone_ep_view) {0}'.format(
+                contract_num
+            )
+        )
 
         p = PortmoneEasypayPayment.objects.filter(
             order_id=action_data['OrderId']
@@ -2008,6 +2101,12 @@ def portmone_ep_view(request):
                 content_type='application/xml'
             )
 
+        telegram_notification(
+            message='Confirm (portmone_ep_view) {0}'.format(
+                payment.account
+            )
+        )
+
         # create turnes connection
         try:
             conn, cursor = create_database_connection(
@@ -2178,6 +2277,15 @@ def portmone_pb_view(request):
         data = xml_data['Transfer']['Data']
         contract_num = data['Unit']['@value']
 
+        telegram_notification(
+            message='Search (portmone_pb_view) {0}'.format(
+                contract_num
+            )
+        )
+        telegram_notification(
+            message=xml_data
+        )
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -2249,6 +2357,15 @@ def portmone_pb_view(request):
         total_sum = Decimal(data['TotalSum'])
         create_time = data['CreateTime']
         confirm_time = data['ConfirmTime']
+
+        telegram_notification(
+            message='Pay (portmone_pb_view) {0}'.format(
+                contract_num
+            )
+        )
+        telegram_notification(
+            message=xml_data
+        )
 
         # replace payment's date if payment processed after 22:00
         date_for_turnes = date.today()
@@ -2471,6 +2588,12 @@ def okci_pb_terminal_view(request):
         data = xml_data['Transfer']['Data']
         contract_num = data['Unit']['@value']
 
+        telegram_notification(
+            message='Search (okci_pb_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -2550,6 +2673,12 @@ def okci_pb_terminal_view(request):
         total_sum = Decimal(data['TotalSum'])
         create_time = data['CreateTime']
         confirm_time = data['ConfirmTime']
+
+        telegram_notification(
+            message='Pay (okci_pb_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
 
         # replace payment's date if payment processed after 22:00
         date_for_turnes = date.today()
@@ -2809,6 +2938,12 @@ def okci_ep_terminal_view(request):
         template = 'payment_gateways/fam/response_1_check.xml'
         contract_num = action_data['Account']
 
+        telegram_notification(
+            message='Search (okci_ep_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
+
         try:
             conn, cursor = create_database_connection(
                 host=settings.TURNES_HOST,
@@ -2894,6 +3029,12 @@ def okci_ep_terminal_view(request):
     elif action == constants.EASYPAY_PAYMENT:
         template = 'payment_gateways/fam/response_2_payment.xml'
         contract_num = action_data['Account']
+
+        telegram_notification(
+            message='Pay (okci_ep_terminal_view) {0}'.format(
+                contract_num
+            )
+        )
 
         p = OkciEasypayPayment.objects.filter(
             order_id=action_data['OrderId']
@@ -3061,6 +3202,12 @@ def okci_ep_terminal_view(request):
                 ctx,
                 content_type='application/xml'
             )
+
+        telegram_notification(
+            message='Confirm (okci_ep_terminal_view) {0}'.format(
+                payment.account
+            )
+        )
 
         # create turnes connection
         try:
