@@ -2270,7 +2270,7 @@ def portmone_pb_view(request):
 
     is_valid, action, xml_data = process_pb_request(request)
 
-    if not is_valid:
+    if True: #if not is_valid:
         return HttpResponseBadRequest("Операция не поддерживается")
 
     if action == "Search":
