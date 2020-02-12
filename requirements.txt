@@ -4,7 +4,7 @@ authy==2.1.5
 Babel==2.5.3
 certifi==2018.1.18
 chardet==3.0.4
-Django==2.0.2
+Django==2.2.10
 django-admin-honeypot==1.1.0
 django-admin-ip-restrictor==1.0.0
 django-admin-rangefilter==0.3.7
