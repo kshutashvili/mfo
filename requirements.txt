@@ -1,4 +1,4 @@
-aiohttp==2.3.10
+aiohttp==3.7.4
 async-timeout==2.0.1
 authy==2.1.5
 Babel==2.5.3
